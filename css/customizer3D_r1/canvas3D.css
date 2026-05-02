@@ -1,0 +1,14 @@
+section.customizer > div.webgl_3d_canvas
+{
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+}
+
+section.customizer > div.webgl_3d_canvas > canvas.webgl_3d
+{
+    display: block;
+    width: 100%;
+    height: 100%;
+}

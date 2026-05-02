@@ -1,0 +1,43 @@
+section.customizer > div.contextMenu
+{
+    position: absolute;
+    z-index: 9;
+    background-color: var(--customizerColorPrimary);
+    color: var(--customizerColorText);
+    border-radius: 7px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.33);
+    max-height: 90vh;
+    max-width: 90vw;
+    overflow: auto;
+    padding: 0.75rem;
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+section.customizer > div.contextMenu.show
+{
+    display: flex;
+}
+
+section.customizer > div.contextMenu.hide
+{
+    display: none;
+}
+
+section.customizer > div.contextMenu ul
+{
+    list-style: none;
+}
+
+section.customizer > div.contextMenu li
+{
+    font-size: 0.65rem;
+    padding-top: 0.1rem;
+}
+
+section.customizer > div.contextMenu p
+{
+    font-size: 0.7rem;
+    line-height: 1.5;
+}

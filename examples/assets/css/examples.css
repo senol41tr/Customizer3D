@@ -1,0 +1,198 @@
+section.examples
+{
+  position: absolute;
+  z-index: 6;
+  top: 1rem;
+  left: 180px;
+  display: flex;
+  flex-direction: column;
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
+  width: 150px;
+}
+
+section.examples > div.content
+{
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  overflow: auto;
+  padding: 1rem 0;
+  background: repeating-conic-gradient(#FFFFFF 0 25%, #EBEBEB 0 50%) 50% / 10px 10px;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+
+section.examples *
+{
+  font-family: var(--customizerFontFamily);
+  font-size: 0.75rem;
+  color: var(--customizerColorText);
+}
+
+section.examples > div.title
+{
+  background-color: var(--customizerColorPrimary);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.75rem;
+  cursor: move;
+  border-radius: 7px;
+}
+
+section.examples > div.title_active /* !!! */
+{
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+section.examples > div.title > p
+{
+  user-select: none;
+}
+
+section.examples > div.title > img.rollup
+{
+  width: 8px;
+  cursor: auto;
+  transition: rotate 0.25s cubic-bezier(0.45, 0, 0.55, 1);
+}
+
+section.examples > div.content
+{
+  display: none;
+}
+
+section.examples > div.content > div
+{
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: var(--customizerColorPrimary);
+  border-radius: 7px;
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
+  cursor: pointer;
+}
+
+section.examples > div.content > div.active p
+{
+  color: var(--customizerColorPrimary);
+}
+
+section.examples > div.content > div.active
+{
+  background-color: var(--customizerColorText);
+}
+
+section.examples img
+{
+  width: 100%;
+}
+
+section.examples *::-webkit-scrollbar
+{
+  width: 6px;
+  height: 6px;
+}
+
+section.examples *::-webkit-scrollbar-track
+{
+  background: var(--customizerColorPrimary);
+  border-radius: 4px;
+}
+
+section.examples *::-webkit-scrollbar-thumb
+{
+  background: var(--customizerColorText);
+  border-radius: 4px;
+}
+
+
+
+
+
+
+
+
+
+section.code
+{
+  width: 100%;
+  height: 100svh;
+  overflow: auto;
+  visibility: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 5;
+}
+
+
+
+
+
+
+
+
+
+
+div.switchView
+{
+  position: absolute;
+  z-index: 5;
+  top: 1rem;
+  width: 70px;
+  display: none;
+}
+
+div.switchView input
+{
+  display: none;
+}
+
+div.switchView > div
+{
+  position: absolute;
+  background-color: var(--customizerColorPrimary);
+  padding: 0.5rem;
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+div.switchView > div::before
+{
+  content: "";
+  background-image: url("../../../svg/code.svg");
+  background-position: 0 2px;
+  background-repeat: no-repeat;
+  background-size: 14px auto;
+  padding-left: 20px;
+}
+
+div.switchView > div.design
+{
+  visibility: hidden;
+}
+
+div.switchView > div.design::before
+{
+  background-image: url("../../../svg/design.svg");
+}
+
+div.switchView > div > label
+{
+  font-size: var(--customizerFontSizeDefault);
+  font-family: var(--customizerFontFamily);
+  color: var(--customizerColorText);
+  pointer-events: none;
+  user-select: none;
+}

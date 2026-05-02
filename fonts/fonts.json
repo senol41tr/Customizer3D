@@ -1,0 +1,47 @@
+[
+    {
+        "postscript_name": "BebasNeue-Regular",
+        "name": "BebasNeue Regular",
+        "url": "BebasNeue-Regular.ttf"
+    },
+    {
+        "postscript_name": "BebasNeueRounded-Regular",
+        "name": "BebasNeueRounded Regular",
+        "url": "BebasNeueRounded-Regular.ttf"
+    },
+    {
+        "postscript_name": "Dos_Amazigh",
+        "name": "DOS Amazigh 1",
+        "url": "DOS_Amazigh-1.ttf"
+    },
+    {
+        "postscript_name": "KodeMono-Regular",
+        "name": "KodeMono Regular",
+        "url": "KodeMono-Regular.ttf"
+    },
+    {
+        "postscript_name": "Marsden-Cm-Bold",
+        "name": "Marsden Cm Bold",
+        "url": "Marsden-Cm-Bold.ttf"
+    },
+    {
+        "postscript_name": "Marsden-Ct-Thin",
+        "name": "Marsden Ct Thin",
+        "url": "Marsden-Ct-Thin.ttf"
+    },
+    {
+        "postscript_name": "ScotchDisplay-SemiBold",
+        "name": "ScotchDisplay SemiBold",
+        "url": "ScotchDisplay-SemiBold.ttf"
+    },
+    {
+        "postscript_name": "Signika-Regular",
+        "name": "Signika Regular",
+        "url": "Signika-Regular.ttf"
+    },
+    {
+        "postscript_name": "YummoW03-Light",
+        "name": "YummoLight",
+        "url": "YummoLight.ttf"
+    }
+]

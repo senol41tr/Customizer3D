@@ -1,0 +1,39 @@
+section.customizer > div.controls
+{
+    position: absolute;
+    z-index: 2;
+    background-color: var(--customizerColorPrimary);
+    border-radius: 7px;
+    filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    visibility: hidden;
+}
+
+section.customizer > div.controls img
+{
+    height: 20px;
+    cursor: pointer;
+}
+
+section.customizer > div.controls img.deviceIcon
+{
+    cursor: move;
+}
+
+section.customizer > div.controls > img.zoomOut,
+section.customizer > div.controls > img.zoomIn
+{
+    display: none;
+}
+
+section.customizer > div.controls > div.inputDiv
+{
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}

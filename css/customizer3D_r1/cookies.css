@@ -1,0 +1,44 @@
+section.customizer > div.cookies
+{
+    position: absolute;
+    z-index: 5;
+    bottom: 6rem;
+    left: 60px;
+    background-color: var(--customizerColorPrimary);
+    color: var(--customizerColorText);
+    border-radius: 7px;
+    filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
+    touch-action: none;
+    max-width: 240px;
+    padding: 1rem;
+    line-height: 1.5;
+}
+
+section.customizer > div.cookies > b
+{
+    font-size: 1.1rem;
+    font-weight: normal;
+}
+
+section.customizer > div.cookies > img.close
+{
+    position: absolute;
+    right: 0.75rem;
+    top: 0.75rem;
+    width: 16px;
+    rotate: 45deg;
+    cursor: pointer;
+}
+
+
+@media screen and (max-width: 500px)
+{
+    section.customizer > div.cookies
+    {
+        width: 50vw;
+        max-width: 50vw;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+}

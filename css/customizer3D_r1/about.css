@@ -1,0 +1,79 @@
+section.customizer > div.about
+{
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #000;
+    border-radius: 7px;
+    filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
+    width: 30vw;
+    max-width: 320px;
+    height: fit-content;
+    max-height: 85vh;
+    overflow: auto;
+    display: none;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 2rem;
+}
+
+section.customizer > div.about img
+{
+    filter: none !important;
+}
+
+section.customizer > div.about a,
+section.customizer > div.about p
+{
+    color: #fff !important;
+    font-size: 0.75rem;
+    user-select: text;
+}
+
+section.customizer > div.about p.title
+{
+    flex-basis: 100%;
+    background-color: #DAFF02;
+    color: #000 !important;
+    padding: 0.5rem;
+    border-radius: 7px;
+}
+
+section.customizer > div.about > div.thanks
+{
+    white-space: unset;
+}
+
+section.customizer > div.about > img.logo
+{
+    width: 15vw;
+    margin-bottom: 2rem;
+}
+
+
+section.customizer > div.about > div
+{
+    display: flex;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    gap: 0.5rem;
+    background-color: #222;
+    white-space: nowrap;
+}
+
+@media screen and (max-width: 500px)
+{
+    section.customizer > div.about
+    {
+        width: 70vw;
+        max-width: 70vw;
+    }
+
+    section.customizer > div.about > img.logo
+    {
+        width: 60vw;
+    }
+    
+}
