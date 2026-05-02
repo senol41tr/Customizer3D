@@ -1,35 +1,38 @@
 # Customizer3D
-3D Product Configurator and Editor {beta}
+### 3D Product Configurator and Editor {beta}
 
 # Client Side Creation
-No Server needed, all operations are performed on the device. Client Side
+### No Server needed, all operations are performed on the device. Client Side
 
 # Multiple Language
-With Auto Translate feature, you can add easy new language(s)
+### With Auto Translate feature, you can add easy new language(s)
 
 # Layer based editing
-Add Image, Text and all available Layer types, rearrange with drag'n drop
+### Add Image, Text and all available Layer types, rearrange with drag'n drop
 
 # Layer based PDF export
-All created contents can be edited in Graphics softwares too.
+### All created contents can be edited in Graphics softwares too.
 
 # 2D or 3D editing
-Choose your editing method
+### Choose your editing method
 
 # Open and Save as Functions
-You can save your project in your device later you can continue editing.
+### You can save your project in your device later you can continue editing.
 
 # Custom Fonts (.ttf, .otf)
-You can load your Custom Fonts too.
+### You can load your Custom Fonts too.
 
 # Supported Import Image and document formats
-.xbm, .tif, .jfif, .pjp, .apng, .jpe, .jpeg, .heif, .ico, .tiff, .webp, .svgz, .jpg, .heic, .gif, .svg, .png, .bmp, .pjpeg, .avif, .pdf
+### .xbm, .tif, .jfif, .pjp, .apng, .jpe, .jpeg, .heif, .ico, .tiff, .webp, .svgz, .jpg, .heic, .gif, .svg, .png, .bmp, .pjpeg, .avif, .pdf
 
 # Import PDF Images (Single or multiple page)
-You can add Image(s) in PDF
+### You can add Image(s) in PDF
 
 # WebXR Feature (currently only on Android with Chrome)
-Place your designed Model in your environment
+### Place your designed Model in your environment
 
 # Extrude Text and SVG's
-Extrude Text's and SVG's
+### Extrude Text's and SVG's
+
+# Add Gradients
+### Add Gradients with several options.
