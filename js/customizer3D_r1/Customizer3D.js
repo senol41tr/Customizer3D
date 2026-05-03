@@ -250,13 +250,6 @@ export class Customizer3D
             <img src="${C3D_SERVER}svg/xr.svg" class="button" alt="XR Button" draggable="false">
         `;
         document.querySelector(this.props.container).appendChild(webXRDiv);
-
-        const dragableWebXR = new Dragable({
-            dragEl: webXRDiv,
-            container: webXRDiv,
-            root: document.querySelector(this.props.container),
-            c3d: this
-        });
         
 
         // z-index manager
