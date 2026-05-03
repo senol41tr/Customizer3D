@@ -34,8 +34,8 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: 0.5,
-                maxDistance: 10,
+                minDistance: 0.25,
+                maxDistance: 4,
             }
         },
 

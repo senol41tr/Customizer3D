@@ -967,7 +967,7 @@ export class Customizer3D
 
     onResize()
     {
-        if (this.props.three?.cameraOptions?.position?.z)
+        if (!this.props.three?.cameraOptions?.position?.z)
         {
             fitMeshToScreen(this.three.camera, this.glbScene, 1.5);
         }

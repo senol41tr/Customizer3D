@@ -37,15 +37,6 @@ export function parameters(self)
             {
                 minDistance: 0.25,
                 maxDistance: 1,
-            },
-
-            // set initial z position
-            cameraOptions:
-            {
-                position:
-                {
-                    z: isMobile() ? 0.75 : 0.5
-                }
             }
         },
 

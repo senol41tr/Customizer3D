@@ -181,16 +181,26 @@ export class Open
                         {
                             const img = new Image();
 
-                            await new Promise((resolve, reject) => {
-                                img.decoding = 'async';
-                                img.src = URL.createObjectURL(blob);
-                                img.onload = () => {
-                                img.decode()
-                                    .then(() => resolve(img))
-                                    .catch((err) => reject(err));
-                                };
-                                img.onerror = (err) => reject(err);
-                            });
+                            try
+                            {
+                                await new Promise((resolve, reject) =>
+                                {
+                                    img.decoding = 'async';
+                                    img.src = URL.createObjectURL(blob);
+                                    img.onload = () => {
+                                    img.decode()
+                                        .then(() => resolve(img))
+                                        .catch((err) => reject(err));
+                                    };
+                                    img.onerror = (err) => reject(err);
+                                });
+                            }
+                            catch (e)
+                            {
+                                alert(e.message);
+                                console.error(e);
+                            }
+
                             // img.onload = () => URL.revokeObjectURL(img.src);
 
                             layerData.image = img;
