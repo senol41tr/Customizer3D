@@ -1,38 +1,32 @@
-# Customizer3D
-### 3D Product Configurator and Editor {beta}
+**Client Side Creation**
+No Server needed, all operations are performed on the device. Client Side
 
-# Client Side Creation
-### No Server needed, all operations are performed on the device. Client Side
+**Multiple Language**
+With Auto Translate feature, you can add easy new language(s)
 
-# Multiple Language
-### With Auto Translate feature, you can add easy new language(s)
+**Layer based editing**
+Add Image, Text and all available Layer types, rearrange with drag'n drop
 
-# Layer based editing
-### Add Image, Text and all available Layer types, rearrange with drag'n drop
+**Layer based PDF export**
+All created contents can be edited in Graphics softwares too.
 
-# Layer based PDF export
-### All created contents can be edited in Graphics softwares too.
+**Open and Save as Function**
+You can save your project in your device later you can continue editing.
 
-# 2D or 3D editing
-### Choose your editing method
+**Custom Fonts (.ttf, .otf)**
+You can load your Custom Fonts too.
 
-# Open and Save as Functions
-### You can save your project in your device later you can continue editing.
+**Supported Import Image and document formats**
+.xbm, .tif, .jfif, .pjp, .apng, .jpe, .jpeg, .heif, .ico, .tiff, .webp, .svgz, .jpg, .heic, .gif, .svg, .png, .bmp, .pjpeg, .avif, .pdf
 
-# Custom Fonts (.ttf, .otf)
-### You can load your Custom Fonts too.
+**Import PDF Images (Single or multiple page)**
+You can add Image(s) in PDF
 
-# Supported Import Image and document formats
-### .xbm, .tif, .jfif, .pjp, .apng, .jpe, .jpeg, .heif, .ico, .tiff, .webp, .svgz, .jpg, .heic, .gif, .svg, .png, .bmp, .pjpeg, .avif, .pdf
+**WebXR Feature (currently only on Android with Chrome)**
+Place your designed Model in your environment
 
-# Import PDF Images (Single or multiple page)
-### You can add Image(s) in PDF
+**Extrude Text and SVG's**
+Extrude Text's and SVG's
 
-# WebXR Feature (currently only on Android with Chrome)
-### Place your designed Model in your environment
-
-# Extrude Text and SVG's
-### Extrude Text's and SVG's
-
-# Add Gradients
-### Add Gradients with several options.
+**Add Gradients**
+Add Gradients with several options.
