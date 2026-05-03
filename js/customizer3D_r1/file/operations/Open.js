@@ -34,7 +34,6 @@ export class Open
             if(!file)
             {
                 this.c3d.preloader.hide();
-                this.c3d.showHideUI.show();
                 return;
             }
             arrayBuffer = await file.arrayBuffer();
@@ -46,7 +45,6 @@ export class Open
         if(header != '504b34')
         {
             alert('File Type mismatch!!\nSupported file type is [.c3d]');
-            this.c3d.showHideUI.show();
             return;
         }
 
@@ -59,7 +57,6 @@ export class Open
         {
             alert("Model not Found!");
             this.c3d.preloader.hide();
-            this.c3d.showHideUI.show();
             return;
         }
 
@@ -183,8 +180,17 @@ export class Open
                         if((layerData.changeable && layerData.detectedFileType != 'model/gltf-binary') || layerData.type == 'gradient')
                         {
                             const img = new Image();
-                            img.src = URL.createObjectURL(blob);
-                            await img.decode();
+
+                            await new Promise((resolve, reject) => {
+                                img.decoding = 'async';
+                                img.src = URL.createObjectURL(blob);
+                                img.onload = () => {
+                                img.decode()
+                                    .then(() => resolve(img))
+                                    .catch((err) => reject(err));
+                                };
+                                img.onerror = (err) => reject(err);
+                            });
                             // img.onload = () => URL.revokeObjectURL(img.src);
 
                             layerData.image = img;
@@ -285,8 +291,6 @@ export class Open
 
     async loadModule(jsPath, glbPath)
     {
-        // hide UI during processing
-        this.c3d.showHideUI.hide();
 
         // destroy ui
         this._destroyUI();

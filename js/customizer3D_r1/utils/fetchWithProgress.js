@@ -1,34 +1,40 @@
 // https://stackoverflow.com/a/64123890
 export const fetchWithProgress = async (url, onProgress) =>
 {
-    try
-    {
-        const response = await fetch(url, {
-            headers: {
-            "Content-Type": "application/octet-stream"
-            }
-        });
-        const contentLength = response.headers.get('content-length');
-        const total = parseInt(contentLength, 10);
-        const values = []
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+    try {
+        const response = await fetch(url, { signal: controller.signal });
+        const reader = response.body.getReader();
+        
+        let lastReceivedTime = Date.now();
+        const inactivityLimit = 5000;
+        
+        const values = [];
         let loaded = 0;
 
-        const reader = response.body.getReader();
         while (true) {
-            const {done, value} = await reader.read();
+            const currentTime = Date.now();
+            if (currentTime - lastReceivedTime > inactivityLimit) {
+                throw new Error("Connection timed out: Data stream stopped.");
+            }
+
+            const { done, value } = await reader.read();
             if (done) break;
-            values.push(value)
+
+            lastReceivedTime = Date.now(); 
+            
+            values.push(value);
             loaded += value.byteLength;
-            onProgress((loaded / total * 100).toFixed(1));
         }
 
+        clearTimeout(timeoutId);
         const blob = new Blob(values);
-        const arrayBuffer = await blob.arrayBuffer();
+        return await blob.arrayBuffer();
 
-        return arrayBuffer;
-    }
-    catch (e)
-    {
-        alert(e);
+    } catch (e) {
+        if (e.name === 'AbortError') alert("The request exceeded the total time limit. Please reload the page.\n" + e);
+        else alert(e);
     }
 };

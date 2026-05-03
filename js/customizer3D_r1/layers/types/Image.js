@@ -68,8 +68,8 @@ export class Image
         const previewCanvas = this.c3d.imageLayer.htmlEl.querySelector('canvas.preview');
         const canvas = this.div.querySelector('canvas.thumbnail');
         const ctx = canvas.getContext('2d');
-        const width = 32;
-        const height = 32;
+        const width = 40;
+        const height = 40;
 
         const imgDims = calculateAspectRatioFit(previewCanvas.width, previewCanvas.height, width, height);
 

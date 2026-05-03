@@ -29,9 +29,8 @@ export class Three
         this.__onMouseDown = this._onMouseDown.bind(this);
         this.__onMouseUp = this._onMouseUp.bind(this);
         this.__onMouseWheel = this._onMouseWheel.bind(this);
+        this.__onResize = this._onResize.bind(this);
         this.__container = document.querySelector(c3d.props.container);
-        
-        window.addEventListener('resize', this._onResize.bind(this));
     }
 
     setupAll()
@@ -54,7 +53,6 @@ export class Three
 
     start()
     {
-        this.render();
         if(isMobile())
         {
             this.__container.addEventListener('touchstart', this.__onMouseDown);
@@ -66,6 +64,8 @@ export class Three
             this.__container.addEventListener('mouseup', this.__onMouseUp);
             this.__container.addEventListener('wheel', this.__onMouseWheel);
         }
+        window.addEventListener('resize', this.__onResize);
+        this.render();
     }
 
     stop()
@@ -81,6 +81,7 @@ export class Three
             this.__container.removeEventListener('mouseup', this.__onMouseUp);
             this.__container.addEventListener('wheel', this.__onMouseWheel);
         }
+        window.removeEventListener('resize', this.__onResize);
         cancelAnimationFrame(this.raf);
     }
 
@@ -126,6 +127,7 @@ export class Three
         
         this.renderer = new THREE.WebGLRenderer(options);
         this.renderer.setPixelRatio(this.c3d.PIXEL_RATIO);
+        this.renderer.xr.enabled = true;
         this.renderer.onDeviceLost = () => {
             alert("WebGLRenderer: Context Lost!\nPlease save changes and reload the page.");
         }

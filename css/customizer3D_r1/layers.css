@@ -199,8 +199,8 @@ section.customizer > div.layers > div.content > div.layer > div.content > div.la
     background: repeating-conic-gradient(#FFFFFF 0 25%, #EBEBEB 0 50%) 50% / 6px 6px; /* https://stackoverflow.com/a/65129916 */
     border-radius: 4px;
     cursor: pointer;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
 }
 
 
