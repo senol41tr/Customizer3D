@@ -230,7 +230,7 @@ section.customizer > div.layers > div.content > div.layer > div.content > div.bu
 section.customizer > div.layers > div.content > div.layer > div.content > div.buttons > div.button::after
 {
     content: attr(title);
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     line-height: 1.2;
     padding-top: 0.2rem;
 }
@@ -239,7 +239,7 @@ section.customizer > div.layers > div.content > div.layer > div.content > div.bu
 section.customizer > div.layers > div.content > div.layer > div.content > div.buttons > div.button > img,
 section.customizer > div.layers > div.content > div.layer > div.content > div.layers > div > img
 {
-    width: 12px;
+    width: 14px;
     position: relative;
     cursor: pointer;
 }

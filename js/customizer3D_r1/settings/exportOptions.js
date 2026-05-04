@@ -4,7 +4,7 @@ export const initialize = async (c3d, container) =>
     
     if(!options)
     {
-        options = {convertToOutline: 1, addFonts: 1};
+        options = {convertToOutline: 1, addFonts: 0};
         c3d.localStorage.setObject('exportOptions', options);
     }
 

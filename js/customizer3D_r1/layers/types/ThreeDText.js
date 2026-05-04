@@ -595,6 +595,7 @@ export class ThreeDText
             this._removeMesh();
             this.options = null;
 
+            this.c3d.render3d.renderTextLayer(this.layer);
             this.c3d.textLayer.updatePreview(null, true, false);
 
         });
