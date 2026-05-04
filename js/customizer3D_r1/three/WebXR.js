@@ -22,7 +22,11 @@ export class WebXR
 
     start()
     {
+        this.glbScene = this.c3d.glbScene.clone();
+        this.c3d.three.scene.add(this.glbScene);
+        this.glbScene.visible = false;
         this.c3d.glbScene.visible = false;
+        this.glbScene.visible = false;
         this.c3d.three.controls.orbit.enabled = false;
         this.c3d.three.stop();
 
@@ -46,11 +50,13 @@ export class WebXR
         this.reticle.matrixAutoUpdate = false;
         this.reticle.visible = false;
         this.c3d.three.scene.add( this.reticle );
-
     }
 
     stop()
     {
+        this.scene.remove(this.glbScene);
+        
+        this.glbScene.visible = true;
         this.c3d.three.renderer.setAnimationLoop(null);
 
         this.controller1.removeEventListener('selectstart', this.__onSelect);
@@ -68,12 +74,12 @@ export class WebXR
 
         setTimeout(() =>
         {
-            this.c3d.three.controls.restoreSettings('set');
-            this.c3d.three.controls.orbit.enabled = true;
-            this.c3d.glbScene.position.set(0,0,0);
-            this.c3d.glbScene.rotation.set(0,0,0);
             this.c3d.three.start();
-        }, 10);
+            this.c3d.three.controls.orbit.enabled = true;
+            this.glbScene.position.set(0,0,0);
+            this.glbScene.rotation.set(0,0,0);
+            this.c3d.three.controls.restoreSettings('set');
+        }, 1000);
     }
 
     onSelect()

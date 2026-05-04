@@ -37,8 +37,8 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: isMobile() ? 0.6 : 0.3,
-                maxDistance: 2,
+                minDistance: 0.3,
+                maxDistance: 1.5,
             },
 
             // set initial z position
@@ -46,7 +46,7 @@ export function parameters(self)
             {
                 position:
                 {
-                    z: isMobile() ? 1.5 : 1
+                    z: isMobile() ? 1 : 0.5
                 }
             }
         },

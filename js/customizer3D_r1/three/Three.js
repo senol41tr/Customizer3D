@@ -152,7 +152,7 @@ export class Three
 
     updateCameraOptions()
     {
-        const options = this.c3d.props?.three?.cameraOptions || {};
+        const options = this.c3d.props?.three?.cameraOptions ? {...this.c3d.props.three.cameraOptions} : {};
         
         if(!options?.position) options.position = {};
         if(!options?.position?.x) options.position.x = 0;
