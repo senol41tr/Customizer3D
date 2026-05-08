@@ -119,12 +119,12 @@ export class Export
       width = new Size({size: previewImgDims.width + 'px', DPI}).pt;
       height = new Size({size: previewImgDims.height + 'px', DPI}).pt;
 
-      page = pdf.addPage({width, height, orientation: height > preview.canvas.width ? 'portrait' : 'landscape'});
+      page = pdf.addPage({width, height, orientation: height > width ? 'portrait' : 'landscape'});
 
       // ADD IMAGE
       response = await new Promise(resolve => preview.canvas.toBlob(resolve, 'image/png', 1.0));
       uint8Array = await BlobtoUint8Array(response);
-      image = pdf.embedPng(new Uint8Array(uint8Array));
+      image = pdf.embedPng(uint8Array);
       
       page.drawImage(image, {x: 0, y: 0, width, height});
 
@@ -360,7 +360,7 @@ export class Export
                   response = await this.c3d.render3d.getImage(layer, DPI);
                   uint8Array = await BlobtoUint8Array(response);
                   image = pdf.embedPng(uint8Array);
-                  
+
                   page.drawImage(image,{x: 0, y: 0, width, height});
                 }
 

@@ -583,6 +583,8 @@ export class ThreeDText
 
         this.div.querySelector('button.cancel').addEventListener('click', () => {
 
+            this._removeMesh();
+
             this.layer.zoom = 100;
             this.layer.textPosition = {x: 0, y: 0};
             this.c3d.render3d.renderTextLayer(this.layer);
@@ -592,7 +594,6 @@ export class ThreeDText
             this.c3d.three.render();
 
             this.hide();
-            this._removeMesh();
             this.options = null;
 
             this.c3d.render3d.renderTextLayer(this.layer);

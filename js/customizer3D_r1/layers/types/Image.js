@@ -39,7 +39,6 @@ export class Image
         this.materialOptions = data.materialOptions;
         this.repeatX = data.repeatX || 1;
         this.repeatY = data.repeatY || 1;
-        this.uniforms = data.uniforms || {};
         this.blendMode = typeof data.blendMode == 'number' ? data.blendMode : 0;
         this.uniforms = data.uniforms || {};
         this.visible = typeof data.visible == 'boolean' ? data.visible : true;
@@ -100,7 +99,6 @@ export class Image
 
     destroy()
     {
-        // this.div.remove();
         div.querySelector('img.remove').click();
     }
 
@@ -176,7 +174,6 @@ export class Image
             this.c3d.imageLayer.hide();
             if(this._mesh) this.c3d.render3d.removeLayer(this);
             this.c3d.three.render();
-            if(this.gradient) this.gradient.destroy();
         });
 
         // ADD NEW MESH
@@ -226,11 +223,11 @@ export class Image
         if(this.type == 'gradient')
         {
             this.gradient = new Gradient(this.c3d, this);
-            this.gradient.show();
+            // this.gradient.show();
 
             if(this.gradientOptions)
             {
-                this.gradient.hide();
+                // this.gradient.hide();
             }
         }
 

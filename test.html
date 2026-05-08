@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="theme-color" content="#ffffff">
+        
+        <title>Customizer3D {beta}</title>
+
+        <script src="js/pdfjs-dist@3.4.120/pdf.min.js"></script>
+
+        <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+        <link rel="stylesheet" href="js/jscolorpicker/colorpicker.css">
+
+        <link rel="stylesheet" href="css/customizer3D_r1/style.css">
+        <link rel="stylesheet" href="css/customizer3D_r1/preloader.css">
+        <link rel="stylesheet" href="css/customizer3D_r1/cookies.css">
+        <link rel="stylesheet" href="css/customizer3D_r1/secure.css">
+        <link rel="stylesheet" href="css/customizer3D_r1/layers.css">
+        <link rel="stylesheet" href="css/customizer3D_r1/textLayers.css">
+        <link rel="stylesheet" href="css/customizer3D_r1/imageLayer.css">
+        <link rel="stylesheet" href="css/customizer3D_r1/shapeLayer.css">
+        <link rel="stylesheet" href="css/customizer3D_r1/canvas3D.css">
+        <link rel="stylesheet" href="css/customizer3D_r1/export.css">
+        <link rel="stylesheet" href="css/customizer3D_r1/settings.css">
+        <link rel="stylesheet" href="css/customizer3D_r1/contextMenu.css">
+        <link rel="stylesheet" href="css/customizer3D_r1/help.css">
+        <link rel="stylesheet" href="css/customizer3D_r1/controls.css">
+        <link rel="stylesheet" href="css/customizer3D_r1/about.css">
+
+        <script type="importmap">
+        {
+            "imports":
+            {
+                "base/": "./js/",
+                "customizer3D_dir/": "./js/customizer3D_r1/",
+                "three": "./js/three/build/three.module.min.js",
+                "three_dir/": "./js/three/"
+            }
+        }
+        </script>
+
+    </head>
+
+    <body>
+
+      <script type="module">
+
+        import * as opentype from "base/opentype/opentype.esm.js";
+        import * as fflate from 'base/fflate@0.8.2/fflate.esm.js';
+        import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js';
+        import {Size} from 'customizer3D_dir/utils/Size.js';
+        import {trimCanvas} from 'customizer3D_dir/utils/trimCanvas.js';
+        import {BlobtoUint8Array} from 'customizer3D_dir/utils/BlobtoUint8Array.js';
+        import {Base64ToUint8} from 'customizer3D_dir/utils/Base64ToUint8.js';
+        import {PDF, cmyk, ops, Matrix} from 'base/libpdf@0.3.4/libpdf.min.esm.js';
+        // import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js';
+        import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js';
+
+
+      const pdf = PDF.create();
+
+      const DPI = 300;
+      const width = new Size({size: '210mm', DPI}).pt;
+      const height = new Size({size: '297mm', DPI}).pt;
+      const page = pdf.addPage({width, height, orientation: height > width ? 'portrait' : 'landscape'});
+
+        let response = await fetch('logo.jpg');
+        let uint8Array = new Uint8Array(await response.arrayBuffer());
+
+        const image = pdf.embedImage(uint8Array);
+        const imageName = page.registerImage(image);
+
+        const imgWidth = new Size({size: image.width + 'px', DPI:72}).pt;
+        const imgHeight = new Size({size: image.height + 'px', DPI:72}).pt;
+        
+        const xPos = 1;
+        const yPos = 1;
+
+    page.drawImage(image, {x: (width - imgWidth) * xPos, y: height - imgHeight - ((height - imgHeight) * yPos), widt: imgWidth, height: imgHeight, rotate: { angle: -135 }});
+  /*
+page.drawOperators([
+  ops.pushGraphicsState(),
+  ops.concatMatrix(cos, sin, -sin, cos, originX, originY),
+  ops.concatMatrix(imgWidth, 0, 1, imgHeight, 0,0),
+  ops.paintXObject(imageName),
+  ops.popGraphicsState()
+]);
+*/
+
+/*
+
+                else
+                {
+                  response = await this.c3d.render3d.getImage(layer, DPI);
+                  uint8Array = await BlobtoUint8Array(response);
+                  image = pdf.embedPng(uint8Array);
+
+                  const imgWidth = new Size({size: image.width + 'px', DPI:72}).pt;
+                  const imgHeight = new Size({size: image.height + 'px', DPI:72}).pt;
+
+                  const imgWidth2 = new Size({size: image.width + 'px', DPI}).pt;
+                  const imgHeight2 = new Size({size: image.height + 'px', DPI}).pt;
+
+                  page.drawImage(image, {
+                    x: ((width - imgWidth2) / 2) + (width * layer.imagePosition.x), 
+                    y: (height - ((height + imgHeight2) / 2)) + (imgHeight2 * layer.imagePosition.y), 
+                    width: imgWidth2, 
+                    height: imgHeight2, 
+                    rotate: { angle: - layer.rotation }
+                  });
+                  // page.drawImage(image,{x: 0, y: 0, width, height});
+                }
+
+*/
+
+
+
+
+
+        uint8Array = await pdf.save();
+        const blob = new Blob([uint8Array], {type:'application/pdf'});
+
+
+        const a = document.createElement('a');
+        const blobUrl = URL.createObjectURL(blob);
+        a.href = blobUrl;
+        a.download = 'sil.pdf';
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(blobUrl);
+
+
+      </script>
+
+    </body>
+
+
+</html>

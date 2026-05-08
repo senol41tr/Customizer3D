@@ -30,7 +30,7 @@ export class Customizer3D
 {
     constructor(glbPath, jsPath)
     {
-        this.PIXEL_RATIO = Math.max(2, window.devicePixelRatio);
+        this.PIXEL_RATIO = 2;//Math.max(2, window.devicePixelRatio);
 
         if(glbPath && jsPath) this.initialize(glbPath, jsPath);
     }
@@ -952,7 +952,12 @@ export class Customizer3D
                 {
                     const layer = await this.layers.addImage(layers, {type:'gradient', changeable: false});
                     this._setNavActive(mesh.name, false);
-                    // layer.input.click();
+                });
+
+                materialButtons.querySelector('div.shape').addEventListener('click', async () =>
+                {
+                    await this.layers.addShape(layers);
+                    this._setNavActive(mesh.name, false);
                 });
 
             }

@@ -34,3 +34,8 @@ Extrude Text's and SVG's
 
 **Add Gradients**
 Add Gradients with several options.
+
+**Online Demo** 
+https://ssarigul.tr/Customizer3D
+
+Documentation and API coming soon...

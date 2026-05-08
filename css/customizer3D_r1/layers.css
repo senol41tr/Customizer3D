@@ -7,8 +7,6 @@ section.customizer > div.layers
     background-color: var(--customizerColorPrimary);
     border-radius: 7px;
     filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
-    max-height: calc(100dvh - 100px);
-    overflow: auto;
     min-height: 120px;
     min-width: 125px;
     display: flex;
@@ -87,6 +85,8 @@ section.customizer > div.layers > div.content
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
+    max-height: calc(100dvh - 100px);
+    overflow: auto;
 }
 
 section.customizer > div.layers > div.content > div.layer
@@ -309,10 +309,13 @@ section.customizer > div.layers > div.content > div.layer > div.content > div.la
 
 /* FILE MENU */
 
+
 section.customizer > div.layers > div.fileMenu
 {
     display: flex;
-    position: relative;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
 }
 
 section.customizer > div.layers > div.fileMenu > button.menu

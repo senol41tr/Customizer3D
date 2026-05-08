@@ -2,8 +2,8 @@ section.examples
 {
   position: absolute;
   z-index: 6;
-  top: 1rem;
-  left: 180px;
+  top: 100px;
+  right: 75x;
   display: flex;
   flex-direction: column;
   filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));

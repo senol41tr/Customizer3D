@@ -653,9 +653,11 @@ export class ImageLayer
             if(this.layer.gradient) this.layer.gradient.setUniforms();
         }
 
+
+        if(reDraw && !drawSnappingLines) this.c3d.render3d.renderImageLayer(this.layer);
+        
         if(reDraw)
         {
-            this.c3d.render3d.renderImageLayer(this.layer);
             uniforms.tDiffuse.value.needsUpdate = true;
         }
 

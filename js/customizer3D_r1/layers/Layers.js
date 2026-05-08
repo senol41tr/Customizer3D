@@ -1,7 +1,7 @@
 import {Image} from 'customizer3D_dir/layers/types/Image.js';
 import {Solid} from 'customizer3D_dir/layers/types/Solid.js';
 import {Text} from 'customizer3D_dir/layers/types/Text.js';
-// import {Shape} from 'customizer3D_dir/layers/types/Shape.js';
+import {Shape} from 'customizer3D_dir/layers/types/Shape.js';
 
 export class Layers
 {
@@ -58,8 +58,10 @@ export class Layers
 
     async addShape(root, data = {})
     {
-        alert('Not implemented!');
-        // return new Shape(root, this.c3d, data);
+        const layer = new Shape(root, this.c3d, data);
+        await layer._init();
+
+        return layer;
     }
     
 }

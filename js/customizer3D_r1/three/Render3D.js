@@ -206,6 +206,12 @@ export class Render3D
     }
 
 
+    renderShapeLayer(layer)
+    {
+        
+    }
+
+
     addSolidLayer(layer)
     {
         this._addNewMesh(layer);
@@ -219,6 +225,12 @@ export class Render3D
 
 
     addImageLayer(layer)
+    {
+        this._addNewMesh(layer);
+    }
+
+
+    addShapeLayer(layer)
     {
         this._addNewMesh(layer);
     }
@@ -424,15 +436,25 @@ export class Render3D
             }
             else if(layer.type == 'image')
             {
-                bigCanvas = layer[layer.detectedFileType == 'model/gltf-binary' ? 'threeD' : 'threeDSVG'].bakeImageToLayer(width, height, true, true);
+                let obj;
+
+                if(layer.detectedFileType == 'model/gltf-binary') obj = 'threeD';
+                else if(layer.threeDSVG?.mesh) obj = 'threeDSVG';
+                else console.warn('Unknown layer object!');
+
+                bigCanvas = layer[obj].bakeImageToLayer(width, height, true, true);
             }
             else
             {
                 console.warn('Unknown layer type!');
             }
         }
+        else if(layer.type == 'gradient')
+        {
+            bigCanvas = layer.gradient.bakeImageToLayer(width, height, true, true);
+        }
 
-        container.show(layer, width, height);
+        container.show(layer, width / this.c3d.PIXEL_RATIO, height / this.c3d.PIXEL_RATIO);
         container.updatePreview(bigCanvas, true, false);
 
 
@@ -441,7 +463,7 @@ export class Render3D
 
         const blob = await new Promise(resolve => three.getCanvas().toBlob(resolve, 'image/png', 1.0));
 
-        /*
+        
         const fileBlob = new Blob( [blob] , {type:'image/png'});
         const a = document.createElement('a');
         const blobUrl = URL.createObjectURL(fileBlob);
@@ -450,7 +472,7 @@ export class Render3D
         a.click();
         a.remove();
         setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
-        */
+        
 
         // RESTORE SETTINGS AND VARIABLES
 
