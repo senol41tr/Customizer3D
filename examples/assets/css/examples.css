@@ -171,7 +171,7 @@ div.switchView > div
 div.switchView > div::before
 {
   content: "";
-  background-image: url("../../../svg/code.svg");
+  background-image: url("../../../svg/code.svg?c3d=101");
   background-position: 0 2px;
   background-repeat: no-repeat;
   background-size: 14px auto;
@@ -185,7 +185,7 @@ div.switchView > div.design
 
 div.switchView > div.design::before
 {
-  background-image: url("../../../svg/design.svg");
+  background-image: url("../../../svg/design.svg?c3d=101");
 }
 
 div.switchView > div > label

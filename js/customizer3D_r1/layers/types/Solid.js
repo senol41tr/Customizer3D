@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import ColorPicker from 'base/jscolorpicker/colorpicker.js';
-import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js';
-import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=101';
+import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=101';
+import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=101';
 
 export class Solid
 {
@@ -46,11 +46,11 @@ export class Solid
         this.div = div;
         
         div.innerHTML = `
-            <img class="visibility" src="${C3D_SERVER}svg/show.svg" alt="Icon" style="opacity:1;">
+            <img class="visibility" src="${C3D_SERVER}svg/show.svg?c3d=101" alt="Icon" style="opacity:1;">
             <div class="color_picker"></div>
-            <img src="${C3D_SERVER}svg/opacity.svg" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
-            <img src="${C3D_SERVER}svg/blend_modes.svg" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
-            <img src="${C3D_SERVER}svg/delete-bin.svg" alt="Icon" title="${this.c3d.lang['delete-layer']}" class="delete-layer">
+            <img src="${C3D_SERVER}svg/opacity.svg?c3d=101" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
+            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=101" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=101" alt="Icon" title="${this.c3d.lang['delete-layer']}" class="delete-layer">
         `;
 
         if(this.type == 'color')

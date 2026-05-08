@@ -17,7 +17,7 @@ import * as opentype from "base/opentype/opentype.esm.js";
  * ```
  *
  * @augments Loader
- * @three_import import { TTFLoader } from 'three/addons/loaders/TTFLoader.js';
+ * @three_import import { TTFLoader } from 'three/addons/loaders/TTFLoader.js?c3d=101';
  */
 class TTFLoader extends Loader {
 

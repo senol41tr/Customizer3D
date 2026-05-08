@@ -20,7 +20,7 @@ export const about = async (c3d, container) =>
 
     content.classList.add('about');
     content.innerHTML = `
-        <img src="${C3D_SERVER}svg/customizer_3D_logo.svg" alt="Customizer3D Logo" class="logo">
+        <img src="${C3D_SERVER}svg/customizer_3D_logo.svg?c3d=101" alt="Customizer3D Logo" class="logo">
 
         <p class="title">Used Libraries</p>
 
@@ -34,7 +34,7 @@ export const about = async (c3d, container) =>
         </div>
         <div>
             <p>PDF.js</p>
-            <a href="https://mozilla.github.io/pdf.js" target="_blank">#</a>
+            <a href="https://mozilla.github.io/pdf.js?c3d=101" target="_blank">#</a>
         </div>
         <div>
             <p>jsColorEngine</p>
@@ -42,11 +42,11 @@ export const about = async (c3d, container) =>
         </div>
         <div>
             <p>JS Color Picker</p>
-            <a href="https://www.jscolorpicker.com" target="_blank">#</a>
+            <a href="https://www.jscolorpicker.com?c3d=101" target="_blank">#</a>
         </div>
         <div>
             <p>opentype.js</p>
-            <a href="https://opentype.js.org" target="_blank">#</a>
+            <a href="https://opentype.js.org?c3d=101" target="_blank">#</a>
         </div>
         <div>
             <p>fflate</p>

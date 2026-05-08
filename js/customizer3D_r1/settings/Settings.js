@@ -1,12 +1,12 @@
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js';
-import ColorPicker from 'base/jscolorpicker/colorpicker.js';
-import {langs} from './langs.js';
-import {changeUIColors, tintSVG} from './changeUIColors.js';
-import {GPUInfo} from './GPUInfo.js';
-import * as ExportOptions from './exportOptions.js';
-import {takeAScreenshot} from './takeAScreenshot.js';
-import {about} from './about.js';
-import {stats} from './stats.js';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=101';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=101';
+import {langs} from './langs.js?c3d=101';
+import {changeUIColors, tintSVG} from './changeUIColors.js?c3d=101';
+import {GPUInfo} from './GPUInfo.js?c3d=101';
+import * as ExportOptions from './exportOptions.js?c3d=101';
+import {takeAScreenshot} from './takeAScreenshot.js?c3d=101';
+import {about} from './about.js?c3d=101';
+import {stats} from './stats.js?c3d=101';
 
 export class Settings
 {
@@ -22,7 +22,7 @@ export class Settings
         this.htmlEl.innerHTML = `
         <div class="title">
             <div class="title">
-                <img src="${C3D_SERVER}svg/settings.svg" alt="Icon" class="icon" draggable="false">
+                <img src="${C3D_SERVER}svg/settings.svg?c3d=101" alt="Icon" class="icon" draggable="false">
             </div>
         </div>
 

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import ColorPicker from 'base/jscolorpicker/colorpicker.js';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=101';
 
 export class Gradient
 {

@@ -14,23 +14,23 @@
 
         <link rel="icon" href="favicon.ico" type="image/x-icon">
 
-        <link rel="stylesheet" href="js/jscolorpicker/colorpicker.css">
+        <link rel="stylesheet" href="js/jscolorpicker/colorpicker.css?c3d=101">
 
-        <link rel="stylesheet" href="css/customizer3D_r1/style.css">
-        <link rel="stylesheet" href="css/customizer3D_r1/preloader.css">
-        <link rel="stylesheet" href="css/customizer3D_r1/cookies.css">
-        <link rel="stylesheet" href="css/customizer3D_r1/secure.css">
-        <link rel="stylesheet" href="css/customizer3D_r1/layers.css">
-        <link rel="stylesheet" href="css/customizer3D_r1/textLayers.css">
-        <link rel="stylesheet" href="css/customizer3D_r1/imageLayer.css">
-        <link rel="stylesheet" href="css/customizer3D_r1/shapeLayer.css">
-        <link rel="stylesheet" href="css/customizer3D_r1/canvas3D.css">
-        <link rel="stylesheet" href="css/customizer3D_r1/export.css">
-        <link rel="stylesheet" href="css/customizer3D_r1/settings.css">
-        <link rel="stylesheet" href="css/customizer3D_r1/contextMenu.css">
-        <link rel="stylesheet" href="css/customizer3D_r1/help.css">
-        <link rel="stylesheet" href="css/customizer3D_r1/controls.css">
-        <link rel="stylesheet" href="css/customizer3D_r1/about.css">
+        <link rel="stylesheet" href="css/customizer3D_r1/style.css?c3d=101">
+        <link rel="stylesheet" href="css/customizer3D_r1/preloader.css?c3d=101">
+        <link rel="stylesheet" href="css/customizer3D_r1/cookies.css?c3d=101">
+        <link rel="stylesheet" href="css/customizer3D_r1/secure.css?c3d=101">
+        <link rel="stylesheet" href="css/customizer3D_r1/layers.css?c3d=101">
+        <link rel="stylesheet" href="css/customizer3D_r1/textLayers.css?c3d=101">
+        <link rel="stylesheet" href="css/customizer3D_r1/imageLayer.css?c3d=101">
+        <link rel="stylesheet" href="css/customizer3D_r1/shapeLayer.css?c3d=101">
+        <link rel="stylesheet" href="css/customizer3D_r1/canvas3D.css?c3d=101">
+        <link rel="stylesheet" href="css/customizer3D_r1/export.css?c3d=101">
+        <link rel="stylesheet" href="css/customizer3D_r1/settings.css?c3d=101">
+        <link rel="stylesheet" href="css/customizer3D_r1/contextMenu.css?c3d=101">
+        <link rel="stylesheet" href="css/customizer3D_r1/help.css?c3d=101">
+        <link rel="stylesheet" href="css/customizer3D_r1/controls.css?c3d=101">
+        <link rel="stylesheet" href="css/customizer3D_r1/about.css?c3d=101">
 
         <script type="importmap">
         {
@@ -52,14 +52,14 @@
 
         import * as opentype from "base/opentype/opentype.esm.js";
         import * as fflate from 'base/fflate@0.8.2/fflate.esm.js';
-        import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js';
-        import {Size} from 'customizer3D_dir/utils/Size.js';
-        import {trimCanvas} from 'customizer3D_dir/utils/trimCanvas.js';
-        import {BlobtoUint8Array} from 'customizer3D_dir/utils/BlobtoUint8Array.js';
-        import {Base64ToUint8} from 'customizer3D_dir/utils/Base64ToUint8.js';
+        import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=101';
+        import {Size} from 'customizer3D_dir/utils/Size.js?c3d=101';
+        import {trimCanvas} from 'customizer3D_dir/utils/trimCanvas.js?c3d=101';
+        import {BlobtoUint8Array} from 'customizer3D_dir/utils/BlobtoUint8Array.js?c3d=101';
+        import {Base64ToUint8} from 'customizer3D_dir/utils/Base64ToUint8.js?c3d=101';
         import {PDF, cmyk, ops, Matrix} from 'base/libpdf@0.3.4/libpdf.min.esm.js';
-        // import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js';
-        import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js';
+        // import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=101';
+        import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=101';
 
 
       const pdf = PDF.create();
@@ -69,7 +69,7 @@
       const height = new Size({size: '297mm', DPI}).pt;
       const page = pdf.addPage({width, height, orientation: height > width ? 'portrait' : 'landscape'});
 
-        let response = await fetch('logo.jpg');
+        let response = await fetch('logo.jpg?c3d=101');
         let uint8Array = new Uint8Array(await response.arrayBuffer());
 
         const image = pdf.embedImage(uint8Array);

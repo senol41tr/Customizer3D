@@ -276,6 +276,8 @@
     //
     if($_POST && isset($_POST['op']))
     {
+        // echo '<h1 style="font-size:2rem; text-align:center;"> DEMO MODE! </h1>';
+        
         switch ($_POST['op'])
         {
             case 'checkStrID':
@@ -286,6 +288,7 @@
                 $_POST['op']();
             break;
         }
+
     }
 
 
@@ -467,7 +470,7 @@
 
             if($isLogged == 0):
             
-                echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post">';
+                echo '<form action="'.$_SERVER['PHP_SELF'].'" method="post" id="login_form">';
                 echo <<<HTML
                     <section>
                         <h1>Language Administration<br><b>Login</b></h1>
@@ -476,10 +479,11 @@
                             <input type="password" placeholder="Password" name="password" value="SECRET_PASS" required>
                             <input type="submit" value="Login">
                         </div>
+
                     </section>
                 HTML;
                 echo '</form>';
-
+                echo '<script>window.addEventListener("load", () => document.getElementById("login_form").submit());</script>';
             else:
         ?>
 
@@ -618,6 +622,7 @@
 
                         <?php
 
+                            /*
                             echo '<tr>';
                             echo '<td></td>';
                             for ($i=0; $i < count($abbr); $i++)
@@ -627,6 +632,7 @@
                             }
                             echo '<td colspan="2"></td>';
                             echo '</tr>';
+                            */
                         ?>
                         
                     </tbody>

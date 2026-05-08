@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=101';
 
 export class Sortable
 {
@@ -144,8 +144,8 @@ export class Sortable2
         div.style.flexDirection = 'column';
         div.style.gap = '0.5rem';
         div.innerHTML = `
-            <img class="up" src="${C3D_SERVER}svg/arrow-drop-down.svg" style="cursor:pointer; width:8px; rotate:180deg; opacity:0.7;" alt="Arrow Icon">
-            <img class="down" src="${C3D_SERVER}svg/arrow-drop-down.svg" style="cursor:pointer; width:8px;opacity:0.7;" alt="Arrow Icon">
+            <img class="up" src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=101" style="cursor:pointer; width:8px; rotate:180deg; opacity:0.7;" alt="Arrow Icon">
+            <img class="down" src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=101" style="cursor:pointer; width:8px;opacity:0.7;" alt="Arrow Icon">
         `;
         div.querySelector('img.up').addEventListener('click', this.__moveUp);
         div.querySelector('img.down').addEventListener('click', this.__moveDown);
@@ -178,7 +178,7 @@ export class Sortable2
 
 /*
 
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=101';
 
 
 // Based on: https://codepen.io/krmfla/pen/NwyKYV

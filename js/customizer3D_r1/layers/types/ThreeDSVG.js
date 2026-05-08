@@ -1,8 +1,8 @@
 import * as THREE from 'three';
-import {SVGLoader} from 'three_dir/loaders/SVGLoader.js';
-import {Controls} from 'customizer3D_dir/layers/utils/Controls.js';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js';
-import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js';
+import {SVGLoader} from 'three_dir/loaders/SVGLoader.js?c3d=101';
+import {Controls} from 'customizer3D_dir/layers/utils/Controls.js?c3d=101';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=101';
+import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=101';
 
 export class ThreeDSVG
 {
@@ -47,12 +47,12 @@ export class ThreeDSVG
                     name: 'MeshMatcapMaterial',
                     matcaps: {value:
                         [
-                            'matcap-1764731458681.jpg', 
-                            'matcap-1764731550075.jpg', 
-                            'matcap-1764731647559.jpg', 
-                            'matcap-1764787557882.jpg',
-                            'matcap-1776615703860.jpg',
-                            'matcap-1776615686768.jpg'
+                            'matcap-1764731458681.jpg?c3d=101', 
+                            'matcap-1764731550075.jpg?c3d=101', 
+                            'matcap-1764731647559.jpg?c3d=101', 
+                            'matcap-1764787557882.jpg?c3d=101',
+                            'matcap-1776615703860.jpg?c3d=101',
+                            'matcap-1776615686768.jpg?c3d=101'
                         ], type: 'image_array'}
                 }
             }

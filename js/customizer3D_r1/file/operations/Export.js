@@ -1,13 +1,13 @@
 import * as opentype from "base/opentype/opentype.esm.js";
 import * as fflate from 'base/fflate@0.8.2/fflate.esm.js';
-import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js';
-import {Size} from 'customizer3D_dir/utils/Size.js';
-import {trimCanvas} from 'customizer3D_dir/utils/trimCanvas.js';
-import {BlobtoUint8Array} from 'customizer3D_dir/utils/BlobtoUint8Array.js';
-import {Base64ToUint8} from 'customizer3D_dir/utils/Base64ToUint8.js';
+import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=101';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=101';
+import {trimCanvas} from 'customizer3D_dir/utils/trimCanvas.js?c3d=101';
+import {BlobtoUint8Array} from 'customizer3D_dir/utils/BlobtoUint8Array.js?c3d=101';
+import {Base64ToUint8} from 'customizer3D_dir/utils/Base64ToUint8.js?c3d=101';
 import {PDF, cmyk, ops} from 'base/libpdf@0.3.4/libpdf.min.esm.js';
-// import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js';
+// import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=101';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=101';
 
 export class Export
 {

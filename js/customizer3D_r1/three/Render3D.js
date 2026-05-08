@@ -1,10 +1,10 @@
 import * as THREE from 'three';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js';
-import {Size} from 'customizer3D_dir/utils/Size.js';
-import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js';
-import {getMaxLayers, getTexureSize} from 'customizer3D_dir/settings/GPUInfo.js';
-import {getDummyCanvas, getDummyCanvasTexture} from 'customizer3D_dir/three/materials/Materials.js';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=101';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=101';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=101';
+import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=101';
+import {getMaxLayers, getTexureSize} from 'customizer3D_dir/settings/GPUInfo.js?c3d=101';
+import {getDummyCanvas, getDummyCanvasTexture} from 'customizer3D_dir/three/materials/Materials.js?c3d=101';
 
 export class Render3D
 {
@@ -463,16 +463,16 @@ export class Render3D
 
         const blob = await new Promise(resolve => three.getCanvas().toBlob(resolve, 'image/png', 1.0));
 
-        
+        /*
         const fileBlob = new Blob( [blob] , {type:'image/png'});
         const a = document.createElement('a');
         const blobUrl = URL.createObjectURL(fileBlob);
         a.href = blobUrl;
-        a.download = this.c3d.props.modelName + '_Screenshot.png';
+        a.download = this.c3d.props.modelName + '_Screenshot.png?c3d=101';
         a.click();
         a.remove();
         setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
-        
+        */
 
         // RESTORE SETTINGS AND VARIABLES
 

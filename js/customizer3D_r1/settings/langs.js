@@ -6,12 +6,13 @@ export const langs = async (c3d, container) =>
     div.style.paddingBottom = '1rem';
     div.innerHTML = `
         <p class="title">${c3d.lang['change-language']}</p>
-        <div class="langs"></div>
+        <div class="langs" style="padding-bottom:0.5rem;"></div>
+        <a href="php/language.php" target="_blank" title="Language Administration">Language Administration</a>
     `;
     
     const langs = div.querySelector('div.langs');
 
-    const availableLangs = Object.entries(JSON.parse(await (await fetch(C3D_SERVER + 'lang/langs.json')).text()));
+    const availableLangs = Object.entries(JSON.parse(await (await fetch(C3D_SERVER + 'lang/langs.json?c3d=101')).text()));
     const activeLang = c3d.localStorage.get('language');
 
     for (let i = 0; i < availableLangs.length; i++)

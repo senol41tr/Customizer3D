@@ -1,8 +1,8 @@
 import * as THREE from 'three';
-import {GLB} from 'customizer3D_dir/three/loaders/GLB.js';
-import {Controls} from 'customizer3D_dir/layers/utils/Controls.js';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js';
-import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js';
+import {GLB} from 'customizer3D_dir/three/loaders/GLB.js?c3d=101';
+import {Controls} from 'customizer3D_dir/layers/utils/Controls.js?c3d=101';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=101';
+import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=101';
 
 export class ThreeD
 {

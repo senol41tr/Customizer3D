@@ -1,6 +1,6 @@
-import * as Materials from 'customizer3D_dir/three/materials/Materials.js';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js';
+import * as Materials from 'customizer3D_dir/three/materials/Materials.js?c3d=101';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=101';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=101';
 
 export const GPUInfo = async (c3d, container) =>
 {
@@ -27,7 +27,7 @@ export const GPUInfo = async (c3d, container) =>
 
     let html = `
         <div class="title">
-            <img src="${C3D_SERVER}svg/plus.svg" alt="Icon" class="icon">
+            <img src="${C3D_SERVER}svg/plus.svg?c3d=101" alt="Icon" class="icon">
             <p>${c3d.lang['render-quality']}</p>
         </div>
         <div class="content">

@@ -15,7 +15,7 @@ export const initialize = async (c3d, container) =>
     div.classList.add('options');
     div.innerHTML = `
         <div class="title">
-            <img src="${C3D_SERVER}svg/plus.svg" alt="Icon" class="icon">
+            <img src="${C3D_SERVER}svg/plus.svg?c3d=101" alt="Icon" class="icon">
             <p>${c3d.lang['export-options']}</p>
         </div>
 

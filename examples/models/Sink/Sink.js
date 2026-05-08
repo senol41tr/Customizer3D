@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=101';
 
 export function lang()
 {
@@ -61,7 +61,7 @@ export function parameters(self)
                 materials:
                 [
                     {
-                        url: root + 'cabinet/dark.jpg', 
+                        url: root + 'cabinet/dark.jpg?c3d=101', 
                         repatX: 4, 
                         repeatY: 4, 
                         material: 'MeshStandardMaterial', 
@@ -72,7 +72,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'cabinet/middle.jpg', 
+                        url: root + 'cabinet/middle.jpg?c3d=101', 
                         repatX: 4, 
                         repeatY: 4, 
                         material: 'MeshStandardMaterial', 
@@ -83,7 +83,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'cabinet/light.jpg', 
+                        url: root + 'cabinet/light.jpg?c3d=101', 
                         repatX: 4, 
                         repeatY: 4, 
                         material: 'MeshStandardMaterial', 
@@ -101,7 +101,7 @@ export function parameters(self)
                 materials:
                 [
                     {
-                        url: root + 'marmour/black_gold.jpg', 
+                        url: root + 'marmour/black_gold.jpg?c3d=101', 
                         material: 'MeshStandardMaterial', 
                         materialOptions: 
                         {
@@ -110,7 +110,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'marmour/white_gold.jpg', 
+                        url: root + 'marmour/white_gold.jpg?c3d=101', 
                         material: 'MeshStandardMaterial', 
                         materialOptions: 
                         {
@@ -119,7 +119,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'marmour/middle.jpg', 
+                        url: root + 'marmour/middle.jpg?c3d=101', 
                         material: 'MeshStandardMaterial', 
                         materialOptions: 
                         {
@@ -128,7 +128,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'marmour/black.jpg', 
+                        url: root + 'marmour/black.jpg?c3d=101', 
                         material: 'MeshStandardMaterial', 
                         materialOptions: 
                         {
@@ -137,7 +137,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'marmour/white.jpg', 
+                        url: root + 'marmour/white.jpg?c3d=101', 
                         material: 'MeshStandardMaterial', 
                         materialOptions: 
                         {
@@ -153,31 +153,31 @@ export function parameters(self)
                 materials:
                 [
                     {
-                        url: root + 'metal_pieces/gold.jpg', 
+                        url: root + 'metal_pieces/gold.jpg?c3d=101', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/anthracite.jpg', 
+                        url: root + 'metal_pieces/anthracite.jpg?c3d=101', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/metal.jpg', 
+                        url: root + 'metal_pieces/metal.jpg?c3d=101', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/green_metal.jpg', 
+                        url: root + 'metal_pieces/green_metal.jpg?c3d=101', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/orange_metal.jpg', 
+                        url: root + 'metal_pieces/orange_metal.jpg?c3d=101', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/red_metal.jpg', 
+                        url: root + 'metal_pieces/red_metal.jpg?c3d=101', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/white_metal.jpg', 
+                        url: root + 'metal_pieces/white_metal.jpg?c3d=101', 
                         material: 'MeshMatcapMaterial'
                     }
                 ]
