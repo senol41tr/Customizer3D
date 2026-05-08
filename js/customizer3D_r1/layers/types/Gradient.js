@@ -63,7 +63,7 @@ export class Gradient
 
         const oldCanvasSize = {...three._canvasDims};
 
-        // three.renderer.setPixelRatio(1);
+        three.renderer.setPixelRatio(1);
         three._onResize(null, w, h);
 
         this.setUniforms();
