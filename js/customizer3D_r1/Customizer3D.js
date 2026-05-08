@@ -720,9 +720,13 @@ export class Customizer3D
             {
                 if(!layer) layer = await this.layers.addImage(layers, {changeable:false});
 
+                // strip get parameters
+                let image_src = data.url.substring(data.url.lastIndexOf('/') + 1);
+                if(image_src.indexOf('?') > -1) image_src = image_src.substring(0, image_src.indexOf('?'));
+
                 const img = document.createElement('img');
                 img.classList.add('texture');
-                img.dataset.image_src = data.url.substring(data.url.lastIndexOf('/') + 1);
+                img.dataset.image_src = image_src;
                 img.src = data.url;
 
                 await img.decode();
@@ -741,6 +745,7 @@ export class Customizer3D
                             layer.image = img;
                             layer.fileName = data.url.substring(data.url.lastIndexOf('/') + 1);
                             if(layer.fileName.indexOf('?') > -1) layer.fileName = layer.fileName.substring(0, layer.fileName.indexOf('?'));
+                            
                             if(data.material) layer.material = data.material;
                             if(data.repeatX) layer.repeatX = data.repeatX || 1;
                             if(data.repeatY) layer.repeatY = data.repeatY || 1;
