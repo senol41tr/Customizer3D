@@ -320,6 +320,7 @@ section.customizer > div.layers > div.fileMenu
 
 section.customizer > div.layers > div.fileMenu > button.menu
 {
+    border-radius: 7px;
     flex-basis: 100%;
     border-top-left-radius: 0;
     border-top-right-radius: 0;

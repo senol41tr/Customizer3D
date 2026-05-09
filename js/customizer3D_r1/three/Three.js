@@ -127,7 +127,6 @@ export class Three
         
         this.renderer = new THREE.WebGLRenderer(options);
         this.renderer.setPixelRatio(this.c3d.PIXEL_RATIO);
-        this.renderer.xr.enabled = true;
         this.renderer.onDeviceLost = () => {
             alert("WebGLRenderer: Context Lost!\nPlease save changes and reload the page.");
         };

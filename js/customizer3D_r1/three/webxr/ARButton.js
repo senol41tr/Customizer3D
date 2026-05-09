@@ -1,6 +1,6 @@
 class ARButton {
 
-	static createButton( renderer, sessionInit = {}, c3d ) {
+	static createButton( sessionInit = {}, c3d ) {
 
 		const button = document.querySelector(c3d.props.container + ' > div.webXR > img.button');
 
@@ -67,9 +67,9 @@ class ARButton {
 
 				session.addEventListener( 'end', onSessionEnded );
 
-				renderer.xr.setReferenceSpaceType( 'local' );
+				c3d.webXR.three.renderer.xr.setReferenceSpaceType( 'local' );
 
-				await renderer.xr.setSession( session );
+				await c3d.webXR.three.renderer.xr.setSession( session );
 
 				sessionInit.domOverlay.root.style.display = '';
 

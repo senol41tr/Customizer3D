@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import { ARButton } from './webxr/ARButton.js?c3d=101';
+import { ARButton } from './webxr/ARButton.js?c3d=102';
+import {Three} from 'customizer3D_dir/three/Three.js?c3d=101';
 
 export class WebXR
 {
@@ -9,84 +10,102 @@ export class WebXR
 
         this.controller1 = null;
         this.controller12 = null;
+        this.glbScene = null;
         this.reticle = null;
         this.hitTestSource = null;
         this.hitTestSourceRequested = false;
+        this.canvas = null;
+        this.three = null;
 
         this.__onSelect = this.onSelect.bind(this);
         this.__onEnterFrame = this._onEnterFrame.bind(this);
 
-        ARButton.createButton(this.c3d.three.renderer, {requiredFeatures: ['hit-test']}, this.c3d);
-        
+        ARButton.createButton({requiredFeatures: ['hit-test']}, this.c3d);
+
     }
 
     start()
     {
+
+        // CANVAS 3D
+        this.canvas = document.createElement('canvas');
+        this.canvas.style.position = 'fixed';
+        this.canvas.style.left = 0;
+        this.canvas.style.top = 0;
+        this.canvas.style.zIndex = this.c3d.zIndex.index;
+        document.querySelector(this.c3d.props.container).appendChild(this.canvas);
+
+        this.three = new Three(this.c3d, {
+            rendererOptions:
+            {
+                canvas: this.canvas
+            }
+        });
+
+        this.three.setupAll();
+        this.three.setupLights();
+        this.three.renderer.xr.enabled = true;
+        this.three.renderer.setPixelRatio(window.devicePixelRatio);
+        this.three.camera.position.z = 1;
+        this.three._onResize(null, window.innerWidth, window.innerHeight);
+
+
         this.glbScene = this.c3d.glbScene.clone();
-        this.c3d.three.scene.add(this.glbScene);
-        this.glbScene.visible = false;
+        this.three.scene.add(this.glbScene);
+        // this.glbScene.visible = false;
+        
         this.c3d.glbScene.visible = false;
-        this.glbScene.visible = false;
         this.c3d.three.controls.orbit.enabled = false;
         this.c3d.three.stop();
 
-        this.c3d.three.renderer.setAnimationLoop( this.__onEnterFrame );
-
-        this.controller1 = this.c3d.three.renderer.xr.getController(0);
-        this.c3d.three.scene.add(this.controller1);
+        this.controller1 = this.three.renderer.xr.getController(0);
+        this.three.scene.add(this.controller1);
         this.controller1.addEventListener('select', this.__onSelect);
 
-        this.controller2 = this.c3d.three.renderer.xr.getController(1);
-        this.c3d.three.scene.add(this.controller2);
+        this.controller2 = this.three.renderer.xr.getController(1);
+        this.three.scene.add(this.controller2);
         this.controller2.addEventListener('select', this.__onSelect);
 
         const outerRadius = 0.1;
-        const thickness = 0.015;
+        const thickness = 0.02;
         const innerRadius = outerRadius - thickness;
         this.reticle = new THREE.Mesh(
             new THREE.RingGeometry(innerRadius, outerRadius, 64).rotateX( - Math.PI / 2 ),
             new THREE.MeshBasicMaterial({transparent:true, color:0xffffff, opacity: 0.75})
         );
         this.reticle.matrixAutoUpdate = false;
-        this.reticle.visible = false;
-        this.c3d.three.scene.add( this.reticle );
+        // this.reticle.visible = false;
+        this.three.scene.add( this.reticle );
+
+        this.three.renderer.setAnimationLoop( this.__onEnterFrame );
+
     }
 
     stop()
     {
-        this.scene.remove(this.glbScene);
-        
-        this.glbScene.visible = true;
-        this.c3d.three.renderer.setAnimationLoop(null);
-
-        this.controller1.removeEventListener('selectstart', this.__onSelect);
-        // this.controller1.removeEventListener('selectend', this.__onSelectEnd);
-        this.controller1.parent.remove(this.controller1);
-
-        this.controller2.removeEventListener('selectstart', this.__onSelect);
-        // this.controller2.removeEventListener('selectend', this.__onSelectEnd);
-        this.controller2.parent.remove(this.controller2);
-
-        this.reticle.removeFromParent();
-
-        this.hitTestSource = null;
-        this.hitTestSourceRequested = false;
+        this.three.renderer.setAnimationLoop(null);
 
         setTimeout(() =>
         {
+            this.c3d.three._clearThree(this.three.scene);
+            
+            this.canvas.remove();
+
+            this.c3d.glbScene.visible = true;
+
+            this.hitTestSource = null;
+            this.hitTestSourceRequested = false;
+
             this.c3d.three.start();
             this.c3d.three.controls.orbit.enabled = true;
-            this.glbScene.position.set(0,0,0);
-            this.glbScene.rotation.set(0,0,0);
-            this.c3d.three.controls.restoreSettings('set');
-        }, 1000);
+        }, 100);
     }
 
     onSelect()
     {
         if (this.reticle.visible)
         {
-            const mesh = this.c3d.glbScene;
+            const mesh = this.glbScene;
             this.reticle.matrix.decompose( mesh.position, mesh.quaternion, mesh.scale );
             mesh.visible = true;
         }
@@ -96,8 +115,8 @@ export class WebXR
     {
         if ( frame ) {
 
-            const referenceSpace = this.c3d.three.renderer.xr.getReferenceSpace();
-            const session = this.c3d.three.renderer.xr.getSession();
+            const referenceSpace = this.three.renderer.xr.getReferenceSpace();
+            const session = this.three.renderer.xr.getSession();
 
             if ( this.hitTestSourceRequested === false ) {
                 const self = this;
@@ -143,7 +162,7 @@ export class WebXR
 
         }
 
-        this.c3d.three.renderer.render( this.c3d.three.scene, this.c3d.three.camera );
+        this.three.renderer.render(this.three.scene, this.three.camera);
     }
 
 }
