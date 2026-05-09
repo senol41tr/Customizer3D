@@ -3,7 +3,7 @@ import {uniforms2, vertexShader2, fragmentShader2} from 'customizer3D_dir/three/
 import {Three} from 'customizer3D_dir/three/Three.js?c3d=101';
 import * as opentype from "base/opentype/opentype.esm.js";
 import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=101';
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=101';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=102';
 import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=101';
 import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=101';
 import {Size} from 'customizer3D_dir/utils/Size.js?c3d=101';

@@ -130,7 +130,10 @@ export class Three
         this.renderer.xr.enabled = true;
         this.renderer.onDeviceLost = () => {
             alert("WebGLRenderer: Context Lost!\nPlease save changes and reload the page.");
-        }
+        };
+
+        const gl = options.canvas.getContext('webgl2');
+        if (!gl) alert("WebGL 2 not supported!");
     }
 
     setupLights()

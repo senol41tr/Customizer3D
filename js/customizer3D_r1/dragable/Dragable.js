@@ -13,8 +13,6 @@ export class Dragable
         this._mdown = this._onMouseDown.bind(this);
         this._resetPos = this._resetPosition.bind(this);
         this._mmove = this._onMouseMove.bind(this);
-        this._menter = this._onMouseEnter.bind(this);
-        this._mleave = this._onMouseLeave.bind(this);
         this._resetPositionFn = this._resetPosition.bind(this);
         this._resetPositionID = 0;
         this._xy = {x:0, y:0};
@@ -27,28 +25,28 @@ export class Dragable
         else
         {
             this.dragEl.addEventListener('mousedown', this._mdown);
-            this.dragEl.addEventListener('mouseup', this._mup);
-            this.root.addEventListener('mouseleave', this._mup);
-            this.root.addEventListener('mouseup', this._mup);
-            this.container.addEventListener('mouseenter', this._menter);
-            this.container.addEventListener('mouseleave', this._mleave);
+            this.dragEl.addEventListener('click', this._mup);
+            window.addEventListener('mouseup', this._mup);
             window.addEventListener('resize', this._resetPos);
         }
     }
 
     destroy()
     {
-        this.dragEl.removeEventListener('touchstart', this._mdown);
-        this.dragEl.removeEventListener('touchend', this._mup);
-        this.dragEl.removeEventListener('mousedown', this._mdown);
-        this.dragEl.removeEventListener('mouseup', this._mup);
-        this.root.removeEventListener('mouseleave', this._mup);
-        this.root.removeEventListener('mouseup', this._mup);
-        window.removeEventListener('resize', this._resetPos);
-        window.removeEventListener('mousemove', this._mmove);
-        window.removeEventListener('touchmove', this._mmove);
-        this.container.removeEventListener('mouseenter', this._menter);
-        this.container.removeEventListener('mouseleave', this._mleave);
+        if(isMobile())
+        {
+            this.dragEl.removeEventListener('touchstart', this._mdown);
+            this.dragEl.removeEventListener('touchend', this._mup);
+            window.removeEventListener('touchmove', this._mmove);
+        }
+        else
+        {
+            this.dragEl.removeEventListener('mousedown', this._mdown);
+            window.removeEventListener('mouseup', this._mup);
+            this.root.removeEventListener('click', this._mup);
+            window.removeEventListener('resize', this._resetPos);
+            window.removeEventListener('mousemove', this._mmove);
+        }
     }
 
     _onMouseDown(e)
@@ -63,17 +61,19 @@ export class Dragable
         if(isMobile()) document.body.style.overflow = 'hidden'; // https://stackoverflow.com/a/6411611
         this.container.style.zIndex = this.c3d.zIndex.index; // move to top
 
-        window.addEventListener('mousemove', this._mmove);
-        window.addEventListener('touchmove', this._mmove);
+        if(!isMobile()) window.addEventListener('mousemove', this._mmove);
+        else window.addEventListener('touchmove', this._mmove);
+
     }
 
     _onMouseUp()
     {
-        window.removeEventListener('mousemove', this._mmove);
-        window.removeEventListener('touchmove', this._mmove);
-        this._resetPositionID = setTimeout(this._resetPositionFn, 200); // !!!
+        if(!isMobile()) window.removeEventListener('mousemove', this._mmove);
+        else window.removeEventListener('touchmove', this._mmove);
 
         if(isMobile()) document.body.style.overflow = 'auto';
+
+        this._resetPosition();
     }
 
     _onMouseMove(e)
@@ -94,16 +94,6 @@ export class Dragable
         this.container.style.bottom = 'auto';
         this.container.style.right = 'auto';
         this.container.style.transform = 'none';
-    }
-
-    _onMouseEnter(e)
-    {
-        this.c3d.eventsManager.raycaster.layers.disableAll();
-    }
-
-    _onMouseLeave(e)
-    {
-        this.c3d.eventsManager.raycaster.layers.enableAll();
     }
 
     _resetPosition()

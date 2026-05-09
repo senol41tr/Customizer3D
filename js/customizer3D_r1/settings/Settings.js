@@ -1,4 +1,4 @@
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=101';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=102';
 import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=101';
 import {langs} from './langs.js?c3d=101';
 import {changeUIColors, tintSVG} from './changeUIColors.js?c3d=101';

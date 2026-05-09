@@ -1,4 +1,4 @@
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=101';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=102';
 import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=101';
 
 export class Help

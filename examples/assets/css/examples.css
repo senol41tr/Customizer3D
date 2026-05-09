@@ -10,6 +10,12 @@ section.examples
   width: 150px;
 }
 
+section.examples *
+{
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
 section.examples > div.content
 {
   overflow: auto;

@@ -15,7 +15,7 @@ import {Layers} from 'customizer3D_dir/layers/Layers.js?c3d=101';
 import {TextLayer} from 'customizer3D_dir/layers/TextLayer.js?c3d=101';
 import {ImageLayer} from 'customizer3D_dir/layers/ImageLayer.js?c3d=101';
 import {ShapeLayer} from 'customizer3D_dir/layers/ShapeLayer.js?c3d=101';
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=101';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=102';
 import {ContextMenu} from 'customizer3D_dir/contextMenu/ContextMenu.js?c3d=101';
 import {Help} from 'customizer3D_dir/help/Help.js?c3d=101';
 import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=101';
@@ -149,11 +149,6 @@ export class Customizer3D
             container: layersDiv,
             root: document.querySelector(this.props.container),
             c3d: this
-        });
-
-        layersDiv.addEventListener('mouseup', () =>
-        {
-            document.querySelector(this.props.layers).style.opacity = 1;
         });
 
         // https://discourse.threejs.org/t/how-to-prevent-raycast-from-firing-when-i-touch-an-html-element/30262/2
