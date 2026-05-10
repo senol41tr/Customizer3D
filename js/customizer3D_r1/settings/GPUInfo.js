@@ -82,13 +82,17 @@ export const GPUInfo = async (c3d, container) =>
         c3d.three.render();
     };
 
+    let renderQuality = c3d.localStorage.get('renderQuality');
+
+    if(!renderQuality) renderQuality = 1;
+
     html += `
         <div style="padding-bottom:0.5rem;">
             <div>
                 <p class="sub_title">${c3d.lang['render-quality']}</p>
                 <div style="display:flex; gap:0.3rem; align-items:center;padding-top:0.5rem;">
                     <span>Min.</span>
-                    <input type="range" min="0" max="2" value="1" step="1" title="${c3d.lang['render-quality']}" class="renderQuality">
+                    <input type="range" min="0" max="2" value="${renderQuality}" step="1" title="${c3d.lang['render-quality']}" class="renderQuality">
                     <span>Max.</span>
                 </div>
             </div>
@@ -178,6 +182,7 @@ export const GPUInfo = async (c3d, container) =>
             }
 
             range.value = value;
+            c3d.localStorage.set('renderQuality', renderQualityRange.value);
             range.dispatchEvent(new Event('change'));
 
         });
@@ -189,7 +194,7 @@ export const GPUInfo = async (c3d, container) =>
         container.style.opacity = 1;
         
     });
-    
+
     ranges.forEach(range =>
     {
         const {width, height} = getPrintDims(c3d, range.dataset.mesh_name, 72);
@@ -198,8 +203,19 @@ export const GPUInfo = async (c3d, container) =>
 
         range.max = textureSize;
         range.min = isMobile ? 256 : 512;
-        range.step = 128;//isMobile ? 128 : 256;
-        range.value = textureSize / 1.5;
+        range.step = 128;
+
+        let renderQualityVal;
+        switch (c3d.localStorage.get('renderQuality'))
+        {
+            case '0': renderQualityVal = range.min; break;
+            case '1': renderQualityVal = range.max / 2; break;
+            case '2': renderQualityVal = range.max; break;
+            default: renderQualityVal = range.max / 1.5; break;
+        }
+
+        range.value = renderQualityVal;
+        
 
         range.parentNode.querySelector('p.textureSize').innerHTML = `Texture Size: ${range.value} px`;
 

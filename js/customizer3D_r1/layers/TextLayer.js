@@ -74,6 +74,16 @@ export class TextLayer
                     <div class="list">
                     </div>
                 </div>
+                <div class="moreOptions" title="${this.c3d.lang['more-options']}" style="padding-left:0.5rem;">
+                    <div class="button">
+                        <img src="${C3D_SERVER}svg/three_dot.svg?c3d=101" alt="Icon" style="height: 16px;">
+                    </div>
+                    <div class="list">
+                        <div title="${this.c3d.lang['export-as-png']}" style="white-space: nowrap;">
+                            <a href="javascript:void(0);" class="exportAsPNG">${this.c3d.lang['export-as-png']}</a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <canvas class="preview" oncontextmenu="return false;"></canvas>
             <div class="input">
@@ -260,6 +270,7 @@ export class TextLayer
         this.htmlEl.querySelector('div.fontSizes > div.button').addEventListener('click', this._listOnclick.bind(this));
         this.htmlEl.querySelector('div.rotate > div.button').addEventListener('click', this._listOnclick.bind(this));
         this.htmlEl.querySelector('div.zoom > div.button').addEventListener('click', this._listOnclick.bind(this));
+        this.htmlEl.querySelector('div.moreOptions > div.button').addEventListener('click', this._listOnclick.bind(this));
         
         // FONT SIZE
 
@@ -373,6 +384,64 @@ export class TextLayer
         el.addEventListener('click', () => this.layer.converTo3D());
 
 
+        // MORE OPTIONS
+
+        el = this.htmlEl.querySelector('div.moreOptions');
+        el.querySelector('a.exportAsPNG').addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            this.c3d.showHideUI.hide();
+            this.c3d.preloader.show();
+
+            let width, height, bigCanvas;
+
+            // CALCULATE IMAGE SIZE
+
+            let printDims = getPrintDims(this.c3d, this.layer.name, 300);
+
+            if(printDims.width > 4096 || printDims.height > 4096) {
+                alert("The print dimensions are larger than 4096px!\nPerhaps the rendering won't be correct!\nFile size reduced.");
+                printDims = calculateAspectRatioFit(printDims.width, printDims.height, 4096, 4096);
+            }
+
+            width = Math.floor(printDims.width);
+            height = Math.floor(printDims.height);
+
+            this.three._onResize(null, width, height);
+
+            if(this.layer.is3D)
+            {
+                bigCanvas = this.layer.threeDText.bakeTextToLayer(width, height, true, true);
+            }
+            else
+            {
+                width /= this.c3d.PIXEL_RATIO;
+                height /= this.c3d.PIXEL_RATIO;
+            }
+
+            this.show(this.layer, width, height);
+            this.updatePreview(bigCanvas, true, false);
+
+            this.three.render();
+
+            const blob = await new Promise(resolve => this.three.getCanvas().toBlob(resolve, 'image/png', 1.0));
+
+            const fileBlob = new Blob( [blob] , {type:'image/png'});
+            const a = document.createElement('a');
+            const blobUrl = URL.createObjectURL(fileBlob);
+            a.href = blobUrl;
+            a.download = this.layer.text + '.png' || this.c3d.props.modelName + '_Screenshot.png';
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
+
+            this.c3d.preloader.hide();
+            this.c3d.showHideUI.show();
+            this.show(this.layer);
+
+        });
+
+
         // SNAP
 
         el = this.htmlEl.querySelector('div.snap > div.button');
@@ -408,6 +477,11 @@ export class TextLayer
             if(!this.htmlEl.querySelector('div.zoom > div.list').contains(e.target) && !this.htmlEl.querySelector('div.zoom > div.button').contains(e.target))
             {
                 this.htmlEl.querySelector('div.zoom > div.list').style.display = 'none';
+            }
+
+            if(!this.htmlEl.querySelector('div.moreOptions > div.list').contains(e.target) && !this.htmlEl.querySelector('div.moreOptions > div.button').contains(e.target))
+            {
+                this.htmlEl.querySelector('div.moreOptions > div.list').style.display = 'none';
             }
         };
         window.addEventListener('click', _listClickOutside);
@@ -616,8 +690,8 @@ export class TextLayer
                 ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
                 ctx.fillText(
                     this.layer.text, 
-                    this.layer.textPosition.x * canvasPreview.width - (metrics.width / 2), 
-                    -this.layer.textPosition.y * canvasPreview.height + (actualHeight / 2)
+                    this.layer.textPosition.x * this.canvas.width - (metrics.width / 2), 
+                    -this.layer.textPosition.y * this.canvas.height + (actualHeight / 2)
                 );
                 // ctx.fillText(this.layer.text, - metrics.width / 2, actualHeight / 2);
                 ctx.restore();

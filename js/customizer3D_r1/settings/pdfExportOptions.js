@@ -1,11 +1,11 @@
 export const initialize = async (c3d, container) =>
 {
-    let options = c3d.localStorage.getObject('exportOptions');
+    let options = c3d.localStorage.getObject('pdfExportOptions');
     
     if(!options)
     {
         options = {convertToOutline: 1, addFonts: 0};
-        c3d.localStorage.setObject('exportOptions', options);
+        c3d.localStorage.setObject('pdfExportOptions', options);
     }
 
     const addFonts = options.addFonts == 1 ? ' checked' : '';
@@ -16,7 +16,7 @@ export const initialize = async (c3d, container) =>
     div.innerHTML = `
         <div class="title">
             <img src="${C3D_SERVER}svg/plus.svg?c3d=101" alt="Icon" class="icon">
-            <p>${c3d.lang['export-options']}</p>
+            <p>${c3d.lang['pdf-export-options']}</p>
         </div>
 
         <div>
@@ -36,9 +36,9 @@ export const initialize = async (c3d, container) =>
     {
         checkbox.addEventListener('change', (e) =>
         {
-            const options = c3d.localStorage.getObject('exportOptions');
+            const options = c3d.localStorage.getObject('pdfExportOptions');
             options[e.currentTarget.dataset.value] = e.currentTarget.checked ? 1 : 0;
-            c3d.localStorage.setObject('exportOptions', options);
+            c3d.localStorage.setObject('pdfExportOptions', options);
         });
     });
 
@@ -47,5 +47,5 @@ export const initialize = async (c3d, container) =>
 
 export const getOptions = (c3d) =>
 {
-    return c3d.localStorage.getObject('exportOptions');
+    return c3d.localStorage.getObject('pdfExportOptions');
 }

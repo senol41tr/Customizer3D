@@ -334,9 +334,6 @@
             }
             body
             {
-                display: flex;
-                justify-content: center;
-                padding-bottom: 3rem;
                 padding: 2rem
             }
             input
@@ -368,6 +365,10 @@
             img
             {
                 width: 30px;
+            }
+            section
+            {
+                overflow: auto;
             }
         </style>
 
@@ -639,7 +640,7 @@
 
                 </table>
                 
-                <div style="text-align:right">
+                <div>
                     <input type="submit" value="Save Changes" onclick="this.value = 'Please wait...';">
                 </div>
                 

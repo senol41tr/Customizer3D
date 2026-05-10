@@ -27,6 +27,11 @@ export class ShowHideUI
         document.querySelector(this.c3d.props.layers).style.visibility = 
         document.querySelector(this.c3d.props.help).style.visibility = 
         document.querySelector(this.c3d.props.controls).style.visibility = 
+        document.querySelector(this.c3d.props.imageLayer).style.visibility = 
+        document.querySelector(this.c3d.props.textLayer).style.visibility = 
+        document.querySelector(this.c3d.props.shapeLayer).style.visibility = 
+        document.querySelector('section.examples').style.visibility = 
+        document.querySelector('div.switchView').style.visibility = 
         document.querySelector(this.c3d.props.settings).style.visibility = state;
         
         this.c3d.glbScene.visible = state == 'visible';

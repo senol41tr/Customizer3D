@@ -101,14 +101,12 @@ section.customizer > div.imageLayer > div.content > div > div.selectImage > labe
     text-align: center;
 }
 
-section.customizer > div.imageLayer > div.content > div > div.rotate,
-section.customizer > div.imageLayer > div.content > div > div.zoom
+section.customizer > div.imageLayer > div.content > div > div
 {
     position: relative;
 }
 
-section.customizer > div.imageLayer > div.content > div > div.rotate > div.list,
-section.customizer > div.imageLayer > div.content > div > div.zoom > div.list
+section.customizer > div.imageLayer > div.content > div > div > div.list
 {
     position: absolute;
     display: none;
@@ -119,18 +117,17 @@ section.customizer > div.imageLayer > div.content > div > div.zoom > div.list
     max-height: 60vh;
     overflow-y: auto;
     z-index: 2;
+    white-space: nowrap;
 }
 
-section.customizer > div.imageLayer > div.content > div > div.rotate > div.list > div,
-section.customizer > div.imageLayer > div.content > div > div.zoom > div.list > div
+section.customizer > div.imageLayer > div.content > div > div > div.list > div
 {
     display: flex;
     gap: 0.5rem;
     align-items: center;
 }
 
-section.customizer > div.imageLayer > div.content > div > div.rotate > div.list > div > input,
-section.customizer > div.imageLayer > div.content > div > div.zoom > div.list > div > input
+section.customizer > div.imageLayer > div.content > div > div > div.list > div > input
 {
     width: 55px;
     padding: 0.25rem;
@@ -138,8 +135,7 @@ section.customizer > div.imageLayer > div.content > div > div.zoom > div.list > 
     font-size: 0.65rem;
 }
 
-section.customizer > div.imageLayer > div.content > div > div.rotate > div.list > div > input[type="number"]::-webkit-inner-spin-button,
-section.customizer > div.imageLayer > div.content > div > div.zoom > div.list > div > input[type="number"]::-webkit-inner-spin-button
+section.customizer > div.imageLayer > div.content > div > div > div.list > div > input[type="number"]::-webkit-inner-spin-button
 {
     -webkit-appearance: none;
 }

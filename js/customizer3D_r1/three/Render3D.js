@@ -74,6 +74,8 @@ export class Render3D
 
                     break;
                 }
+
+                this.setVisibility(layer, !layer.visible);
             }
             else if(layer.image)
             {
@@ -409,14 +411,15 @@ export class Render3D
 
         // CALCULATE IMAGE SIZE
 
-        const printDims = getPrintDims(this.c3d, layer.name, DPI);
+        let printDims = getPrintDims(this.c3d, layer.name, DPI);
 
         if(printDims.width > 4096 || printDims.height > 4096) {
-            alert("The print dimensions are larger than 4096px!\nPerhaps the rendering won't be correct!");
+            alert("The print dimensions are larger than 4096px!\nPerhaps the rendering won't be correct!\nFile size reduced.");
+            printDims = calculateAspectRatioFit(printDims.width, printDims.height, 4096, 4096);
         }
 
-        const width = Math.floor(printDims.width);
-        const height = Math.floor(printDims.height);
+        let width = Math.floor(printDims.width);
+        let height = Math.floor(printDims.height);
 
         // RENDER LAYER
 
@@ -453,12 +456,15 @@ export class Render3D
         {
             bigCanvas = layer.gradient.bakeImageToLayer(width, height, true, true);
         }
+        else
+        {
+            width /= this.c3d.PIXEL_RATIO;
+            height /= this.c3d.PIXEL_RATIO;
+        }
 
-        container.show(layer, width / this.c3d.PIXEL_RATIO, height / this.c3d.PIXEL_RATIO);
+        container.show(layer, width, height);
         container.updatePreview(bigCanvas, true, false);
 
-
-        // fitMeshToScreen(three.camera, texture, 1);
         three.render();
 
         const blob = await new Promise(resolve => three.getCanvas().toBlob(resolve, 'image/png', 1.0));
@@ -468,7 +474,7 @@ export class Render3D
         const a = document.createElement('a');
         const blobUrl = URL.createObjectURL(fileBlob);
         a.href = blobUrl;
-        a.download = this.c3d.props.modelName + '_Screenshot.png?c3d=101';
+        a.download = this.c3d.props.modelName + '_Screenshot.png';
         a.click();
         a.remove();
         setTimeout(() => URL.revokeObjectURL(blobUrl), 100);

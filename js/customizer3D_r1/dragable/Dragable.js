@@ -64,6 +64,8 @@ export class Dragable
         if(!isMobile()) window.addEventListener('mousemove', this._mmove);
         else window.addEventListener('touchmove', this._mmove);
 
+        setTimeout(() => this._resetPosition(), 200);
+
     }
 
     _onMouseUp()

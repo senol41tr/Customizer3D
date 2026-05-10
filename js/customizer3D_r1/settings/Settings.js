@@ -2,8 +2,8 @@ import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=102';
 import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=101';
 import {langs} from './langs.js?c3d=101';
 import {changeUIColors, tintSVG} from './changeUIColors.js?c3d=101';
-import {GPUInfo} from './GPUInfo.js?c3d=101';
-import * as ExportOptions from './exportOptions.js?c3d=101';
+import {GPUInfo} from './GPUInfo.js?c3d=102';
+import * as PDFExportOptions from './pdfExportOptions.js?c3d=101';
 import {takeAScreenshot} from './takeAScreenshot.js?c3d=101';
 import {about} from './about.js?c3d=101';
 import {stats} from './stats.js?c3d=101';
@@ -42,7 +42,7 @@ export class Settings
         GPUInfo(this.c3d, container);
         
         // ADD Export Options
-        ExportOptions.initialize(this.c3d, container);
+        PDFExportOptions.initialize(this.c3d, container);
         const GPUInfoDiv = this.htmlEl.querySelector('div.GPUInfo');
         if(GPUInfoDiv.style.opacity == '0.5')
         {
@@ -125,7 +125,7 @@ export class Settings
 
     getExportOptions()
     {
-        return ExportOptions.getOptions(this.c3d);
+        return PDFExportOptions.getOptions(this.c3d);
     }
 
 }
