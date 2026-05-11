@@ -210,7 +210,35 @@ export class Render3D
 
     renderShapeLayer(layer)
     {
-        
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const dims = getTexureSize(this.c3d, layer.name);
+        canvas.width = dims.width;
+        canvas.height = dims.height;
+
+        ctx.save();
+        ctx.fillStyle = layer.color;
+        // ctx.strokeStyle = this.layer.strokeColor;
+        // ctx.lineWidth = 2;
+        // ctx.lineJoin = "round"; // miter, round, bevel 
+        // context.miterLimit = 15;
+
+        ctx.translate(
+            canvas.width / 2 + (layer.shapePosition.x * canvas.width), 
+            canvas.height / 2 - (layer.shapePosition.y * canvas.height)
+        );
+
+        ctx.rotate(THREE.MathUtils.degToRad(layer.rotation));
+        ctx.beginPath();
+
+        this.c3d.shapeLayer.drawShape(ctx, layer.radius * 5);
+
+        ctx.closePath();
+        ctx.stroke();
+        ctx.fill();
+        ctx.restore();
+
+        this.updateLayerTexture(layer, canvas);
     }
 
 

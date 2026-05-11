@@ -289,6 +289,48 @@ export class ShapeLayer
         el.parentNode.classList[this._snap ? 'remove' : 'add']('toggle');
 
 
+        // FREEFORM
+
+        el = this.htmlEl.querySelector('div.freeform > div.button');
+        el.addEventListener('click', (e) =>
+        {
+            this.layer.shapeType = 'freeform';
+            this.updatePreview(null, true, false);
+        });
+
+
+        // TRIANGLE
+        
+        el = this.htmlEl.querySelector('div.triangle > div.button');
+        el.addEventListener('click', (e) =>
+        {
+            this.layer.shapeType = 'triangle';
+            this.updatePreview(null, true, false);
+        });
+
+
+        // CIRCLE
+        
+        el = this.htmlEl.querySelector('div.circle > div.button');
+        el.addEventListener('click', (e) =>
+        {
+            this.layer.shapeType = 'circle';
+            this.updatePreview(null, true, false);
+        });
+
+
+
+        // SQUARE
+        
+        el = this.htmlEl.querySelector('div.square > div.button');
+        el.addEventListener('click', (e) =>
+        {
+            this.layer.shapeType = 'square';
+            this.updatePreview(null, true, false);
+        });
+
+
+
 
         const _listClickOutside = (e) =>
         {
@@ -399,7 +441,7 @@ export class ShapeLayer
 
 
     updatePreview(canvasData = null, reDraw = true, drawSnappingLines = true)
-    {        
+    {     
         if(!this.layer || !this.layer._mesh) return;
 
         const canvas = this.htmlEl.querySelector('canvas.preview');
@@ -444,36 +486,18 @@ export class ShapeLayer
             //     ctx.drawImage(tmpCanvas, -canvas.width/2, -canvas.height/2, canvas.width, canvas.height);
             //     ctx.restore();
             // }
-            else
+            else if(this.layer.shapeType)
             {
-                const radius = this.layer.radius;
                 // const sides = 8;//Math.floor(Math.random() * 32);
                 // const splice = (Math.PI * 2) / sides;
                 const angle = THREE.MathUtils.degToRad(this.layer.rotation);
-
-                this.layer.points = [{x: 1, y: 0}, {x: 1, y: 1}, {x: 0, y: 1}, {x: 0, y: 0}];
-
 
                 ctx.save();
                 ctx.fillStyle = this.layer.color;
                 ctx.strokeStyle = this.layer.strokeColor;
                 ctx.lineWidth = 2;
-
-                let x1 = 0;
-                let x2 = this.layer.shapePosition.x;
-
-                let y1 = 0;
-                let y2 = this.layer.shapePosition.y;
-
-                let dx2 = x2 - x1;
-                let dy2 = y2 - y1;
-
-                dx2 = dx2 * Math.cos(angle) - dy2 * Math.sin(angle);
-                dy2 = dx2 * Math.sin(angle) + dy2 * Math.cos(angle);
-
-                x2 = (dx2 + x1);
-                y2 = (dy2 + y1);
-
+                // ctx.lineJoin = "round"; // miter, round, bevel 
+                // context.miterLimit = 15;
 
                 ctx.translate(
                     canvas.width / 2 + (this.layer.shapePosition.x * canvas.width), 
@@ -481,19 +505,9 @@ export class ShapeLayer
                 );
 
                 ctx.rotate(angle);
-
-
                 ctx.beginPath();
 
-                for (let i = 0; i < this.layer.points.length; i++)
-                {
-                    const point = this.layer.points[i];
-                    const x = (point.x * radius - radius / 2);// * (this.layer.radius / 100);
-                    const y = (point.y * radius - radius / 2);// * (this.layer.radius / 100);
-
-                    ctx.lineTo(x, y);
-
-                }
+                this.drawShape(ctx);
 
                 ctx.closePath();
                 ctx.stroke();
@@ -529,7 +543,11 @@ export class ShapeLayer
             ctx.restore();
         }
 
+        //if(reDraw && !drawSnappingLines)
+        this.c3d.render3d.renderShapeLayer(this.layer);
+
         this.layer.updateThumbnail();
+        this.c3d.three.render();
 
     }
 
@@ -538,6 +556,40 @@ export class ShapeLayer
     {
         const divList = e.currentTarget.parentNode.querySelector('div.list');
         divList.style.display = divList.style.display == '' || divList.style.display == 'none' ? 'block' : 'none';
+    }
+
+    drawShape(ctx, r = this.layer.radius)
+    {
+        switch(this.layer.shapeType)
+        {
+
+            case 'freeform':
+
+
+
+            break;
+
+            case 'triangle':
+
+                ctx.moveTo(0, - r / 2);
+                ctx.lineTo(r / 2 * Math.cos(Math.PI / 6), r / 2 * Math.sin(Math.PI / 6));
+                ctx.lineTo(- r / 2 * Math.cos(Math.PI / 6), r / 2 * Math.sin(Math.PI / 6));
+
+            break;
+
+            case 'circle':
+
+                ctx.arc(0, 0, r / 2, 0, Math.PI * 2, true);
+
+            break;
+
+            case 'square':
+
+                ctx.rect(- r / 2, - r / 2, r, r)
+
+            break;
+        }
+
     }
 
 }

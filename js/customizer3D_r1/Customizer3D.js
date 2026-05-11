@@ -181,6 +181,7 @@ export class Customizer3D
         // CONTROLS
 
         const controlsDiv = document.querySelector(this.props.controls);
+        controlsDiv.style.display = 'none';
         const deviceIcon = isMobile() ? 'tap' : 'mouse';
         controlsDiv.innerHTML = `
             <img src="${C3D_SERVER}svg/zoom-out.svg?c3d=101" class="zoomOut" draggable="false">
@@ -228,7 +229,7 @@ export class Customizer3D
         zoomCheckBox.addEventListener('click', () =>
         {
             const checked = zoomCheckBox.checked;
-            if(!isMobile()) this.three.controls.orbit.enableZoom = checked;
+            this.three.controls.orbit.enableZoom = checked;
             if(isMobile())
             {
                 const canvas3d = document.querySelector(this.props.canvas3d);
@@ -917,7 +918,7 @@ export class Customizer3D
                     <img src="${C3D_SERVER}svg/3D.svg?c3d=101" alt="Icon" draggable="false">
                 </div>
 
-                <div class="button shape" title="${this.lang['add-shape-layer']}" style="pointer-events:none; opacity:0.4;">
+                <div class="button shape" title="${this.lang['add-shape-layer']}">
                     <img src="${C3D_SERVER}svg/shapes.svg?c3d=101" alt="Icon" draggable="false">
                 </div>
                 `;

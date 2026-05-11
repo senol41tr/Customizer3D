@@ -377,11 +377,12 @@ export class ThreeDText
             this.c3d.contextMenu.setHTMLObj(this.div);
             this.c3d.contextMenu.show(button, false);
             this.c3d.contextMenu.setPosition(16, 16);
-            this.c3d.contextMenu.setWidth(180);
+            this.c3d.contextMenu.setWidth(220);
             return;
         }
 
         this.div = document.createElement('div');
+        this.div.style.cssText = 'display:flex; flex-direction:column; gap:0.5rem;';
 
         let html = '';
         const toUpper = (str) => str.charAt(0).toUpperCase() + str.substring(1);
@@ -390,7 +391,7 @@ export class ThreeDText
         {
             const props = this._options[key];
 
-            html += '<div style="display:flex; flex-direction:column; gap: 0.25rem; border: 1px solid rgba(0, 0, 0, 0.15);border-radius: 8px; padding: 0.35rem; margin: 0.1rem; margin-bottom:0.5rem;">';
+            html += '<div style="display:flex; flex-direction:column; gap: 0.85rem; border: 1px solid var(--customizerColorText);border-radius: 8px; padding: 0.35rem;">';
             html += '<p style="font-weight:bold; font-size:0.75rem;" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display == \'\' || this.nextElementSibling.style.display == \'block\' ? \'none\' : \'block\';">+ ' + toUpper(key) + '</p>';
 
             switch(key)
@@ -407,7 +408,7 @@ export class ThreeDText
 
                             if(!item.type) continue;
 
-                            html += '<div style="padding: 0 0.5rem;">';
+                            html += '<div style="padding: 0 0.85rem; margin-bottom: 0.5rem;">';
                             html += '<p>' + toUpper(prop) + '</p>';
 
                             switch (item.type)
@@ -437,7 +438,7 @@ export class ThreeDText
 
                 case 'material':
 
-                    html += '<div>';
+                    html += '<div style="display:flex; flex-direction:column; gap: 0.5rem; padding-left:0.5rem;">';
                         for (const prop in props)
                         {
                             const item = props[prop];
@@ -475,9 +476,9 @@ export class ThreeDText
                                             for (let i = 0; i < subItem.value.length; i++)
                                             {
                                                 const img = subItem.value[i];
-                                                subHtml += '<img data-image="' + img + '" src="'+ this._getMatcapURL(img) +'" alt="matcap image" style="width: 40px; cursor:pointer;">';
+                                                subHtml += '<img data-image="' + img + '" src="'+ this._getMatcapURL(img) +'" alt="matcap image" style="width: 40px; cursor:pointer; border-radius:6px;">';
                                             }
-                                            html += '<div style="display:flex; gap:0.25rem; flex-wrap:wrap;" class="' + key + ', ' + subProp + '">' + subHtml + '</div>';
+                                            html += '<div style="display:flex; gap:0.75rem; flex-wrap:wrap;" class="' + key + ', ' + subProp + '">' + subHtml + '</div>';
 
                                         break;
 
@@ -505,7 +506,7 @@ export class ThreeDText
             html += '</div>';
         }
 
-        html += '<div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">';
+        html += '<div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; padding:0.5rem;">';
         html += '<button class="cancel">To 2D</button>';
         html += '<button class="render">RENDER</button>';
         html += '</div>';
@@ -616,7 +617,7 @@ export class ThreeDText
         this.c3d.contextMenu.setHTMLObj(this.div);
         this.c3d.contextMenu.show(button, false);
         this.c3d.contextMenu.setPosition(16, 16);
-        this.c3d.contextMenu.setWidth(180);
+        this.c3d.contextMenu.setWidth(220);
 
 
     }

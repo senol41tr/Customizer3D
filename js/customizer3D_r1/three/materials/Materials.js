@@ -55,7 +55,6 @@ export const getDummyCanvas = (width = 1, height = 1, color) =>
     if(color)
     {
         const ctx = canvas.getContext('2d');
-        // ctx.globalAlpha = 0.2;
         ctx.fillStyle = color;
         ctx.fillRect(0, 0, width, height);
     }

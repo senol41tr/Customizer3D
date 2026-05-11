@@ -117,6 +117,8 @@ export class Gradient
         const gradientDiv = this.c3d.imageLayer.htmlEl.querySelector('div.content > div.menu > div.gradient');
         const buttonCSS = 'border:none; outline:none; padding: 0.25rem; color: var(--customizerColorText); font-size: 0.7rem; background-color: transparent;';
 
+        gradientDiv.style.width = '130px';
+
         gradientDiv.innerHTML = `
             <div style="display:flex; flex-direction:column; gap: 0.25rem;">
                 

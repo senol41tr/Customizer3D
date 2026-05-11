@@ -2,7 +2,7 @@ section.examples
 {
   position: absolute;
   z-index: 6;
-  top: 100px;
+  top: 1rem;
   right: 75x;
   display: flex;
   flex-direction: column;
@@ -28,7 +28,7 @@ section.examples > div.content
   gap: 1.5rem;
   overflow: auto;
   padding: 1rem 0;
-  background: repeating-conic-gradient(#FFFFFF 0 25%, #EBEBEB 0 50%) 50% / 10px 10px;
+  background: linear-gradient(0deg, var(--customizerColorBG1), var(--customizerColorBG2));
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
 }
@@ -154,9 +154,11 @@ div.switchView
 {
   position: absolute;
   z-index: 5;
-  top: 1rem;
-  width: 70px;
+  bottom: calc(48px + 1rem);
+  right: 1.5rem;
   display: none;
+  height: 50px;
+  width: 70px;
 }
 
 div.switchView input
@@ -168,30 +170,16 @@ div.switchView > div
 {
   position: absolute;
   background-color: var(--customizerColorPrimary);
-  padding: 0.5rem;
+  padding: 0 0.75rem;
   filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
   border-radius: 7px;
   cursor: pointer;
-}
-
-div.switchView > div::before
-{
-  content: "";
-  background-image: url("../../../svg/code.svg?c3d=101");
-  background-position: 0 2px;
-  background-repeat: no-repeat;
-  background-size: 14px auto;
-  padding-left: 20px;
+  z-index: 0;
 }
 
 div.switchView > div.design
 {
   visibility: hidden;
-}
-
-div.switchView > div.design::before
-{
-  background-image: url("../../../svg/design.svg?c3d=101");
 }
 
 div.switchView > div > label
@@ -201,4 +189,12 @@ div.switchView > div > label
   color: var(--customizerColorText);
   pointer-events: none;
   user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+div.switchView > div > label > img
+{
+  width: 14px;
 }

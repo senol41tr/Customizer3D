@@ -62,7 +62,7 @@ section.customizer > div.imageLayer > div.content
 section.customizer > div.imageLayer > div.content > div
 {
     display: flex;
-    gap: 0.5rem;
+    gap: 1rem;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
@@ -78,7 +78,7 @@ section.customizer > div.imageLayer > div.content > div > div.toggle
 
 section.customizer > div.imageLayer > div.content > div > div > div.button > img
 {
-    height: 12px;
+    height: 17px;
 }
 
 section.customizer > div.imageLayer > div.content > div > div > div.button
@@ -93,11 +93,10 @@ section.customizer > div.imageLayer > div.content > div > div > div.button::afte
 section.customizer > div.imageLayer > div.content > div > div.selectImage > label::after
 {
     content: attr(title);
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     max-width: 50px;
     line-height: 1.2;
     padding-top: 0.3rem;
-    opacity: 0.6;
     text-align: center;
 }
 
@@ -156,7 +155,7 @@ section.customizer > div.imageLayer > div.content > div > div.selectImage > labe
 
 section.customizer > div.imageLayer > div.content > div > div.selectImage > label > img
 {
-    height: 22px;
+    height: 17px;
 }
 
 section.customizer > div.imageLayer > div.content > div > div.selectImage > div.inputs
@@ -173,7 +172,7 @@ section.customizer > div.imageLayer > div.content > canvas.preview
     cursor: move;
     width: 150px;
     height: 150px;
-    background: repeating-conic-gradient(#FFFFFF 0 25%, #EBEBEB 0 50%) 50% / 12px 12px; /* https://stackoverflow.com/a/65129916 */
+    background: repeating-conic-gradient(#FFFFFF 0 25%, #EBEBEB 0 50%) 50% / 5px 5px; /* https://stackoverflow.com/a/65129916 */
 }
 
 

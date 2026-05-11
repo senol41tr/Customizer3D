@@ -67,8 +67,6 @@ export class ImageLayer
                 </div>
             </div>
             <canvas class="preview" oncontextmenu="return false;"></canvas>
-            <p class="description"></p>
-            <p class="smaller-than-preffered"></p>
             <div style="padding-top:0.25rem;" class="snapping">
                 <div class="snap">
                     <div class="button" title="${this.c3d.lang['snap']}">
@@ -148,13 +146,6 @@ export class ImageLayer
         };
 
 
-
-        const _upDateLayer = () =>
-        {
-            this.updatePreview(null, false);
-        };
-
-
         // ROTATION
 
         this.htmlEl.querySelector('div.rotate > div.button').addEventListener('click', _listOnclick);
@@ -166,7 +157,7 @@ export class ImageLayer
             e.currentTarget.value = val;
             this.htmlEl.querySelector('div.rotate input[type="range"]').value = val;
             this.layer.rotation = val;
-            this.updatePreview();
+            this.updatePreview(null, true, false);
         });
 
         el.addEventListener('focus', (e) => e.currentTarget.select());
@@ -176,7 +167,7 @@ export class ImageLayer
             {
                 const input = this.htmlEl.querySelector('div.rotate input[type="number"]');
                 input.parentNode.parentNode.style.display = 'none'; // hide list
-                this.updatePreview();
+                this.updatePreview(null, true, false);
             }
         });
         
@@ -185,7 +176,7 @@ export class ImageLayer
         el.addEventListener('input', (e) => {
             this.layer.rotation = parseFloat(e.currentTarget.value);
             this.htmlEl.querySelector('div.rotate input[type="number"]').value = e.currentTarget.value;
-            this.updatePreview();
+            this.updatePreview(null, true, false);
         });
 
         // ZOOM
@@ -281,7 +272,7 @@ export class ImageLayer
             const a = document.createElement('a');
             const blobUrl = URL.createObjectURL(fileBlob);
             a.href = blobUrl;
-            a.download = this.layer.fileName + '.png' || this.c3d.props.modelName + '_Screenshot.png';
+            a.download = (this.layer.fileName || this.c3d.props.modelName) + '.png';
             a.click();
             a.remove();
             setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
@@ -329,7 +320,7 @@ export class ImageLayer
                 y: (0.5 - ((clientY - bb.top) / bb.height)) / (this.layer.zoom / 100)
             };
 
-            _upDateLayer();
+            this.updatePreview(null, false);
         };
 
         const canvasMouseUp = () =>
@@ -369,10 +360,6 @@ export class ImageLayer
 
         if(isMobile()) canvasPreview.addEventListener('touchstart', canvasMouseDown);
         else canvasPreview.addEventListener('pointerdown', canvasMouseDown);
-
-        // show preferred size notice
-        const smallerThanPreffered = this.c3d.lang['smaller-than-preffered'].replace('[warningIcon]', '<img src="' + C3D_SERVER + 'svg/warning.svg?c3d=101" alt="Icon">');
-        this.htmlEl.querySelector('p.smaller-than-preffered').innerHTML = smallerThanPreffered;
 
 
         // SNAP
@@ -472,50 +459,13 @@ export class ImageLayer
         plane.name = 'texture';
         this.three.scene.add(plane);
 
-        
 
-        // hide notice
-        this.htmlEl.querySelector('p.smaller-than-preffered').style.display = 'none';
-        
         // set top of window
         this.htmlEl.style.zIndex = this.c3d.zIndex.index;
-
-        // extract image(s)
-        if(this.layer.image && this.layer.detectedFileType != 'image/svg+xml')
-        {
-            const printDims = getPrintDims(this.c3d, this.layer, 72);
-
-            // show notice when file dimensions are small
-            const pixelWidth = Math.round(new Size({size:printDims.originalSize.width, DPI:300}).px);
-            const pixelHeight = Math.round(new Size({size:printDims.originalSize.height, DPI:300}).px);
-
-            const info = this.c3d.lang['preferred-image-size']
-            .replace('[printSize]', printDims.originalSize.width + ' x ' + printDims.originalSize.height)
-            .replace('[pixelWidth]', pixelWidth)
-            .replace('[pixelHeight]', pixelHeight)
-            .replace('[DPI]', 72);
-            this.htmlEl.querySelector('p.description').innerHTML = info;
-            
-            if(this.layer.image.naturalWidth < pixelWidth || this.layer.image.naturalHeight < pixelHeight)
-            {
-                this.htmlEl.querySelector('p.description').style.display = 'block';
-                this.htmlEl.querySelector('p.smaller-than-preffered').style.display = 'flex';
-                setTimeout(() => {
-                    this.htmlEl.querySelector('p.description').style.display = 'none';
-                    this.htmlEl.querySelector('p.smaller-than-preffered').style.display = 'none';
-                }, 10000);
-            }
-            else
-            {
-                this.htmlEl.querySelector('p.description').style.display = 'none';
-                this.htmlEl.querySelector('p.smaller-than-preffered').style.display = 'none';
-            }
-        }
 
         // as default show window
         this.htmlEl.querySelector('div.content').style.display = 'flex'; // show content
         this.htmlEl.querySelector('div.title > div.buttons > img.rollup').style.rotate = '180deg';
-
 
         // add input for layer
         if(!this.layer.input)
@@ -839,7 +789,6 @@ export class ImageLayer
                 const img = new Image();
                 img.src = objectURL;
                 await img.decode();
-                // img.onload = () => URL.revokeObjectURL(img.src);
                 
                 // ADD NEW LAYER
                 if(!this.layer.image || filesLength > 1)
@@ -863,14 +812,20 @@ export class ImageLayer
                 }
                 else // UPDATE CURRENT LAYER
                 {
-                    URL.revokeObjectURL(this.layer.image.src);
-                    this.layer.image = img;
-                    this.layer.detectedFileType = data.detectedFileType;
-                    this.layer.fileName = file.name;
                     if(data.detectedFileType == 'image/svg+xml')
                     {
                         this.layer.destroy();
+                        this.layer.image = img;
+                        this.layer.input = this._addSelectImageInput();
+                        this.layer.detectedFileType = data.detectedFileType;
+                        this.layer.fileName = file.name;
                         await this.layer._init();
+                    }
+                    else
+                    {
+                        this.layer.image = img;
+                        this.layer.detectedFileType = data.detectedFileType;
+                        this.layer.fileName = file.name;
                     }
                     this.show(this.layer);
                 }

@@ -99,7 +99,7 @@ export class Image
 
     destroy()
     {
-        div.querySelector('img.remove').click();
+        this.div.querySelector('img.remove').click();
     }
 
     
@@ -170,9 +170,10 @@ export class Image
         div.querySelector('img.remove').addEventListener('click', () =>
         {
             if(this.input) this.input.remove();
+            if(this.image) URL.revokeObjectURL(this.image.src);
+            if(this._mesh) this.c3d.render3d.removeLayer(this);
             div.remove();
             this.c3d.imageLayer.hide();
-            if(this._mesh) this.c3d.render3d.removeLayer(this);
             this.c3d.three.render();
         });
 

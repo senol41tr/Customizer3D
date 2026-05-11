@@ -8,7 +8,7 @@ section.customizer > div.settings
     border-radius: 7px;
     filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
     max-height: calc(100dvh - 100px);
-    max-width: 200px;
+    max-width: 220px;
     overflow: auto;
     visibility: hidden;
 }
@@ -43,7 +43,7 @@ section.customizer > div.settings > div.content
     flex-direction: column;
     padding: 0.75rem;
     padding-top: 0;
-    min-width: 200px;
+    width: 220px;
 }
 
 section.customizer > div.settings > div.content > div
@@ -51,12 +51,12 @@ section.customizer > div.settings > div.content > div
     padding: 0.25rem;
 }
 
-section.customizer > div.settings > div.content > div:not(.language, .title, .about, .takeAScreenshot)
+section.customizer > div.settings > div.content > div:not(.language, .title, .about, .takeAScreenshot, .stats)
 {
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 7px;
-    padding: 0.35rem;
-    margin: 0.25rem;
+    border: 1px solid var(--customizerColorText);
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 section.customizer > div.settings > div.content > div.colors > div > div > p.title

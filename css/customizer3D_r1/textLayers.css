@@ -66,7 +66,7 @@ section.customizer > div.textLayer > div.content > input.text
 section.customizer > div.textLayer > div.content > div
 {
     display: flex;
-    gap: 0.5rem;
+    gap: 1rem;
     align-items: center;
     flex-wrap: wrap;
     justify-content: center;
@@ -88,17 +88,16 @@ section.customizer > div.textLayer > div.content > div > div > div.button::after
 section.customizer > div.textLayer > div.content > div > div.color_picker::after
 {
     content: attr(title);
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     max-width: 50px;
     line-height: 1.2;
     padding-top: 0.3rem;
-    opacity: 0.6;
     text-align: center;
 }
 
 section.customizer > div.textLayer > div.content > div > div > div.button > img
 {
-    height: 12px;
+    height: 17px;
 }
 
 

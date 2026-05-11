@@ -118,13 +118,19 @@
         <div class="switchView">
 
             <div class="code" title="Code View">
-                <input type="checkbox" id="__C3D_switchView_CheckBox_Code">
-                <label for="__C3D_switchView_CheckBox_Code">CODE</label>
+                <label>
+                    <input type="checkbox">
+                    <img src="svg/code.svg" alt="Icon">
+                    <p>CODE</p>
+                </label>
             </div>
 
             <div class="design" title="Design View">
-                <input type="checkbox" id="__C3D_switchView_CheckBox_Design">
-                <label for="__C3D_switchView_CheckBox_Design">DESIGN</label>
+                <label>
+                    <input type="checkbox">
+                    <img src="svg/design.svg" alt="Icon">
+                    <p>DESIGN</p>
+                </label>
             </div>
 
         </div>
@@ -190,7 +196,7 @@
                 c3d: C3D
             });
 
-            container.style.top = '100px';
+            container.style.top = '1rem';
             container.style.right = '75px';
 
             const rollup = container.querySelector('div.title > img.rollup');
@@ -207,6 +213,13 @@
 
             const switchView = document.querySelector('div.switchView');
             
+            const dragableView = new Dragable({
+                dragEl: switchView,
+                container: switchView,
+                root: document.querySelector('section.customizer'),
+                c3d: C3D
+            });
+
             for (let i = 0; i < modules.length; i++)
             {
                 const module = modules[i];
@@ -272,7 +285,6 @@
                 code.style.visibility = 
                 designView.style.visibility = view == 'code' ? 'visible' : 'hidden';
 
-                switchView.style.right = view == 'code' ? '1rem' : '60px';
                 code.style.zIndex = C3D.zIndex.index; // move to top
                 switchView.style.zIndex = C3D.zIndex.index;
             };

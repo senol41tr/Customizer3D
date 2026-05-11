@@ -93,7 +93,7 @@ section.customizer > div.shapeLayer > div.content > div > div > div.button::afte
 section.customizer > div.shapeLayer > div.content > div > div.selectImage > label::after
 {
     content: attr(title);
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     max-width: 50px;
     line-height: 1.2;
     padding-top: 0.3rem;
@@ -154,7 +154,7 @@ section.customizer > div.shapeLayer > div.content > canvas.preview
     cursor: move;
     width: 150px;
     height: 150px;
-    background: repeating-conic-gradient(#FFFFFF 0 25%, #EBEBEB 0 50%) 50% / 12px 12px; /* https://stackoverflow.com/a/65129916 */
+    background: repeating-conic-gradient(#FFFFFF 0 25%, #EBEBEB 0 50%) 50% /  5px 5px; /* https://stackoverflow.com/a/65129916 */
 }
 
 @media screen and (max-width: 500px)

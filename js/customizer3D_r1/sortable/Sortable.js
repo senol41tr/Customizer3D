@@ -11,7 +11,13 @@ export class Sortable
         this.startY = 0;
         this.initialY = 0;
         this.time = 0;
-        this.selector = 'div.image:not(.active), div.text:not(.active), div.solid:not(.active), div.gradient:not(.active)';
+        this.selector = `
+            div.image:not(.active), 
+            div.text:not(.active), 
+            div.solid:not(.active), 
+            div.gradient:not(.active),
+            div.shape:not(.active)
+        `;
 
         this.onMove = this.onMove.bind(this);
         this.onEnd = this.onEnd.bind(this);

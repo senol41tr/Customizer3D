@@ -18,7 +18,7 @@ export class Shape
         this.opacity = data.opacity || 100;
         this.rotation = data.rotation || 0;
         this.radius = data.radius || 50;
-        this.points = data.points || null;
+        this.shapeType = data.shapeType || null;
         this.uniforms = data.uniforms || {};
         this.visible = typeof data.visible == 'boolean' ? data.visible : true;
         this.blendMode = typeof data.blendMode == 'number' ? data.blendMode : 0;

@@ -334,7 +334,10 @@
             }
             body
             {
-                padding: 2rem
+                display: flex;
+                justify-content: center;
+                padding: 2rem;
+                padding-bottom: 3rem;
             }
             input
             {
@@ -369,6 +372,14 @@
             section
             {
                 overflow: auto;
+            }
+
+            @media screen and (max-width: 500px)
+            {
+                body
+                {
+                    display: block;
+                }
             }
         </style>
 

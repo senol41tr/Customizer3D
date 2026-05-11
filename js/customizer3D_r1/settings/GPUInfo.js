@@ -44,10 +44,7 @@ export const GPUInfo = async (c3d, container) =>
         // disable UI during processing
         c3d.preloader.show();
         c3d.preloader.set('Processing...');
-
-        const container = document.querySelector(c3d.props.container);
-        container.style.pointerEvents = 'none';
-        container.style.opacity = 0.5;
+        c3d.showHideUI.hide();
     };
 
     const onChange = (e) =>
@@ -76,9 +73,7 @@ export const GPUInfo = async (c3d, container) =>
 
         // Enable UI
         c3d.preloader.hide();
-        const container = document.querySelector(c3d.props.container);
-        container.style.pointerEvents = 'all';
-        container.style.opacity = 1;
+        c3d.showHideUI.show();
         c3d.three.render();
     };
 
@@ -162,10 +157,7 @@ export const GPUInfo = async (c3d, container) =>
         // disable UI during processing
         c3d.preloader.show();
         c3d.preloader.set('Processing...');
-
-        const container = document.querySelector(c3d.props.container);
-        container.style.pointerEvents = 'none';
-        container.style.opacity = 0.5;
+        c3d.showHideUI.hide();
     });
 
     renderQualityRange.addEventListener('change', () =>
@@ -189,9 +181,7 @@ export const GPUInfo = async (c3d, container) =>
 
         // Enable UI
         c3d.preloader.hide();
-        const container = document.querySelector(c3d.props.container);
-        container.style.pointerEvents = 'all';
-        container.style.opacity = 1;
+        c3d.showHideUI.show();
         
     });
 
