@@ -12,7 +12,7 @@ export const langs = async (c3d, container) =>
     
     const langs = div.querySelector('div.langs');
 
-    const availableLangs = Object.entries(JSON.parse(await (await fetch(C3D_SERVER + 'lang/langs.json?c3d=101')).text()));
+    const availableLangs = Object.entries(JSON.parse(await (await fetch(C3D_SERVER + 'lang/langs.json?c3d=102')).text()));
     const activeLang = c3d.localStorage.get('language');
 
     for (let i = 0; i < availableLangs.length; i++)

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import {GLTFLoader} from 'three_dir/loaders/GLTFLoader.js?c3d=101';
-import {DRACOLoader} from 'three_dir/loaders/DRACOLoader.js?c3d=101';
+import {GLTFLoader} from 'three_dir/loaders/GLTFLoader.js?c3d=102';
+import {DRACOLoader} from 'three_dir/loaders/DRACOLoader.js?c3d=102';
 
 export class DefaultLoader
 {

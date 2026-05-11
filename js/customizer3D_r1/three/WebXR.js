@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { ARButton } from './webxr/ARButton.js?c3d=102';
-import {Three} from 'customizer3D_dir/three/Three.js?c3d=101';
+import {Three} from 'customizer3D_dir/three/Three.js?c3d=102';
 
 export class WebXR
 {

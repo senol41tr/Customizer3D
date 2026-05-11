@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=101';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=102';
 
 export function lang()
 {
@@ -58,12 +58,12 @@ export function parameters(self)
                 label: self.lang['bag-texture'],
                 materials:
                 [
-                    {url: root + 'Fabric067_2K-JPG_Color.jpg?c3d=101', repeatX: 2, repeatY: 2},
-                    {url: root + 'Fabric018_2K-JPG_Color.jpg?c3d=101', repeatX: 3, repeatY: 3},
-                    {url: root + 'Fabric061_2K-JPG_Color.jpg?c3d=101', repeatX: 3, repeatY: 3},
-                    {url: root + 'Fabric026_2K-JPG_Color.jpg?c3d=101', repeatX: 3, repeatY: 3},
-                    {url: root + 'Fabric039_1K-JPG_Color.jpg?c3d=101', repeatX: 3, repeatY: 3},
-                    {url: root + 'Fabric024_2K-JPG_Color.jpg?c3d=101', repeatX: 3, repeatY: 3}
+                    {url: root + 'Fabric067_2K-JPG_Color.jpg?c3d=102', repeatX: 2, repeatY: 2},
+                    {url: root + 'Fabric018_2K-JPG_Color.jpg?c3d=102', repeatX: 3, repeatY: 3},
+                    {url: root + 'Fabric061_2K-JPG_Color.jpg?c3d=102', repeatX: 3, repeatY: 3},
+                    {url: root + 'Fabric026_2K-JPG_Color.jpg?c3d=102', repeatX: 3, repeatY: 3},
+                    {url: root + 'Fabric039_1K-JPG_Color.jpg?c3d=102', repeatX: 3, repeatY: 3},
+                    {url: root + 'Fabric024_2K-JPG_Color.jpg?c3d=102', repeatX: 3, repeatY: 3}
                 ]
             },
             front:

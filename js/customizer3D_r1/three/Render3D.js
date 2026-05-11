@@ -1,10 +1,10 @@
 import * as THREE from 'three';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=101';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=101';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=101';
-import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=101';
-import {getMaxLayers, getTexureSize} from 'customizer3D_dir/settings/GPUInfo.js?c3d=101';
-import {getDummyCanvas, getDummyCanvasTexture} from 'customizer3D_dir/three/materials/Materials.js?c3d=101';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=102';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=102';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=102';
+import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=102';
+import {getMaxLayers, getTexureSize} from 'customizer3D_dir/settings/GPUInfo.js?c3d=102';
+import {getDummyCanvas, getDummyCanvasTexture} from 'customizer3D_dir/three/materials/Materials.js?c3d=102';
 
 export class Render3D
 {
@@ -483,9 +483,6 @@ export class Render3D
         else if(layer.type == 'gradient')
         {
             bigCanvas = layer.gradient.bakeImageToLayer(width, height, true, true);
-        }
-        else
-        {
             width /= this.c3d.PIXEL_RATIO;
             height /= this.c3d.PIXEL_RATIO;
         }

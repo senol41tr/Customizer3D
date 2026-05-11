@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=101';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=102';
 
 export class Gradient
 {
@@ -247,6 +247,8 @@ export class Gradient
 
             _update();
 
+            this.c3d.render3d.renderImageLayer(this.layer);
+            this.c3d.three.render();
         });
 
 
@@ -261,6 +263,9 @@ export class Gradient
             };
 
             this._createOptions();
+
+            this.c3d.render3d.renderImageLayer(this.layer);
+            this.c3d.three.render();
 
         });
 

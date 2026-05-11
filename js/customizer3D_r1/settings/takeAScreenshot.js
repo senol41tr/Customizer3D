@@ -23,7 +23,7 @@ export const takeAScreenshot = async (c3d, container) =>
         const a = document.createElement('a');
         const blobUrl = URL.createObjectURL(blob);
         a.href = blobUrl;
-        a.download = c3d.props.modelName + '_Screenshot.png?c3d=101';
+        a.download = c3d.props.modelName + '_Screenshot.png';
         a.click();
         a.remove();
         setTimeout(() =>

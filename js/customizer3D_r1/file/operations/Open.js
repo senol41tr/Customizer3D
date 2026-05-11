@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import * as fflate from 'base/fflate@0.8.2/fflate.esm.js';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=101';
-import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=101';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=102';
+import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=102';
 import gsap from 'base/gsap@3.13.0/gsap@3.13.0.esm.js';
-import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=101';
-import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=101';
+import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=102';
+import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=102';
 
 export class Open
 {

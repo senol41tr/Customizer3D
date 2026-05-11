@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { DefaultLoader } from './DefaultLoader.js?c3d=101';
+import { DefaultLoader } from './DefaultLoader.js?c3d=102';
 
 export class Texture extends DefaultLoader
 {

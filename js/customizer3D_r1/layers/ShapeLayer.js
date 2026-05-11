@@ -1,12 +1,12 @@
 import * as THREE from 'three';
-import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=101';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=102';
 import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=102';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=101';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=101';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=101';
-import {createFiltersList} from 'customizer3D_dir/layers/Filters/createFiltersList.js?c3d=101';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=101';
-import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=101';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=102';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=102';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=102';
+import {createFiltersList} from 'customizer3D_dir/layers/Filters/createFiltersList.js?c3d=102';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=102';
+import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=102';
 
 export class ShapeLayer
 {
@@ -26,8 +26,8 @@ export class ShapeLayer
         <div class="title">
             <p class="label" draggable="false">${this.c3d.lang['add-shape-layer']}</p>
             <div class="buttons">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=101" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
-                <img src="${C3D_SERVER}svg/plus.svg?c3d=101" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=102" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
+                <img src="${C3D_SERVER}svg/plus.svg?c3d=102" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
             </div>
         </div>
 
@@ -35,25 +35,25 @@ export class ShapeLayer
             <div class="menu">
                 <div class="freeform">
                     <div class="button" title="${this.c3d.lang['freeform']}">
-                        <img src="${C3D_SERVER}svg/freeform.svg?c3d=101" alt="Icon">
+                        <img src="${C3D_SERVER}svg/freeform.svg?c3d=102" alt="Icon">
                     </div>
                     <div class="list"></div>
                 </div>
                 <div class="triangle">
                     <div class="button" title="${this.c3d.lang['triangle']}">
-                        <img src="${C3D_SERVER}svg/triangle.svg?c3d=101" alt="Icon">
+                        <img src="${C3D_SERVER}svg/triangle.svg?c3d=102" alt="Icon">
                     </div>
                     <div class="list"></div>
                 </div>
                 <div class="circle">
                     <div class="button" title="${this.c3d.lang['circle']}">
-                        <img src="${C3D_SERVER}svg/circle.svg?c3d=101" alt="Icon">
+                        <img src="${C3D_SERVER}svg/circle.svg?c3d=102" alt="Icon">
                     </div>
                     <div class="list"></div>
                 </div>
                 <div class="square">
                     <div class="button" title="${this.c3d.lang['square']}">
-                        <img src="${C3D_SERVER}svg/square.svg?c3d=101" alt="Icon">
+                        <img src="${C3D_SERVER}svg/square.svg?c3d=102" alt="Icon">
                     </div>
                     <div class="list"></div>
                 </div>
@@ -64,13 +64,13 @@ export class ShapeLayer
             <div style="padding-top:0.25rem;">
                 <div class="snap toggle">
                     <div class="button" title="${this.c3d.lang['snap']}">
-                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=101" alt="Icon">
+                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=102" alt="Icon">
                     </div>
                 </div>
 
                 <div class="rotate">
                     <div class="button" title="${this.c3d.lang['rotate']}">
-                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=101" alt="Icon">
+                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=102" alt="Icon">
                     </div>
                     <div class="list">
                         <div class="inputPercent" title="°"><input type="number" min="0" max="360" value="0"></div>
@@ -79,7 +79,7 @@ export class ShapeLayer
                 </div>
                 <div class="radius">
                     <div class="button" title="${this.c3d.lang['radius']}">
-                        <img src="${C3D_SERVER}svg/radius.svg?c3d=101" alt="Icon">
+                        <img src="${C3D_SERVER}svg/radius.svg?c3d=102" alt="Icon">
                     </div>
                     <div class="list">
                         <div class="inputPercent" title="r"><input type="number" min="10" max="400" value="50"></div>

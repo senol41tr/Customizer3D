@@ -1,14 +1,14 @@
 import * as THREE from 'three';
-import {uniforms2, vertexShader2, fragmentShader2} from 'customizer3D_dir/three/materials/Shaders.js?c3d=101';
-import {Three} from 'customizer3D_dir/three/Three.js?c3d=101';
+import {uniforms2, vertexShader2, fragmentShader2} from 'customizer3D_dir/three/materials/Shaders.js?c3d=102';
+import {Three} from 'customizer3D_dir/three/Three.js?c3d=102';
 import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=102';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=101';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=101';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=101';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=101';
-import {ExtractImages} from 'customizer3D_dir/layers/utils/ExtractImages.js?c3d=101';
-// import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=101';
-import {createFiltersList} from 'customizer3D_dir/layers/Filters/createFiltersList.js?c3d=101';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=102';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=102';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=102';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=102';
+import {ExtractImages} from 'customizer3D_dir/layers/utils/ExtractImages.js?c3d=102';
+// import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=102';
+import {createFiltersList} from 'customizer3D_dir/layers/Filters/createFiltersList.js?c3d=102';
 
 export class ImageLayer
 {
@@ -33,8 +33,8 @@ export class ImageLayer
         <div class="title">
             <p class="label" draggable="false">...</p>
             <div class="buttons">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=101" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
-                <img src="${C3D_SERVER}svg/plus.svg?c3d=101" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=102" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
+                <img src="${C3D_SERVER}svg/plus.svg?c3d=102" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
             </div>
         </div>
 
@@ -46,18 +46,18 @@ export class ImageLayer
                 </div>
                 <div class="filters">
                     <div class="button" title="${this.c3d.lang['filter-gallery']}">
-                        <img src="${C3D_SERVER}svg/filters.svg?c3d=101" alt="Icon">
+                        <img src="${C3D_SERVER}svg/filters.svg?c3d=102" alt="Icon">
                     </div>
                 </div>
                 <div class="threeD">
                     <div class="button" title="${this.c3d.lang['to-3d']}">
-                        <img src="${C3D_SERVER}svg/3D.svg?c3d=101" alt="Icon">
+                        <img src="${C3D_SERVER}svg/3D.svg?c3d=102" alt="Icon">
                     </div>
                 </div>
                 <div class="gradient" style="flex-basis: 100%;"></div>
                 <div class="moreOptions" title="${this.c3d.lang['more-options']}" style="padding-left:0.5rem;">
                     <div class="button">
-                        <img src="${C3D_SERVER}svg/three_dot.svg?c3d=101" alt="Icon" style="height: 16px;">
+                        <img src="${C3D_SERVER}svg/three_dot.svg?c3d=102" alt="Icon" style="height: 16px;">
                     </div>
                     <div class="list">
                         <div title="${this.c3d.lang['export-as-png']}">
@@ -70,12 +70,12 @@ export class ImageLayer
             <div style="padding-top:0.25rem;" class="snapping">
                 <div class="snap">
                     <div class="button" title="${this.c3d.lang['snap']}">
-                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=101" alt="Icon">
+                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=102" alt="Icon">
                     </div>
                 </div>
                 <div class="rotate">
                     <div class="button" title="${this.c3d.lang['rotate']}">
-                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=101" alt="Icon">
+                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=102" alt="Icon">
                     </div>
                     <div class="list">
                         <div class="inputPercent" title="°">
@@ -86,7 +86,7 @@ export class ImageLayer
                 </div>
                 <div class="zoom">
                     <div class="button" title="${this.c3d.lang['zoom']}">
-                        <img src="${C3D_SERVER}svg/zoom.svg?c3d=101" alt="Icon">
+                        <img src="${C3D_SERVER}svg/zoom.svg?c3d=102" alt="Icon">
                     </div>
                     <div class="list">
                         <div class="inputPercent" title="%">
@@ -687,9 +687,6 @@ export class ImageLayer
             if(this.layer.gradient) this.layer.gradient.setUniforms();
         }
 
-
-        if(reDraw && !drawSnappingLines) this.c3d.render3d.renderImageLayer(this.layer);
-        
         if(reDraw)
         {
             uniforms.tDiffuse.value.needsUpdate = true;

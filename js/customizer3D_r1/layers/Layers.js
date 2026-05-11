@@ -1,7 +1,7 @@
-import {Image} from 'customizer3D_dir/layers/types/Image.js?c3d=101';
-import {Solid} from 'customizer3D_dir/layers/types/Solid.js?c3d=101';
-import {Text} from 'customizer3D_dir/layers/types/Text.js?c3d=101';
-import {Shape} from 'customizer3D_dir/layers/types/Shape.js?c3d=101';
+import {Image} from 'customizer3D_dir/layers/types/Image.js?c3d=102';
+import {Solid} from 'customizer3D_dir/layers/types/Solid.js?c3d=102';
+import {Text} from 'customizer3D_dir/layers/types/Text.js?c3d=102';
+import {Shape} from 'customizer3D_dir/layers/types/Shape.js?c3d=102';
 
 export class Layers
 {

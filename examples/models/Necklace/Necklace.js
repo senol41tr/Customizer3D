@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=101';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=102';
 
 export function lang()
 {
@@ -59,9 +59,9 @@ export function parameters(self)
                 label: self.lang['necklace-chain'],
                 materials:
                 [
-                    {url:root + 'matcap-1764731458681.jpg?c3d=101', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764731647559.jpg?c3d=101', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764787557882.jpg?c3d=101', material:'MeshMatcapMaterial'}
+                    {url:root + 'matcap-1764731458681.jpg?c3d=102', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764731647559.jpg?c3d=102', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764787557882.jpg?c3d=102', material:'MeshMatcapMaterial'}
                 ]
             },
             heart:
@@ -69,10 +69,10 @@ export function parameters(self)
                 label: self.lang['necklace-heart'],
                 materials:
                 [
-                    {url:root + 'matcap-1764731458681.jpg?c3d=101', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764731647559.jpg?c3d=101', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764787557882.jpg?c3d=101', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764731550075.jpg?c3d=101', material:'MeshMatcapMaterial'}
+                    {url:root + 'matcap-1764731458681.jpg?c3d=102', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764731647559.jpg?c3d=102', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764787557882.jpg?c3d=102', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764731550075.jpg?c3d=102', material:'MeshMatcapMaterial'}
                 ]
             }
         }

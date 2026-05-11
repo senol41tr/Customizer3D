@@ -1,4 +1,4 @@
-import {SVGFill, SVGFillColor} from 'customizer3D_dir/utils/SVGFill.js?c3d=101';
+import {SVGFill, SVGFillColor} from 'customizer3D_dir/utils/SVGFill.js?c3d=102';
 
 export const changeUIColors = (c3d, container) =>
 {
@@ -11,7 +11,7 @@ export const changeUIColors = (c3d, container) =>
     div.classList.add('colors');
     div.innerHTML = `
         <div class="title">
-            <img src="${C3D_SERVER}svg/plus.svg?c3d=101" alt="Icon" class="icon">
+            <img src="${C3D_SERVER}svg/plus.svg?c3d=102" alt="Icon" class="icon">
             <p>${c3d.lang['change-ui-colors']}</p>
         </div>
         <div class="colors">
@@ -43,14 +43,7 @@ export const changeUIColors = (c3d, container) =>
     const bg_color1 = c3d.localStorage.get(customizerColorBG1) || cs.getPropertyValue('--' + customizerColorBG1);
     const bg_color2 = c3d.localStorage.get(customizerColorBG2) || cs.getPropertyValue('--' + customizerColorBG2);
     const primary_color = c3d.localStorage.get(customizerColorPrimary) || cs.getPropertyValue('--' + customizerColorPrimary);
-    let text_color = c3d.localStorage.get(customizerColorText) || cs.getPropertyValue('--' + customizerColorText);
-    
-    if(c3d.localStorage.get(customizerColorText) == null)
-    {
-        const ce = c3d.colorEngine;
-        ce.invert(primary_color, false, false);
-        text_color = ce.color;
-    }
+    const text_color = c3d.localStorage.get(customizerColorText) || cs.getPropertyValue('--' + customizerColorText);
 
     c3d.localStorage.set(customizerColorBG1, bg_color1);
     c3d.localStorage.set(customizerColorBG2, bg_color2);

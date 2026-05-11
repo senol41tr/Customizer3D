@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {uniforms2} from 'customizer3D_dir/three/materials/Shaders.js?c3d=101';
+import {uniforms2} from 'customizer3D_dir/three/materials/Shaders.js?c3d=102';
 
 // container: ImageLayer or TextLayer
 export const createFiltersList = (c3d, container, button) =>

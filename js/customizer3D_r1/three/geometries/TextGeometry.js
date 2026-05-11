@@ -13,7 +13,7 @@ import {
  *
  * ```js
  * const loader = new FontLoader();
- * const font = await loader.loadAsync( 'fonts/helvetiker_regular.typeface.json?c3d=101' );
+ * const font = await loader.loadAsync( 'fonts/helvetiker_regular.typeface.json?c3d=102' );
  * const geometry = new TextGeometry( 'Hello three.js!', {
  * 	font: font,
  * 	size: 80,
@@ -23,7 +23,7 @@ import {
  * ```
  *
  * @augments ExtrudeGeometry
- * @three_import import { TextGeometry } from 'three/addons/geometries/TextGeometry.js?c3d=101';
+ * @three_import import { TextGeometry } from 'three/addons/geometries/TextGeometry.js?c3d=102';
  */
 class TextGeometry extends ExtrudeGeometry {
 
