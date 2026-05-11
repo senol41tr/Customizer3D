@@ -5,8 +5,7 @@
 No Server needed, all operations are performed on the device. Client Side
 
 **Multiple Language**
-With Auto Translate feature, you can add easy new language(s)
-* It requires an http server.
+It requires an http server.
 
 **Layer based editing**
 Add Image, Text and all available Layer types, rearrange with drag'n drop
