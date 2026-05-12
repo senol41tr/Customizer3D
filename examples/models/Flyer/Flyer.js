@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=102';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js';
 
 export function lang()
 {
@@ -12,8 +12,10 @@ export function lang()
 export function parameters(self)
 {
     return {
+        
         // unique name (module name) in models folder, the name is important for creating instance 
         // const {parameters, init, setView, onUnLoad} = await import('models/'+ data.modelName +'.js');  
+
         modelName: 'Flyer',
 
         container:      'section.customizer',

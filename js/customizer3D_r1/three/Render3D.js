@@ -133,8 +133,8 @@ export class Render3D
         const ctx = canvas.getContext('2d');
         const dims = getTexureSize(this.c3d, layer.name);
         
-        canvas.width = Math.min(4096, dims.width);
-        canvas.height = Math.min(4096, dims.height);
+        canvas.width = Math.min(this.c3d.MAX_IMAGE_SIZE, dims.width);
+        canvas.height = Math.min(this.c3d.MAX_IMAGE_SIZE, dims.height);
 
         if(layer.detectedFileType == 'image/svg+xml' && layer.is3D)
         {
@@ -441,9 +441,9 @@ export class Render3D
 
         let printDims = getPrintDims(this.c3d, layer.name, DPI);
 
-        if(printDims.width > 4096 || printDims.height > 4096) {
-            alert("The print dimensions are larger than 4096px!\nPerhaps the rendering won't be correct!\nFile size reduced.");
-            printDims = calculateAspectRatioFit(printDims.width, printDims.height, 4096, 4096);
+        if(printDims.width > this.c3d.MAX_IMAGE_SIZE || printDims.height > this.c3d.MAX_IMAGE_SIZE) {
+            console.warn("The print dimensions are larger than " + this.c3d.MAX_IMAGE_SIZE + "px!\nPerhaps the rendering won't be correct!\nFile size reduced.");
+            printDims = calculateAspectRatioFit(printDims.width, printDims.height, this.c3d.MAX_IMAGE_SIZE, this.c3d.MAX_IMAGE_SIZE);
         }
 
         let width = Math.floor(printDims.width);

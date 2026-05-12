@@ -5,8 +5,8 @@ export const langs = async (c3d, container) =>
     div.style.gap = '0.2rem';
     div.style.paddingBottom = '1rem';
     div.innerHTML = `
-        <p class="title">${c3d.lang['change-language']}</p>
-        <div class="langs" style="padding-bottom:0.5rem;"></div>
+        <p class="title" style="margin-bottom: 0.5rem;">${c3d.lang['change-language']}</p>
+        <div class="langs" style="padding-bottom:1rem;"></div>
         <a href="php/language.php" target="_blank" title="Language Administration">Language Administration</a>
     `;
     

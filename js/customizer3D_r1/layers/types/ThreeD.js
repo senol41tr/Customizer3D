@@ -171,6 +171,7 @@ export class ThreeD
             return canvasImage;
         }
 
+        c3d.render3d.renderImageLayer(this.layer);
         c3d.render3d.updateLayerTexture(this.layer, canvasImage);
         c3d.imageLayer.show(this.layer);
     }

@@ -144,16 +144,16 @@ export class SaveAs
                         }
                         else if(layer.gradient && layer.type == 'gradient')
                         {
-                            const gradientDims = calculateAspectRatioFit(layer.image.width, layer.image.height, 4096, 4096);
+                            const gradientDims = calculateAspectRatioFit(layer.image.width, layer.image.height, this.c3d.MAX_IMAGE_SIZE, this.c3d.MAX_IMAGE_SIZE);
                             const gradientCanvas = layer.gradient.bakeImageToLayer(gradientDims.width, gradientDims.height, true, true);
                             blob = await new Promise(resolve => gradientCanvas.toBlob(resolve, 'image/png', 1.0));
                             fileName = 'gradient' + imageIndex;
                         }
                         else
                         {
-                            if((layer.image.naturalWidth >= 4096 || layer.image.naturalHeight >= 4096))
+                            if((layer.image.naturalWidth >= this.c3d.MAX_IMAGE_SIZE || layer.image.naturalHeight >= this.c3d.MAX_IMAGE_SIZE))
                             {
-                                const newDims = calculateAspectRatioFit(layer.image.naturalWidth, layer.image.naturalHeight, 4096, 4096);
+                                const newDims = calculateAspectRatioFit(layer.image.naturalWidth, layer.image.naturalHeight, this.c3d.MAX_IMAGE_SIZE, this.c3d.MAX_IMAGE_SIZE);
                                 const canvas = document.createElement('canvas');
                                 const ctx = canvas.getContext('2d');
 

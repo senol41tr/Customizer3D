@@ -231,9 +231,9 @@ export class ImageLayer
 
             let printDims = getPrintDims(this.c3d, this.layer.name, 300);
 
-            if(printDims.width > 4096 || printDims.height > 4096) {
-                alert("The print dimensions are larger than 4096px!\nPerhaps the rendering won't be correct!\nFile size reduced.");
-                printDims = calculateAspectRatioFit(printDims.width, printDims.height, 4096, 4096);
+            if(printDims.width > this.c3d.MAX_IMAGE_SIZE || printDims.height > this.c3d.MAX_IMAGE_SIZE) {
+                console.warn("The print dimension(s) are larger than " + this.c3d.MAX_IMAGE_SIZE + "px!\nPerhaps the rendering won't be correct!\nFile size reduced.");
+                printDims = calculateAspectRatioFit(printDims.width, printDims.height, this.c3d.MAX_IMAGE_SIZE, this.c3d.MAX_IMAGE_SIZE);
             }
 
             width = Math.floor(printDims.width);

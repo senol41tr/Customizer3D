@@ -30,7 +30,8 @@ export class Customizer3D
 {
     constructor(glbPath, jsPath)
     {
-        this.PIXEL_RATIO = 2;//Math.max(2, window.devicePixelRatio);
+        this.PIXEL_RATIO = 2;
+        this.MAX_IMAGE_SIZE = 4096;
 
         if(glbPath && jsPath) this.initialize(glbPath, jsPath);
     }
