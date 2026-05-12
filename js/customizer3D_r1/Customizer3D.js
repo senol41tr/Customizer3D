@@ -919,7 +919,7 @@ export class Customizer3D
                     <img src="${C3D_SERVER}svg/3D.svg?c3d=102" alt="Icon" draggable="false">
                 </div>
 
-                <div class="button shape" title="${this.lang['add-shape-layer']}">
+                <div class="button shape" title="${this.lang['add-shape-layer']}" style="pointer-events:none; opacity:0.6;">
                     <img src="${C3D_SERVER}svg/shapes.svg?c3d=102" alt="Icon" draggable="false">
                 </div>
                 `;

@@ -613,7 +613,7 @@ export class ImageLayer
             ctx.beginPath();
             ctx.setLineDash([5, 3]);
             ctx.strokeStyle = 'rgb(128,128,128)';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 2 * this.c3d.PIXEL_RATIO;
             if(snapX)
             {
                 ctx.moveTo(canvas.width / 2, 0);
