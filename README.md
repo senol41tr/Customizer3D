@@ -4,7 +4,7 @@
 **Client Side Creation**
 No Server needed, all operations are performed on the device. Client Side
 
-**Multiple Language Support**
+**Multiple Language**
 It requires an http server.
 
 **Layer based editing**
