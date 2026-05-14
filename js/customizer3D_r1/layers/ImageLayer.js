@@ -1,14 +1,14 @@
 import * as THREE from 'three';
-import {uniforms2, vertexShader2, fragmentShader2} from 'customizer3D_dir/three/materials/Shaders.js?c3d=102';
-import {Three} from 'customizer3D_dir/three/Three.js?c3d=102';
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=102';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=102';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=102';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=102';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=102';
-import {ExtractImages} from 'customizer3D_dir/layers/utils/ExtractImages.js?c3d=102';
-// import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=102';
-import {createFiltersList} from 'customizer3D_dir/layers/Filters/createFiltersList.js?c3d=102';
+import {uniforms2, vertexShader2, fragmentShader2} from 'customizer3D_dir/three/materials/Shaders.js?c3d=103';
+import {Three} from 'customizer3D_dir/three/Three.js?c3d=103';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=103';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=103';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=103';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=103';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=103';
+import {ExtractImages} from 'customizer3D_dir/layers/utils/ExtractImages.js?c3d=103';
+// import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=103';
+import {createFiltersList} from 'customizer3D_dir/layers/Filters/createFiltersList.js?c3d=103';
 
 export class ImageLayer
 {
@@ -33,8 +33,8 @@ export class ImageLayer
         <div class="title">
             <p class="label" draggable="false">...</p>
             <div class="buttons">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=102" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
-                <img src="${C3D_SERVER}svg/plus.svg?c3d=102" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=103" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
+                <img src="${C3D_SERVER}svg/plus.svg?c3d=103" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
             </div>
         </div>
 
@@ -46,18 +46,18 @@ export class ImageLayer
                 </div>
                 <div class="filters">
                     <div class="button" title="${this.c3d.lang['filter-gallery']}">
-                        <img src="${C3D_SERVER}svg/filters.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/filters.svg?c3d=103" alt="Icon">
                     </div>
                 </div>
                 <div class="threeD">
                     <div class="button" title="${this.c3d.lang['to-3d']}">
-                        <img src="${C3D_SERVER}svg/3D.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/3D.svg?c3d=103" alt="Icon">
                     </div>
                 </div>
                 <div class="gradient" style="flex-basis: 100%;"></div>
                 <div class="moreOptions" title="${this.c3d.lang['more-options']}" style="padding-left:0.5rem;">
                     <div class="button">
-                        <img src="${C3D_SERVER}svg/three_dot.svg?c3d=102" alt="Icon" style="height: 16px;">
+                        <img src="${C3D_SERVER}svg/three_dot.svg?c3d=103" alt="Icon" style="height: 16px;">
                     </div>
                     <div class="list">
                         <div title="${this.c3d.lang['export-as-png']}">
@@ -70,23 +70,23 @@ export class ImageLayer
             <div style="padding-top:0.25rem;" class="snapping">
                 <div class="snap">
                     <div class="button" title="${this.c3d.lang['snap']}">
-                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=103" alt="Icon">
                     </div>
                 </div>
                 <div class="rotate">
                     <div class="button" title="${this.c3d.lang['rotate']}">
-                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=103" alt="Icon">
                     </div>
                     <div class="list">
                         <div class="inputPercent" title="°">
-                            <input type="number" min="0" max="359" value="0">
+                            <input type="number" min="-180" max="180" value="0">
                         </div>
-                        <input type="range" min="0" max="359" value="0" step="1">
+                        <input type="range" min="-180" max="180" value="0" step="1">
                     </div>
                 </div>
                 <div class="zoom">
                     <div class="button" title="${this.c3d.lang['zoom']}">
-                        <img src="${C3D_SERVER}svg/zoom.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/zoom.svg?c3d=103" alt="Icon">
                     </div>
                     <div class="list">
                         <div class="inputPercent" title="%">
@@ -157,6 +157,7 @@ export class ImageLayer
             e.currentTarget.value = val;
             this.htmlEl.querySelector('div.rotate input[type="range"]').value = val;
             this.layer.rotation = val;
+            this.c3d.render3d.renderImageLayer(this.layer);
             this.updatePreview(null, true, false);
         });
 
@@ -167,6 +168,7 @@ export class ImageLayer
             {
                 const input = this.htmlEl.querySelector('div.rotate input[type="number"]');
                 input.parentNode.parentNode.style.display = 'none'; // hide list
+                this.c3d.render3d.renderImageLayer(this.layer);
                 this.updatePreview(null, true, false);
             }
         });
@@ -176,6 +178,7 @@ export class ImageLayer
         el.addEventListener('input', (e) => {
             this.layer.rotation = parseFloat(e.currentTarget.value);
             this.htmlEl.querySelector('div.rotate input[type="number"]').value = e.currentTarget.value;
+            this.c3d.render3d.renderImageLayer(this.layer);
             this.updatePreview(null, true, false);
         });
 
@@ -571,7 +574,7 @@ export class ImageLayer
             {
                 ctx.drawImage(canvasData, 0, 0, this.canvas.width, this.canvas.height);
             }
-            else if(this.layer.is3D || this.layer.type == 'gradient')
+            else if(this.layer.is3D)
             {
                 const layerData = this.c3d.render3d.getLayerTexture(this.layer);
                 const tmpCanvas = document.createElement('canvas');
@@ -584,6 +587,7 @@ export class ImageLayer
 
                 ctx.save();
                 ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
+                // ctx.rotate(THREE.MathUtils.degToRad(this.layer.rotation));
                 ctx.drawImage(tmpCanvas, -this.canvas.width / 2, -this.canvas.height / 2, this.canvas.width, this.canvas.height);
                 ctx.restore();
             }
@@ -591,7 +595,6 @@ export class ImageLayer
             {
                 ctx.save();
                 ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
-                // ctx.scale(zoom, zoom);
                 ctx.rotate(THREE.MathUtils.degToRad(this.layer.rotation));
                 ctx.drawImage(this.layer.image, -width / 2, -height / 2, width, height);
                 ctx.restore();
@@ -609,7 +612,7 @@ export class ImageLayer
         if(this._snap || !drawSnappingLines) ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         if(this._snap && drawSnappingLines)
-        {            
+        {  
             ctx.beginPath();
             ctx.setLineDash([5, 3]);
             ctx.strokeStyle = 'rgb(128,128,128)';
@@ -640,51 +643,73 @@ export class ImageLayer
         {
 
             const layerMeshUniforms = renderer.material.uniforms;
-            const ro = this.layer._mesh.userData.index;
+            const layer = this.layer;
+            const index = layer._mesh.userData.index;
+            const x = layer.imagePosition.x;
+            const y = layer.imagePosition.y;
 
-            const x = this.layer.imagePosition.x;
-            const y = this.layer.imagePosition.y;
-            // const rotationRad = THREE.MathUtils.degToRad(this.layer.rotation);
-
-            uniforms.uZoom.value = this.layer.zoom / 100;
-            // uniforms.uAspect.value = height / width * 2;
-
-            layerMeshUniforms.uZoom.value[ro] = uniforms.uZoom.value;
-            // layerMeshUniforms.uAspect.value = uniforms.uAspect.value;
-
-            // layerMeshUniforms.uRotation.value[ro] = rotationRad;
-            // uniforms.uRotation.value = -rotationRad;
-            
-            // let correctedAxis = getCorrectedAxis(rotationRad, x, -y);
-            // layerMeshUniforms.uOffset.value[ro].set(correctedAxis.x, correctedAxis.y);
-            
-            // correctedAxis = getCorrectedAxis(-rotationRad, x, y);
-            // uniforms.uOffset.value.set(correctedAxis.x, correctedAxis.y);
-            
-            layerMeshUniforms.uOffset.value[ro].set(x, -y);
+            uniforms.uZoom.value = layer.zoom / 100;
             uniforms.uOffset.value.set(x, y);
-            
-            uniforms.uBrightness.value = layerMeshUniforms.uBrightness.value[ro] = this.layer.uniforms.uBrightness || 1.0;
-            uniforms.uContrast.value = layerMeshUniforms.uContrast.value[ro] = this.layer.uniforms.uContrast || 1.0;
-            uniforms.uHue.value = layerMeshUniforms.uHue.value[ro] = this.layer.uniforms.uHue || 0.0;
-            uniforms.uSaturation.value = layerMeshUniforms.uSaturation.value[ro] = this.layer.uniforms.uSaturation || 1.0;
-            uniforms.uSepia.value = layerMeshUniforms.uSepia.value[ro] = this.layer.uniforms.uSepia || 0.0;
-            uniforms.uInvert.value = layerMeshUniforms.uInvert.value[ro] = this.layer.uniforms.uInvert || 0.0;
-            uniforms.uVignette.value = layerMeshUniforms.uVignette.value[ro] = this.layer.uniforms.uVignette || 0.0;
-            uniforms.uGrainAmount.value = layerMeshUniforms.uGrainAmount.value[ro] = this.layer.uniforms.uGrainAmount || 0.0;
-            uniforms.uOpacity.value = layerMeshUniforms.uAlphas.value[ro] = this.layer.opacity / 100;
+            uniforms.uBrightness.value = layer.uniforms.uBrightness || 1.0;
+            uniforms.uContrast.value = layer.uniforms.uContrast || 1.0;
+            uniforms.uHue.value = layer.uniforms.uHue || 0.0;
+            uniforms.uSaturation.value = layer.uniforms.uSaturation || 1.0;
+            uniforms.uSepia.value = layer.uniforms.uSepia || 0.0;
+            uniforms.uInvert.value = layer.uniforms.uInvert || 0.0;
+            uniforms.uVignette.value = layer.uniforms.uVignette || 0.0;
+            uniforms.uGrainAmount.value = layer.uniforms.uGrainAmount || 0.0;
+            uniforms.uOpacity.value = layer.opacity / 100;
 
             uniforms.uChromaticAmount.value.set(
-                this.layer.uniforms.uChromaticAmount ? this.layer.uniforms.uChromaticAmount.x : 0.0,
-                this.layer.uniforms.uChromaticAmount ? -this.layer.uniforms.uChromaticAmount.y : 0.0
-            );
-            layerMeshUniforms.uChromaticAmount.value[ro].set(
-                this.layer.uniforms.uChromaticAmount ? this.layer.uniforms.uChromaticAmount.x : 0.0, 
-                this.layer.uniforms.uChromaticAmount ? this.layer.uniforms.uChromaticAmount.y : 0.0
+                layer.uniforms.uChromaticAmount ? layer.uniforms.uChromaticAmount.x : 0.0,
+                layer.uniforms.uChromaticAmount ? -layer.uniforms.uChromaticAmount.y : 0.0
             );
 
-            uniforms.uIsGradient.value = this.layer.gradient ? 1 : 0;
-            if(this.layer.gradient) this.layer.gradient.setUniforms();
+            uniforms.uIsGradient.value = layer.gradient ? 1 : 0;
+            if(layer.gradient) layer.gradient.setUniforms();
+
+
+            const PARAMS_PER_LAYER = 5;
+            const data = layerMeshUniforms.uData.value.image.data;
+            const offset = index * PARAMS_PER_LAYER * 4;
+
+            // P0
+
+            data[offset + 0] = uniforms.uZoom.value; // zoom
+            // data[offset + 1] = 0.0; // THREE.MathUtils.degToRad(layer.rotation) // rotation
+            data[offset + 2] = x; // offsetX
+            data[offset + 3] = -y; // offsetY
+
+            // P1
+
+            data[offset + 4] = uniforms.uBrightness.value; // uBrightness
+            data[offset + 5] = uniforms.uContrast.value; // uContrast
+            data[offset + 6] = uniforms.uHue.value; // uHue
+            data[offset + 7] = uniforms.uSaturation.value; // uSaturation
+
+            // P2
+
+            data[offset + 8] = uniforms.uSepia.value; // uSepia
+            data[offset + 9] = uniforms.uInvert.value; // uInvert
+            data[offset + 10] = uniforms.uGrainAmount.value; // uGrainAmount
+            data[offset + 11] = uniforms.uVignette.value; // uVignette
+
+            // P3
+
+            // data[offset + 12] = 0.0; // TINT R
+            // data[offset + 13] = 0.0; // TINT G
+            // data[offset + 14] = 0.0; // TINT B
+            // data[offset + 15] = 0.0; // Tint Amount
+
+            // P4
+
+            data[offset + 16] = uniforms.uChromaticAmount.value.x; // uChromaticAmount.value.x
+            data[offset + 17] = uniforms.uChromaticAmount.value.x; // uChromaticAmount.value.y
+            // data[offset + 18] = layer.blendMode; // blendMode
+            data[offset + 19] = uniforms.uOpacity.value; // alpha
+
+            layerMeshUniforms.uData.value.needsUpdate = true;
+
         }
 
         if(reDraw)

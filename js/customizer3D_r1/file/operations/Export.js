@@ -1,13 +1,13 @@
 import * as opentype from "base/opentype/opentype.esm.js";
 import * as fflate from 'base/fflate@0.8.2/fflate.esm.js';
-import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=102';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=102';
-import {trimCanvas} from 'customizer3D_dir/utils/trimCanvas.js?c3d=102';
-import {BlobtoUint8Array} from 'customizer3D_dir/utils/BlobtoUint8Array.js?c3d=102';
-import {Base64ToUint8} from 'customizer3D_dir/utils/Base64ToUint8.js?c3d=102';
+import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=103';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=103';
+import {trimCanvas} from 'customizer3D_dir/utils/trimCanvas.js?c3d=103';
+import {BlobtoUint8Array} from 'customizer3D_dir/utils/BlobtoUint8Array.js?c3d=103';
+import {Base64ToUint8} from 'customizer3D_dir/utils/Base64ToUint8.js?c3d=103';
 import {PDF, cmyk, ops} from 'base/libpdf@0.3.4/libpdf.min.esm.js';
-// import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=102';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=102';
+// import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=103';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=103';
 
 export class Export
 {
@@ -22,7 +22,6 @@ export class Export
       const container = document.querySelector(this.c3d.props.container);
       container.style.pointerEvents = 'none';
       container.style.opacity = 0.5;
-      document.body.style.overflow = 'hidden';
 
       this.c3d.preloader.show();
       this.c3d.preloader.set(this.c3d.lang['creating-pdf']);
@@ -127,6 +126,10 @@ export class Export
       image = pdf.embedPng(uint8Array);
       
       page.drawImage(image, {x: 0, y: 0, width, height});
+
+      // HIDE GLB
+
+      this.c3d.glbScene.visible = false;
 
 
       // ADD DEFAULT FONT (which can support multi-language)
@@ -439,7 +442,7 @@ export class Export
       // Enable UI
       container.style.pointerEvents = 'all';
       container.style.opacity = 1;
-      document.body.style.overflow = 'auto';
+      this.c3d.glbScene.visible = true;
       this.c3d.three.render();
 
     }

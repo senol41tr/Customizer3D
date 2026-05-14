@@ -1,6 +1,6 @@
-import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=102';
-import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=102';
-import {ThreeDText} from 'customizer3D_dir/layers/types/ThreeDText.js?c3d=102';
+import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=103';
+import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=103';
+import {ThreeDText} from 'customizer3D_dir/layers/types/ThreeDText.js?c3d=103';
 
 export class Text
 {
@@ -74,11 +74,11 @@ export class Text
         this.div = div;
 
         div.innerHTML = `
-            <img class="visibility" src="${C3D_SERVER}svg/show.svg?c3d=102" alt="Icon" style="opacity:1;">
+            <img class="visibility" src="${C3D_SERVER}svg/show.svg?c3d=103" alt="Icon" style="opacity:1;">
             <p class="title">${this.c3d.lang['text']}</p>
-            <img src="${C3D_SERVER}svg/opacity.svg?c3d=102" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
-            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=102" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
-            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=102" title="${this.c3d.lang['delete-layer']}" class="delete-layer">
+            <img src="${C3D_SERVER}svg/opacity.svg?c3d=103" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
+            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=103" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=103" title="${this.c3d.lang['delete-layer']}" class="delete-layer">
         `;
 
         div.querySelector('p.title').addEventListener('click', () => {

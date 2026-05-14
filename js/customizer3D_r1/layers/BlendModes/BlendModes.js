@@ -59,7 +59,12 @@ export const createBlendModesList = (c3d, root, layer, button) =>
 
             const layerMeshUniforms = c3d.glbScene.getObjectByName(layer.name).material.uniforms;
             const index = layer._mesh.userData.index;
-            layerMeshUniforms.uBlendModes.value[index] = layer.blendMode;
+            const PARAMS_PER_LAYER = 5;
+            const data = layerMeshUniforms.uData.value.image.data;
+            const offset = index * PARAMS_PER_LAYER * 4;
+            data[offset + 18] = parseFloat(layer.blendMode);
+            layerMeshUniforms.uData.value.needsUpdate = true;
+
             c3d.three.render();
         };
 

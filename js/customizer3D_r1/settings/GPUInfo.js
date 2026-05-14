@@ -1,9 +1,10 @@
-import * as Materials from 'customizer3D_dir/three/materials/Materials.js?c3d=102';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=102';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=102';
+import * as Materials from 'customizer3D_dir/three/materials/Materials.js?c3d=103';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=103';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=103';
 
 export const GPUInfo = async (c3d, container) =>
 {
+
     const ua = navigator.userAgent;
     // const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
@@ -27,7 +28,7 @@ export const GPUInfo = async (c3d, container) =>
 
     let html = `
         <div class="title">
-            <img src="${C3D_SERVER}svg/plus.svg?c3d=102" alt="Icon" class="icon">
+            <img src="${C3D_SERVER}svg/plus.svg?c3d=103" alt="Icon" class="icon">
             <p>${c3d.lang['render-quality']}</p>
         </div>
         <div class="content">

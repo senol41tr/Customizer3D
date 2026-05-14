@@ -53,7 +53,7 @@ export class LocalStorage
         this.div.setAttribute('class', 'cookies');
         this.div.addEventListener('click', this._hideDialog.bind(this));
         this.div.innerHTML = this.c3d.lang['cookie-information'];
-        this.div.innerHTML += '<img src="' + C3D_SERVER + 'svg/plus.svg?c3d=102" alt="Icon" class="close">';
+        this.div.innerHTML += '<img src="' + C3D_SERVER + 'svg/plus.svg?c3d=103" alt="Icon" class="close">';
         this.htmlEl.appendChild(this.div);
     }
 

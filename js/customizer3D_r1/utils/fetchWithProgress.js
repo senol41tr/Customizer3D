@@ -1,12 +1,12 @@
-// https://stackoverflow.com/a/64123890
 export const fetchWithProgress = async (url, onProgress) =>
 {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
 
     try {
         const response = await fetch(url, { signal: controller.signal });
         const reader = response.body.getReader();
+        const contentLength = +response.headers.get('Content-Length');
         
         let lastReceivedTime = Date.now();
         const inactivityLimit = 5000;
@@ -27,6 +27,8 @@ export const fetchWithProgress = async (url, onProgress) =>
             
             values.push(value);
             loaded += value.byteLength;
+
+            onProgress((loaded/contentLength*100).toFixed(1));
         }
 
         clearTimeout(timeoutId);

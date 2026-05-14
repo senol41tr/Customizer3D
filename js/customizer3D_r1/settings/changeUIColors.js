@@ -1,4 +1,4 @@
-import {SVGFill, SVGFillColor} from 'customizer3D_dir/utils/SVGFill.js?c3d=102';
+import {SVGFill, SVGFillColor} from 'customizer3D_dir/utils/SVGFill.js?c3d=103';
 
 export const changeUIColors = (c3d, container) =>
 {
@@ -11,7 +11,7 @@ export const changeUIColors = (c3d, container) =>
     div.classList.add('colors');
     div.innerHTML = `
         <div class="title">
-            <img src="${C3D_SERVER}svg/plus.svg?c3d=102" alt="Icon" class="icon">
+            <img src="${C3D_SERVER}svg/plus.svg?c3d=103" alt="Icon" class="icon">
             <p>${c3d.lang['change-ui-colors']}</p>
         </div>
         <div class="colors">

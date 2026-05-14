@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=102';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=103';
 
 export function lang()
 {
@@ -60,27 +60,27 @@ export function parameters(self)
                 materials:
                 [
                     {
-                        url: root + 'feet/white_metal.jpg?c3d=102', 
+                        url: root + 'feet/white_metal.jpg?c3d=103', 
                         material:'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'feet/metal.jpg?c3d=102', 
+                        url: root + 'feet/metal.jpg?c3d=103', 
                         material:'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'feet/green_metal.jpg?c3d=102', 
+                        url: root + 'feet/green_metal.jpg?c3d=103', 
                         material:'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'feet/gold.jpg?c3d=102', 
+                        url: root + 'feet/gold.jpg?c3d=103', 
                         material:'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'feet/orange_metal.jpg?c3d=102', 
+                        url: root + 'feet/orange_metal.jpg?c3d=103', 
                         material:'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'feet/red_metal.jpg?c3d=102', 
+                        url: root + 'feet/red_metal.jpg?c3d=103', 
                         material:'MeshMatcapMaterial'
                     }
                 ]
@@ -93,31 +93,31 @@ export function parameters(self)
                 materials: 
                 [
                     {
-                        url: root + 'cushion/gingham_check_diff_2k.jpg?c3d=102', 
+                        url: root + 'cushion/gingham_check_diff_2k.jpg?c3d=103', 
                         material:'MeshBasicMaterial', 
                         repeatX: 3, 
                         repeatY: 3
                     },
                     {
-                        url: root + 'cushion/hessian_230_diff_2k.jpg?c3d=102', 
+                        url: root + 'cushion/hessian_230_diff_2k.jpg?c3d=103', 
                         material:'MeshBasicMaterial', 
                         repeatX: 3, 
                         repeatY: 3
                     },
                     {
-                        url: root + 'cushion/curly_teddy_checkered_diff_2k.jpg?c3d=102', 
+                        url: root + 'cushion/curly_teddy_checkered_diff_2k.jpg?c3d=103', 
                         material:'MeshBasicMaterial', 
                         repeatX: 10, 
                         repeatY: 10
                     },
                     {
-                        url: root + 'cushion/wool_boucle_diff_2k.jpg?c3d=102', 
+                        url: root + 'cushion/wool_boucle_diff_2k.jpg?c3d=103', 
                         material:'MeshBasicMaterial', 
                         repeatX: 3, 
                         repeatY: 3
                     },
                     {
-                        url: root + 'cushion/denim_fabric_diff_2k.jpg?c3d=102', 
+                        url: root + 'cushion/denim_fabric_diff_2k.jpg?c3d=103', 
                         material:'MeshBasicMaterial', 
                         repeatX: 3, 
                         repeatY: 3
@@ -132,31 +132,31 @@ export function parameters(self)
                 materials: 
                 [
                     {
-                        url: root + 'cushion/gingham_check_diff_2k.jpg?c3d=102', 
+                        url: root + 'cushion/gingham_check_diff_2k.jpg?c3d=103', 
                         material:'MeshBasicMaterial', 
                         repeatX: 3, 
                         repeatY: 3
                     },
                     {
-                        url: root + 'cushion/hessian_230_diff_2k.jpg?c3d=102', 
+                        url: root + 'cushion/hessian_230_diff_2k.jpg?c3d=103', 
                         material:'MeshBasicMaterial', 
                         repeatX: 3, 
                         repeatY: 3
                     },
                     {
-                        url: root + 'cushion/curly_teddy_checkered_diff_2k.jpg?c3d=102', 
+                        url: root + 'cushion/curly_teddy_checkered_diff_2k.jpg?c3d=103', 
                         material:'MeshBasicMaterial', 
                         repeatX: 10, 
                         repeatY: 10
                     },
                     {
-                        url: root + 'cushion/wool_boucle_diff_2k.jpg?c3d=102', 
+                        url: root + 'cushion/wool_boucle_diff_2k.jpg?c3d=103', 
                         material:'MeshBasicMaterial', 
                         repeatX: 3, 
                         repeatY: 3
                     },
                     {
-                        url: root + 'cushion/denim_fabric_diff_2k.jpg?c3d=102', 
+                        url: root + 'cushion/denim_fabric_diff_2k.jpg?c3d=103', 
                         material:'MeshBasicMaterial', 
                         repeatX: 3, 
                         repeatY: 3

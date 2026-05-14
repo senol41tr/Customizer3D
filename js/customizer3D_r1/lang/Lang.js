@@ -7,7 +7,7 @@ export class Lang
 
     async loadTranslationTable()
     {
-        const availableLangs = Object.entries(JSON.parse(await (await fetch(C3D_SERVER + 'lang/langs.json?c3d=102')).text()));
+        const availableLangs = Object.entries(JSON.parse(await (await fetch(C3D_SERVER + 'lang/langs.json?c3d=103')).text()));
 
         const lsLang = window.localStorage.getItem('language');
         let userLang = lsLang == null ? (navigator.language || navigator.userLanguage).substr(0, 2) : lsLang;
@@ -25,7 +25,7 @@ export class Lang
 
         if(!found) userLang = 'en';
 
-        const translationTable = JSON.parse(await (await fetch(C3D_SERVER + 'lang/'+ userLang +'.json?c3d=102')).text());
+        const translationTable = JSON.parse(await (await fetch(C3D_SERVER + 'lang/'+ userLang +'.json?c3d=103')).text());
 
         // save to local storage
         window.localStorage.setItem('language', userLang);

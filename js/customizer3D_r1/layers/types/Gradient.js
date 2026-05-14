@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=102';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=103';
 
 export class Gradient
 {
@@ -168,6 +168,8 @@ export class Gradient
         {
             this.update();
             this.setUniforms();
+            this.c3d.render3d.renderImageLayer(this.layer);
+            this.c3d.three.render();
         };
 
         type_linear.addEventListener('click', () => {

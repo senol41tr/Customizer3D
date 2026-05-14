@@ -25,6 +25,7 @@ export class Preloader
     {
         if(typeof txt != 'string') txt = txt.toString();
         if(txt.indexOf('</') < 0) txt = txt.substring(txt.lastIndexOf('/') + 1);
+        if(txt.indexOf('?') >= 0) txt = txt.substring(0, txt.lastIndexOf('?'));
         txt = '<b>' + this.c3d.lang['please-wait'] + '</b><br>' + txt;
         
         this.p.innerHTML = txt;

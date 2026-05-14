@@ -1,15 +1,15 @@
 import * as THREE from 'three';
-import {uniforms2, vertexShader2, fragmentShader2} from 'customizer3D_dir/three/materials/Shaders.js?c3d=102';
-import {Three} from 'customizer3D_dir/three/Three.js?c3d=102';
+import {uniforms2, vertexShader2, fragmentShader2} from 'customizer3D_dir/three/materials/Shaders.js?c3d=103';
+import {Three} from 'customizer3D_dir/three/Three.js?c3d=103';
 import * as opentype from "base/opentype/opentype.esm.js";
-import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=102';
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=102';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=102';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=102';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=102';
-import {createFiltersList} from 'customizer3D_dir/layers/Filters/createFiltersList.js?c3d=102';
-import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=102';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=102';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=103';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=103';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=103';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=103';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=103';
+import {createFiltersList} from 'customizer3D_dir/layers/Filters/createFiltersList.js?c3d=103';
+import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=103';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=103';
 
 export class TextLayer
 {
@@ -35,8 +35,8 @@ export class TextLayer
         <div class="title">
             <p class="label" draggable="false">${this.c3d.lang['add-text-layer']}</p>
             <div class="buttons">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=102" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
-                <img src="${C3D_SERVER}svg/plus.svg?c3d=102" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=103" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
+                <img src="${C3D_SERVER}svg/plus.svg?c3d=103" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
             </div>
         </div>
 
@@ -45,13 +45,13 @@ export class TextLayer
             <div class="menu">
                 <div class="builtInFonts">
                     <div class="button" title="${this.c3d.lang['font']}">
-                        <img src="${C3D_SERVER}svg/font_family.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/font_family.svg?c3d=103" alt="Icon">
                     </div>
                     <div class="list"></div>
                 </div>
                 <div class="fontSizes">
                     <div class="button" title="${this.c3d.lang['size']}">
-                        <img src="${C3D_SERVER}svg/font_size.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/font_size.svg?c3d=103" alt="Icon">
                     </div>
                     <!-- change Text.js if default font size change -->
                     <div class="list">
@@ -64,19 +64,19 @@ export class TextLayer
                 <div class="color_picker" title="${this.c3d.lang['color']}"></div>
                 <div class="filters">
                     <div class="button" title="${this.c3d.lang['filter-gallery']}">
-                        <img src="${C3D_SERVER}svg/filters.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/filters.svg?c3d=103" alt="Icon">
                     </div>
                 </div>
                 <div class="threeD">
                     <div class="button" title="${this.c3d.lang['3D-text']}">
-                        <img src="${C3D_SERVER}svg/3D.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/3D.svg?c3d=103" alt="Icon">
                     </div>
                     <div class="list">
                     </div>
                 </div>
                 <div class="moreOptions" title="${this.c3d.lang['more-options']}" style="padding-left:0.5rem;">
                     <div class="button">
-                        <img src="${C3D_SERVER}svg/three_dot.svg?c3d=102" alt="Icon" style="height: 16px;">
+                        <img src="${C3D_SERVER}svg/three_dot.svg?c3d=103" alt="Icon" style="height: 16px;">
                     </div>
                     <div class="list">
                         <div title="${this.c3d.lang['export-as-png']}" style="white-space: nowrap;">
@@ -93,22 +93,24 @@ export class TextLayer
             <div style="padding-top:0.25rem;">
                 <div class="snap toggle">
                     <div class="button" title="${this.c3d.lang['snap']}">
-                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=103" alt="Icon">
                     </div>
                 </div>
 
                 <div class="rotate">
                     <div class="button" title="${this.c3d.lang['rotate']}">
-                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=103" alt="Icon">
                     </div>
                     <div class="list">
-                        <div class="inputPercent" title="°"><input type="number" min="0" max="360" value="0"></div>
-                        <input type="range" min="0" max="360" value="0" step="0.1">
+                        <div class="inputPercent" title="°">
+                            <input type="number" min="-180" max="180" value="0">
+                        </div>
+                        <input type="range" min="-180" max="180" value="0" step="1">
                     </div>
                 </div>
                 <div class="zoom">
                     <div class="button" title="${this.c3d.lang['zoom']}">
-                        <img src="${C3D_SERVER}svg/zoom.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/zoom.svg?c3d=103" alt="Icon">
                     </div>
                     <div class="list">
                         <div class="inputPercent" title="%"><input type="number" min="10" max="500" value="100"></div>
@@ -149,6 +151,7 @@ export class TextLayer
             if(this.layer.is3D) {
                 this.layer.threeDText.update(true);
                 this.c3d.render3d.renderTextLayer(this.layer);
+                this.c3d.three.render();
             }
         });
 
@@ -731,67 +734,92 @@ export class TextLayer
 
 
 
+        const renderer = this.c3d.glbScene.getObjectByName(this.layer.name);
         const plane = this.three.scene.getObjectByName('texture');
         const uniforms = plane.material.uniforms;
-        const layerMeshUniforms = this.c3d.glbScene.getObjectByName(this.layer.name).material.uniforms;
-        const ro = this.layer._mesh.userData.index;
 
-        uniforms.uOpacity.value = layerMeshUniforms.uAlphas.value[ro] = this.layer.opacity / 100;
-
-        // layerMeshUniforms.uAspect.value = (this.canvas.width < this.canvas.height ? this.canvas.width / this.canvas.height : this.canvas.height / this.canvas.width);
-        // layerMeshUniforms.uOffset.value[ro].set(this.layer.textPosition.x, -this.layer.textPosition.y);
-        // uniforms.uOffset.value.set(this.layer.textPosition.x, this.layer.textPosition.y);
-
-        if(this.layer.is3D)
+        if(this.layer._mesh && renderer)
         {
-            // const rotationRad = THREE.MathUtils.degToRad(this.layer.rotation);
-            const x = this.layer.textPosition.x;
-            const y = this.layer.textPosition.y;
+            const layerMeshUniforms = renderer.material.uniforms;
+            const layer = this.layer;
+            const index = layer._mesh.userData.index;
 
-            layerMeshUniforms.uOffset.value[ro].set(x, -y);
-            uniforms.uOffset.value.set(x, y);
 
-            // layerMeshUniforms.uRotation.value[ro] = rotationRad;
-            // uniforms.uRotation.value = -rotationRad;
+            if(layer.is3D)
+            {
+                const x = layer.textPosition.x;
+                const y = layer.textPosition.y;
 
-            // if(this.layer.is3D)
-            // {
-            //     let correctedAxis = getCorrectedAxis(rotationRad, x, -y);
-            //     layerMeshUniforms.uOffset.value[ro].set(correctedAxis.x, correctedAxis.y);
+                uniforms.uOffset.value.set(x, y);
+            }
+
+            uniforms.uZoom.value = layer.zoom / 100;
+            uniforms.uBrightness.value = layer.uniforms.uBrightness || 1.0;
+            uniforms.uContrast.value = layer.uniforms.uContrast || 1.0;
+            uniforms.uHue.value = layer.uniforms.uHue || 0.0;
+            uniforms.uSaturation.value = layer.uniforms.uSaturation || 1.0;
+            uniforms.uSepia.value = layer.uniforms.uSepia || 0.0;
+            uniforms.uInvert.value = layer.uniforms.uInvert || 0.0;
+            uniforms.uGrainAmount.value = layer.uniforms.uGrainAmount || 0.0;
+            uniforms.uVignette.value = layer.uniforms.uVignette || 0.0;
+
+            uniforms.uChromaticAmount.value.set(
+                layer.uniforms.uChromaticAmount ? layer.uniforms.uChromaticAmount.x : 0.0,
+                layer.uniforms.uChromaticAmount ? -layer.uniforms.uChromaticAmount.y : 0.0
+            );
+
+            if(!layer.is3D)
+            {
+                uniforms.uTintAmount.value = 1.0;
                 
-            //     correctedAxis = getCorrectedAxis(-rotationRad, x, y);
-            //     uniforms.uOffset.value.set(correctedAxis.x, correctedAxis.y);
-            // }
-        }
+                const color = new THREE.Color(layer.color);
+                uniforms.uTint.value.set(color.r, color.g, color.b);
+            }
 
-        uniforms.uZoom.value = layerMeshUniforms.uZoom.value[ro] = this.layer.zoom / 100;
-        layerMeshUniforms.uTintAmount.value[ro] = 0.0;
-        uniforms.uBrightness.value = layerMeshUniforms.uBrightness.value[ro] = this.layer.uniforms.uBrightness || 1.0;
-        uniforms.uContrast.value = layerMeshUniforms.uContrast.value[ro] = this.layer.uniforms.uContrast || 1.0;
-        uniforms.uHue.value = layerMeshUniforms.uHue.value[ro] = this.layer.uniforms.uHue || 0.0;
-        uniforms.uSaturation.value = layerMeshUniforms.uSaturation.value[ro] = this.layer.uniforms.uSaturation || 1.0;
-        uniforms.uSepia.value = layerMeshUniforms.uSepia.value[ro] = this.layer.uniforms.uSepia || 0.0;
-        uniforms.uInvert.value = layerMeshUniforms.uInvert.value[ro] = this.layer.uniforms.uInvert || 0.0;
-        uniforms.uVignette.value = layerMeshUniforms.uVignette.value[ro] = this.layer.uniforms.uVignette || 0.0;
-        uniforms.uGrainAmount.value = layerMeshUniforms.uGrainAmount.value[ro] = this.layer.uniforms.uGrainAmount || 0.0;
+            uniforms.uOpacity.value = layer.opacity / 100;
 
-        uniforms.uChromaticAmount.value.set(
-            this.layer.uniforms.uChromaticAmount ? this.layer.uniforms.uChromaticAmount.x : 0.0,
-            this.layer.uniforms.uChromaticAmount ? -this.layer.uniforms.uChromaticAmount.y : 0.0
-        );
-        layerMeshUniforms.uChromaticAmount.value[ro].set(
-            this.layer.uniforms.uChromaticAmount ? this.layer.uniforms.uChromaticAmount.x : 0.0, 
-            this.layer.uniforms.uChromaticAmount ? this.layer.uniforms.uChromaticAmount.y : 0.0
-        );
 
-        if(!this.layer.is3D)
-        {
-            uniforms.uTintAmount.value = 1.0;
-            layerMeshUniforms.uTintAmount.value[ro] = 1.0;
-            
-            const color = new THREE.Color(this.layer.color);
-            uniforms.uTint.value.set(color.r, color.g, color.b);
-            layerMeshUniforms.uTint.value[ro].set(color.r, color.g, color.b);
+            const PARAMS_PER_LAYER = 5;
+            const data = layerMeshUniforms.uData.value.image.data;
+            const offset = index * PARAMS_PER_LAYER * 4;
+
+
+            // P0
+
+            data[offset + 0] = uniforms.uZoom.value; // zoom
+            // data[offset + 1] = 0.0; // rotation
+            data[offset + 2] = uniforms.uOffset.value.x; // offsetX
+            data[offset + 3] = -uniforms.uOffset.value.y; // offsetY
+
+            // P1
+
+            data[offset + 4] = uniforms.uBrightness.value; // uBrightness
+            data[offset + 5] = uniforms.uContrast.value; // uContrast
+            data[offset + 6] = uniforms.uHue.value; // uHue
+            data[offset + 7] = uniforms.uSaturation.value; // uSaturation
+
+            // P2
+
+            data[offset + 8] = uniforms.uSepia.value; // uSepia
+            data[offset + 9] = uniforms.uInvert.value; // uInvert
+            data[offset + 10] = uniforms.uGrainAmount.value; // uGrainAmount
+            data[offset + 11] = uniforms.uVignette.value; // uVignette
+
+            // P3
+
+            data[offset + 12] = uniforms.uTint.value.r; // TINT R
+            data[offset + 13] = uniforms.uTint.value.g; // TINT G
+            data[offset + 14] = uniforms.uTint.value.b; // TINT B
+            data[offset + 15] = uniforms.uTintAmount.value; // Tint Amount
+
+            // P4
+
+            data[offset + 16] = uniforms.uChromaticAmount.value.x; // uChromaticAmount.value.x
+            data[offset + 17] = uniforms.uChromaticAmount.value.y; // uChromaticAmount.value.y
+            // data[offset + 18] = 0; // blendMode
+            data[offset + 19] = uniforms.uOpacity.value; // alpha
+
+            layerMeshUniforms.uData.value.needsUpdate = true;
         }
         
         if(reDraw) uniforms.tDiffuse.value.needsUpdate = true;
@@ -866,7 +894,7 @@ export class TextLayer
     // https://stackoverflow.com/a/42272155
     async _loadBuiltInFonts()
     {
-        const url = 'fonts/fonts.json?c3d=102'; // load all built-in fonts
+        const url = 'fonts/fonts.json?c3d=103'; // load all built-in fonts
         
         this.c3d.preloader.show();
         this.c3d.preloader.set(url);
@@ -922,10 +950,10 @@ export class TextLayer
             }
             else
             {
+                this.c3d.render3d.renderTextLayer(this.layer);
+                this.updatePreview(null, true, false);
+                this.c3d.three.render();
             }
-            this.c3d.render3d.renderTextLayer(this.layer);
-            this.updatePreview(null, true, false);
-            this.c3d.three.render();
         });
         listDiv[prepend ? 'prepend' : 'append'](p);
     }

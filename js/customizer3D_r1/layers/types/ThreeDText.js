@@ -1,10 +1,10 @@
 import * as THREE from 'three';
-import {TTFLoader} from 'customizer3D_dir/three/loaders/TTFLoader.js?c3d=102';
-import {Font} from 'customizer3D_dir/three/loaders/FontLoader.js?c3d=102';
-import {TextGeometry} from 'customizer3D_dir/three/geometries/TextGeometry.js?c3d=102';
-import {Controls} from 'customizer3D_dir/layers/utils/Controls.js?c3d=102';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=102';
-import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=102';
+import {TTFLoader} from 'customizer3D_dir/three/loaders/TTFLoader.js?c3d=103';
+import {Font} from 'customizer3D_dir/three/loaders/FontLoader.js?c3d=103';
+import {TextGeometry} from 'customizer3D_dir/three/geometries/TextGeometry.js?c3d=103';
+import {Controls} from 'customizer3D_dir/layers/utils/Controls.js?c3d=103';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=103';
+import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=103';
 
 export class ThreeDText
 {
@@ -46,12 +46,12 @@ export class ThreeDText
                     name: 'MeshMatcapMaterial',
                     matcaps: {value:
                         [
-                            'matcap-1764731458681.jpg?c3d=102', 
-                            'matcap-1764731550075.jpg?c3d=102', 
-                            'matcap-1764731647559.jpg?c3d=102', 
-                            'matcap-1764787557882.jpg?c3d=102',
-                            'matcap-1776615703860.jpg?c3d=102',
-                            'matcap-1776615686768.jpg?c3d=102'
+                            'matcap-1764731458681.jpg?c3d=103', 
+                            'matcap-1764731550075.jpg?c3d=103', 
+                            'matcap-1764731647559.jpg?c3d=103', 
+                            'matcap-1764787557882.jpg?c3d=103',
+                            'matcap-1776615703860.jpg?c3d=103',
+                            'matcap-1776615686768.jpg?c3d=103'
                         ], type: 'image_array'}
                 }
             }
@@ -330,7 +330,7 @@ export class ThreeDText
         }
         else this.mesh.rotation.set(0, Math.PI / 8, 0);
 
-        this.mesh.scale.setScalar(0.001);
+        this.mesh.scale.setScalar(0.00025);
         this._onResize();
 
         this.controls.mesh = this.mesh;
@@ -360,7 +360,7 @@ export class ThreeDText
 
     _onResize()
     {
-        fitMeshToScreen(this.c3d.three.camera, this.mesh, 2);
+        // fitMeshToScreen(this.c3d.three.camera, this.mesh, 2);
     }
 
     _hideOptions()

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import {getMainUniforms, getMainVertexShader, getMainFragmentShader} from 'customizer3D_dir/three/materials/Shaders.js?c3d=102';
-import {getMaxLayers, getTexureSize} from 'customizer3D_dir/settings/GPUInfo.js?c3d=102';
+import {getMainUniforms, getMainVertexShader, getMainFragmentShader} from 'customizer3D_dir/three/materials/Shaders.js?c3d=103';
+import {getMaxLayers, getTexureSize} from 'customizer3D_dir/settings/GPUInfo.js?c3d=103';
 
 
 export const setMainMaterial = (c3d, mesh) =>
@@ -14,7 +14,6 @@ export const setMainMaterial = (c3d, mesh) =>
 
     uniforms.tBase.value = getDummyCanvasTexture(dims.width, dims.height);
     uniforms.uLayerTextures.value = createTextureArray(c3d, dims.width, dims.height);
-    uniforms.uActiveLayerCount.value = MAX_LAYERS;
 
     const material = new THREE.RawShaderMaterial(
     {
@@ -66,6 +65,9 @@ export const getDummyCanvas = (width = 1, height = 1, color) =>
 export const getDummyCanvasTexture = (width = 1, height = 1, color) =>
 {
     const texture = new THREE.CanvasTexture(getDummyCanvas(width, height, color));
+    texture.generateMipmaps = false;
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
 
     return texture;
 };

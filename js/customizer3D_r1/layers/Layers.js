@@ -1,7 +1,7 @@
-import {Image} from 'customizer3D_dir/layers/types/Image.js?c3d=102';
-import {Solid} from 'customizer3D_dir/layers/types/Solid.js?c3d=102';
-import {Text} from 'customizer3D_dir/layers/types/Text.js?c3d=102';
-import {Shape} from 'customizer3D_dir/layers/types/Shape.js?c3d=102';
+import {Image} from 'customizer3D_dir/layers/types/Image.js?c3d=103';
+import {Solid} from 'customizer3D_dir/layers/types/Solid.js?c3d=103';
+import {Text} from 'customizer3D_dir/layers/types/Text.js?c3d=103';
+import {Shape} from 'customizer3D_dir/layers/types/Shape.js?c3d=103';
 
 export class Layers
 {
@@ -61,6 +61,9 @@ export class Layers
         const layer = new Shape(root, this.c3d, data);
         await layer._init();
 
+        this.c3d.render3d.renderShapeLayer(layer);
+        this.c3d.three.render();
+        
         return layer;
     }
     

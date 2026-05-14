@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import * as fflate from 'base/fflate@0.8.2/fflate.esm.js';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=102';
-import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=102';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=103';
+import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=103';
 import gsap from 'base/gsap@3.13.0/gsap@3.13.0.esm.js';
-import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=102';
-import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=102';
+import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=103';
+import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=103';
 
 export class Open
 {
@@ -15,18 +15,21 @@ export class Open
 
     async open(file)
     {
-        // disable UI during processing
-        const container = document.querySelector(this.c3d.props.container);
-        container.style.pointerEvents = 'none';
-        container.style.opacity = 0.5;
-
         let arrayBuffer, header = '';
 
         this.c3d.preloader.show();
+        this.c3d.showHideUI.hide();
 
         if(typeof file == 'string') // load .c3d
         {
-            arrayBuffer = await fetchWithProgress(file, (percent) => this.c3d.preloader.set(this.c3d.lang['processing-c3d-file'] + '<br><b>' + percent + '%</b>'));
+            try {
+                arrayBuffer = await fetchWithProgress(file, (percent) => this.c3d.preloader.set(this.c3d.lang['processing-c3d-file'] + '<br><b>' + percent + '%</b>'));
+            }
+            catch(e) {
+                this.c3d.showHideUI.show();
+                this.c3d.preloader.hide();
+                return;
+            }
         }
         else
         {
@@ -285,14 +288,11 @@ export class Open
             }
         }
 
-        // Enable UI
-        container.style.pointerEvents = 'all';
-        container.style.opacity = 1;
-
         // 
         this.c3d.textLayer.hide();
         this.c3d.imageLayer.hide();
         this.c3d.preloader.hide();
+        this.c3d.showHideUI.show();
         setTimeout(() => {
             this.c3d.three.controls.restoreSettings('set');
             this.c3d.three.render();

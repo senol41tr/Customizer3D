@@ -1,12 +1,12 @@
 import * as THREE from 'three';
-import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=102';
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=102';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=102';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=102';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=102';
-import {createFiltersList} from 'customizer3D_dir/layers/Filters/createFiltersList.js?c3d=102';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=102';
-import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=102';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=103';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=103';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=103';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=103';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=103';
+import {createFiltersList} from 'customizer3D_dir/layers/Filters/createFiltersList.js?c3d=103';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=103';
+import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=103';
 
 export class ShapeLayer
 {
@@ -21,41 +21,60 @@ export class ShapeLayer
         this._snap = false;
 
         let el;
-        // <div class="color_picker" title="${this.c3d.lang['color']}"></div>
+
         this.htmlEl.innerHTML = `
         <div class="title">
             <p class="label" draggable="false">${this.c3d.lang['add-shape-layer']}</p>
             <div class="buttons">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=102" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
-                <img src="${C3D_SERVER}svg/plus.svg?c3d=102" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=103" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
+                <img src="${C3D_SERVER}svg/plus.svg?c3d=103" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
             </div>
         </div>
 
         <div class="content">
             <div class="menu">
-                <div class="freeform">
+                <div class="freeform" style="pointer-events:none; opacity:0.6;">
                     <div class="button" title="${this.c3d.lang['freeform']}">
-                        <img src="${C3D_SERVER}svg/freeform.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/freeform.svg?c3d=103" alt="Icon">
                     </div>
                     <div class="list"></div>
                 </div>
                 <div class="triangle">
                     <div class="button" title="${this.c3d.lang['triangle']}">
-                        <img src="${C3D_SERVER}svg/triangle.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/triangle.svg?c3d=103" alt="Icon">
                     </div>
                     <div class="list"></div>
                 </div>
                 <div class="circle">
                     <div class="button" title="${this.c3d.lang['circle']}">
-                        <img src="${C3D_SERVER}svg/circle.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/circle.svg?c3d=103" alt="Icon">
                     </div>
                     <div class="list"></div>
                 </div>
                 <div class="square">
                     <div class="button" title="${this.c3d.lang['square']}">
-                        <img src="${C3D_SERVER}svg/square.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/square.svg?c3d=103" alt="Icon">
                     </div>
                     <div class="list"></div>
+                </div>
+            </div>
+
+            <div class="menu2" style="justify-content: flex-start; align-items: flex-start; width: 150px;">
+                <div class="stroke" style="display:flex; gap:0.5rem; align-items: center;">
+                    <div data-color="stroke" class="color_picker" title="${this.c3d.lang['stroke']} ${this.c3d.lang['color']}"></div>
+                    <label style="display:flex; gap:0.25rem;">
+                        <input data-type="stroke" type="checkbox" checked>
+                        <p style="font-size: 0.65rem;">${this.c3d.lang['stroke']}</p>
+                    </label>
+                    <input type="range" class="lineWidth" min="0" max="100" value="5" step="1">
+                </div>
+
+                <div class="fill" style="display:flex; gap:0.5rem;">
+                    <div data-color="fill" class="color_picker" title="${this.c3d.lang['fill']} ${this.c3d.lang['color']}"></div>
+                    <label style="display:flex; gap:0.25rem;">
+                        <input data-type="fill" type="checkbox" checked>
+                        <p style="font-size: 0.65rem;">${this.c3d.lang['fill']}</p>
+                    </label>
                 </div>
             </div>
 
@@ -64,25 +83,29 @@ export class ShapeLayer
             <div style="padding-top:0.25rem;">
                 <div class="snap toggle">
                     <div class="button" title="${this.c3d.lang['snap']}">
-                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=103" alt="Icon">
                     </div>
                 </div>
 
                 <div class="rotate">
                     <div class="button" title="${this.c3d.lang['rotate']}">
-                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=103" alt="Icon">
                     </div>
                     <div class="list">
-                        <div class="inputPercent" title="°"><input type="number" min="0" max="360" value="0"></div>
-                        <input type="range" min="0" max="360" value="0" step="0.1">
+                        <div class="inputPercent" title="°">
+                            <input type="number" min="-180" max="180" value="0">
+                        </div>
+                        <input type="range" min="-180" max="180" value="0" step="1">
                     </div>
                 </div>
                 <div class="radius">
                     <div class="button" title="${this.c3d.lang['radius']}">
-                        <img src="${C3D_SERVER}svg/radius.svg?c3d=102" alt="Icon">
+                        <img src="${C3D_SERVER}svg/radius.svg?c3d=103" alt="Icon">
                     </div>
                     <div class="list">
-                        <div class="inputPercent" title="r"><input type="number" min="10" max="400" value="50"></div>
+                        <div class="inputPercent" title="r">
+                            <input type="number" min="10" max="400" value="50">
+                        </div>
                         <input type="range" min="10" max="400" value="50" step="1">
                     </div>
                 </div>
@@ -94,27 +117,45 @@ export class ShapeLayer
 
         // COLOR PICKERS
 
-        const ce = this.c3d.colorEngine;
-        ce.invert('#eeff00', false, false);
-        this.colorPicker = new ColorPicker(this.htmlEl.querySelector('div.color_picker'), {
-            color: ce.color,
-            submitMode: 'instant',
-            enableEyedropper:true,
-            enableAlpha:false,
-            loadLocalSwatches:true,
-            localStorage: this.c3d.localStorage,
-            c3d: this.c3d
-        });
-        
-        this.colorPicker.on('pick', (color) => {
-            ce.invert(color.string('hex'), true, false);
-            canvas.style.backgroundColor = ce.color;
-            this.layer.color = color.string('hex');
-            this.updatePreview(null, false, false);
+        this.htmlEl.querySelectorAll('div.menu2 div.color_picker').forEach(cp =>
+        {
+            const ce = this.c3d.colorEngine;
+            const active = cp.dataset.color;
+            
+            ce.hex('#eeff00', false);
+            const fillColor = ce.color;
+            ce.hex('#1100ff', false);
+            const strokeColor = ce.color;
+
+            this.colorPicker = new ColorPicker(cp, {
+                color: active == 'fill' ? fillColor : strokeColor,
+                submitMode: 'instant',
+                enableEyedropper:true,
+                enableAlpha:false,
+                loadLocalSwatches:true,
+                localStorage: this.c3d.localStorage,
+                c3d: this.c3d
+            });
+            
+            this.colorPicker.on('pick', (color) => {
+                if(active == 'fill')
+                {
+                    ce.invert(color.string('hex'), true, false);
+                    canvas.style.backgroundColor = ce.color;
+                }
+                this.layer[active == 'fill' ? 'fillColor' : 'strokeColor'] = color.string('hex');
+                this.updatePreview(null, true, false);
+            });   
         });
 
-        this.colorPicker.on('close', () => {
 
+        // STROKE WIDTH
+
+        el = this.htmlEl.querySelector('div.menu2 input[type="range"].lineWidth');
+        el.addEventListener('input', (e) =>
+        {
+            this.layer.lineWidth = parseInt(e.currentTarget.value);
+            this.updatePreview(null, true, false);
         });
 
 
@@ -264,12 +305,6 @@ export class ShapeLayer
             this.htmlEl.querySelector('div.radius input[type="number"]').value = e.currentTarget.value;
             this.updatePreview(null, true, false);
         });
-
-
-        // CONVERT TO 3D TEXT
-
-        // el = this.htmlEl.querySelector('div.threeD > div.button');
-        // el.addEventListener('click', () => this.layer.converTo3D());
 
 
         // SNAP
@@ -493,9 +528,9 @@ export class ShapeLayer
                 const angle = THREE.MathUtils.degToRad(this.layer.rotation);
 
                 ctx.save();
-                ctx.fillStyle = this.layer.color;
+                ctx.fillStyle = this.layer.fillColor;
                 ctx.strokeStyle = this.layer.strokeColor;
-                ctx.lineWidth = 2;
+                ctx.lineWidth = this.layer.lineWidth;
                 // ctx.lineJoin = "round"; // miter, round, bevel 
                 // context.miterLimit = 15;
 
@@ -528,7 +563,7 @@ export class ShapeLayer
             ctx.beginPath();
             ctx.setLineDash([5, 3]);
             ctx.strokeStyle = 'rgb(128,128,128)';
-            ctx.lineWidth = 2 * this.c3d.PIXEL_RATIO;
+            ctx.lineWidth = 2;// * this.c3d.PIXEL_RATIO;
             if(snapX)
             {
                 ctx.moveTo(canvas.width / 2, 0);

@@ -1,10 +1,10 @@
 import * as THREE from 'three';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=102';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=102';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=102';
-import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=102';
-import {getMaxLayers, getTexureSize} from 'customizer3D_dir/settings/GPUInfo.js?c3d=102';
-import {getDummyCanvas, getDummyCanvasTexture} from 'customizer3D_dir/three/materials/Materials.js?c3d=102';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=103';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=103';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=103';
+import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=103';
+import {getMaxLayers, getTexureSize} from 'customizer3D_dir/settings/GPUInfo.js?c3d=103';
+import {getDummyCanvas, getDummyCanvasTexture} from 'customizer3D_dir/three/materials/Materials.js?c3d=103';
 
 export class Render3D
 {
@@ -210,18 +210,20 @@ export class Render3D
 
     renderShapeLayer(layer)
     {
+        const previewCanvas = this.c3d.shapeLayer.htmlEl.querySelector('canvas.preview');
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         const dims = getTexureSize(this.c3d, layer.name);
+
         canvas.width = dims.width;
         canvas.height = dims.height;
 
+        const ratio = canvas.width / previewCanvas.width;
+
         ctx.save();
-        ctx.fillStyle = layer.color;
-        // ctx.strokeStyle = this.layer.strokeColor;
-        // ctx.lineWidth = 2;
-        // ctx.lineJoin = "round"; // miter, round, bevel 
-        // context.miterLimit = 15;
+        ctx.fillStyle = layer.fillColor;
+        ctx.strokeStyle = layer.strokeColor;
+        ctx.lineWidth = layer.lineWidth * ratio;
 
         ctx.translate(
             canvas.width / 2 + (layer.shapePosition.x * canvas.width), 
@@ -229,13 +231,14 @@ export class Render3D
         );
 
         ctx.rotate(THREE.MathUtils.degToRad(layer.rotation));
+
         ctx.beginPath();
-
-        this.c3d.shapeLayer.drawShape(ctx, layer.radius * 5);
-
+        this.c3d.shapeLayer.drawShape(ctx, layer.radius * ratio);
         ctx.closePath();
+
         ctx.stroke();
         ctx.fill();
+
         ctx.restore();
 
         this.updateLayerTexture(layer, canvas);
@@ -304,60 +307,81 @@ export class Render3D
             const layer = layers[i].self;
             if(!layer._mesh) continue;
 
+            const PARAMS_PER_LAYER = 5;
             const oldOrder = layer._mesh.userData.index;
+            const data = uniforms.uData.value.image.data;
+            const offset = oldOrder * PARAMS_PER_LAYER * 4;
 
             uniforms.uRenderOrder.value[i] = oldOrder;
 
-            uniforms.uBlendModes.value[oldOrder] = 0;
-            uniforms.uAlphas.value[oldOrder] = 1.0;
-            // uniforms.uOffset.value[oldOrder].set(0,0);
-            uniforms.uZoom.value[oldOrder] = 1.0;
-            // uniforms.uRotation.value[oldOrder] = 0.0;
-            uniforms.uBrightness.value[oldOrder] = 1.0;
-            uniforms.uContrast.value[oldOrder] = 1.0;
-            uniforms.uHue.value[oldOrder] = 0.0;
-            uniforms.uSaturation.value[oldOrder] = 1.0;
-            uniforms.uSepia.value[oldOrder] = 0.0;
-            uniforms.uChromaticAmount.value[oldOrder].set(0,0);
-            uniforms.uInvert.value[oldOrder] = 0.0;
-            uniforms.uVignette.value[oldOrder] = 0.0;
-            uniforms.uGrainAmount.value[oldOrder] = 0.0;
-            uniforms.uTint.value[oldOrder].set(0,0,0);
-            uniforms.uTintAmount.value[oldOrder] = 0.0;
+            // P0
 
-            uniforms.uBlendModes.value[oldOrder] = layer.blendMode;
-            uniforms.uAlphas.value[oldOrder] = (layer.opacity ?? 100) / 100;
-            // !!! (text layer)
-            if(layer.type == 'image')
-            {
-                // let correctedAxis = getCorrectedAxis(THREE.MathUtils.degToRad(layer.rotation), layer.imagePosition.x, -layer.imagePosition.y);
-                // uniforms.uOffset.value[oldOrder].set(correctedAxis.x, correctedAxis.y);
-                uniforms.uOffset.value[oldOrder].set(layer.imagePosition.x, -layer.imagePosition.y);
+            data[offset + 0] = (layer.zoom ?? 100) / 100; // zoom
+            data[offset + 1] = THREE.MathUtils.degToRad(layer.rotation ?? 0); // rotation
+            data[offset + 2] = 0.0; // offsetX
+            data[offset + 3] = 0.0; // offsetY
+
+            // P1
+
+            data[offset + 4] = 1.0; // uBrightness
+            data[offset + 5] = 1.0; // uContrast
+            data[offset + 6] = 0.0; // uHue
+            data[offset + 7] = 1.0; // uSaturation
+
+            // P2
+
+            data[offset + 8] = 0.0; // uSepia
+            data[offset + 9] = 0.0; // uInvert
+            data[offset + 10] = 0.0; // uGrainAmount
+            data[offset + 11] = 0.0; // uVignette
+
+            // P3
+
+            data[offset + 12] = 0.0; // TINT R
+            data[offset + 13] = 0.0; // TINT G
+            data[offset + 14] = 0.0; // TINT B
+            data[offset + 15] = 0.0; // Tint Amount
+
+            // P4
+
+            data[offset + 16] = 0.0; // uChromaticAmount.value.x
+            data[offset + 17] = 0.0; // uChromaticAmount.value.y
+            data[offset + 18] = layer.blendMode || 0; // blendMode
+            data[offset + 19] = (layer.opacity ?? 100) / 100; // alpha
+
+
+            if(layer.type === 'image') {
+                data[offset + 2] = layer.imagePosition.x;
+                data[offset + 3] = -layer.imagePosition.y;
             }
-            else if(layer.type == 'text')
-            {
-                // uniforms.uOffset.value[oldOrder].set(layer.textPosition.x, -layer.textPosition.y);
-            }
-            if(layer.zoom) uniforms.uZoom.value[oldOrder] = (layer.zoom ?? 100) / 100;
-            // if(layer.rotation) uniforms.uRotation.value[oldOrder] = THREE.MathUtils.degToRad(layer.rotation);
-            if(layer.uniforms.uBrightness) uniforms.uBrightness.value[oldOrder] = layer.uniforms.uBrightness;
-            if(layer.uniforms.uContrast) uniforms.uContrast.value[oldOrder] = layer.uniforms.uContrast;
-            if(layer.uniforms.uHue) uniforms.uHue.value[oldOrder] = layer.uniforms.uHue;
-            if(layer.uniforms.uSaturation) uniforms.uSaturation.value[oldOrder] = layer.uniforms.uSaturation;
-            if(layer.uniforms.uSepia) uniforms.uSepia.value[oldOrder] = layer.uniforms.uSepia;
-            if(layer.uniforms.uChromaticAmount) uniforms.uChromaticAmount.value[oldOrder].set(layer.uniforms.uChromaticAmount.x, layer.uniforms.uChromaticAmount.y);
-            if(layer.uniforms.uInvert) uniforms.uInvert.value[oldOrder] = layer.uniforms.uInvert;
-            if(layer.uniforms.uVignette) uniforms.uVignette.value[oldOrder] = layer.uniforms.uVignette;
-            if(layer.uniforms.uGrainAmount) uniforms.uGrainAmount.value[oldOrder] = layer.uniforms.uGrainAmount;
-            if(layer.color && !layer.is3D)
-            {
+
+            const lu = layer.uniforms;
+            if(lu.uBrightness !== undefined) data[offset + 4] = lu.uBrightness;
+            if(lu.uContrast !== undefined)   data[offset + 5] = lu.uContrast;
+            if(lu.uHue !== undefined)        data[offset + 6] = lu.uHue;
+            if(lu.uSaturation !== undefined) data[offset + 7] = lu.uSaturation;
+
+            if(lu.uSepia !== undefined)       data[offset + 8] = lu.uSepia;
+            if(lu.uInvert !== undefined)      data[offset + 9] = lu.uInvert;
+            if(lu.uGrainAmount !== undefined) data[offset + 10] = lu.uGrainAmount;
+            if(lu.uVignette !== undefined)    data[offset + 11] = lu.uVignette;
+
+            if(layer.color && !layer.is3D) {
                 const ce = this.c3d.colorEngine;
                 ce.hex(layer.color, false);
                 const c = new THREE.Color(ce.color);
-                
-                uniforms.uTint.value[oldOrder].set(c.r, c.g, c.b);
-                uniforms.uTintAmount.value[oldOrder] = layer.opacity / 100;
+                data[offset + 12] = c.r;
+                data[offset + 13] = c.g;
+                data[offset + 14] = c.b;
+                data[offset + 15] = 1.0;
             }
+
+            if(lu.uChromaticAmount) {
+                data[offset + 16] = lu.uChromaticAmount.x;
+                data[offset + 17] = lu.uChromaticAmount.y;
+            }
+            
+            uniforms.uData.value.needsUpdate = true;
 
         }
 
@@ -381,6 +405,7 @@ export class Render3D
                 case 'solid': this.renderSolidLayer(layer); break;
                 case 'text': this.renderTextLayer(layer); break;
                 case 'image': case 'gradient': this.renderImageLayer(layer); break;
+                case 'shape': this.renderShapeLayer(layer); break;
                 default: console.warn('Unknown Layer type!'); break;
             }
         }
@@ -426,6 +451,7 @@ export class Render3D
         catch(e) {
             alert("Unable to set Texture data!\n" + e);
         }
+
     }
 
 

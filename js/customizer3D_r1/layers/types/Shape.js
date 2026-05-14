@@ -1,6 +1,6 @@
-import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=102';
-import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=102';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=102';
+import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=103';
+import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=103';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=103';
 
 export class Shape
 {
@@ -13,15 +13,20 @@ export class Shape
         this.div = null;
 
         this.shapePosition = data.shapePosition || {x:0, y:0};
-        this.color = data.color || '#eeff00';
-        this.strokeColor = data.strokeColor || '#1100ff';
         this.opacity = data.opacity || 100;
         this.rotation = data.rotation || 0;
         this.radius = data.radius || 50;
-        this.shapeType = data.shapeType || null;
+        this.lineWidth = data.lineWidth || 5;
+        this.shapeType = data.shapeType || 'triangle';
         this.uniforms = data.uniforms || {};
         this.visible = typeof data.visible == 'boolean' ? data.visible : true;
         this.blendMode = typeof data.blendMode == 'number' ? data.blendMode : 0;
+
+        const ce = this.c3d.colorEngine;
+        ce.hex(data.fillColor || '#eeff00', false);
+        this.fillColor = ce.color;
+        ce.hex(data.strokeColor || '#1100ff', false);
+        this.strokeColor = ce.color;
 
         this._mesh = null;
         
@@ -78,12 +83,12 @@ export class Shape
         this.div = div;
 
         div.innerHTML = `
-            <img class="visibility" src="${C3D_SERVER}svg/show.svg?c3d=102" alt="Icon" style="opacity:1;">
+            <img class="visibility" src="${C3D_SERVER}svg/show.svg?c3d=103" alt="Icon" style="opacity:1;">
             <canvas class="thumbnail" oncontextmenu="return false;"></canvas>
             <div style="width:100%;"></div>
-            <img src="${C3D_SERVER}svg/opacity.svg?c3d=102" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
-            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=102" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
-            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=102" title="${this.c3d.lang['delete-layer']}" class="remove">
+            <img src="${C3D_SERVER}svg/opacity.svg?c3d=103" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
+            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=103" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=103" title="${this.c3d.lang['delete-layer']}" class="remove">
         `;
 
         // VISIBILITY
@@ -134,9 +139,8 @@ export class Shape
             if(this.input) this.input.remove();
             div.remove();
             this.c3d.shapeLayer.hide();
-            // if(this._mesh) this.c3d.render3d.removeLayer(this);
-            // this.c3d.three.render();
-            // if(this.gradient) this.gradient.destroy();
+            if(this._mesh) this.c3d.render3d.removeLayer(this);
+            this.c3d.three.render();
         });
 
         // ADD NEW MESH

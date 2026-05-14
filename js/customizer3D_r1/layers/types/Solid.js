@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=102';
-import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=102';
-import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=102';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=103';
+import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=103';
+import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=103';
 
 export class Solid
 {
@@ -46,11 +46,11 @@ export class Solid
         this.div = div;
         
         div.innerHTML = `
-            <img class="visibility" src="${C3D_SERVER}svg/show.svg?c3d=102" alt="Icon" style="opacity:1;">
+            <img class="visibility" src="${C3D_SERVER}svg/show.svg?c3d=103" alt="Icon" style="opacity:1;">
             <div class="color_picker"></div>
-            <img src="${C3D_SERVER}svg/opacity.svg?c3d=102" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
-            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=102" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
-            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=102" alt="Icon" title="${this.c3d.lang['delete-layer']}" class="delete-layer">
+            <img src="${C3D_SERVER}svg/opacity.svg?c3d=103" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
+            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=103" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=103" alt="Icon" title="${this.c3d.lang['delete-layer']}" class="delete-layer">
         `;
 
         if(this.type == 'color')
@@ -155,16 +155,26 @@ export class Solid
         }
         else if(this._mesh)
         {
-            const rendererUniforms = this.c3d.glbScene.getObjectByName(this.name).material.uniforms;
+            const layerMeshUniforms = this.c3d.glbScene.getObjectByName(this.name).material.uniforms;
+
+            const index = this._mesh.userData.index;
+            const PARAMS_PER_LAYER = 5;
+            const data = layerMeshUniforms.uData.value.image.data;
+            const offset = index * PARAMS_PER_LAYER * 4;
 
             const ro = this._mesh.userData.index;
             const ce = this.c3d.colorEngine;
             ce.hex(this.color, false);
             const c = new THREE.Color(ce.color);
+            
+            
+            data[offset + 12] = c.r; // TINT R
+            data[offset + 13] = c.g; // TINT G
+            data[offset + 14] = c.b; // TINT B
+            data[offset + 15] = this.opacity / 100; // Tint Amount
+            data[offset + 19] = this.opacity / 100; // Alpha
 
-            rendererUniforms.uTint.value[ro].set(c.r, c.g, c.b);
-            rendererUniforms.uAlphas.value[ro] = this.opacity / 100;
-            rendererUniforms.uTintAmount.value[ro] = this.opacity / 100;   
+            layerMeshUniforms.uData.value.needsUpdate = true;
         }
 
         this.c3d.three.render();
