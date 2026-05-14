@@ -24,7 +24,7 @@ const COLOR_SPACE_SVG = SRGBColorSpace;
  *
  * ```js
  * const loader = new SVGLoader();
- * const data = await loader.loadAsync( 'data/svgSample.svg?c3d=103' );
+ * const data = await loader.loadAsync( 'data/svgSample.svg?c3d=104' );
  *
  * const paths = data.paths;
  * const group = new THREE.Group();
@@ -55,7 +55,7 @@ const COLOR_SPACE_SVG = SRGBColorSpace;
  * ```
  *
  * @augments Loader
- * @three_import import { SVGLoader } from 'three/addons/loaders/SVGLoader.js?c3d=103';
+ * @three_import import { SVGLoader } from 'three/addons/loaders/SVGLoader.js?c3d=104';
  */
 class SVGLoader extends Loader {
 

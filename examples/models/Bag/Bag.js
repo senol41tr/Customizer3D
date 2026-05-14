@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=103';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=104';
 
 export function lang()
 {
@@ -37,8 +37,8 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: isMobile() ? 0.5 : 1,
-                maxDistance: isMobile() ? 6 : 4,
+                minDistance: 0.5,
+                maxDistance: 3,
             },
 
             // set initial z position
@@ -46,7 +46,7 @@ export function parameters(self)
             {
                 position:
                 {
-                    z: isMobile() ? 5 : 2.5
+                    z: isMobile() ? 3 : 2
                 }
             }
         },
@@ -58,12 +58,12 @@ export function parameters(self)
                 label: self.lang['bag-texture'],
                 materials:
                 [
-                    {url: root + 'Fabric067_2K-JPG_Color.jpg?c3d=103', repeatX: 2, repeatY: 2},
-                    {url: root + 'Fabric018_2K-JPG_Color.jpg?c3d=103', repeatX: 3, repeatY: 3},
-                    {url: root + 'Fabric061_2K-JPG_Color.jpg?c3d=103', repeatX: 3, repeatY: 3},
-                    {url: root + 'Fabric026_2K-JPG_Color.jpg?c3d=103', repeatX: 3, repeatY: 3},
-                    {url: root + 'Fabric039_1K-JPG_Color.jpg?c3d=103', repeatX: 3, repeatY: 3},
-                    {url: root + 'Fabric024_2K-JPG_Color.jpg?c3d=103', repeatX: 3, repeatY: 3}
+                    {url: root + 'Fabric067_2K-JPG_Color.jpg?c3d=104', repeatX: 2, repeatY: 2},
+                    {url: root + 'Fabric018_2K-JPG_Color.jpg?c3d=104', repeatX: 3, repeatY: 3},
+                    {url: root + 'Fabric061_2K-JPG_Color.jpg?c3d=104', repeatX: 3, repeatY: 3},
+                    {url: root + 'Fabric026_2K-JPG_Color.jpg?c3d=104', repeatX: 3, repeatY: 3},
+                    {url: root + 'Fabric039_1K-JPG_Color.jpg?c3d=104', repeatX: 3, repeatY: 3},
+                    {url: root + 'Fabric024_2K-JPG_Color.jpg?c3d=104', repeatX: 3, repeatY: 3}
                 ]
             },
             front:

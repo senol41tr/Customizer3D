@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=103';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=104';
 
 export function lang()
 {
@@ -66,17 +66,17 @@ export function parameters(self)
                 materials:
                 [
                     {
-                        url: root + 'cabinet/dark.jpg?c3d=103', 
+                        url: root + 'cabinet/dark.jpg?c3d=104', 
                         repatX: 4, 
                         repeatY: 4
                     },
                     {
-                        url: root + 'cabinet/middle.jpg?c3d=103', 
+                        url: root + 'cabinet/middle.jpg?c3d=104', 
                         repatX: 4, 
                         repeatY: 4
                     },
                     {
-                        url: root + 'cabinet/light.jpg?c3d=103', 
+                        url: root + 'cabinet/light.jpg?c3d=104', 
                         repatX: 4, 
                         repeatY: 4
                     }
@@ -146,23 +146,23 @@ export function parameters(self)
                 materials:
                 [
                     {
-                        url: root + 'marmour/black_gold.jpg?c3d=103', 
+                        url: root + 'marmour/black_gold.jpg?c3d=104', 
                         material: 'MeshStandardMaterial'
                     },
                     {
-                        url: root + 'marmour/white_gold.jpg?c3d=103', 
+                        url: root + 'marmour/white_gold.jpg?c3d=104', 
                         material: 'MeshStandardMaterial'
                     },
                     {
-                        url: root + 'marmour/middle.jpg?c3d=103', 
+                        url: root + 'marmour/middle.jpg?c3d=104', 
                         material: 'MeshStandardMaterial'
                     },
                     {
-                        url: root + 'marmour/black.jpg?c3d=103', 
+                        url: root + 'marmour/black.jpg?c3d=104', 
                         material: 'MeshStandardMaterial'
                     },
                     {
-                        url: root + 'marmour/white.jpg?c3d=103', 
+                        url: root + 'marmour/white.jpg?c3d=104', 
                         material: 'MeshStandardMaterial'
                     }
                 ]

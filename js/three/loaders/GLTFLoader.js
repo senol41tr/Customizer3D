@@ -65,8 +65,8 @@ import {
 	SRGBColorSpace,
 	InstancedBufferAttribute
 } from 'three';
-import { toTrianglesDrawMode } from '../utils/BufferGeometryUtils.js?c3d=103';
-import { clone } from '../utils/SkeletonUtils.js?c3d=103';
+import { toTrianglesDrawMode } from '../utils/BufferGeometryUtils.js?c3d=104';
+import { clone } from '../utils/SkeletonUtils.js?c3d=104';
 
 /**
  * A loader for the glTF 2.0 format.
@@ -119,7 +119,7 @@ import { clone } from '../utils/SkeletonUtils.js?c3d=103';
  * ```
  *
  * @augments Loader
- * @three_import import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js?c3d=103';
+ * @three_import import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js?c3d=104';
  */
 class GLTFLoader extends Loader {
 
@@ -273,7 +273,7 @@ class GLTFLoader extends Loader {
 			// Example  path = 'https://my-cnd-server.com/', url = 'assets/models/model.gltf'
 			// resourcePath = 'https://my-cnd-server.com/assets/models/'
 			// referenced resource 'model.bin' will be loaded from 'https://my-cnd-server.com/assets/models/model.bin'
-			// referenced resource '../textures/texture.png?c3d=103' will be loaded from 'https://my-cnd-server.com/assets/textures/texture.png?c3d=103'
+			// referenced resource '../textures/texture.png?c3d=104' will be loaded from 'https://my-cnd-server.com/assets/textures/texture.png?c3d=104'
 			const relativeUrl = LoaderUtils.extractUrlBase( url );
 			resourcePath = LoaderUtils.resolveURL( relativeUrl, this.path );
 

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=103';
-import {Texture} from 'customizer3D_dir/three/loaders/Texture.js?c3d=103';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=104';
+import {Texture} from 'customizer3D_dir/three/loaders/Texture.js?c3d=104';
 
 
 export function lang()
@@ -61,13 +61,13 @@ export function parameters(self)
                 label: self.lang['vase-texture'],
                 materials: 
                 [
-                    {url: root + 'textures/5.jpg?c3d=103', repeatX: 2, repeatY: 2},
-                    {url: root + 'textures/1.jpg?c3d=103', repeatX: 4, repeatY: 4},
-                    {url: root + 'textures/2.jpg?c3d=103', repeatX: 4, repeatY: 4},
-                    {url: root + 'textures/3.jpg?c3d=103', repeatX: 4, repeatY: 4},
-                    {url: root + 'textures/4.jpg?c3d=103', repeatX: 4, repeatY: 4},
-                    {url: root + 'textures/6.jpg?c3d=103', repeatX: 3, repeatY: 3},
-                    {url: root + 'textures/7.jpg?c3d=103', repeatX: 2, repeatY: 2}
+                    {url: root + 'textures/5.jpg?c3d=104', repeatX: 2, repeatY: 2},
+                    {url: root + 'textures/1.jpg?c3d=104', repeatX: 4, repeatY: 4},
+                    {url: root + 'textures/2.jpg?c3d=104', repeatX: 4, repeatY: 4},
+                    {url: root + 'textures/3.jpg?c3d=104', repeatX: 4, repeatY: 4},
+                    {url: root + 'textures/4.jpg?c3d=104', repeatX: 4, repeatY: 4},
+                    {url: root + 'textures/6.jpg?c3d=104', repeatX: 3, repeatY: 3},
+                    {url: root + 'textures/7.jpg?c3d=104', repeatX: 2, repeatY: 2}
                 ]
             }
         }
@@ -83,15 +83,15 @@ export async function init()
     this.enableAutoZoom();
 
     // set mesh materials
-    const soilMap = await new Texture({url: root + 'maps/Plant-Set-002-grass.jpg?c3d=103', preloader: this.preloader}).load();
+    const soilMap = await new Texture({url: root + 'maps/Plant-Set-002-grass.jpg?c3d=104', preloader: this.preloader}).load();
 
     this.glbScene.getObjectByName('vase').material = new THREE.MeshPhysicalMaterial({map:soilMap, metalness: 0.3, roughness: 0.5});
     
     this.glbScene.getObjectByName('soil').material = new THREE.MeshBasicMaterial({map: soilMap, side: THREE.DoubleSide});
     
-    const leavesMap = await new Texture({url: root + 'maps/03.jpg?c3d=103', preloader: this.preloader}).load();
-    const leavesAlphaMap = await new Texture({url: root + 'maps/03_Opacity.jpg?c3d=103', preloader: this.preloader}).load();
-    const leavesNormalMap = await new Texture({url: root + 'maps/03_Normal.jpg?c3d=103', preloader: this.preloader}).load();
+    const leavesMap = await new Texture({url: root + 'maps/03.jpg?c3d=104', preloader: this.preloader}).load();
+    const leavesAlphaMap = await new Texture({url: root + 'maps/03_Opacity.jpg?c3d=104', preloader: this.preloader}).load();
+    const leavesNormalMap = await new Texture({url: root + 'maps/03_Normal.jpg?c3d=104', preloader: this.preloader}).load();
     this.glbScene.getObjectByName('leaves').material = new THREE.MeshStandardMaterial({
         map: leavesMap, 
         alphaMap: leavesAlphaMap, 

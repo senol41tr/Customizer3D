@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=103';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=104';
 
 export function lang(self)
 {
