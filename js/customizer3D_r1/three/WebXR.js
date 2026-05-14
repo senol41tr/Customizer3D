@@ -52,7 +52,7 @@ export class WebXR
 
         this.glbScene = this.c3d.glbScene.clone();
         this.three.scene.add(this.glbScene);
-        // this.glbScene.visible = false;
+        this.glbScene.visible = false;
         
         this.c3d.glbScene.visible = false;
         this.c3d.three.controls.orbit.enabled = false;
@@ -74,7 +74,7 @@ export class WebXR
             new THREE.MeshBasicMaterial({transparent:true, color:0xffffff, opacity: 0.75})
         );
         this.reticle.matrixAutoUpdate = false;
-        // this.reticle.visible = false;
+        this.reticle.visible = false;
         this.three.scene.add( this.reticle );
 
         this.three.renderer.setAnimationLoop( this.__onEnterFrame );
