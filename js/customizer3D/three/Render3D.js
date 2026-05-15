@@ -67,12 +67,14 @@ export class Render3D
                     break;
         
                     case 'image':
+                    case 'gradient':
 
                         this.renderImageLayer(layer);
                         this.c3d.imageLayer.show(layer);
                         this.c3d.imageLayer.hide();
 
                     break;
+
                 }
 
                 this.setVisibility(layer, !layer.visible);
@@ -142,7 +144,6 @@ export class Render3D
             ctx.translate(canvas.width / 2, canvas.height / 2);
             ctx.rotate(THREE.MathUtils.degToRad(layer.rotation));
             ctx.drawImage(threeDSVGCanvas, -dims.width / 2, -dims.height / 2, dims.width, dims.height);
-            // ctx.drawImage(threeDSVGCanvas, 0, 0, dims.width, dims.height);
         }
         else if(layer.detectedFileType == 'model/gltf-binary' && layer.is3D)
         {
@@ -150,14 +151,12 @@ export class Render3D
             ctx.translate(canvas.width / 2, canvas.height / 2);
             ctx.rotate(THREE.MathUtils.degToRad(layer.rotation));
             ctx.drawImage(threeDCanvas, -dims.width / 2, -dims.height / 2, dims.width, dims.height);
-            // ctx.drawImage(threeDCanvas, 0, 0, dims.width, dims.height); 
         }
         else if(layer.type == 'gradient' && layer.gradient)
         {
             const gradientCanvas = layer.gradient.bakeImageToLayer(dims.width, dims.height, true);
             ctx.translate(canvas.width / 2, canvas.height / 2);
             ctx.drawImage(gradientCanvas, -dims.width / 2, -dims.height / 2, dims.width, dims.height);
-            // ctx.drawImage(gradientCanvas, 0, 0, dims.width, dims.height); 
         }
         else
         {
@@ -190,7 +189,6 @@ export class Render3D
             ctx.translate(canvas.width / 2, canvas.height / 2);
             ctx.rotate(THREE.MathUtils.degToRad(layer.rotation));
             ctx.drawImage(threeDTextCanvas, -dims.width / 2, -dims.height / 2, dims.width, dims.height);
-            // ctx.drawImage(threeDTextCanvas, 0, 0, dims.width, dims.height);
         }
         else
         {
@@ -200,7 +198,6 @@ export class Render3D
             const actualHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
             ctx.translate(canvas.width / 2, canvas.height / 2);
             ctx.fillText(layer.text, layer.textPosition.x * canvas.width - (metrics.width / 2), -layer.textPosition.y * canvas.height + (actualHeight / 2));
-            // ctx.fillText(layer.text, -metrics.width / 2, actualHeight / 2);
         }
 
         this.updateLayerTexture(layer, canvas);

@@ -224,12 +224,6 @@ export class Image
         if(this.type == 'gradient')
         {
             this.gradient = new Gradient(this.c3d, this);
-            // this.gradient.show();
-
-            if(this.gradientOptions)
-            {
-                // this.gradient.hide();
-            }
         }
 
         // ADD TO SORTABLE LIST

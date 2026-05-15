@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import * as Materials from 'customizer3D_dir/three/materials/Materials.js?c3d=104';
 import {Three} from 'customizer3D_dir/three/Three.js?c3d=104';
 import {createMaterial} from 'customizer3D_dir/utils/createMaterial.js?c3d=104';
-import {Render3D} from 'customizer3D_dir/three/Render3D.js?c3d=105';
+import {Render3D} from 'customizer3D_dir/three/Render3D.js?c3d=106';
 import {GLB} from 'customizer3D_dir/three/loaders/GLB.js?c3d=104';
 import {WebXR} from 'customizer3D_dir/three/WebXR.js?c3d=104';
 import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=104';
