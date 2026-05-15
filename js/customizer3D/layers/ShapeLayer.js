@@ -571,11 +571,12 @@ export class ShapeLayer
             );
 
             ctx.rotate(angle);
+            ctx.globalAlpha = this.layer.opacity / 100;
+            
             ctx.beginPath();
-
             this.drawShape(ctx, radius);
-
             ctx.closePath();
+
             if(this.layer.strokeColor != null) ctx.stroke();
             if(this.layer.fillColor != null) ctx.fill();
             ctx.restore();

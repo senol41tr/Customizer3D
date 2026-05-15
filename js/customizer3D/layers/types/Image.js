@@ -1,5 +1,5 @@
 import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=104';
-import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=104';
+import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=105';
 import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=104';
 import {ThreeD} from 'customizer3D_dir/layers/types/ThreeD.js?c3d=104';
 import {ThreeDSVG} from 'customizer3D_dir/layers/types/ThreeDSVG.js?c3d=104';

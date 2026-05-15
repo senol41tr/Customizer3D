@@ -1,4 +1,4 @@
-import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=104';
+import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=105';
 import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=104';
 import {ThreeDText} from 'customizer3D_dir/layers/types/ThreeDText.js?c3d=104';
 

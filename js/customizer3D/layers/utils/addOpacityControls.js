@@ -41,6 +41,12 @@ export const addOpacityControls = (c3d, layer, button) =>
                 
             break;
 
+            case 'shape':
+
+                c3d.shapeLayer.show(layer);
+
+            break;
+
             default:
 
                 console.warn("Unknown Layer Type!");

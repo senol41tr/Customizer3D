@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=104';
-import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=104';
+import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=105';
 import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=104';
 
 export class Solid

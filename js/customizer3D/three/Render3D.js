@@ -232,6 +232,7 @@ export class Render3D
         );
 
         ctx.rotate(THREE.MathUtils.degToRad(layer.rotation));
+        ctx.globalAlpha = layer.opacity / 100;
 
         ctx.beginPath();
         this.c3d.shapeLayer.drawShape(ctx, layer.radius * ratio);
