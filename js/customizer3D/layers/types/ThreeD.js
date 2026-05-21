@@ -51,7 +51,6 @@ export class ThreeD
         if(this.mesh) this.mesh.visible = false;
         this.c3d.glbScene.visible = true;
         this.c3d.three.controls.orbit.enabled = true;
-        document.querySelector(this.c3d.props.layers).style.visibility = 'visible';
         this.c3d.textLayer.htmlEl.style.visibility = 'visible';
         this.c3d.imageLayer.htmlEl.style.visibility = 'visible';
 
@@ -73,10 +72,18 @@ export class ThreeD
         this.c3d.imageLayer.updatePreview(null, true, false);
         this.c3d.three.controls.restoreSettings('set');
         this.c3d.three.render();
+
+        // resize canvas
+        document.querySelector(this.c3d.props.layers).style.display = 'flex';
+        this.c3d._updateCanvasSize();
     }
 
     show()
     {
+        // resize canvas
+        document.querySelector(this.c3d.props.layers).style.display = 'none';
+        this.c3d._updateCanvasSize();
+        
         this.c3d.three.controls.restoreSettings('set');
         this.c3d.three.controls.orbit.enabled = false;
         this.c3d.glbScene.visible = false;
@@ -94,7 +101,6 @@ export class ThreeD
         
         this.c3d.textLayer.htmlEl.style.visibility = 'hidden';
         this.c3d.imageLayer.htmlEl.style.visibility = 'hidden';
-        document.querySelector(this.c3d.props.layers).style.visibility = 'hidden';
         this._onResize();
         this.c3d.three.render();   
     }

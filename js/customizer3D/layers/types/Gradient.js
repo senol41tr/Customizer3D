@@ -115,37 +115,37 @@ export class Gradient
     _createOptions()
     {
         const gradientDiv = this.c3d.imageLayer.htmlEl.querySelector('div.content > div.menu > div.gradient');
-        const buttonCSS = 'border:none; outline:none; padding: 0.25rem; color: var(--customizerColorText); font-size: 0.7rem; background-color: transparent;';
+        const buttonCSS = 'border:none; outline:none; padding: 0.25rem; color: var(--customizerColorText); background-color: transparent;';
 
-        gradientDiv.style.width = '130px';
+        gradientDiv.style.width = '140px';
 
         gradientDiv.innerHTML = `
             <div style="display:flex; flex-direction:column; gap: 0.25rem;">
                 
                 <div style="display:flex; gap: 0.25rem; align-items: center;">
-                    <p style="font-size: 0.65rem; opacity: 0.6; flex-basis: 40%;">Gradient Type</p>
+                    <p style="flex-basis: 40%;">Gradient Type</p>
                     <button class="type_linear" style="${buttonCSS} opacity: 0.5;">Linear</button>
                     <button class="type_radial" style="${buttonCSS}">Radial</button>
                 </div>
 
                 <div style="display:flex; gap: 0.25rem; align-items: center;">
-                    <p style="font-size: 0.65rem; opacity: 0.6; flex-basis: 40%;">Rotation</p>
+                    <p style="flex-basis: 40%;">Rotation</p>
                     <input class="angle" type="range" min="0" max="360" value="${this.options.angle}" step="0.5" style="width:100px;">
                 </div>
 
                 <div style="display:flex; gap: 0.25rem; align-items: center;">
-                    <p style="font-size: 0.65rem; opacity: 0.6; flex-basis: 40%;">Scale</p>
+                    <p style="flex-basis: 40%;">Scale</p>
                     <input class="scale" type="range" min="0" max="5" value="${this.options.scale}" step="0.01" style="width:100px;">
                 </div>
 
                 <div style="display:flex; gap: 0.25rem;">
-                    <p style="font-size: 0.65rem; opacity: 0.6; flex-basis: 40%;">Colors</p>
+                    <p style="flex-basis: 40%;">Colors</p>
                     <div style="display:flex; gap: 0.5rem;">
-                        <div class="color_picker color_picker_0"></div>
-                        <div class="color_picker color_picker_1"></div>
-                        <div class="color_picker color_picker_2"></div>
-                        <div class="color_picker color_picker_3"></div>
-                        <div class="color_picker color_picker_4"></div>
+                        <div class="color_picker color_picker_0" style="min-width:auto;width:25px;height:25px;"></div>
+                        <div class="color_picker color_picker_1" style="min-width:auto;width:25px;height:25px;"></div>
+                        <div class="color_picker color_picker_2" style="min-width:auto;width:25px;height:25px;"></div>
+                        <div class="color_picker color_picker_3" style="min-width:auto;width:25px;height:25px;"></div>
+                        <div class="color_picker color_picker_4" style="min-width:auto;width:25px;height:25px;"></div>
                     </div>
                 </div>
 

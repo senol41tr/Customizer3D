@@ -97,9 +97,9 @@ export class Shape
         div.innerHTML = `
             <img class="visibility" src="${C3D_SERVER}svg/show.svg?c3d=104" alt="Icon" style="opacity:1;">
             <canvas class="thumbnail" oncontextmenu="return false;"></canvas>
-            <div style="width:100%;"></div>
             <img src="${C3D_SERVER}svg/opacity.svg?c3d=104" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
             <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=104" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <div class="spacer"></div>
             <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=104" title="${this.c3d.lang['delete-layer']}" class="remove">
         `;
 
@@ -120,10 +120,11 @@ export class Shape
         // CANVAS
 
         const thumbCanvas = div.querySelector('canvas.thumbnail');
-        thumbCanvas.addEventListener('click', () => {
+        const _onClick = () => {
             this.c3d.shapeLayer.show(this);
-        });
-
+        };
+        thumbCanvas.addEventListener('click', _onClick);
+        div.querySelector('div.spacer').addEventListener('click', _onClick);
 
         // OPACITY
 

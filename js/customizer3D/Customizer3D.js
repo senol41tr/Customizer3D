@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import gsap from 'base/gsap@3.13.0/gsap@3.13.0.esm.js';
 import * as Materials from 'customizer3D_dir/three/materials/Materials.js?c3d=104';
 import {Three} from 'customizer3D_dir/three/Three.js?c3d=104';
 import {createMaterial} from 'customizer3D_dir/utils/createMaterial.js?c3d=104';
@@ -58,6 +59,27 @@ export class Customizer3D
         this.setView = setView;
         this.onUnLoad = onUnLoad;
 
+        // UI
+
+        const layersDiv = document.querySelector(this.props.layers);
+
+        layersDiv.innerHTML = `
+            <div class="title">
+                <div class="title">
+                    <img src="${C3D_SERVER}svg/layers.svg?c3d=104" alt="Icon" class="icon" draggable="false">
+                    <p class="title">${this.lang['layers']}</p>
+                </div>
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=104" alt="Icon" class="rollup" draggable="false">
+            </div>
+
+            <div class="content"></div>
+            <div class="settings"></div>
+            <div class="imageLayer"></div>
+            <div class="textLayer"></div>
+            <div class="shapeLayer"></div>
+        `;
+
+
         //
         this.preloader = new Preloader(this);
 
@@ -110,8 +132,7 @@ export class Customizer3D
 
         //
         this.eventsManager = new EventsManager({
-            camera: this.three.camera,
-            scene: this.three.scene
+            c3d: this
         });
 
 
@@ -132,26 +153,6 @@ export class Customizer3D
         // HTML STUFF
         //
 
-        const layersDiv = document.querySelector(this.props.layers);
-
-        layersDiv.innerHTML = `
-        <div class="title">
-            <div class="title">
-                <img src="${C3D_SERVER}svg/layers.svg?c3d=104" alt="Icon" class="icon" draggable="false">
-                <p class="title">${this.lang['layers']}</p>
-            </div>
-            <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=104" alt="Icon" class="rollup" draggable="false">
-        </div>
-
-        <div class="content"></div>`;
-
-        const dragable = new Dragable({
-            dragEl: layersDiv.querySelector('div.title'),
-            container: layersDiv,
-            root: document.querySelector(this.props.container),
-            c3d: this
-        });
-
         // https://discourse.threejs.org/t/how-to-prevent-raycast-from-firing-when-i-touch-an-html-element/30262/2
         layersDiv.addEventListener('mouseenter', () =>
         {
@@ -164,20 +165,25 @@ export class Customizer3D
         });
 
         const titleRollUpIcon = layersDiv.querySelector('div.title > img.rollup');
-        titleRollUpIcon.addEventListener('click', (e) =>
+        titleRollUpIcon.addEventListener('click', (e, state) =>
         {
             const layers = document.querySelector(this.props.layers);
             const content = layers.querySelector('div.content');
-            const fileMenu = layers.querySelector('div.fileMenu');
-            const visible = content.style.display == 'none';
+            const settings = layers.querySelector('div.settings');
+            const bottomNav = layers.querySelector('div.bottomNav');
+            const visible = typeof state == 'boolean' ? state : content.style.display == 'none';
             
-            titleRollUpIcon.style.rotate = visible ? '180deg' : '0deg';
-            content.style.display = 
-            fileMenu.style.display = visible ? 'flex' : 'none';
+            titleRollUpIcon.style.rotate = visible ? '0deg' : '180deg';
+            content.style.display = visible ? 'flex' : 'none';
+            settings.style.display = visible ? 'block' : 'none';
+            bottomNav.style.display = visible ? 'flex' : 'none';
             
             layers.dataset.minHeight = window.getComputedStyle(layers)['minHeight'];
             layers.style.minHeight = visible ? layers.dataset.minHeight : 'auto';
+
+            this._updateCanvasSize();
         });
+
 
         // CONTROLS
 
@@ -285,7 +291,9 @@ export class Customizer3D
 
     _setAutoZoom(auto = true)
     {
-        const setZoomCheckbox = document.querySelector(this.props.controls).querySelector('input.checkbox');
+        const controlsDiv = document.querySelector(this.props.controls);
+        const setZoomCheckbox = controlsDiv.querySelector('input.checkbox');
+        controlsDiv.style.display = auto ? 'none' : 'flex';
         setZoomCheckbox.checked = !auto; // true: manuel zoom, false: auto (default: auto)
         setZoomCheckbox.click();
     }
@@ -328,7 +336,10 @@ export class Customizer3D
             // create layers bottom
             if(meshName == '*') continue;
 
-            //
+
+            // SET RAWSHADER MATERIAL
+
+
             if((!materials || materials[0].image || materials[0].text || materials[0].solid) && printSize)
             {
                 const renderer = this.glbScene.getObjectByName(meshName);
@@ -339,12 +350,16 @@ export class Customizer3D
                 renderer.material = Materials.setMainMaterial(this, renderer);
             }
 
+
             const layer = document.createElement('div');
             layer.className = 'layer ' + meshName;
             layer.dataset.mesh = meshName;
             layer.innerHTML = `
                 <div class="title">
-                    <img src="${C3D_SERVER}svg/plus.svg?c3d=104" alt="Icon" class="icon" draggable="false">
+                    <div class="back">
+                        <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=104" alt="Icon" class="back" draggable="false">
+                        <p class="label">${this.lang['back']}</p>
+                    </div>
                     <p class="name">${label}</p>
                 </div>
                 <div class="content">
@@ -353,14 +368,21 @@ export class Customizer3D
                 </div>`;
             
             layersDivContent.appendChild(layer);
+
+            // add back button listener
+            layer.querySelector('div.title > div.back').addEventListener('click', () =>
+            {
+                this._setNavActive('C3D_reset'); // show all layers
+            });
             
-            // add button listener
-            layer.querySelector('div.title').addEventListener('click', () =>
+            // set nav. item as active
+            layer.querySelector('div.title > p.name').addEventListener('click', () =>
             {
                 this._setNavActive(meshName);
                 this.textLayer.hide();
                 this.imageLayer.hide();
             });
+
 
             // create material data
             const mesh = group ? this.glbScene.getObjectByName(group).getObjectByName(meshName) : this.glbScene.getObjectByName(meshName);
@@ -393,36 +415,32 @@ export class Customizer3D
 
         }
 
-        // FILE MENU
+        // BOTTOM NAV.
 
-        const fileDiv = document.createElement('div');
-        fileDiv.className = 'fileMenu';
-        fileDiv.innerHTML = `
-            <button class="menu">${this.lang['file']}</button>
-            <div class="menu">
-                <a href="javascript:void(0);" class="saveAs" title="${this.lang['save-as']}">${this.lang['save-as']}</a>  
-                <a href="javascript:void(0);" class="exportAsPDF" title="${this.lang['export']}">${this.lang['export']}</a>  
-            </div>`;
-        
-        // show file menu button and content
-        const menuButton = fileDiv.querySelector('button.menu');
-        const menuDiv = fileDiv.querySelector('div.menu');
+        const bottomNav = document.createElement('div');
+        bottomNav.className = 'bottomNav';
+        bottomNav.innerHTML = `
 
-        menuButton.addEventListener('click', (e) => {
-            const visible = menuDiv.style.display == 'none' || menuDiv.style.display == '' ;
-            menuDiv.style.display = visible ? 'flex' : 'none';
-        });
+            <div class="file">
+                <a href="javascript:void(0);" class="menu">${this.lang['file']}</a>
+                <div class="menu">
+                    <a href="javascript:void(0);" class="saveAs" title="${this.lang['save-as']}">${this.lang['save-as']}</a>  
+                    <a href="javascript:void(0);" class="exportAsPDF" title="${this.lang['export']}">${this.lang['export']}</a>  
+                </div>
+            </div>
 
-        // on click outside hide the menu
-        const _menuClickOutside = (e) =>
-        {
-            if(!fileDiv.contains(e.target) && !menuButton.contains(e.target))
-            {
-                menuDiv.style.display = 'none';
-            }
-        };
-        window.addEventListener('click', _menuClickOutside);
-        window.addEventListener('touchstart', _menuClickOutside);
+            <div class="add_layer" title="${this.lang['add-layer']}">
+                <img src="${C3D_SERVER}svg/plus.svg?c3d=104" alt="Icon" draggable="false">
+                <span>${this.lang['add-layer']}</span>
+            </div>
+
+            <div class="settings">
+                <a href="javascript:void(0);" class="settings">${this.lang['settings']}</a>
+            </div>
+
+        `;
+
+        const menuDiv = bottomNav.querySelector('div.file > div.menu');
 
         // 
         const openDiv = document.createElement('div');
@@ -432,9 +450,6 @@ export class Customizer3D
         const openLabel = document.createElement('label');
         openLabel.setAttribute('for', openInputID);
         openLabel.innerText = this.lang['open'];
-        openLabel.addEventListener('click', (e) => {
-            menuDiv.style.display = 'none';
-        });
         openDiv.appendChild(openLabel);
 
         const openInput = document.createElement('input');
@@ -445,26 +460,27 @@ export class Customizer3D
         openInput.addEventListener('change', (e) => {
             this.textLayer.hide();
             this.imageLayer.hide();
+            this.shapeLayer.hide();
             this.file.open(e);
         });
 
         openDiv.appendChild(openInput);
 
         menuDiv.prepend(openDiv);
-
+        
         // 
-        const saveAsButton = fileDiv.querySelector('a.saveAs');
+        const saveAsButton = bottomNav.querySelector('a.saveAs');
         saveAsButton.addEventListener('click', () => {
             this.file.saveAs();
-            menuDiv.style.display = 'none';
         });
 
         //
-        const exportAsPDFButton = fileDiv.querySelector('a.exportAsPDF');
+        const exportAsPDFButton = bottomNav.querySelector('a.exportAsPDF');
         exportAsPDFButton.addEventListener('click', (e) =>
         {
             this.textLayer.hide();
             this.imageLayer.hide();
+            this.shapeLayer.hide();
 
             let notice = '<img src="' + C3D_SERVER + 'svg/warning.svg?c3d=104" style="width:28px;filter:none !important;align-self: center;">' + this.lang['convert-to-cmyk-notice'];
 
@@ -473,19 +489,85 @@ export class Customizer3D
             notice = notice.replace('[DOWNLOAD]', '<button class="download">'+ this.lang['download'] +'</button>');
             notice = notice.replace('[PDFTOCMYK_COM]', '<a href="' + C3D_SERVER + 'jpg/pdf2cmyk.com.jpg?c3d=104" target="_blank" style="font-size:0.7rem;">'+ this.lang['screenshot'] +'</a> <a href="https://www.pdf2cmyk.com" target="_blank" style="font-size:0.7rem;">pdf2cmyk.com</a>');
 
-            this.contextMenu.setWidth(220);
+            this.contextMenu.setWidth(350);
             this.contextMenu.setHTML(notice);
             this.contextMenu.show(e.currentTarget);
             
             this.contextMenu.el.querySelector('button.download').addEventListener('click', (e) => {
                 this.file.export();
-                menuDiv.style.display = 'none';  
                 this.contextMenu.hide();  
             });
 
         });
 
-        document.querySelector(this.props.layers).appendChild(fileDiv);
+
+        const addLayerButton = bottomNav.querySelector('div.add_layer');
+        addLayerButton.addEventListener('click', () =>
+        {
+            const activeDiv = layersDiv.querySelector('div.content > div.active');
+            const buttons = activeDiv.querySelector('div.content > div.buttons');
+            const content = activeDiv.querySelector('div.content');
+            const isVisible = buttons.style.display == '' || buttons.style.display == 'none';
+
+            const maxHeight = parseInt(content.style.maxHeight);
+            buttons.style.display = isVisible ? 'flex' : 'none';
+            content.style.maxHeight = isVisible ? (buttons.offsetHeight + maxHeight) + 'px' : (maxHeight - buttons.offsetHeight) + 'px';
+            setTimeout(() => buttons.scrollIntoView(), 300);
+
+            addLayerButton.querySelector('img').style.rotate = isVisible ? '45deg' : '0deg';
+            addLayerButton.querySelector('span').innerText = this.lang[isVisible ? 'close' : 'add-layer'];
+        });
+
+
+        layersDiv.appendChild(bottomNav);
+
+
+
+        // SETTINGS
+
+        const settingsButton = bottomNav.querySelector('a.settings');
+        settingsButton.addEventListener('click', () => 
+        {
+            const title = layersDiv.querySelector('div.title > p.title');
+            const titleIcon = layersDiv.querySelector('div.title > img.icon');
+            const fileDiv = bottomNav.querySelector('div.file');
+            const addLayerDiv = bottomNav.querySelector('div.add_layer');
+
+            let maxHeight = this.settings.htmlEl.style.maxHeight;
+            let maxHeightLayer;
+
+            if(maxHeight == '' || maxHeight == '0px') 
+            {
+                const bb = this.settings.htmlEl.querySelector('div.content').scrollHeight;
+                maxHeight = bb + 'px';
+                maxHeightLayer = 0;
+
+                title.innerText = this.lang['settings'];
+                titleIcon.src = C3D_SERVER + 'svg/settings.svg?c3d=104';
+                settingsButton.innerText = this.lang['close'];
+
+                fileDiv.style.visibility = 'hidden';
+                addLayerDiv.style.visibility = 'hidden';
+            }
+            else
+            {
+                const bb = layersDiv.querySelector('div.content').scrollHeight;
+                maxHeightLayer = bb + 'px';
+                maxHeight = 0;
+
+                title.innerText = this.lang['layers'];
+                titleIcon.src = C3D_SERVER + 'svg/layers.svg?c3d=104';
+                settingsButton.innerText = this.lang['settings'];
+
+                fileDiv.style.visibility = 'visible';
+                addLayerDiv.style.visibility = 'visible';
+            }
+
+            this.settings.htmlEl.style.maxHeight = maxHeight;
+            layersDiv.querySelector('div.content').style.maxHeight = maxHeightLayer;
+
+        });
+
 
 
         //
@@ -549,17 +631,6 @@ export class Customizer3D
                         this.imageLayer.hide();
                     });
 
-                    this.eventsManager.addEventListener({
-                        mesh, 
-                        event:'mouseup', 
-                        callback:(o) => {
-                            this._setNavActive(mesh.name, false);
-                            layersDiv.dispatchEvent(new MouseEvent('mouseup'));
-                            this.textLayer.hide();
-                            this.imageLayer.hide();
-                        }
-                    });
-
                     await this._createMaterials(mesh, materialData.materials);
                 }
 
@@ -593,44 +664,84 @@ export class Customizer3D
         // show UI
         this.showHideUI.show();
         this.onResize(); // fit mesh to screen
+        // layersDiv.querySelector('div.title > img.rollup').click(null, true);
     }
 
     _setNavActive(name, rotate = true, fn = 'to')
     {
-        const layersDivContent = document.querySelector(this.props.layers + ' > div.content');
+        const layersDiv = document.querySelector(this.props.layers);
+        const layersDivContent = layersDiv.querySelector('div.content');
+        const layers = layersDivContent.querySelectorAll('div.layer');
+        const add_layer = layersDiv.querySelector('div.bottomNav > div.add_layer');        
 
         // show if window rolled up
         if(layersDivContent.style.display == 'none') return;
-        // layersDivContent.style.display = 'flex';
-        // document.querySelector(this.props.layers + ' > div.title > img.icon').style.rotate = '180deg';
-
-        const layers = layersDivContent.querySelectorAll('div.layer');
 
         for (let i = 0; i < layers.length; i++)
         {
             const layer = layers[i];
             const title = layer.querySelector('div.title');
             const content = layer.querySelector('div.content');
-            const icon = title.querySelector('img.icon');
+            const back = title.querySelector('div.back');
 
             if(layer.classList.contains(name))
             {
+                const layersDivContentMaxHeight = layersDivContent.style.maxHeight;
+
+                layer.style.display = 'flex';
+                layer.classList.add('active');
                 title.classList.add('active');
-                icon.style.opacity = 0;
+                back.style.display = 'flex';
                 content.style.display = 'block';
-                content.style.maxHeight = (content.scrollHeight + 2) + 'px';
+                content.style.maxHeight = content.scrollHeight + 'px';
+                layersDivContent.style.maxHeight = (layersDiv.offsetHeight + content.scrollHeight) + 'px';              
+
                 if(rotate) this.setView(name, fn);
                 title.scrollIntoView();
             }
             else
             {
+                layer.style.display = name == 'C3D_reset' ? 'flex' : 'none';
+                layer.classList.remove('active');
                 title.classList.remove('active');
-                icon.style.opacity = 1;
+                back.style.display = 'none';
                 content.style.display = 'none';
                 content.style.maxHeight = null;
             }
+
+            if(name == 'C3D_reset')
+            {
+                this.three.rotateToAngle(0, 0, 0);
+                this.three.moveToAngle(0, 0, 0);
+                if(parseInt(add_layer.querySelector('img').style.rotate) == 45) {
+                    add_layer.click();
+                }
+            }
         }
 
+
+        const hasButtons = layersDiv.querySelector('div.content > div.active div.buttons > div');
+        add_layer.style.display = hasButtons ? 'flex' : 'none';
+
+        this._updateCanvasSize();
+
+    }
+
+    _updateCanvasSize()
+    {
+        const canvas3d = document.querySelector(this.props.canvas3d);
+        const container = document.querySelector(this.props.container);
+        const layersDiv = document.querySelector(this.props.layers);
+
+        setTimeout(() =>
+        {
+            gsap.to(canvas3d, {
+                height: container.offsetHeight - layersDiv.offsetHeight,
+                duration: 0.5,
+                ease: "power2.inOut",
+                onUpdate: () => this.three._onResize()
+            });  
+        }, 750);
     }
 
     async _createMaterials(mesh, materials = [])
@@ -681,6 +792,7 @@ export class Customizer3D
                 for (let j = 0; j < data.colors.length; j++)
                 {
                     const activeSpan = document.createElement('span');
+                    activeSpan.dataset.color = data.colors[j];
                     activeSpan.style.backgroundColor = data.colors[j];
                     
                     activeSpan.addEventListener('click', () => 
@@ -694,7 +806,7 @@ export class Customizer3D
                             if(span === activeSpan)
                             {
                                 span.classList.add('active');
-                                layer.color = span.style.backgroundColor;
+                                layer.color = data.colors[j];
                                 layer.updatePreview();
                             }
                             else

@@ -1,4 +1,3 @@
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=104';
 import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=104';
 import {langs} from './langs.js?c3d=104';
 import {changeUIColors, tintSVG} from './changeUIColors.js?c3d=104';
@@ -13,20 +12,14 @@ export class Settings
     constructor(c3d)
     {
         this.c3d = c3d;        
-        this.htmlEl = document.querySelector(this.c3d.props.settings);
+        this.htmlEl = document.querySelector(this.c3d.props.layers + ' > div.settings');
     }
 
     async init()
     {
 
         this.htmlEl.innerHTML = `
-        <div class="title">
-            <div class="title">
-                <img src="${C3D_SERVER}svg/settings.svg?c3d=104" alt="Icon" class="icon" draggable="false">
-            </div>
-        </div>
-
-        <div class="content"></div>
+            <div class="content"></div>
         `;
 
         const container = this.htmlEl.querySelector('div.content');
@@ -63,7 +56,7 @@ export class Settings
 
         // ADD EVENT LISTENERS
 
-        this.htmlEl.querySelectorAll('section.customizer > div.settings > div.content > div > div.title').forEach(title =>
+        this.htmlEl.querySelectorAll('div.content > div > div.title').forEach(title =>
         {
             title.addEventListener('click', () =>    
             {
@@ -71,23 +64,10 @@ export class Settings
                 const hidden = content.style.maxHeight == '' || content.style.maxHeight == '0px';                
                 content.style.maxHeight = (hidden ? content.scrollHeight + 2 : 0) + 'px';
                 title.querySelector('img').style.rotate = hidden ? '45deg' : '0deg';
-                title.querySelector('p').style.fontWeight = hidden ? 'bold' : 'normal';
+                title.querySelector('p').classList[hidden ? 'add' : 'remove']('active');
+
+                this.htmlEl.style.maxHeight = (container.scrollHeight + content.scrollHeight) + 'px';                
             });
-        });
-
-        this.htmlEl.querySelector('div.title > div.title > img.icon').addEventListener('click', (e) => 
-        {
-            const content = this.htmlEl.querySelector('div.content');
-            const visible = content.style.display == 'none' || content.style.display == '' ;
-            content.style.display = visible ? 'flex' : 'none';
-            this.htmlEl.querySelector('div.title > div.title > img.icon').src = C3D_SERVER + 'svg/' + (visible ? 'plus' : 'settings') + '.svg';
-        });
-
-        const dragable = new Dragable({
-            dragEl: this.htmlEl.querySelector('div.title'),
-            container: this.htmlEl,
-            root: document.querySelector(this.c3d.props.container),
-            c3d: this.c3d
         });
 
         this.htmlEl.querySelectorAll('div.content div.color_picker').forEach(i => {

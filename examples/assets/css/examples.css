@@ -154,8 +154,9 @@ div.switchView
 {
   position: absolute;
   z-index: 5;
-  bottom: calc(48px + 1rem);
-  right: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 1rem;
   display: none;
   height: 50px;
   width: 70px;

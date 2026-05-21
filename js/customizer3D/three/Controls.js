@@ -52,8 +52,8 @@ export class Controls
         this._preSettings =
         {
             position: this.c3d.three.camera.position.clone(),
-            rotation: this.c3d.three.camera.rotation.clone(),
-            controlCenter: new THREE.Vector3() //this.orbit.target.clone()
+            rotation: this.c3d.three.camera.rotation.clone()
+            // controlCenter: new THREE.Vector3() //this.orbit.target.clone()
         };
     }
 
@@ -78,11 +78,11 @@ export class Controls
             z:this._preSettings.rotation.z
         });
         
-        gsap[fn](this.orbit.target, {
-            x:this._preSettings.controlCenter.x, 
-            y:this._preSettings.controlCenter.y, 
-            z:this._preSettings.controlCenter.z
-        });
+        // gsap[fn](this.orbit.target, {
+        //     x:this._preSettings.controlCenter.x, 
+        //     y:this._preSettings.controlCenter.y, 
+        //     z:this._preSettings.controlCenter.z
+        // });
 
     }
 

@@ -1,26 +1,27 @@
 import * as THREE from 'three';
 import {uniforms2, vertexShader2, fragmentShader2} from 'customizer3D_dir/three/materials/Shaders.js?c3d=104';
 import {Three} from 'customizer3D_dir/three/Three.js?c3d=104';
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=104';
 import {Size} from 'customizer3D_dir/utils/Size.js?c3d=104';
 import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=104';
 import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=104';
 import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=104';
 import {ExtractImages} from 'customizer3D_dir/layers/utils/ExtractImages.js?c3d=104';
-// import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=104';
 import {createFiltersList} from 'customizer3D_dir/layers/Filters/createFiltersList.js?c3d=104';
+import {RulerSlider} from 'customizer3D_dir/ui/RulerSlider.js?c3d=104';
 
 export class ImageLayer
 {
     constructor(c3d)
     {
         this.c3d = c3d;
-        this.htmlEl = document.querySelector(this.c3d.props.imageLayer);
+        this.htmlEl = document.querySelector(this.c3d.props.layers + ' > div.imageLayer');
         
         this.three = null;
         this.canvas = null;
         this.texture = null;
         this.gridLines = null;
+        this.rotationSlider = null;
+        this.zoomSlider = null;
 
         this.layer = null; // active layer (new Image(): Image.js)
         this._selectImageIDIncrement = 0; // <input id=
@@ -30,44 +31,38 @@ export class ImageLayer
         let el;
         
         this.htmlEl.innerHTML = `
+
         <div class="title">
-            <p class="label" draggable="false">...</p>
-            <div class="buttons">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=104" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
-                <img src="${C3D_SERVER}svg/plus.svg?c3d=104" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
+            <div class="back">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=104" alt="Icon" class="back" draggable="false">
+                <p class="title" draggable="false">${this.c3d.lang['back']}</p>
             </div>
+            <p class="label" draggable="false"></p>
         </div>
 
         <div class="content">
+
             <div class="menu">
+
                 <div class="selectImage">
                     <label class="selectImage"><img src="" alt="Icon"></label>
                     <div class="inputs"></div>
                 </div>
+
                 <div class="filters">
                     <div class="button" title="${this.c3d.lang['filter-gallery']}">
                         <img src="${C3D_SERVER}svg/filters.svg?c3d=104" alt="Icon">
                     </div>
                 </div>
+
                 <div class="threeD">
                     <div class="button" title="${this.c3d.lang['to-3d']}">
                         <img src="${C3D_SERVER}svg/3D.svg?c3d=104" alt="Icon">
                     </div>
                 </div>
+
                 <div class="gradient" style="flex-basis: 100%;"></div>
-                <div class="moreOptions" title="${this.c3d.lang['more-options']}" style="padding-left:0.5rem;">
-                    <div class="button">
-                        <img src="${C3D_SERVER}svg/three_dot.svg?c3d=104" alt="Icon" style="height: 16px;">
-                    </div>
-                    <div class="list">
-                        <div title="${this.c3d.lang['export-as-png']}">
-                            <a href="javascript:void(0);" class="exportAsPNG">${this.c3d.lang['export-as-png']}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <canvas class="preview" oncontextmenu="return false;"></canvas>
-            <div style="padding-top:0.25rem;" class="snapping">
+
                 <div class="snap">
                     <div class="button" title="${this.c3d.lang['snap']}">
                         <img src="${C3D_SERVER}svg/magnet.svg?c3d=104" alt="Icon">
@@ -77,140 +72,92 @@ export class ImageLayer
                     <div class="button" title="${this.c3d.lang['rotate']}">
                         <img src="${C3D_SERVER}svg/rotate.svg?c3d=104" alt="Icon">
                     </div>
-                    <div class="list">
-                        <div class="inputPercent" title="°">
-                            <input type="number" min="-180" max="180" value="0">
-                        </div>
-                        <input type="range" min="-180" max="180" value="0" step="1">
-                    </div>
                 </div>
                 <div class="zoom">
                     <div class="button" title="${this.c3d.lang['zoom']}">
                         <img src="${C3D_SERVER}svg/zoom.svg?c3d=104" alt="Icon">
                     </div>
-                    <div class="list">
-                        <div class="inputPercent" title="%">
-                            <input type="number" min="10" max="500" value="100">
-                        </div>
-                        <input type="range" min="10" max="500" value="100" step="1">
+                </div>
+
+                <div class="png" title="${this.c3d.lang['export']}" style="padding-left:0.5rem;">
+                    <div class="button" title="PNG">
+                        <img src="${C3D_SERVER}svg/png.svg?c3d=104" alt="Icon">
                     </div>
                 </div>
+
             </div>
+
+            <div class="slider slider_rotation">
+                <canvas></canvas>
+                <span></span>
+            </div>
+
+            <div class="slider slider_zoom">
+                <canvas></canvas>
+                <span></span>
+            </div>
+
+            <canvas class="preview" oncontextmenu="return false;"></canvas>
+
+            <div class="filters" style="justify-content: flex-start; padding: 2rem; display:none;"></div>
+
         </div>`;
 
-        const dragable = new Dragable({
-            dragEl: this.htmlEl.querySelector('div.title'),
-            container: this.htmlEl,
-            root: document.querySelector(this.c3d.props.container),
-            c3d: this.c3d
-        });
+        // BACK
 
-        this.htmlEl.querySelector('div.title > div.buttons > img.rollup').addEventListener('click', (e) => {
-            const content = this.htmlEl.querySelector('div.content');
-            const visible = content.style.display == 'none' || content.style.display == '' ;
-            content.style.display = visible ? 'flex' : 'none';
-            e.currentTarget.style.rotate = visible ? '-180deg' : '0deg';
-        });
-
-        this.htmlEl.querySelector('div.title > div.buttons > img.icon').addEventListener('click', () => {
+        this.htmlEl.querySelector('div.title > div.back').addEventListener('click', (e) => {
+            this.htmlEl.querySelector('div.slider_rotation').classList.remove('show');
+            this.htmlEl.querySelector('div.slider_zoom').classList.remove('show');
+            this.htmlEl.querySelector('div.content > div.filters').style.display = 'none';
             this.hide();
         });
-
-        // Click outside of element
-
-        const _listClickOutside = (e) =>
-        {
-            if(!this.htmlEl.querySelector('div.rotate > div.list').contains(e.target) && !this.htmlEl.querySelector('div.rotate > div.button').contains(e.target))
-            {
-                this.htmlEl.querySelector('div.rotate > div.list').style.display = 'none';
-            }
-
-            if(!this.htmlEl.querySelector('div.zoom > div.list').contains(e.target) && !this.htmlEl.querySelector('div.zoom > div.button').contains(e.target))
-            {
-                this.htmlEl.querySelector('div.zoom > div.list').style.display = 'none';
-            }
-
-            if(!this.htmlEl.querySelector('div.moreOptions > div.list').contains(e.target) && !this.htmlEl.querySelector('div.moreOptions > div.button').contains(e.target))
-            {
-                this.htmlEl.querySelector('div.moreOptions > div.list').style.display = 'none';
-            }
-        };
-        window.addEventListener('click', _listClickOutside);
-        window.addEventListener('touchstart', _listClickOutside);
-
-
-        const _listOnclick = (e) =>
-        {
-            const divList = e.currentTarget.parentNode.querySelector('div.list');
-            divList.style.display = divList.style.display == '' || divList.style.display == 'none' ? 'block' : 'none';
-        };
 
 
         // ROTATION
 
-        this.htmlEl.querySelector('div.rotate > div.button').addEventListener('click', _listOnclick);
-        el = this.htmlEl.querySelector('div.rotate input[type="number"]');
-
-        el.addEventListener('input', (e) => {
-            let val = parseFloat(e.currentTarget.value);
-            if(isNaN(val)) return;
-            e.currentTarget.value = val;
-            this.htmlEl.querySelector('div.rotate input[type="range"]').value = val;
-            this.layer.rotation = val;
-            this.c3d.render3d.renderImageLayer(this.layer);
-            this.updatePreview(null, true, false);
-        });
-
-        el.addEventListener('focus', (e) => e.currentTarget.select());
-
-        el.addEventListener('keydown', (e) => {
-            if (e.keyCode === 13)
+        this.rotationSlider = new RulerSlider(
+            this.htmlEl.querySelector('div.slider_rotation > canvas'), 
+            this.htmlEl.querySelector('div.slider_rotation > span'),
             {
-                const input = this.htmlEl.querySelector('div.rotate input[type="number"]');
-                input.parentNode.parentNode.style.display = 'none'; // hide list
-                this.c3d.render3d.renderImageLayer(this.layer);
-                this.updatePreview(null, true, false);
+                min: -180,
+                max: 180,
+                value: 0,
+                suffix: '°',
+                onChange: (val) =>
+                {
+                    this.layer.rotation = val;
+                    this.updatePreview(null, false, false);
+                }
             }
-        });
-        
-        el = this.htmlEl.querySelector('div.rotate input[type="range"]');
+        );
 
-        el.addEventListener('input', (e) => {
-            this.layer.rotation = parseFloat(e.currentTarget.value);
-            this.htmlEl.querySelector('div.rotate input[type="number"]').value = e.currentTarget.value;
-            this.c3d.render3d.renderImageLayer(this.layer);
-            this.updatePreview(null, true, false);
+        this.htmlEl.querySelector('div.rotate').addEventListener('click', () => {
+            this.htmlEl.querySelector('div.slider_rotation').classList.toggle('show');
+            this.c3d._updateCanvasSize();
         });
 
         // ZOOM
 
-        this.htmlEl.querySelector('div.zoom > div.button').addEventListener('click', _listOnclick);
-        el = this.htmlEl.querySelector('div.zoom input[type="number"]');
+        this.zoomSlider = new RulerSlider(
+            this.htmlEl.querySelector('div.slider_zoom > canvas'), 
+            this.htmlEl.querySelector('div.slider_zoom > span'),
+            {
+                min: 10,
+                max: 500,
+                value: 100,
+                step: 10,
+                onChange: (val) =>
+                {
+                    this.layer.zoom = val;
+                    this.updatePreview(null, false, false);
+                }
+            }
+        );
 
-        el.addEventListener('input', (e) => {
-            let val = parseFloat(e.currentTarget.value);
-            if(isNaN(val)) return;
-            e.currentTarget.value = val;
-            this.htmlEl.querySelector('div.zoom input[type="range"]').value = val;
-            this.layer.zoom = val;
-            this.updatePreview(null, false, false);
+        this.htmlEl.querySelector('div.zoom').addEventListener('click', () => {
+            this.htmlEl.querySelector('div.slider_zoom').classList.toggle('show');
+            this.c3d._updateCanvasSize();
         });
-
-        el.addEventListener('focus', (e) => e.currentTarget.select());
-
-        el.addEventListener('keyup', (e) => {
-            const input = this.htmlEl.querySelector('div.zoom input[type="number"]');
-            if(e.keyCode === 13) input.parentNode.parentNode.style.display = 'none'; // hide list
-            this.updatePreview(null, false, false);
-        });
-        
-        el = this.htmlEl.querySelector('div.zoom input[type="range"]');
-        el.addEventListener('input', (e) => {
-            this.layer.zoom = parseFloat(e.currentTarget.value);
-            this.htmlEl.querySelector('div.zoom input[type="number"]').value = e.currentTarget.value;
-            this.updatePreview(null, false, false);
-        });
-
 
         // CONVERT TO 3D
 
@@ -220,9 +167,10 @@ export class ImageLayer
 
         // MORE OPTIONS
 
-        el = this.htmlEl.querySelector('div.moreOptions');
-        el.querySelector('div.button').addEventListener('click', _listOnclick);
-        el.querySelector('a.exportAsPNG').addEventListener('click', async (e) => {
+        el = this.htmlEl.querySelector('div.png');
+
+        el.addEventListener('click', async (e) =>
+        {
             e.preventDefault();
 
             this.c3d.showHideUI.hide();
@@ -286,8 +234,8 @@ export class ImageLayer
 
         });
 
-
         // CANVAS 3D
+        
         const canvasPreview = this.htmlEl.querySelector('canvas.preview');
 
         this.three = new Three(this.c3d, {
@@ -392,19 +340,21 @@ export class ImageLayer
         if(imageLayer) this.layer = imageLayer;
 
         //
-        this.c3d.textLayer.hide();
+        this.htmlEl.style.display = 'block';
 
         //
-        this.htmlEl.querySelector('div.title > p.label').innerText = this.c3d.lang['add-' + this.layer.type + '-layer'];
+        this.htmlEl.querySelector('div.title > p.label').innerText = this.layer.fileName || '';
+        const layersDiv = document.querySelector(this.c3d.props.layers);
+        layersDiv.querySelector('div.title').style.display = 'none';
+        layersDiv.querySelector('div.content').style.display = 'none';
+        layersDiv.querySelector('div.bottomNav').style.display = 'none';
 
-        // set top of window
-        this.htmlEl.style.zIndex = this.c3d.zIndex.index;
         
         // CANVAS
         const previewCanvas = this.htmlEl.querySelector('canvas.preview');
         const printSize = getPrintDims(this.c3d, this.layer, 72);
         const isExport = width && height ? true : false;
-        const previewCanvasDims = isExport ? {width, height} : calculateAspectRatioFit(printSize.width, printSize.height, 150, 150);
+        const previewCanvasDims = isExport ? {width, height} : calculateAspectRatioFit(printSize.width, printSize.height, 200, 200);
 
         previewCanvasDims.width = Math.round(previewCanvasDims.width);
         previewCanvasDims.height = Math.round(previewCanvasDims.height);
@@ -463,12 +413,8 @@ export class ImageLayer
         this.three.scene.add(plane);
 
 
-        // set top of window
-        this.htmlEl.style.zIndex = this.c3d.zIndex.index;
-
         // as default show window
         this.htmlEl.querySelector('div.content').style.display = 'flex'; // show content
-        this.htmlEl.querySelector('div.title > div.buttons > img.rollup').style.rotate = '180deg';
 
         // add input for layer
         if(!this.layer.input)
@@ -479,19 +425,6 @@ export class ImageLayer
             this.htmlEl.querySelector('div.zoom').style.display = 
             this.htmlEl.querySelector('div.filters').style.display = 'none';
         }
-
-
-        // set window position
-        const bb = document.querySelector(this.c3d.props.layers).getBoundingClientRect();
-        const bbContainer = document.querySelector(this.c3d.props.container).getBoundingClientRect();
-        const top = bb.top - bbContainer.y;
-        const left = bb.left + bb.width + 16;
-
-        document.querySelector(this.c3d.props.textLayer).style.display = 'none';
-
-        this.htmlEl.style.left = left + 'px';
-        this.htmlEl.style.top = top + 'px';
-        this.htmlEl.style.display = 'block';
 
         // UPDATE OR ADD IMAGE
         const selectImage = this.htmlEl.querySelector('div.selectImage > label.selectImage');
@@ -507,24 +440,25 @@ export class ImageLayer
         // ZOOM
         const zoomDiv = this.htmlEl.querySelector('div.zoom');
         zoomDiv.style.display = this.layer.is3D || state ? 'block' : 'none';
-        zoomDiv.querySelector('input[type="range"]').value = this.layer.zoom;
-        zoomDiv.querySelector('input[type="number"]').value = this.layer.zoom;
+        this.zoomSlider.value = this.layer.zoom;
         
         // ROTATION
         const rotateDiv = this.htmlEl.querySelector('div.rotate');
         rotateDiv.style.display = this.layer.image && this.layer.type == 'image' ? 'block' : 'none';
-        rotateDiv.querySelector('input[type="range"]').value = this.layer.rotation;
-        rotateDiv.querySelector('input[type="number"]').value = this.layer.rotation;
+        this.rotationSlider.value = this.layer.rotation;
 
         // FILTERS
         createFiltersList(this.c3d, this, this.htmlEl.querySelector('div.filters > div.button'));
         this.htmlEl.querySelector('div.filters').style.display = state ? 'block' : 'none';
 
         // SNAP
-        this.htmlEl.querySelector('div.snapping').style.display = state ? 'flex' : 'none';
+        this.htmlEl.querySelector('div.snap').style.display = state ? 'flex' : 'none';
 
         // SNAP
         this.htmlEl.querySelector('div.selectImage').style.display = this.layer.type == 'gradient' ? 'none' : 'block';
+
+        // SNAP
+        this.htmlEl.querySelector('div.png').style.display = state ? 'flex' : 'none';
 
         // CANVAS PREVIEW
         const canvasPreview = this.htmlEl.querySelector('canvas.preview');
@@ -536,11 +470,19 @@ export class ImageLayer
 
         // 
         this.updatePreview(null, true, false);
+        this.c3d._updateCanvasSize();
     }
 
     hide()
     {
         this.htmlEl.style.display = 'none';
+
+        const layersDiv = document.querySelector(this.c3d.props.layers);
+        layersDiv.querySelector('div.content').style.display = 'flex';
+        layersDiv.querySelector('div.title').style.display = 'flex';
+        const bottomNav = layersDiv.querySelector('div.bottomNav');
+        if(bottomNav) bottomNav.style.display = 'flex';
+        this.c3d._updateCanvasSize();
     }
 
     updatePreview(canvasData = null, reDraw = true, drawSnappingLines = true)
@@ -595,7 +537,7 @@ export class ImageLayer
             {
                 ctx.save();
                 ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
-                ctx.rotate(THREE.MathUtils.degToRad(this.layer.rotation));
+                // ctx.rotate(THREE.MathUtils.degToRad(this.layer.rotation));
                 ctx.drawImage(this.layer.image, -width / 2, -height / 2, width, height);
                 ctx.restore();
             }
@@ -641,14 +583,17 @@ export class ImageLayer
 
         if(this.layer._mesh && renderer)
         {
-
+            const printDims = getPrintDims(this.c3d, this.layer.name, 72);
             const layerMeshUniforms = renderer.material.uniforms;
             const layer = this.layer;
             const index = layer._mesh.userData.index;
             const x = layer.imagePosition.x;
             const y = layer.imagePosition.y;
+            const rotation = THREE.MathUtils.degToRad(layer.rotation);
 
+            uniforms.uAspect.value = printDims.width / printDims.height;
             uniforms.uZoom.value = layer.zoom / 100;
+            uniforms.uRotation.value = -rotation;
             uniforms.uOffset.value.set(x, y);
             uniforms.uBrightness.value = layer.uniforms.uBrightness || 1.0;
             uniforms.uContrast.value = layer.uniforms.uContrast || 1.0;
@@ -669,6 +614,9 @@ export class ImageLayer
             if(layer.gradient) layer.gradient.setUniforms();
 
 
+            layerMeshUniforms.uAspect.value = uniforms.uAspect.value;
+
+
             const PARAMS_PER_LAYER = 5;
             const data = layerMeshUniforms.uData.value.image.data;
             const offset = index * PARAMS_PER_LAYER * 4;
@@ -676,7 +624,7 @@ export class ImageLayer
             // P0
 
             data[offset + 0] = uniforms.uZoom.value; // zoom
-            // data[offset + 1] = 0.0; // THREE.MathUtils.degToRad(layer.rotation) // rotation
+            data[offset + 1] = rotation; // rotation
             data[offset + 2] = x; // offsetX
             data[offset + 3] = -y; // offsetY
 
@@ -703,11 +651,14 @@ export class ImageLayer
 
             // P4
 
-            data[offset + 16] = uniforms.uChromaticAmount.value.x; // uChromaticAmount.value.x
-            data[offset + 17] = uniforms.uChromaticAmount.value.x; // uChromaticAmount.value.y
+            const ratioX = layerMeshUniforms.uLayerTextures.value.image.width / canvas.width * this.c3d.PIXEL_RATIO;
+            const ratioY = layerMeshUniforms.uLayerTextures.value.image.height / canvas.height * this.c3d.PIXEL_RATIO;
+            data[offset + 16] = uniforms.uChromaticAmount.value.x / ratioX; // uChromaticAmount.value.x
+            data[offset + 17] = -uniforms.uChromaticAmount.value.y / ratioY; // uChromaticAmount.value.y
             // data[offset + 18] = layer.blendMode; // blendMode
             data[offset + 19] = uniforms.uOpacity.value; // alpha
 
+            // update data
             layerMeshUniforms.uData.value.needsUpdate = true;
 
         }
@@ -759,6 +710,12 @@ export class ImageLayer
         {
             const file = e.target.files[i];
             const blobArray = (await extractImages.extract(file)).reverse();
+
+            if(blobArray.length == 0)
+            {
+                _end();
+                break;
+            }
             
             this.c3d.preloader.show();
 
@@ -813,7 +770,7 @@ export class ImageLayer
                 await img.decode();
                 
                 // ADD NEW LAYER
-                if(!this.layer.image || filesLength > 1)
+                if(!this.layer.image || (blobArray.length > 1 || filesLength > 1))
                 {
                     if(this.c3d.render3d.checkLayersLength(layerName))
                     {

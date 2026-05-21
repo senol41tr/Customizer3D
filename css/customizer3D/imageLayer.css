@@ -1,82 +1,78 @@
-section.customizer > div.imageLayer
+section.customizer > div.layers > div.imageLayer
 {
-    position: absolute;
-    z-index: 8;
-    background-color: var(--customizerColorPrimary);
-    border-radius: 7px;
-    filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
     display: none;
 }
 
-section.customizer > div.imageLayer > div.title
+
+
+section.customizer > div.layers > div.imageLayer > div.title
 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--customizerColorPrimary);
-    border-radius: 7px;
-    padding: 0.75rem;
+    padding: 1.5rem;
     gap: 0.75rem;
-    cursor: move;
 }
 
-section.customizer > div.imageLayer > div.title > div.buttons
+section.customizer > div.layers > div.imageLayer > div.title > div.back
 {
     display: flex;
-    align-items: center;
     gap: 0.5rem;
-}
-
-section.customizer > div.imageLayer > div.title > div.buttons > img
-{
-    height: 14px;
     cursor: pointer;
 }
 
-section.customizer > div.imageLayer > div.title > div.buttons > img.rollup
+section.customizer > div.layers > div.imageLayer > div.title > div.back > img
 {
-    height: 5px;
-    margin-right: 0.2rem;
+    width: 24px;
+    margin-right: 0.1rem;
+    rotate: 90deg;
+}
+
+section.customizer > div.layers > div.imageLayer > div.title > p.label
+{
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 
-section.customizer > div.imageLayer > div.content
+
+
+section.customizer > div.layers > div.imageLayer > div.content
 {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     padding: 0.75rem;
-    padding-top: 0;
+    padding-bottom: 2rem;
     line-height: 1.5;
 }
 
-
-
-
-
-section.customizer > div.imageLayer > div.content > div
+section.customizer > div.layers > div.imageLayer > div.content > div
 {
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     flex-wrap: wrap;
 }
 
 
-section.customizer > div.imageLayer > div.content > div > div.toggle
+section.customizer > div.layers > div.imageLayer > div.content > div > div.toggle
 {
     opacity: 0.5;
 }
 
 
 
-section.customizer > div.imageLayer > div.content > div > div > div.button > img
+section.customizer > div.layers > div.imageLayer > div.content > div > div > div.button > img
 {
-    height: 17px;
+    height: 24px;
 }
 
-section.customizer > div.imageLayer > div.content > div > div > div.button
+section.customizer > div.layers > div.imageLayer > div.content > div > div > div.button
 {
     display: flex;
     flex-direction: column;
@@ -84,8 +80,8 @@ section.customizer > div.imageLayer > div.content > div > div > div.button
     cursor: pointer;
 }
 
-section.customizer > div.imageLayer > div.content > div > div > div.button::after,
-section.customizer > div.imageLayer > div.content > div > div.selectImage > label::after
+section.customizer > div.layers > div.imageLayer > div.content > div > div > div.button::after,
+section.customizer > div.layers > div.imageLayer > div.content > div > div.selectImage > label::after
 {
     content: attr(title);
     font-size: 0.65rem;
@@ -95,50 +91,33 @@ section.customizer > div.imageLayer > div.content > div > div.selectImage > labe
     text-align: center;
 }
 
-section.customizer > div.imageLayer > div.content > div > div
-{
-    position: relative;
-}
 
-section.customizer > div.imageLayer > div.content > div > div > div.list
+
+
+
+section.customizer > div.layers > div.imageLayer > div.content > div.slider
 {
-    position: absolute;
+    gap: 0;
+    flex-direction: column;
     display: none;
-    padding: 0.5rem;
-    background-color: var(--customizerColorPrimary);
-    border-radius: 7px;
-    filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
-    max-height: 60vh;
-    overflow-y: auto;
-    z-index: 2;
-    white-space: nowrap;
 }
 
-section.customizer > div.imageLayer > div.content > div > div > div.list > div
+section.customizer > div.layers > div.imageLayer > div.content > div.slider.show
 {
     display: flex;
-    gap: 0.5rem;
-    align-items: center;
 }
 
-section.customizer > div.imageLayer > div.content > div > div > div.list > div > input
+section.customizer > div.layers > div.imageLayer > div.content > div.slider > canvas
 {
-    width: 55px;
-    padding: 0.25rem;
-    padding-left: 0.5rem;
-    font-size: 0.65rem;
-}
-
-section.customizer > div.imageLayer > div.content > div > div > div.list > div > input[type="number"]::-webkit-inner-spin-button
-{
-    -webkit-appearance: none;
+    width: 75%;
+    height: 58px;
 }
 
 
 
 
 
-section.customizer > div.imageLayer > div.content > div > div.selectImage > label
+section.customizer > div.layers > div.imageLayer > div.content > div > div.selectImage > label
 {
     border: none;
     outline: none;
@@ -148,32 +127,33 @@ section.customizer > div.imageLayer > div.content > div > div.selectImage > labe
     cursor: pointer;
 }
 
-section.customizer > div.imageLayer > div.content > div > div.selectImage > label > img
+section.customizer > div.layers > div.imageLayer > div.content > div > div.selectImage > label > img
 {
-    height: 17px;
+    height: 24px;
 }
 
-section.customizer > div.imageLayer > div.content > div > div.selectImage > div.inputs
+section.customizer > div.layers > div.imageLayer > div.content > div > div.selectImage > div.inputs
 {
     display: none;
 }
 
 
 
-section.customizer > div.imageLayer > div.content > canvas.preview
+section.customizer > div.layers > div.imageLayer > div.content > canvas.preview
 {
+    margin-top: 1rem;
     border: 1px dashed var(--customizerColorText);
     align-self: center;
     cursor: move;
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 200px;
     background: repeating-conic-gradient(#FFFFFF 0 25%, #EBEBEB 0 50%) 50% / 5px 5px; /* https://stackoverflow.com/a/65129916 */
 }
 
 
-section.customizer > div.imageLayer > div.content > p.description, 
-section.customizer > div.imageLayer > div.content > p.smaller-than-preffered,
-section.customizer > div.imageLayer > div.content > p.convert-to-cmyk
+section.customizer > div.layers > div.imageLayer > div.content > p.description, 
+section.customizer > div.layers > div.imageLayer > div.content > p.smaller-than-preffered,
+section.customizer > div.layers > div.imageLayer > div.content > p.convert-to-cmyk
 {
     font-size: 0.7rem;
     text-decoration: none;
@@ -181,8 +161,8 @@ section.customizer > div.imageLayer > div.content > p.convert-to-cmyk
     text-align: center;
 }
 
-section.customizer > div.imageLayer > div.content > p.smaller-than-preffered,
-section.customizer > div.imageLayer > div.content > p.convert-to-cmyk
+section.customizer > div.layers > div.imageLayer > div.content > p.smaller-than-preffered,
+section.customizer > div.layers > div.imageLayer > div.content > p.convert-to-cmyk
 {
     display: none;
     gap: 0.25rem;
@@ -191,12 +171,12 @@ section.customizer > div.imageLayer > div.content > p.convert-to-cmyk
     flex-direction: column;
 }
 
-section.customizer > div.imageLayer > div.content > p.smaller-than-preffered
+section.customizer > div.layers > div.imageLayer > div.content > p.smaller-than-preffered
 {
     align-self: center;
 }
 
-section.customizer > div.imageLayer > div.content > p.smaller-than-preffered > img
+section.customizer > div.layers > div.imageLayer > div.content > p.smaller-than-preffered > img
 {
     filter: none !important;
     width: 16px;
@@ -204,7 +184,7 @@ section.customizer > div.imageLayer > div.content > p.smaller-than-preffered > i
 
 @media screen and (max-width: 500px)
 {
-    section.customizer > div.imageLayer > div.content
+    section.customizer > div.layers > div.imageLayer > div.content
     {
         max-width: 90vw;
     }

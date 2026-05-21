@@ -69,6 +69,7 @@ export const changeUIColors = (c3d, container) =>
             c3d.localStorage.delete(id);
             if(id == 'customizerColorText') tintSVG(i.colorPicker.color.string('hex'), c3d);
         });
+        
     });
 
     container.appendChild(div);

@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=104';
 import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=104';
 import {Size} from 'customizer3D_dir/utils/Size.js?c3d=104';
-import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=104';
 import {getMaxLayers, getTexureSize} from 'customizer3D_dir/settings/GPUInfo.js?c3d=104';
 import {getDummyCanvas, getDummyCanvasTexture} from 'customizer3D_dir/three/materials/Materials.js?c3d=104';
 
@@ -142,14 +141,14 @@ export class Render3D
         {
             const threeDSVGCanvas = layer.threeDSVG.bakeImageToLayer(dims.width, dims.height, true);
             ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.rotate(THREE.MathUtils.degToRad(layer.rotation));
+            // ctx.rotate(THREE.MathUtils.degToRad(layer.rotation));
             ctx.drawImage(threeDSVGCanvas, -dims.width / 2, -dims.height / 2, dims.width, dims.height);
         }
         else if(layer.detectedFileType == 'model/gltf-binary' && layer.is3D)
         {
             const threeDCanvas = layer.threeD.bakeImageToLayer(dims.width, dims.height, true);
             ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.rotate(THREE.MathUtils.degToRad(layer.rotation));
+            // ctx.rotate(THREE.MathUtils.degToRad(layer.rotation));
             ctx.drawImage(threeDCanvas, -dims.width / 2, -dims.height / 2, dims.width, dims.height);
         }
         else if(layer.type == 'gradient' && layer.gradient)
@@ -162,7 +161,7 @@ export class Render3D
         {
             const imgDims = calculateAspectRatioFit(layer.image.naturalWidth, layer.image.naturalHeight, canvas.width, canvas.height);
             ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.rotate(THREE.MathUtils.degToRad(layer.rotation));
+            //ctx.rotate(THREE.MathUtils.degToRad(layer.rotation));
             ctx.drawImage(layer.image, -imgDims.width / 2, -imgDims.height / 2, imgDims.width, imgDims.height);
         }
         
@@ -187,7 +186,7 @@ export class Render3D
         {
             const threeDTextCanvas = layer.threeDText.bakeTextToLayer(dims.width, dims.height, true);
             ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.rotate(THREE.MathUtils.degToRad(layer.rotation));
+            // ctx.rotate(THREE.MathUtils.degToRad(layer.rotation));
             ctx.drawImage(threeDTextCanvas, -dims.width / 2, -dims.height / 2, dims.width, dims.height);
         }
         else
@@ -271,15 +270,21 @@ export class Render3D
     removeLayer(layer)
     {
         const slot = layer._mesh.userData.index;
+        const groupName = layer.name + '_group';
+        const group = this.c3d.glbScene.getObjectByName(groupName);
+        const renderer = this.c3d.glbScene.getObjectByName(layer.name);
+
+        //
+        if(layer.type == 'image' || layer.type == 'gradient') {
+            const tex = renderer.material.uniforms.uLayerTextures.value;
+            this.updateLayerTexture(layer, getDummyCanvas(tex.image.width, tex.image.height));
+        }
 
         // remove mesh
         layer._mesh.removeFromParent();
         layer._mesh = null;
 
         // update edit area
-        const groupName = layer.name + '_group';
-        const group = this.c3d.glbScene.getObjectByName(groupName);
-        const renderer = this.c3d.glbScene.getObjectByName(layer.name);
         renderer.material.uniforms.tBase.value = getDummyCanvasTexture(1, 1, group.children.length == 0 ? '#000000' : null);
 
         // reserve slot

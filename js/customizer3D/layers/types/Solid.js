@@ -50,6 +50,7 @@ export class Solid
             <div class="color_picker"></div>
             <img src="${C3D_SERVER}svg/opacity.svg?c3d=104" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
             <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=104" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <div class="spacer"></div>
             <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=104" alt="Icon" title="${this.c3d.lang['delete-layer']}" class="delete-layer">
         `;
 
@@ -98,7 +99,6 @@ export class Solid
             this.color = color.string('hex');
             this.updatePreview();
         });
-
 
         // OPACITY
 

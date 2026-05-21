@@ -67,8 +67,8 @@ export class Image
         const previewCanvas = this.c3d.imageLayer.htmlEl.querySelector('canvas.preview');
         const canvas = this.div.querySelector('canvas.thumbnail');
         const ctx = canvas.getContext('2d');
-        const width = 40;
-        const height = 40;
+        const width = 50;
+        const height = 50;
 
         const imgDims = calculateAspectRatioFit(previewCanvas.width, previewCanvas.height, width, height);
 
@@ -117,9 +117,9 @@ export class Image
         div.innerHTML = `
             <img class="visibility" src="${C3D_SERVER}svg/show.svg?c3d=104" alt="Icon" style="opacity:1;">
             <canvas class="thumbnail" oncontextmenu="return false;"></canvas>
-            <div style="width:100%;"></div>
             <img src="${C3D_SERVER}svg/opacity.svg?c3d=104" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
             <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=104" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <div class="spacer"></div>
             <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=104" title="${this.c3d.lang['delete-layer']}" class="remove">
         `;
 
@@ -137,13 +137,17 @@ export class Image
 
         });
 
-        // CANVAS
+        // ONCLİCK
 
-        const thumbCanvas = div.querySelector('canvas.thumbnail');
-        thumbCanvas.addEventListener('click', () => {
+        const _onClick = () => {
             this.c3d.imageLayer.show(this);
             if(this.gradient) this.gradient.show();
-        });
+        };
+        const thumbCanvas = div.querySelector('canvas.thumbnail');
+        thumbCanvas.addEventListener('click', _onClick);
+        div.querySelector('div.spacer').addEventListener('click', _onClick);
+
+
 
 
         // OPACITY

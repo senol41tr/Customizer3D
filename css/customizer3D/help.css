@@ -2,7 +2,8 @@ section.customizer > div.help
 {
     position: absolute;
     z-index: 5;
-    bottom: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
     left: 1rem;
     background-color: var(--customizerColorPrimary);
     border-radius: 7px;

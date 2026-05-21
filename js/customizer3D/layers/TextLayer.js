@@ -3,25 +3,26 @@ import {uniforms2, vertexShader2, fragmentShader2} from 'customizer3D_dir/three/
 import {Three} from 'customizer3D_dir/three/Three.js?c3d=104';
 import * as opentype from "base/opentype/opentype.esm.js";
 import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=104';
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=104';
 import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=104';
 import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=104';
 import {Size} from 'customizer3D_dir/utils/Size.js?c3d=104';
 import {createFiltersList} from 'customizer3D_dir/layers/Filters/createFiltersList.js?c3d=104';
-import {getCorrectedAxis} from 'customizer3D_dir/layers/utils/getCorrectedAxis.js?c3d=104';
 import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=104';
+import {RulerSlider} from 'customizer3D_dir/ui/RulerSlider.js?c3d=104';
 
 export class TextLayer
 {
     constructor(c3d)
     {
         this.c3d = c3d;
-        this.htmlEl = document.querySelector(this.c3d.props.textLayer);
+        this.htmlEl = document.querySelector(this.c3d.props.layers + ' > div.textLayer');
 
         this.three = null;
         this.canvas = null;
         this.texture = null;
         this.gridLines = null;
+        this.rotationSlider = null;
+        this.zoomSlider = null;
 
         this.customFonts = [];
         this.builtInFonts = [];
@@ -32,65 +33,53 @@ export class TextLayer
         let el;
 
         this.htmlEl.innerHTML = `
+
         <div class="title">
-            <p class="label" draggable="false">${this.c3d.lang['add-text-layer']}</p>
-            <div class="buttons">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=104" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
-                <img src="${C3D_SERVER}svg/plus.svg?c3d=104" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
+            <div class="back">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=104" alt="Icon" class="back" draggable="false">
+                <p class="title" draggable="false">${this.c3d.lang['back']}</p>
             </div>
+            <p class="label" draggable="false"></p>
         </div>
 
         <div class="content">
+
             <input type="text" class="text" placeholder="${this.c3d.lang['enter-your-text']}">
+
             <div class="menu">
+
                 <div class="builtInFonts">
                     <div class="button" title="${this.c3d.lang['font']}">
                         <img src="${C3D_SERVER}svg/font_family.svg?c3d=104" alt="Icon">
                     </div>
-                    <div class="list"></div>
                 </div>
+
                 <div class="fontSizes">
                     <div class="button" title="${this.c3d.lang['size']}">
                         <img src="${C3D_SERVER}svg/font_size.svg?c3d=104" alt="Icon">
                     </div>
-                    <!-- change Text.js if default font size change -->
-                    <div class="list">
-                        <div class="inputPercent" title="pt">
-                            <input type="number" min="1" max="552" value="50">
-                        </div>
-                        <input type="range" min="1" max="552" value="50" step="1">
-                    </div>
                 </div>
+
                 <div class="color_picker" title="${this.c3d.lang['color']}"></div>
+
                 <div class="filters">
                     <div class="button" title="${this.c3d.lang['filter-gallery']}">
                         <img src="${C3D_SERVER}svg/filters.svg?c3d=104" alt="Icon">
                     </div>
                 </div>
+
                 <div class="threeD">
                     <div class="button" title="${this.c3d.lang['3D-text']}">
                         <img src="${C3D_SERVER}svg/3D.svg?c3d=104" alt="Icon">
                     </div>
-                    <div class="list">
+                </div>
+
+                <div class="png" title="${this.c3d.lang['export']}" style="padding-left:0.5rem;">
+                    <div class="button" title="PNG">
+                        <img src="${C3D_SERVER}svg/png.svg?c3d=104" alt="Icon">
                     </div>
                 </div>
-                <div class="moreOptions" title="${this.c3d.lang['more-options']}" style="padding-left:0.5rem;">
-                    <div class="button">
-                        <img src="${C3D_SERVER}svg/three_dot.svg?c3d=104" alt="Icon" style="height: 16px;">
-                    </div>
-                    <div class="list">
-                        <div title="${this.c3d.lang['export-as-png']}" style="white-space: nowrap;">
-                            <a href="javascript:void(0);" class="exportAsPNG">${this.c3d.lang['export-as-png']}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <canvas class="preview" oncontextmenu="return false;"></canvas>
-            <div class="input">
-                <div class="list"></div>
-                <a href="https://convertio.co" target="_blank" class="convertURL">${this.c3d.lang['convert-font']}</a>
-            </div>
-            <div style="padding-top:0.25rem;">
+
                 <div class="snap toggle">
                     <div class="button" title="${this.c3d.lang['snap']}">
                         <img src="${C3D_SERVER}svg/magnet.svg?c3d=104" alt="Icon">
@@ -101,30 +90,58 @@ export class TextLayer
                     <div class="button" title="${this.c3d.lang['rotate']}">
                         <img src="${C3D_SERVER}svg/rotate.svg?c3d=104" alt="Icon">
                     </div>
-                    <div class="list">
-                        <div class="inputPercent" title="°">
-                            <input type="number" min="-180" max="180" value="0">
-                        </div>
-                        <input type="range" min="-180" max="180" value="0" step="1">
-                    </div>
                 </div>
+
                 <div class="zoom">
                     <div class="button" title="${this.c3d.lang['zoom']}">
                         <img src="${C3D_SERVER}svg/zoom.svg?c3d=104" alt="Icon">
                     </div>
-                    <div class="list">
-                        <div class="inputPercent" title="%"><input type="number" min="10" max="500" value="100"></div>
-                        <input type="range" min="10" max="500" value="100" step="1">
-                    </div>
                 </div>
+
+
             </div>
+
+            <div class="slider slider_fontsize">
+                <canvas></canvas>
+                <span></span>
+            </div>
+
+            <div class="slider slider_rotation">
+                <canvas></canvas>
+                <span></span>
+            </div>
+
+            <div class="slider slider_zoom">
+                <canvas></canvas>
+                <span></span>
+            </div>
+
+            <div class="fontList"></div>
+
+            <div class="filters" style="justify-content: flex-start; padding: 2rem; display:none;"></div>
+
+            <canvas class="preview" oncontextmenu="return false;"></canvas>
+
+            <div class="input">
+                <div class="list"></div>
+                <a href="https://convertio.co" target="_blank" class="convertURL">${this.c3d.lang['convert-font']}</a>
+            </div>
+
         </div>`;
 
         const canvasPreview = this.htmlEl.querySelector('canvas.preview');
-        const _upDateLayer = () =>
-        {
-            this.updatePreview(null, false);
-        };
+
+        // BACK
+
+        this.htmlEl.querySelector('div.title > div.back').addEventListener('click', (e) => {
+            this.htmlEl.querySelector('div.slider_fontsize').classList.remove('show');
+            this.htmlEl.querySelector('div.slider_rotation').classList.remove('show');
+            this.htmlEl.querySelector('div.slider_zoom').classList.remove('show');
+            this.htmlEl.querySelector('div.fontList').classList.remove('show');
+            this.htmlEl.querySelector('div.content > div.filters').style.display = 'none';
+            this.htmlEl.querySelector('canvas.preview').style.display = 'block';
+            this.hide();
+        });
 
         // COLOR PICKERS
 
@@ -164,7 +181,7 @@ export class TextLayer
             }
         });
 
-        this.three.setupAll();//Orthographic();
+        this.three.setupAll();
         this.three.camera.position.z = 1;
 
         this.canvas = document.createElement('canvas');
@@ -189,11 +206,9 @@ export class TextLayer
                 x: (((clientX - bb.left) / bb.width) - 0.5) / (this.layer.zoom / 100), 
                 y: (0.5 - ((clientY - bb.top) / bb.height)) / (this.layer.zoom / 100)
             };
-            if(this.layer.is3D) _upDateLayer();
+            if(this.layer.is3D) this.updatePreview(null, false, true);
             else {
                 this.updatePreview();
-                this.c3d.render3d.renderTextLayer(this.layer);
-                this.three.render();
             }
         };
 
@@ -239,25 +254,7 @@ export class TextLayer
         else canvasPreview.addEventListener('pointerdown', canvasMouseDown);
 
         
-        // OTHER HTML STUFF
-        
-        const dragable = new Dragable({
-            dragEl: this.htmlEl.querySelector('div.title'),
-            container: this.htmlEl,
-            root: document.querySelector(this.c3d.props.container),
-            c3d: this.c3d
-        });
-
-        this.htmlEl.querySelector('div.title > div.buttons > img.rollup').addEventListener('click', (e) => {
-            const content = this.htmlEl.querySelector('div.content');
-            const visible = content.style.display == 'none' || content.style.display == '' ;
-            content.style.display = visible ? 'flex' : 'none';
-            e.currentTarget.style.rotate = visible ? '-180deg' : '0deg';
-        });
-
-        this.htmlEl.querySelector('div.title > div.buttons > img.icon').addEventListener('click', () => {
-            this.hide();
-        });
+        // INPUT TEXT
 
         this.htmlEl.querySelector('div.content > input.text').addEventListener('input', (e) => {
             this.layer.setText(e.currentTarget.value);
@@ -269,115 +266,87 @@ export class TextLayer
         });
         this.htmlEl.querySelector('div.content > input.text').addEventListener('focus', (e) => e.currentTarget.select());
 
-        this.htmlEl.querySelector('div.builtInFonts > div.button').addEventListener('click', this._listOnclick.bind(this));
-        this.htmlEl.querySelector('div.fontSizes > div.button').addEventListener('click', this._listOnclick.bind(this));
-        this.htmlEl.querySelector('div.rotate > div.button').addEventListener('click', this._listOnclick.bind(this));
-        this.htmlEl.querySelector('div.zoom > div.button').addEventListener('click', this._listOnclick.bind(this));
-        this.htmlEl.querySelector('div.moreOptions > div.button').addEventListener('click', this._listOnclick.bind(this));
+
+        // FONT LIST
+
+        this.htmlEl.querySelector('div.builtInFonts').addEventListener('click', () => {
+            this.htmlEl.querySelector('div.fontList').classList.toggle('show');
+            this.c3d._updateCanvasSize();
+        });
+
+
         
         // FONT SIZE
 
-        el = this.htmlEl.querySelector('div.fontSizes input[type="number"]');
-        el.addEventListener('input', (e) => {
-            let val = parseInt(e.currentTarget.value);
-            if(isNaN(val)) return;
-            e.currentTarget.value = val;
-            this.htmlEl.querySelector('div.fontSizes input[type="range"]').value = val;
-            this.layer.fontSize = val;
-            if(!this.layer.is3D) {
-                this.c3d.render3d.renderTextLayer(this.layer);
-            }
-            _upDateLayer();
-        });
-        el.addEventListener('focus', (e) => e.currentTarget.select());
-        el.addEventListener('keydown', (e) => 
-        {
-            if (e.keyCode === 13)
+        this.fontsizeSlider = new RulerSlider(
+            this.htmlEl.querySelector('div.slider_fontsize > canvas'), 
+            this.htmlEl.querySelector('div.slider_fontsize > span'),
             {
-                e.preventDefault();
-                const input = this.htmlEl.querySelector('div.fontSizes input[type="number"]');
-                if(input.value < parseInt(input.min)) input.value = input.min;
-                if(input.value > parseInt(input.max)) input.value = input.max;
-                this.htmlEl.querySelector('div.fontSizes input[type="range"]').value = input.value;
-                this.layer.fontSize = input.value;
-                _upDateLayer();
-                input.parentNode.parentNode.style.display = 'none'; // hide list
+                min: 1,
+                max: 552,
+                value: 50,
+                step: 8,
+                suffix: ' pt',
+                onChange: (val) =>
+                {
+                    this.layer.fontSize = val;
+                    if(!this.layer.is3D) {
+                        this.c3d.render3d.renderTextLayer(this.layer);
+                    }
+                    this.updatePreview(null, true, false);
+                }
             }
-        });
-        
-        this.htmlEl.querySelector('div.fontSizes input[type="range"]').addEventListener('input', (e) => {
-            this.layer.fontSize = e.currentTarget.value;
-            this.htmlEl.querySelector('div.fontSizes input[type="number"]').value = e.currentTarget.value;
-            this.updatePreview(null, true, false);
-        });
+        );
 
-        this.htmlEl.querySelector('div.fontSizes input[type="range"]').addEventListener('change', (e) => {
-            this.c3d.render3d.renderTextLayer(this.layer);
-            this.updatePreview(null, true, false);
+        this.htmlEl.querySelector('div.fontSizes').addEventListener('click', () => {
+            this.htmlEl.querySelector('div.slider_fontsize').classList.toggle('show');
+            this.c3d._updateCanvasSize();
         });
 
 
         // ROTATION
-
-        el = this.htmlEl.querySelector('div.rotate input[type="number"]');
-        el.addEventListener('input', (e) => {
-            let val = parseInt(e.currentTarget.value);
-            if(isNaN(val)) return;
-            e.currentTarget.value = val;
-            this.htmlEl.querySelector('div.rotate input[type="range"]').value = val;
-            this.layer.rotation = parseFloat(val);
-            this.updatePreview();
-        });
-        el.addEventListener('focus', (e) => e.currentTarget.select());
-        el.addEventListener('keydown', (e) => 
+        
+        this.rotationSlider = new RulerSlider(
+            this.htmlEl.querySelector('div.slider_rotation > canvas'), 
+            this.htmlEl.querySelector('div.slider_rotation > span'),
             {
-                if (e.keyCode === 13)
+                min: -180,
+                max: 180,
+                value: 0,
+                suffix: '°',
+                onChange: (val) =>
                 {
-                    e.preventDefault();
-                    const input = this.htmlEl.querySelector('div.rotate input[type="number"]');
-                    if(input.value < parseInt(input.min)) input.value = input.min;
-                    if(input.value > parseInt(input.max)) input.value = input.max;
-                    this.htmlEl.querySelector('div.rotate input[type="range"]').value = input.value;
-                    this.layer.rotation = parseFloat(input.value);
-                    this.updatePreview();
-                    input.parentNode.parentNode.style.display = 'none'; // hide list
+                    this.layer.rotation = parseFloat(val);
+                    this.updatePreview(null, false, false);
                 }
             }
         );
-        
-        this.htmlEl.querySelector('div.rotate input[type="range"]').addEventListener('input', (e) => {
-            this.layer.rotation = parseFloat(e.currentTarget.value);
-            this.htmlEl.querySelector('div.rotate input[type="number"]').value = e.currentTarget.value;
-            this.updatePreview();
-        });
 
+        this.htmlEl.querySelector('div.rotate').addEventListener('click', () => {
+            this.htmlEl.querySelector('div.slider_rotation').classList.toggle('show');
+            this.c3d._updateCanvasSize();
+        });
 
         // ZOOM
 
-        el = this.htmlEl.querySelector('div.zoom input[type="number"]');
+        this.zoomSlider = new RulerSlider(
+            this.htmlEl.querySelector('div.slider_zoom > canvas'), 
+            this.htmlEl.querySelector('div.slider_zoom > span'),
+            {
+                min: 10,
+                max: 500,
+                value: 100,
+                step: 10,
+                onChange: (val) =>
+                {
+                    this.layer.zoom = val;
+                    this.updatePreview(null, false, false);
+                }
+            }
+        );
 
-        el.addEventListener('input', (e) => {
-            let val = parseFloat(e.currentTarget.value);
-            if(isNaN(val)) return;
-            e.currentTarget.value = val;
-            this.htmlEl.querySelector('div.zoom input[type="range"]').value = val;
-            this.layer.zoom = val;
-            _upDateLayer();
-        });
-
-        el.addEventListener('focus', (e) => e.currentTarget.select());
-
-        el.addEventListener('keyup', (e) => {
-            const input = this.htmlEl.querySelector('div.zoom input[type="number"]');
-            if(e.keyCode === 13) input.parentNode.parentNode.style.display = 'none'; // hide list
-            _upDateLayer();
-        });
-        
-        el = this.htmlEl.querySelector('div.zoom input[type="range"]');
-        el.addEventListener('input', (e) => {
-            this.layer.zoom = parseFloat(e.currentTarget.value);
-            this.htmlEl.querySelector('div.zoom input[type="number"]').value = e.currentTarget.value;
-            _upDateLayer();
+        this.htmlEl.querySelector('div.zoom').addEventListener('click', () => {
+            this.htmlEl.querySelector('div.slider_zoom').classList.toggle('show');
         });
 
 
@@ -389,8 +358,9 @@ export class TextLayer
 
         // MORE OPTIONS
 
-        el = this.htmlEl.querySelector('div.moreOptions');
-        el.querySelector('a.exportAsPNG').addEventListener('click', async (e) => {
+        el = this.htmlEl.querySelector('div.png');
+        el.addEventListener('click', async (e) =>
+        {
             e.preventDefault();
 
             this.c3d.showHideUI.hide();
@@ -461,35 +431,6 @@ export class TextLayer
         this._snap = snapping == 1;
         el.parentNode.classList[this._snap ? 'remove' : 'add']('toggle');
 
-
-
-        const _listClickOutside = (e) =>
-        {
-            if(!this.htmlEl.querySelector('div.builtInFonts > div.list').contains(e.target) && !this.htmlEl.querySelector('div.builtInFonts > div.button').contains(e.target))
-            {
-                this.htmlEl.querySelector('div.builtInFonts > div.list').style.display = 'none';
-            }
-            if(!this.htmlEl.querySelector('div.fontSizes > div.list').contains(e.target) && !this.htmlEl.querySelector('div.fontSizes > div.button').contains(e.target))
-            {
-                this.htmlEl.querySelector('div.fontSizes > div.list').style.display = 'none';
-            }
-            if(!this.htmlEl.querySelector('div.rotate > div.list').contains(e.target) && !this.htmlEl.querySelector('div.rotate > div.button').contains(e.target))
-            {
-                this.htmlEl.querySelector('div.rotate > div.list').style.display = 'none';
-            }
-            if(!this.htmlEl.querySelector('div.zoom > div.list').contains(e.target) && !this.htmlEl.querySelector('div.zoom > div.button').contains(e.target))
-            {
-                this.htmlEl.querySelector('div.zoom > div.list').style.display = 'none';
-            }
-
-            if(!this.htmlEl.querySelector('div.moreOptions > div.list').contains(e.target) && !this.htmlEl.querySelector('div.moreOptions > div.button').contains(e.target))
-            {
-                this.htmlEl.querySelector('div.moreOptions > div.list').style.display = 'none';
-            }
-        };
-        window.addEventListener('click', _listClickOutside);
-        window.addEventListener('touchstart', _listClickOutside);
-
         this._addCustomFontInput(); // add custom font input
 
     }
@@ -502,17 +443,21 @@ export class TextLayer
         // set as active layer
         this.layer = textLayer;
 
-        // set top of window
-        this.htmlEl.style.zIndex = this.c3d.zIndex.index;
+        //
+        this.htmlEl.style.display = 'block';
 
         //
-        this.c3d.imageLayer.hide();
+        this.htmlEl.querySelector('div.title > p.label').innerText = this.layer.text || '';
+        const layersDiv = document.querySelector(this.c3d.props.layers);
+        layersDiv.querySelector('div.title').style.display = 'none';
+        layersDiv.querySelector('div.content').style.display = 'none';
+        layersDiv.querySelector('div.bottomNav').style.display = 'none';
 
         // CANVAS
         const previewCanvas = this.htmlEl.querySelector('canvas.preview');
         const printSize = getPrintDims(this.c3d, this.layer, 72);
         const isExport = width && height ? true : false;
-        const previewCanvasDims = isExport ? {width, height} : calculateAspectRatioFit(printSize.width, printSize.height, 150, 150);
+        const previewCanvasDims = isExport ? {width, height} : calculateAspectRatioFit(printSize.width, printSize.height, 200, 200);
 
         if(!isExport)
         {
@@ -570,36 +515,22 @@ export class TextLayer
         // disable/enable font size
         const fSize = this.htmlEl.querySelector('div.fontSizes');
         fSize.style.display = this.layer.is3D ? 'none' : 'block';
+        this.fontsizeSlider.value = this.layer.fontSize;
 
         // disable/enable rotation
         const rotation = this.htmlEl.querySelector('div.rotate');
         rotation.style.display = this.layer.is3D ? 'block' : 'none';
+        this.rotationSlider.value = this.layer.rotation;
 
-        // disable/enable rotation
+        // disable/enable zoom
         const zoom = this.htmlEl.querySelector('div.zoom');
         zoom.style.display = this.layer.is3D ? 'block' : 'none';
+        this.zoomSlider.value = this.layer.zoom;
 
         // as default show window
-        this.htmlEl.querySelector('div.content').style.display = 'flex'; // show content
-        this.htmlEl.querySelector('div.title > div.buttons > img.rollup').style.rotate = '180deg';
+        // this.htmlEl.querySelector('div.content').style.display = 'flex'; // show content
 
-        // set window position
-        const bb = document.querySelector(this.c3d.props.layers).getBoundingClientRect();
-        const bbContainer = document.querySelector(this.c3d.props.container).getBoundingClientRect();
-        const top = bb.top - bbContainer.y;
-        const left = bb.left + bb.width + 16;
-
-        document.querySelector(this.c3d.props.textLayer).style.display = 'none';
-
-        this.htmlEl.style.left = left + 'px';
-        this.htmlEl.style.top = top + 'px';
-        this.htmlEl.style.display = 'block';
-
-        // reset window vars
-        this.htmlEl.querySelector('div.fontSizes input[type="range"]').value = this.layer.fontSize;
-        this.htmlEl.querySelector('div.fontSizes input[type="number"]').value = this.layer.fontSize;
-        this.htmlEl.querySelector('div.rotate input[type="range"]').value = this.layer.rotation;
-        this.htmlEl.querySelector('div.rotate input[type="number"]').value = this.layer.rotation;
+        // set text
         this.htmlEl.querySelector('div.content > input.text').value = this.layer.text;
 
         // set class vars
@@ -625,11 +556,19 @@ export class TextLayer
         this.updatePreview(null, true, false);
         // if(!this.layer.is3D) this.c3d.render3d.renderTextLayer(this.layer);
         this.three.render();
+        this.c3d._updateCanvasSize();
     }
 
     hide()
     {
         this.htmlEl.style.display = 'none';
+
+        const layersDiv = document.querySelector(this.c3d.props.layers);
+        layersDiv.querySelector('div.content').style.display = 'flex';
+        layersDiv.querySelector('div.title').style.display = 'flex';
+        const bottomNav = layersDiv.querySelector('div.bottomNav');
+        if(bottomNav) bottomNav.style.display = 'flex';
+        this.c3d._updateCanvasSize();
     }
 
 
@@ -743,6 +682,8 @@ export class TextLayer
             const layerMeshUniforms = renderer.material.uniforms;
             const layer = this.layer;
             const index = layer._mesh.userData.index;
+            const printDims = getPrintDims(this.c3d, this.layer.name, 72);
+            const rotation = THREE.MathUtils.degToRad(layer.rotation);
 
 
             if(layer.is3D)
@@ -753,7 +694,9 @@ export class TextLayer
                 uniforms.uOffset.value.set(x, y);
             }
 
+            uniforms.uAspect.value = printDims.width / printDims.height;
             uniforms.uZoom.value = layer.zoom / 100;
+            uniforms.uRotation.value = -rotation;
             uniforms.uBrightness.value = layer.uniforms.uBrightness || 1.0;
             uniforms.uContrast.value = layer.uniforms.uContrast || 1.0;
             uniforms.uHue.value = layer.uniforms.uHue || 0.0;
@@ -783,11 +726,13 @@ export class TextLayer
             const data = layerMeshUniforms.uData.value.image.data;
             const offset = index * PARAMS_PER_LAYER * 4;
 
+            layerMeshUniforms.uAspect.value = uniforms.uAspect.value;
+
 
             // P0
 
             data[offset + 0] = uniforms.uZoom.value; // zoom
-            // data[offset + 1] = 0.0; // rotation
+            data[offset + 1] = rotation; // rotation
             data[offset + 2] = uniforms.uOffset.value.x; // offsetX
             data[offset + 3] = -uniforms.uOffset.value.y; // offsetY
 
@@ -814,8 +759,10 @@ export class TextLayer
 
             // P4
 
-            data[offset + 16] = uniforms.uChromaticAmount.value.x; // uChromaticAmount.value.x
-            data[offset + 17] = uniforms.uChromaticAmount.value.y; // uChromaticAmount.value.y
+            const ratioX = layerMeshUniforms.uLayerTextures.value.image.width / canvas.width * this.c3d.PIXEL_RATIO;
+            const ratioY = layerMeshUniforms.uLayerTextures.value.image.height / canvas.height * this.c3d.PIXEL_RATIO;
+            data[offset + 16] = uniforms.uChromaticAmount.value.x / ratioX; // uChromaticAmount.value.x
+            data[offset + 17] = -uniforms.uChromaticAmount.value.y / ratioY; // uChromaticAmount.value.y
             // data[offset + 18] = 0; // blendMode
             data[offset + 19] = uniforms.uOpacity.value; // alpha
 
@@ -833,7 +780,7 @@ export class TextLayer
     {
         if(this._checkIfFontExists(o.postscript_name)) return;
 
-        const listDiv = this.htmlEl.querySelector('div.builtInFonts > div.list');
+        const listDiv = this.htmlEl.querySelector('div.fontList');
         // https://stackoverflow.com/questions/21797299/how-can-i-convert-a-base64-string-to-arraybuffer/41106346#comment124033543_49273187
         const data = await (await fetch(o.base64)).arrayBuffer();
         const font = new FontFace(o.postscript_name, data);
@@ -899,7 +846,7 @@ export class TextLayer
         this.c3d.preloader.show();
         this.c3d.preloader.set(url);
 
-        const listDiv = this.htmlEl.querySelector('div.builtInFonts > div.list');
+        const listDiv = this.htmlEl.querySelector('div.fontList');
         const response = await fetch(C3D_SERVER + url);
         const json = await response.json();
         
@@ -942,26 +889,17 @@ export class TextLayer
         p.style.fontFamily = data.postscript_name;
         p.addEventListener('click', (e) => {
             this.layer.font = data.postscript_name;
-            e.currentTarget.parentNode.style.display = 'none'; // hide list
+            e.currentTarget.parentNode.classList.toggle('show'); // hide list
+            this.c3d._updateCanvasSize();
             
-            if(this.layer.is3D)
-            {
+            if(this.layer.is3D) {
                 this.layer.threeDText.update(true);
             }
-            else
-            {
-                this.c3d.render3d.renderTextLayer(this.layer);
-                this.updatePreview(null, true, false);
-                this.c3d.three.render();
-            }
+            this.c3d.render3d.renderTextLayer(this.layer);
+            this.updatePreview(null, true, false);
+            this.c3d.three.render();
         });
         listDiv[prepend ? 'prepend' : 'append'](p);
-    }
-
-    _listOnclick(e)
-    {
-        const divList = e.currentTarget.parentNode.querySelector('div.list');
-        divList.style.display = divList.style.display == '' || divList.style.display == 'none' ? 'block' : 'none';
     }
 
     _addCustomFontInput()
@@ -1009,7 +947,7 @@ export class TextLayer
         
         reader.onloadend = async function(e)
         {
-            const listDiv = self.htmlEl.querySelector('div.builtInFonts > div.list');
+            const listDiv = self.htmlEl.querySelector('div.fontList');
             const data = await file.arrayBuffer(); // https://stackoverflow.com/a/61644025
             const fontData = opentype.parse(data);
             const name = fontData.names.fontFamily.en;

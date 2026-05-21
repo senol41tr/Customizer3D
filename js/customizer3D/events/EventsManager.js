@@ -1,8 +1,3 @@
-/*
- * BETA
- * 03.03.2025
- * 
- * 
 // _onMouseEnter(e)
 // {
 //     this.c3d.eventsManager.raycaster.layers.disableAll();
@@ -12,9 +7,6 @@
 // {
 //     this.c3d.eventsManager.raycaster.layers.enableAll();
 // }
- * 
- * 
- */
 
 import * as THREE from 'three';
 import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=104';
@@ -24,10 +16,11 @@ export class EventsManager
     constructor(o)
     {
         // arguments
-        this.meshes = o.hasOwnProperty('meshes') ? o.meshes : undefined;
-        this.camera = o.hasOwnProperty('camera') ? o.camera : undefined;
-        this.scene = o.hasOwnProperty('scene') ? o.scene : undefined;
-        this.htmlElement = o.hasOwnProperty('htmlElement') ? o.htmlElement : window;
+        this.c3d = o.c3d;
+        this.meshes = o.meshes || undefined;
+        this.camera = this.c3d.three.camera;
+        this.scene = o.scene || this.c3d.three.scene;
+        this.htmlElement = o.htmlElement || this.c3d.three.getCanvas();
 
         // vars
         this.mouse = new THREE.Vector2();
@@ -59,16 +52,17 @@ export class EventsManager
 
     onMouseUp(e)
     {
-        // e.preventDefault();
+        e.preventDefault();
 
         const touch = (e.touches && e.touches[0]) || (e.pointerType && e.pointerType === 'touch' && e);
         const clientX = (touch || e).clientX;
         const clientY = (touch || e).clientY;
+        const rect = this.c3d.three.getCanvas().getBoundingClientRect();
 
         let intersected;
 
-        this.mouse.x = (clientX / window.innerWidth) * 2 - 1;
-        this.mouse.y = -(clientY / window.innerHeight) * 2 + 1;
+        this.mouse.x = ((clientX - rect.left) / rect.width) * 2 - 1;
+        this.mouse.y = -((clientY - rect.top) / rect.height) * 2 + 1;
 
         this.raycaster.setFromCamera(this.mouse, this.camera);
 
@@ -83,40 +77,19 @@ export class EventsManager
 
         if (intersected.length > 0)
         {
-
-
-
-            /*
-        const hit = intersected[0];
-        const hitPoint = hit.point;
-
-        // 2. CHECK THE MASK: Is this point inside the mask's area?
-        // We use a Raycaster "down" towards the mask to see if it hits
-        const maskRaycaster = new THREE.Raycaster();
-        
-        // We shoot a ray from the camera toward the hit point
-        maskRaycaster.setFromCamera(this.mouse, this.camera);
-        const maskHit = maskRaycaster.intersectObjects(this.events.map(o => o.mesh));
-
-        if (maskHit.length > 0) {
-            // SUCCESS: The mouse is over the visible part of the stencil!
-            console.log("Valid hit inside the mask:", hit.object.name);
-            // Trigger your 98-file logic here...
-        }
-        */
-
             
             for (let i = 0; i < this.events.length; i++)
             {
                 const o = this.events[i];
-// console.log(intersected[0].object.name);
+                // console.log(intersected[0].object.name);
 
                 if(o.event == 'mouseup')
                 {
                     // if(o.mesh.isGroup && intersected[0].object.parent === o.mesh || o.mesh.name == intersected[0].object.name)
-                    if(o.mesh.isGroup && intersected[0].object.parent === o.mesh || o.mesh.name == intersected[0].object.name)
+                    if(o.mesh.name == intersected[0].object.name)
                     {
                         o.callback(o);
+                        break;
                     }
                 }
             }

@@ -219,7 +219,7 @@ export const GPUInfo = async (c3d, container) =>
 
 export const getTexureSize = (c3d, name) =>
 {
-    const settings = document.querySelector(c3d.props.settings);
+    const settings = c3d.settings.htmlEl;
     const GPUInfoDiv = settings.querySelector('div.GPUInfo');
     const range = GPUInfoDiv.querySelector('[data-mesh_name="' + name + '"]');
     const textureSize = parseInt(range.value);

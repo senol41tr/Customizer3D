@@ -153,7 +153,7 @@ export class Open
                 {
                     case 'color':
                         
-                        notChangeable[meshName] = layerData.color;
+                        notChangeable[meshName] = layerData.color;                        
 
                     break;
 
@@ -235,8 +235,9 @@ export class Open
 
         // SET LOADED TEXT, IMAGE POSITIONS AND UNIFORMS etc.
 
-        const layersDivMain = document.querySelector(this.c3d.props.layers);
+        const layersDivMain = document.querySelector(this.c3d.props.layers + ' > div.content');
         const layersData = Object.keys(this.c3d.props.data);
+
         for (const meshName in layersData)
         {
             const view = layersData[meshName];
@@ -258,7 +259,7 @@ export class Open
                 {
                     if(!layer.changeable && notChangeable[view])
                     {
-                        const preTextureButton = layersDivMain.querySelector('[data-mesh=\'' + view + '\'] > div.content > div.buttons > img[data-image_src = "' + notChangeable[view] + '"');
+                        const preTextureButton = layersDivMain.querySelector('[data-mesh="' + view + '"] > div.content > div.buttons > img[data-image_src = "' + notChangeable[view] + '"]');
                         if(preTextureButton) preTextureButton.click();
                     }
                     else
@@ -272,7 +273,12 @@ export class Open
                     this.c3d.textLayer.show(layer);
                     this.c3d.textLayer.hide();
                 }
-                else if(layer.type == 'color' || layer.type == 'colorOnly')
+                else if(layer.type == 'color')
+                {
+                    const colorSpan = layersDivMain.querySelector('div.' + view + ' > div.content > div.buttons > span[data-color = "' + notChangeable[view] + '"]');
+                    if(colorSpan) colorSpan.click();
+                }
+                else if(layer.type == 'colorOnly')
                 {
                     layer.color = notChangeable[view];
                     layer.update();
@@ -304,6 +310,7 @@ export class Open
         setTimeout(() => {
             this.c3d.three.controls.restoreSettings('set');
             this.c3d.three.render();
+            this.c3d._updateCanvasSize();
         }, 250); // !!!
     }
 
@@ -362,10 +369,11 @@ export class Open
     _destroyUI()
     {
         document.querySelectorAll(this.c3d.props.layers + ' > div.content > div').forEach((e) => e.remove());
-        document.querySelector(this.c3d.props.layers + ' > div.fileMenu').remove();
+        document.querySelector(this.c3d.props.layers + ' > div.bottomNav').remove();
         this.c3d.textLayer.hide();
         this.c3d.imageLayer.hide();
         this.c3d.three.destroy();
+        this.c3d.eventsManager.events = [];
     }
 
 }

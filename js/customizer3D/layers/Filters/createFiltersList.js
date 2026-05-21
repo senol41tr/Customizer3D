@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {uniforms2} from 'customizer3D_dir/three/materials/Shaders.js?c3d=104';
+import {RulerSlider} from 'customizer3D_dir/ui/RulerSlider.js?c3d=104';
 
 // container: ImageLayer or TextLayer
 export const createFiltersList = (c3d, container, button) =>
@@ -10,7 +11,7 @@ export const createFiltersList = (c3d, container, button) =>
     div.classList.add('filters');
     div.style.display = 'flex';
     div.style.flexDirection = 'column';
-    div.style.gap = '0.5rem';
+    div.style.gap = '1rem';
 
     container.layer._C3D_Filter_Div = div;
     
@@ -30,7 +31,7 @@ export const createFiltersList = (c3d, container, button) =>
             <div data-filter="${filter}">
                 <div style="display:flex; gap:0.2rem;">
                     <input type="checkbox" title="Activate" id="${checkboxID}" class="${filter}">
-                    <label for="${checkboxID}" style="white-space:nowrap;">${data.label}</label>
+                    <label for="${checkboxID}" style="white-space:nowrap; white-space: nowrap; font-size: 0.9rem; text-transform: none;">${data.label}</label>
                 </div>
                 <div class="uniforms" style="padding: 0.5rem; display:none;">
                 <div>
@@ -143,9 +144,15 @@ export const createFiltersList = (c3d, container, button) =>
     
     button.addEventListener('click', () =>
     {
-        c3d.contextMenu.setWidth('fit-content');
-        c3d.contextMenu.setHTMLObj(container.layer._C3D_Filter_Div);
-        c3d.contextMenu.show(button);
+        const canvas = container.htmlEl.querySelector('canvas.preview');
+        const isVisible = canvas.style.display == '' || canvas.style.display == 'block';
+        const filters = container.htmlEl.querySelector('div.content > div.filters');
+        const old = filters.querySelector('div.filters');
+        if(old) old.remove();
+        if(isVisible) filters.append(container.layer._C3D_Filter_Div);
+        canvas.style.display = isVisible ? 'none' : 'block';
+        filters.style.display = isVisible ? 'block' : 'none';
+        c3d._updateCanvasSize();
     });
 
     for(const filter in container.layer.uniforms)

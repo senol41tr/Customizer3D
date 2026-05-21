@@ -73,7 +73,6 @@ export class ThreeDText
 
         this.c3d.glbScene.visible = true;
         this.c3d.three.controls.orbit.enabled = true;
-        document.querySelector(this.c3d.props.layers).style.visibility = 'visible';
         this.c3d.textLayer.htmlEl.style.visibility = 'visible';
         this.c3d.imageLayer.htmlEl.style.visibility = 'visible';
 
@@ -90,14 +89,21 @@ export class ThreeDText
 
         this.c3d.three.controls.restoreSettings('set');
         this.c3d.three.render();
+
+        // resize canvas
+        document.querySelector(this.c3d.props.layers).style.display = 'flex';
+        this.c3d._updateCanvasSize();
     }
 
     show()
     {
+        // resize canvas
+        document.querySelector(this.c3d.props.layers).style.display = 'none';
+        this.c3d._updateCanvasSize();
+
         this.c3d.three.controls.restoreSettings('set');
         this.c3d.three.controls.orbit.enabled = false;
         this.c3d.glbScene.visible = false;
-        document.querySelector(this.c3d.props.layers).style.visibility = 'hidden';
         this.c3d.textLayer.htmlEl.style.visibility = 'hidden';
         this.c3d.imageLayer.htmlEl.style.visibility = 'hidden';
 
@@ -330,7 +336,7 @@ export class ThreeDText
         }
         else this.mesh.rotation.set(0, Math.PI / 8, 0);
 
-        this.mesh.scale.setScalar(0.00025);
+        this.mesh.scale.setScalar(0.0004);
         this._onResize();
 
         this.controls.mesh = this.mesh;
@@ -400,7 +406,7 @@ export class ThreeDText
 
                 case 'geometry':
 
-                    html += '<div>';
+                    html += '<div style="display:none;">';
 
                         for (const prop in props)
                         {
@@ -438,7 +444,7 @@ export class ThreeDText
 
                 case 'material':
 
-                    html += '<div style="display:flex; flex-direction:column; gap: 0.5rem; padding-left:0.5rem;">';
+                    html += '<div style="display:none; flex-direction:column; gap: 0.5rem; padding-left:0.5rem;">';
                         for (const prop in props)
                         {
                             const item = props[prop];
@@ -446,7 +452,7 @@ export class ThreeDText
                             html += '<div class="' + prop + 'Container" style="display:flex; flex-direction:column; gap: 0.25rem;">';
                             html += '<p onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display == \'\' || this.nextElementSibling.style.display == \'none\' ? \'block\' : \'none\';" style="font-size:0.75rem; cursor:pointer;">+ ' + toUpper(prop) + '</p>';
 
-                                html += '<div class="' + prop + '" style="display:' + (this.options.material.name == prop ? 'block' : 'none') + ';">';
+                                html += '<div class="' + prop + '">';
                                 for (const subProp in item)
                                 {
                                     const subItem = item[subProp];

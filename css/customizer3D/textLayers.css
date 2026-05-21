@@ -1,45 +1,69 @@
-section.customizer > div.textLayer
+section.customizer > div.layers > div.textLayer
 {
-    position: absolute;
-    z-index: 7;
-    background-color: var(--customizerColorPrimary);
-    border-radius: 7px;
-    filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
     display: none;
 }
 
-section.customizer > div.textLayer > div.title
+
+
+section.customizer > div.layers > div.textLayer > div.title
 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--customizerColorPrimary);
-    border-radius: 7px;
-    padding: 0.75rem;
+    padding: 1.5rem;
     gap: 0.75rem;
-    cursor: move;
 }
 
-section.customizer > div.textLayer > div.title > div.buttons
+section.customizer > div.layers > div.textLayer > div.title > div.back
+{
+    display: flex;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+section.customizer > div.layers > div.textLayer > div.title > div.back > img
+{
+    width: 24px;
+    margin-right: 0.1rem;
+    rotate: 90deg;
+}
+
+section.customizer > div.layers > div.textLayer > div.title > p.label
+{
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+
+
+
+
+
+
+
+section.customizer > div.layers > div.textLayer > div.title > div.buttons
 {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-section.customizer > div.textLayer > div.title > div.buttons > img
+section.customizer > div.layers > div.textLayer > div.title > div.buttons > img
 {
     height: 18px;
     cursor: pointer;
 }
 
-section.customizer > div.textLayer > div.title > div.buttons > img.rollup
+section.customizer > div.layers > div.textLayer > div.title > div.buttons > img.rollup
 {
     height: 5px;
 }
 
 
-section.customizer > div.textLayer > div.content
+section.customizer > div.layers > div.textLayer > div.content
 {
     display: flex;
     flex-direction: column;
@@ -50,37 +74,46 @@ section.customizer > div.textLayer > div.content
 }
 
 
-
-section.customizer > div.textLayer > div.content > input.text
-{
-    padding: 0.5rem;
-}
-
-
-
-section.customizer > div.textLayer > div.content > div
-{
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-section.customizer > div.textLayer > div.content > div > div.toggle
+section.customizer > div.layers > div.textLayer > div.content > div > div.toggle
 {
     opacity: 0.5;
 }
 
-section.customizer > div.textLayer > div.content > div > div > div.button
+
+
+section.customizer > div.layers > div.textLayer > div.content > input.text
+{
+    padding: 0.5rem;
+    text-transform: none;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+
+
+section.customizer > div.layers > div.textLayer > div.content > div
+{
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+section.customizer > div.layers > div.textLayer > div.content > div > div.toggle
+{
+    opacity: 0.5;
+}
+
+section.customizer > div.layers > div.textLayer > div.content > div > div > div.button
 {
     display: flex;
     flex-direction: column;
     cursor: pointer;
 }
 
-section.customizer > div.textLayer > div.content > div > div > div.button::after,
-section.customizer > div.textLayer > div.content > div > div.color_picker::after
+section.customizer > div.layers > div.textLayer > div.content > div > div > div.button::after,
+section.customizer > div.layers > div.textLayer > div.content > div > div.color_picker::after
 {
     content: attr(title);
     font-size: 0.65rem;
@@ -90,20 +123,43 @@ section.customizer > div.textLayer > div.content > div > div.color_picker::after
     text-align: center;
 }
 
-section.customizer > div.textLayer > div.content > div > div > div.button > img
+section.customizer > div.layers > div.textLayer > div.content > div > div > div.button > img
 {
-    height: 17px;
+    height: 24px;
 }
 
 
 
 
-section.customizer > div.textLayer > div.content > div > div
+section.customizer > div.layers > div.textLayer > div.content > div.slider
+{
+    gap: 0;
+    flex-direction: column;
+    display: none;
+}
+
+section.customizer > div.layers > div.textLayer > div.content > div.slider.show
+{
+    display: flex;
+}
+
+section.customizer > div.layers > div.textLayer > div.content > div.slider > canvas
+{
+    width: 75%;
+    height: 58px;
+}
+
+
+
+
+
+
+section.customizer > div.layers > div.textLayer > div.content > div > div
 {
     position: relative;
 }
 
-section.customizer > div.textLayer > div.content > div > div > div.list
+section.customizer > div.layers > div.textLayer > div.content > div > div > div.list
 {
     position: absolute;
     display: none;
@@ -121,10 +177,25 @@ section.customizer > div.textLayer > div.content > div > div > div.list
 
 
 
-section.customizer > div.textLayer > div.content > div > div.builtInFonts > div.list > p
+section.customizer > div.layers > div.textLayer > div.content > div.fontList.show
+{
+    display: flex;
+}
+
+section.customizer > div.layers > div.textLayer > div.content > div.fontList
+{
+    align-items: flex-start; 
+    flex-direction: column; 
+    padding: 2rem;
+    padding-top: 0.5rem;
+    gap:0;
+    display: none;
+}
+
+section.customizer > div.layers > div.textLayer > div.content > div.fontList > p
 {
     color: var(--customizerColorText);
-    font-size: 1rem;
+    font-size: 1.5rem;
     white-space: nowrap;
     cursor: pointer;
     padding: 0.3rem;
@@ -133,7 +204,7 @@ section.customizer > div.textLayer > div.content > div > div.builtInFonts > div.
     text-transform: none;
 }
 
-section.customizer > div.textLayer > div.content > div > div.builtInFonts > div.list > p:hover
+section.customizer > div.layers > div.textLayer > div.content > div.fontList > p:hover
 {
     color: var(--customizerColorPrimary);
     background-color: var(--customizerColorText);
@@ -141,15 +212,15 @@ section.customizer > div.textLayer > div.content > div > div.builtInFonts > div.
 
 
 
-section.customizer > div.textLayer > div.content > div > div.fontSizes > div.list > div,
-section.customizer > div.textLayer > div.content > div > div.rotate > div.list > div
+section.customizer > div.layers > div.textLayer > div.content > div > div.fontSizes > div.list > div,
+section.customizer > div.layers > div.textLayer > div.content > div > div.rotate > div.list > div
 {
     display: flex;
     gap: 0.5rem;
     align-items: center;
 }
 
-section.customizer > div.textLayer > div.content > div > div > div.list > div > input
+section.customizer > div.layers > div.textLayer > div.content > div > div > div.list > div > input
 {
     width: 55px;
     padding: 0.25rem;
@@ -157,15 +228,15 @@ section.customizer > div.textLayer > div.content > div > div > div.list > div > 
     font-size: 0.65rem;
 }
 
-section.customizer > div.textLayer > div.content > div > div > div.list > div > input[type="number"]::-webkit-inner-spin-button
+section.customizer > div.layers > div.textLayer > div.content > div > div > div.list > div > input[type="number"]::-webkit-inner-spin-button
 {
     -webkit-appearance: none;
 }
 
 
-section.customizer > div.textLayer > div.content > div > div.color_picker
+section.customizer > div.layers > div.textLayer > div.content > div > div.color_picker
 {
-    height: 31px;
+    height: 44px;
     display: flex;
     flex-direction: column;
     border: unset;
@@ -177,7 +248,7 @@ section.customizer > div.textLayer > div.content > div > div.color_picker
 }
 
 
-section.customizer > div.textLayer > div.content > div > div.color_picker > div.cp_button
+section.customizer > div.layers > div.textLayer > div.content > div > div.color_picker > div.cp_button
 {
     border: 1px solid var(--customizerColorText);
     border-radius: 3px;
@@ -186,7 +257,7 @@ section.customizer > div.textLayer > div.content > div > div.color_picker > div.
 
 
 
-section.customizer > div.textLayer > div.content > div.input
+section.customizer > div.layers > div.textLayer > div.content > div.input
 {
     display: flex;
     gap: 0.5rem;
@@ -195,12 +266,12 @@ section.customizer > div.textLayer > div.content > div.input
     padding-top: 0.5rem;
 }
 
-section.customizer > div.textLayer > div.content > div.input > div.list > input[type="file"]
+section.customizer > div.layers > div.textLayer > div.content > div.input > div.list > input[type="file"]
 {
     display: none;
 }
 
-section.customizer > div.textLayer > div.content > div.input > div.list > label
+section.customizer > div.layers > div.textLayer > div.content > div.input > div.list > label
 {
     border: none;
     outline: none;
@@ -212,7 +283,7 @@ section.customizer > div.textLayer > div.content > div.input > div.list > label
     font-size: 0.8rem;
 }
 
-section.customizer > div.textLayer > div.content > div.input > a.convertURL
+section.customizer > div.layers > div.textLayer > div.content > div.input > a.convertURL
 {
     margin: 0.5rem 0;
     font-size: 0.6rem;
@@ -221,13 +292,15 @@ section.customizer > div.textLayer > div.content > div.input > a.convertURL
 
 
 
-section.customizer > div.textLayer > div.content > canvas.preview
+section.customizer > div.layers > div.textLayer > div.content > canvas.preview
 {
     border: 1px dashed var(--customizerColorText);
     align-self: center;
     cursor: move;
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 200px;
+    margin-top: 0.5rem;
+    margin-top: 0.5rem;
 }
 
 
@@ -235,7 +308,7 @@ section.customizer > div.textLayer > div.content > canvas.preview
 
 @media screen and (max-width: 500px)
 {
-    section.customizer > div.textLayer > div.content
+    section.customizer > div.layers > div.textLayer > div.content
     {
         max-width: 90vw;
     }

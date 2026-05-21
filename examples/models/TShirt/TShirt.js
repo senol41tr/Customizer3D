@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=104';
 
 export function lang()
@@ -38,7 +39,7 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: 0.75,
+                minDistance: 0.5,
                 maxDistance: 5,
             },
 
@@ -47,7 +48,7 @@ export function parameters(self)
             {
                 position:
                 {
-                    z: isMobile() ? 4 : 2.5
+                    z: isMobile() ? 3 : 2.5
                 }
             }
         },
@@ -74,7 +75,8 @@ export function parameters(self)
                             '#ffd461', 
                             '#ef783e', 
                             '#ea5455', 
-                            '#2c4059'
+                            '#2c4059',
+                            '#5ACBCB'
                         ],
                         material: 'MeshPhongMaterial'
                     }
@@ -118,29 +120,35 @@ export async function init()
 // op = 'to' or 'set' => to=animated, set=instantly for to take screenshot (by exporting PDF)
 export function setView(view, fn = 'to')
 {
-
+    const multiplyer = isMobile() ? 1.5 : 1;
+    
     switch (view)
     {
         case 'back':
+
             this.three.rotateToAngle(0, 180, 0, fn);
-            this.three.moveToAngle(0, 0, 10, fn);
+            this.three.moveToAngle(0, 0, 70 * multiplyer, fn);
         break;
 
         case 'left':
             this.three.rotateToAngle(0, 90, 30, fn);
-            this.three.moveToAngle(0, 0, 60, fn);
+            this.three.moveToAngle(0, 0, 60 * multiplyer, fn);
         break;
 
         case 'right':
             this.three.rotateToAngle(0, -90, -30, fn);
-            this.three.moveToAngle(0, 0, 60, fn);
+            this.three.moveToAngle(0, 0, 60 * multiplyer, fn);
+        break;
+
+        case 'front':
+            this.three.rotateToAngle(0, 0, 0, fn);
+            this.three.moveToAngle(0, 0, 70 * multiplyer, fn);
         break;
 
         default:
-        case 'front':
         case 'model':
             this.three.rotateToAngle(0, 0, 0, fn);
-            this.three.moveToAngle(0, 0, 10, fn);
+            this.three.moveToAngle(0, 0, 0, fn);
         break;
     }
 
@@ -150,5 +158,5 @@ export function setView(view, fn = 'to')
 // callback onUnLoad
 export async function onUnLoad()
 {
-
+    
 }

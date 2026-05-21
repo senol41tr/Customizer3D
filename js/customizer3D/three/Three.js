@@ -18,9 +18,11 @@ export class Three
         this.options = options;
         this.raf = null; // requestAnimationFrame id
         this.controls = null;
+        
 
         this.stats = new Stats();
-        this.stats.dom.style.cssText = 'position:fixed;bottom:1rem;right:1rem;z-Index:5;display:none;';
+        // this.stats.dom.style.cssText = 'position:fixed;bottom:1rem;right:1rem;z-Index:5;display:none;';
+        this.stats.dom.style.cssText = 'position:fixed;top:1rem;left:1rem;z-Index:5;display:none;';
         document.querySelector(this.c3d.props.container).appendChild(this.stats.dom);
         
         this._canvasDims = Size.htmlDims(this.c3d.props.canvas3d);
@@ -211,16 +213,21 @@ export class Three
 
     moveToAngle(x, y, z, fn = 'to')
     {
+        x = THREE.MathUtils.degToRad(x);
+        y = THREE.MathUtils.degToRad(y);
+        z = THREE.MathUtils.degToRad(z);
+
         // mesh.rotation.set(x, x, z);
         gsap[fn](this.c3d.glbScene.position,
         {
-            x: THREE.MathUtils.degToRad(x),
-            y: THREE.MathUtils.degToRad(y),
-            z: THREE.MathUtils.degToRad(z),
+            x,
+            y,
+            z,
             duration: 0.75,
             ease: "power2.inOut",
             onUpdate: () => {
                 this.render();
+                this.controls.orbit.target.set(x, y, z);
             }
         });
     }

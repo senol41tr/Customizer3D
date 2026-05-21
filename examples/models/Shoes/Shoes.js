@@ -156,9 +156,8 @@ export async function init()
     const p = document.createElement('p');
     p.style.position = 'absolute';
     p.style.zIndex = this.zIndex.index;
-    p.style.left = '50%';
-    p.style.top = '80%';
-    p.style.transform = 'translateX(-50%)';
+    p.style.right = '1rem';
+    p.style.bottom = '1rem';
     p.style.padding = '0.5rem';
     p.style.color = '#ffffff';
     p.style.backgroundColor = '#0081ff';

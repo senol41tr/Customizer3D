@@ -2,18 +2,41 @@ section.customizer > div.layers
 {
     position: absolute;
     z-index: 6;
-    left: 1rem;
-    top: 1rem;
-    background-color: var(--customizerColorPrimary);
-    border-radius: 7px;
-    filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
-    min-height: 120px;
-    min-width: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 50vw;
+    max-width: 500px;
+    min-height: 300px;
+    max-height: 70svh;
+    overflow: auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     visibility: hidden;
+    backdrop-filter: blur(20px) brightness(75%);
+    -webkit-backdrop-filter: blur(20px) brightness(75%);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
+
+
+@media screen and (max-width: 500px)
+{
+    section.customizer > div.layers
+    {
+        width: 100vw;
+        padding: 1rem;
+        border-radius: 0;
+    }
+
+    section.customizer > div.layers > div.bottomNav
+    {
+        padding-bottom: 0;
+    }
+
+}
+
 
 
 
@@ -56,9 +79,10 @@ section.customizer > div.layers > div.title
 
 section.customizer > div.layers > div.title > img.rollup
 {
-    width: 8px;
-    rotate: 180deg;
+    width: 16px;
     transition: rotate 0.25s cubic-bezier(0.45, 0, 0.55, 1);
+    cursor: pointer;
+    margin-right: 0.5rem;
 }
 
 section.customizer > div.layers > div.title > div.title
@@ -66,27 +90,29 @@ section.customizer > div.layers > div.title > div.title
     display: flex;
     gap: 0.5rem;
     align-items: center;
-    cursor: move;
 }
 
 section.customizer > div.layers > div.title > div.title > img.icon
 {
-    width: 14px;
+    width: 28px;
 }
 
 section.customizer > div.layers > div.content
 {
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
-    max-height: calc(100dvh - 100px);
+    gap: 1rem;
+    max-height: 50dvh;
     overflow: auto;
-    padding-top: 0.3rem;
+    padding: 0.3rem 1rem 0 1rem;
 }
 
 section.customizer > div.layers > div.content > div.layer
 {
-    padding: 0 0.75rem 0.25rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    padding: 0.15rem;
+    width: 100%;
 }
 
 section.customizer > div.layers > div.content > div.layer:first-child
@@ -106,6 +132,7 @@ section.customizer > div.layers > div.content > div.layer > div.title
     display: flex;
     cursor: pointer;
     align-items: center;
+    justify-content: space-between;
 }
 
 section.customizer > div.layers > div.content > div.layer > div.title > p.name
@@ -115,21 +142,35 @@ section.customizer > div.layers > div.content > div.layer > div.title > p.name
     word-wrap: break-word;
     overflow: hidden;
     white-space: nowrap;
-    max-width: 150px;
+    max-width: 80%;
+    font-size: 0.85rem;
+    padding-left: 1rem;
 }
 
-section.customizer > div.layers > div.content > div.layer > div.title > img.icon
+section.customizer > div.layers > div.content > div.layer > div.title > div.back
 {
-    width: 14px;
-    transition: opacity 0.15s cubic-bezier(0.45, 0, 0.55, 1);
+    gap: 0.5rem;
+    display: none;
+}
+
+section.customizer > div.layers > div.content > div.layer > div.title > div.back > img.back
+{
+    width: 24px;
     margin-right: 0.1rem;
+    rotate: 90deg;
+}
+
+section.customizer > div.layers > div.content > div.layer > div.title.active > p.name
+{
+    font-size: 1.25rem;
+    text-align: right;
 }
 
 section.customizer > div.layers > div.content > div.layer > div.content
 {
     max-height: 0;
     overflow: auto;
-    transition: max-height 0.15s cubic-bezier(0.45, 0, 0.55, 1);
+    transition: max-height 0.25s cubic-bezier(0.45, 0, 0.55, 1);
     padding: 0.5rem;
     padding-left: 0;
     padding-left: 16px;
@@ -153,8 +194,6 @@ section.customizer > div.layers > div.content > div.layer > div.content > div.la
 {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    border-bottom: 1px dashed rgba(0,0,0,0.2);
     margin-bottom: 0.5rem;
 }
 
@@ -167,9 +206,16 @@ section.customizer > div.layers > div.content > div.layer > div.content > div.la
 section.customizer > div.layers > div.content > div.layer > div.content > div.layers > div
 {
     display: flex;
-    gap: 0.35rem;
+    gap: 1rem;
     align-items: center;
     justify-content: space-between;
+    min-height: 50px;
+    padding: 0.5rem;
+}
+
+section.customizer > div.layers > div.content > div.layer > div.content > div.layers > div:nth-child(even)
+{
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 section.customizer > div.layers > div.content > div.layer > div.content > div.layers > div > p.title
@@ -180,7 +226,8 @@ section.customizer > div.layers > div.content > div.layer > div.content > div.la
     word-wrap: break-word;
     overflow: hidden;
     white-space: nowrap;
-    max-width: 100px;
+    width: 50px;
+    max-width: 50px;
     cursor: pointer;
 }
 
@@ -189,8 +236,8 @@ section.customizer > div.layers > div.content > div.layer > div.content > div.la
     background: repeating-conic-gradient(#FFFFFF 0 25%, #EBEBEB 0 50%) 50% /  3px 3px; /* https://stackoverflow.com/a/65129916 */
     border-radius: 4px;
     cursor: pointer;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
 }
 
 
@@ -198,45 +245,60 @@ section.customizer > div.layers > div.content > div.layer > div.content > div.la
 section.customizer > div.layers > div.content > div.layer > div.content > div.buttons
 {
     display: flex;
-    gap: 0.85rem;
-    flex-direction: column;
-    max-width: 130px;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    display: none;
 }
 
 section.customizer > div.layers > div.content > div.layer > div.content > div.buttons:has(> img,span)
 {
+    display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 section.customizer > div.layers > div.content > div.layer > div.content > div.buttons > div.button
 {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
     cursor: pointer;
+    text-align: center;
 }
 
 section.customizer > div.layers > div.content > div.layer > div.content > div.buttons > div.button::after
 {
+    white-space: nowrap;
     content: attr(title);
-    font-size: 0.65rem;
     line-height: 1.2;
-    padding-top: 0.2rem;
+    padding-top: 0.5rem;
+    display: block;
 }
 
 
 section.customizer > div.layers > div.content > div.layer > div.content > div.buttons > div.button > img,
 section.customizer > div.layers > div.content > div.layer > div.content > div.layers > div > img
 {
-    width: 17px;
+    width: 22px;
     position: relative;
     cursor: pointer;
 }
 
+section.customizer > div.layers > div.content > div.layer > div.content > div.buttons > div.button > img
+{
+    width: auto;
+    height: 30px;
+}
+
+section.customizer > div.layers > div.content > div.layer > div.content > div.layers > div > div.spacer
+{
+    width: 100%;
+    height: 50px;
+}
+
 section.customizer > div.layers > div.content > div.layer > div.content > div.layers > div > img.visibility
 {
-    width: 10px;
+    width: 16px;
 }
 
 
@@ -255,122 +317,128 @@ section.customizer > div.layers > div.content > div.layer > div.content > div.la
 section.customizer > div.layers > div.content > div.layer > div.content > div.buttons > span
 {
     display: block;
-    cursor:pointer;
-    width:16px;
-    height:16px;
-    border-radius:50%;
-    border:1px solid var(--customizerColorText);
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--customizerColorText);
     padding: 0.05rem;
+    border-radius: 4px;
 }
 
 section.customizer > div.layers > div.content > div.layer > div.content > div.buttons > img.active,
 section.customizer > div.layers > div.content > div.layer > div.content > div.buttons > span.active
 {
-    outline: 2px solid var(--customizerColorText);
+    outline: 4px solid var(--customizerColorText);
 }
 
 
 /* available model texture(s) imgs */
 section.customizer > div.layers > div.content > div.layer > div.content > div.buttons > img.texture
 {
-    width: 37px;
+    width: 75px;
     height: auto;
-    border-radius: 7px;
+    border-radius: 4px;
     padding: 0.05rem;
     cursor: pointer;
 }
 
 
 
-
 /* SOLID */
 
-
+/*
 section.customizer > div.layers > div.content > div.layer > div.content > div.layers > div.solid > div.color_picker,
 section.customizer > div.layers > div.content > div.layer > div.content > div.layers > div.solid > div.color_picker > div.cp_button
 {
     width: 100%;
 }
+*/
 
 
 
 
 
+/* BOTTOM NAV */
 
-/* FILE MENU */
 
-
-section.customizer > div.layers > div.fileMenu
+section.customizer > div.layers > div.bottomNav
 {
     display: flex;
-    position: sticky;
-    bottom: 0;
-    width: 100%;
+    padding: 1rem 2rem;
+    padding-top: 0;
+    align-items: center;
+    justify-content: space-between;
+    min-height: calc(64px + 2rem);
 }
 
-section.customizer > div.layers > div.fileMenu > button.menu
-{
-    border-radius: 7px;
-    flex-basis: 100%;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    text-align: left;
-    padding: 0.35rem;
-    padding-left: 0.75rem;
-    font-size: calc(var(--customizerFontSizeDefault) + 0.1rem);
-}
 
-section.customizer > div.layers > div.fileMenu > div.menu
+section.customizer > div.layers > div.bottomNav a
 {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    gap: 0.6rem;
-    padding: 0.75rem;
-    background-color: var(--customizerColorText);
-    z-index: 1;
-    bottom: 1.6rem;
-    width: 100%;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-}
-
-section.customizer > div.layers > div.fileMenu > div.menu > a
-{
-    color: var(--customizerColorPrimary);
     text-decoration: none;
+    font-size: calc(var(--customizerFontSizeDefault) + 0.15rem);
 }
 
-section.customizer > div.layers > div.fileMenu > div.menu > div.open > label
+section.customizer > div.layers > div.bottomNav > div.file
+{
+    position: relative;
+}
+
+section.customizer > div.layers > div.bottomNav > div.file:has(:hover) div.menu
+{
+    display: flex;
+}
+
+section.customizer > div.layers > div.bottomNav > div.file > div.menu
+{
+    flex-direction: column;
+    gap: 1rem;
+    display: none;
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    padding: 1.5rem;
+    background-color: var(--customizerColorText);
+    white-space: nowrap;
+    border-radius: 6px;
+}
+
+section.customizer > div.layers > div.bottomNav > div.file > div.menu *
 {
     color: var(--customizerColorPrimary);
     cursor: pointer;
 }
 
-section.customizer > div.layers > div.fileMenu > div.menu > div.open > input[type="file"]
+section.customizer > div.layers > div.bottomNav > div.file > div.menu > div.open > input
 {
     display: none;
 }
 
-
-
-
-section.customizer > div.layers > div.switchTo2D > button.button
+section.customizer > div.layers > div.bottomNav > div.file > div.menu > div.open > label
 {
-    border-radius: 0px;
+    display: block;
     width: 100%;
-    background: linear-gradient(135deg, #ff0000, #ff9900);
-    color: var(--customizerColorText);
-    text-align: left;
-    font-size: 0.85rem;
-    color: #fff;
+    font-size: calc(var(--customizerFontSizeDefault) + 0.15rem);
 }
 
-section.customizer > div.layers > div.switchTo2D > button.threeD
+
+
+section.customizer > div.layers > div.bottomNav > div.add_layer
 {
-    background: linear-gradient(135deg, #00f7ff, #00ff1a);
-    color: #000;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    display: none;
 }
+
+section.customizer > div.layers > div.bottomNav > div.add_layer > img
+{
+    width: 64px;
+    cursor: pointer;
+    transition: rotate 0.25s cubic-bezier(0.45, 0, 0.55, 1);
+}
+
+
 
 
 

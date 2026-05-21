@@ -80,7 +80,6 @@ export class ThreeDSVG
 
         this.c3d.glbScene.visible = true;
         this.c3d.three.controls.orbit.enabled = true;
-        document.querySelector(this.c3d.props.layers).style.visibility = 'visible';
         this.c3d.textLayer.htmlEl.style.visibility = 'visible';
         this.c3d.imageLayer.htmlEl.style.visibility = 'visible';
 
@@ -101,6 +100,11 @@ export class ThreeDSVG
 
         this.c3d.three.controls.restoreSettings('set');
         this.c3d.three.render();
+
+        // resize canvas
+        document.querySelector(this.c3d.props.layers).style.display = 'flex';
+        this.c3d._updateCanvasSize();
+
     }
 
     show()
@@ -115,10 +119,13 @@ export class ThreeDSVG
             return;
         }
 
+        // resize canvas
+        document.querySelector(this.c3d.props.layers).style.display = 'none';
+        this.c3d._updateCanvasSize();
+
         this.c3d.three.controls.restoreSettings('set');
         this.c3d.three.controls.orbit.enabled = false;
         this.c3d.glbScene.visible = false;
-        document.querySelector(this.c3d.props.layers).style.visibility = 'hidden';
         this.c3d.textLayer.htmlEl.style.visibility = 'hidden';
         this.c3d.imageLayer.htmlEl.style.visibility = 'hidden';
 
@@ -454,7 +461,7 @@ export class ThreeDSVG
             this.c3d.contextMenu.setHTMLObj(this.div);
             this.c3d.contextMenu.show(button, false);
             this.c3d.contextMenu.setPosition(16, 16);
-            this.c3d.contextMenu.setWidth(220);
+            this.c3d.contextMenu.setWidth(250);
             return;
         }
 
@@ -469,7 +476,7 @@ export class ThreeDSVG
             const props = this._options[key];
 
             html += '<div style="display:flex; flex-direction:column; gap: 0.85rem; border: 1px solid var(--customizerColorText); border-radius: 7px; padding: 0.85rem; margin: 0.1rem; margin-bottom:0.5rem;">';
-            html += '<p style="font-weight:bold; font-size:0.75rem;" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display == \'\' || this.nextElementSibling.style.display == \'block\' ? \'none\' : \'block\';">+ ' + toUpper(key) + '</p>';
+            html += '<p onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display == \'\' || this.nextElementSibling.style.display == \'block\' ? \'none\' : \'block\';">+ ' + toUpper(key) + '</p>';
 
             switch(key)
             {
@@ -521,8 +528,8 @@ export class ThreeDSVG
                         {
                             const item = props[prop];
 
-                            html += '<div class="' + prop + 'Container" style="display:flex; flex-direction:column; gap: 0.25rem;">';
-                            html += '<p onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display == \'\' || this.nextElementSibling.style.display == \'none\' ? \'block\' : \'none\';" style="font-size:0.75rem; cursor:pointer;">+ ' + toUpper(prop) + '</p>';
+                            html += '<div class="' + prop + 'Container" style="display:flex; flex-direction:column; gap: 0.25rem; padding-bottom: 0.5rem;">';
+                            html += '<p onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display == \'\' || this.nextElementSibling.style.display == \'none\' ? \'block\' : \'none\';" style="cursor:pointer;">+ ' + toUpper(prop) + '</p>';
 
                                 html += '<div class="' + prop + '" style="display:' + (this.options.material.name == prop ? 'block' : 'none') + ';">';
                                 for (const subProp in item)
@@ -684,7 +691,7 @@ export class ThreeDSVG
         this.c3d.contextMenu.setHTMLObj(this.div);
         this.c3d.contextMenu.show(button, false);
         this.c3d.contextMenu.setPosition(16, 16);
-        this.c3d.contextMenu.setWidth(220);
+        this.c3d.contextMenu.setWidth(250);
 
 
     }
