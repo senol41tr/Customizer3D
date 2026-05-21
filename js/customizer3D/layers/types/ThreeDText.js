@@ -593,6 +593,7 @@ export class ThreeDText
             this._removeMesh();
 
             this.layer.zoom = 100;
+            this.layer.rotation = 0;
             this.layer.textPosition = {x: 0, y: 0};
             this.c3d.render3d.renderTextLayer(this.layer);
             this.c3d.textLayer.show(this.layer);

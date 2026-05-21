@@ -353,7 +353,10 @@ export class TextLayer
         // CONVERT TO 3D TEXT
 
         el = this.htmlEl.querySelector('div.threeD > div.button');
-        el.addEventListener('click', () => this.layer.converTo3D());
+        el.addEventListener('click', () => {
+            this.htmlEl.querySelector('div.slider_fontsize').classList.remove('show');
+            this.layer.converTo3D();
+        });
 
 
         // MORE OPTIONS
