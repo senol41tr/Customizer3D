@@ -1,10 +1,10 @@
 import * as THREE from 'three';
-import {TTFLoader} from 'customizer3D_dir/three/loaders/TTFLoader.js?c3d=104';
-import {Font} from 'customizer3D_dir/three/loaders/FontLoader.js?c3d=104';
-import {TextGeometry} from 'customizer3D_dir/three/geometries/TextGeometry.js?c3d=104';
-import {Controls} from 'customizer3D_dir/layers/utils/Controls.js?c3d=104';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=104';
-import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=104';
+import {TTFLoader} from 'customizer3D_dir/three/loaders/TTFLoader.js?c3d=105';
+import {Font} from 'customizer3D_dir/three/loaders/FontLoader.js?c3d=105';
+import {TextGeometry} from 'customizer3D_dir/three/geometries/TextGeometry.js?c3d=105';
+import {Controls} from 'customizer3D_dir/layers/utils/Controls.js?c3d=105';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=105';
+import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=105';
 
 export class ThreeDText
 {
@@ -46,12 +46,12 @@ export class ThreeDText
                     name: 'MeshMatcapMaterial',
                     matcaps: {value:
                         [
-                            'matcap-1764731458681.jpg?c3d=104', 
-                            'matcap-1764731550075.jpg?c3d=104', 
-                            'matcap-1764731647559.jpg?c3d=104', 
-                            'matcap-1764787557882.jpg?c3d=104',
-                            'matcap-1776615703860.jpg?c3d=104',
-                            'matcap-1776615686768.jpg?c3d=104'
+                            'matcap-1764731458681.jpg?c3d=105', 
+                            'matcap-1764731550075.jpg?c3d=105', 
+                            'matcap-1764731647559.jpg?c3d=105', 
+                            'matcap-1764787557882.jpg?c3d=105',
+                            'matcap-1776615703860.jpg?c3d=105',
+                            'matcap-1776615686768.jpg?c3d=105'
                         ], type: 'image_array'}
                 }
             }

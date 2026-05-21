@@ -1,9 +1,9 @@
 import * as THREE from 'three';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=104';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=104';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=104';
-import {getMaxLayers, getTexureSize} from 'customizer3D_dir/settings/GPUInfo.js?c3d=104';
-import {getDummyCanvas, getDummyCanvasTexture} from 'customizer3D_dir/three/materials/Materials.js?c3d=104';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=105';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=105';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=105';
+import {getMaxLayers, getTexureSize} from 'customizer3D_dir/settings/GPUInfo.js?c3d=105';
+import {getDummyCanvas, getDummyCanvasTexture} from 'customizer3D_dir/three/materials/Materials.js?c3d=105';
 
 export class Render3D
 {

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { DefaultLoader } from './DefaultLoader.js?c3d=104';
-import {SVGLoader} from 'three_dir/loaders/SVGLoader.js?c3d=104';
+import { DefaultLoader } from './DefaultLoader.js?c3d=105';
+import {SVGLoader} from 'three_dir/loaders/SVGLoader.js?c3d=105';
 
 export class SVG extends DefaultLoader
 {

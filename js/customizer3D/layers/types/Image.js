@@ -1,10 +1,10 @@
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=104';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=105';
 import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=105';
-import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=104';
-import {ThreeD} from 'customizer3D_dir/layers/types/ThreeD.js?c3d=104';
-import {ThreeDSVG} from 'customizer3D_dir/layers/types/ThreeDSVG.js?c3d=104';
-import {Gradient} from 'customizer3D_dir/layers/types/Gradient.js?c3d=104';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=104';
+import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=105';
+import {ThreeD} from 'customizer3D_dir/layers/types/ThreeD.js?c3d=105';
+import {ThreeDSVG} from 'customizer3D_dir/layers/types/ThreeDSVG.js?c3d=105';
+import {Gradient} from 'customizer3D_dir/layers/types/Gradient.js?c3d=105';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=105';
 
 export class Image
 {
@@ -115,12 +115,12 @@ export class Image
         this.div = div;
 
         div.innerHTML = `
-            <img class="visibility" src="${C3D_SERVER}svg/show.svg?c3d=104" alt="Icon" style="opacity:1;">
+            <img class="visibility" src="${C3D_SERVER}svg/show.svg?c3d=105" alt="Icon" style="opacity:1;">
             <canvas class="thumbnail" oncontextmenu="return false;"></canvas>
-            <img src="${C3D_SERVER}svg/opacity.svg?c3d=104" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
-            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=104" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <img src="${C3D_SERVER}svg/opacity.svg?c3d=105" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
+            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=105" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
             <div class="spacer"></div>
-            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=104" title="${this.c3d.lang['delete-layer']}" class="remove">
+            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=105" title="${this.c3d.lang['delete-layer']}" class="remove">
         `;
 
         // VISIBILITY
