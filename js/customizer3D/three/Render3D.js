@@ -518,7 +518,7 @@ export class Render3D
         }
 
         container.show(layer, width, height);
-        container.updatePreview(bigCanvas, true, false);
+        container.updatePreview(bigCanvas, true, false, true);
 
         three.render();
 

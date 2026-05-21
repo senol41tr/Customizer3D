@@ -485,7 +485,7 @@ export class ImageLayer
         this.c3d._updateCanvasSize();
     }
 
-    updatePreview(canvasData = null, reDraw = true, drawSnappingLines = true)
+    updatePreview(canvasData = null, reDraw = true, drawSnappingLines = true, isExport = false)
     {
         if(!this.layer || !this.layer.image || !this.layer._mesh) return;
 
@@ -591,7 +591,7 @@ export class ImageLayer
             const y = layer.imagePosition.y;
             const rotation = THREE.MathUtils.degToRad(layer.rotation);
 
-            uniforms.uAspect.value = printDims.width / printDims.height;
+            uniforms.uAspect.value = isExport ? 1.0 : printDims.width / printDims.height;
             uniforms.uZoom.value = layer.zoom / 100;
             uniforms.uRotation.value = -rotation;
             uniforms.uOffset.value.set(x, y);
