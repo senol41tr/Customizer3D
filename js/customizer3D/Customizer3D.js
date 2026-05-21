@@ -727,7 +727,7 @@ export class Customizer3D
 
     }
 
-    _updateCanvasSize()
+    _updateCanvasSize(instant = false)
     {
         const canvas3d = document.querySelector(this.props.canvas3d);
         const container = document.querySelector(this.props.container);
@@ -735,12 +735,20 @@ export class Customizer3D
 
         setTimeout(() =>
         {
-            gsap.to(canvas3d, {
-                height: container.offsetHeight - layersDiv.offsetHeight,
-                duration: 0.5,
-                ease: "power2.inOut",
-                onUpdate: () => this.three._onResize()
-            });  
+            if(instant)
+            {
+                canvas3d.style.height = (container.offsetHeight - layersDiv.offsetHeight) + 'px';
+                this.three._onResize();
+            }
+            else
+            {
+                gsap.to(canvas3d, {
+                    height: container.offsetHeight - layersDiv.offsetHeight,
+                    duration: 0.5,
+                    ease: "power2.inOut",
+                    onUpdate: () => this.three._onResize()
+                });
+            }
         }, 750);
     }
 
@@ -1090,6 +1098,7 @@ export class Customizer3D
         {
             fitMeshToScreen(this.three.camera, this.glbScene, 1.5);
         }
+        this._updateCanvasSize(true);
     }
 
 }
