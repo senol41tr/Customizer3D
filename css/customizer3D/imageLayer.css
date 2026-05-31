@@ -84,7 +84,6 @@ section.customizer > div.layers > div.imageLayer > div.content > div > div > div
 section.customizer > div.layers > div.imageLayer > div.content > div > div.selectImage > label::after
 {
     content: attr(title);
-    font-size: 0.65rem;
     max-width: 50px;
     line-height: 1.2;
     padding-top: 0.5rem;

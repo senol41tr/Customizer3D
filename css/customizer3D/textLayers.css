@@ -116,7 +116,6 @@ section.customizer > div.layers > div.textLayer > div.content > div > div > div.
 section.customizer > div.layers > div.textLayer > div.content > div > div.color_picker::after
 {
     content: attr(title);
-    font-size: 0.65rem;
     max-width: 50px;
     line-height: 1.2;
     padding-top: 0.5rem;
@@ -225,7 +224,6 @@ section.customizer > div.layers > div.textLayer > div.content > div > div > div.
     width: 55px;
     padding: 0.25rem;
     padding-left: 0.5rem;
-    font-size: 0.65rem;
 }
 
 section.customizer > div.layers > div.textLayer > div.content > div > div > div.list > div > input[type="number"]::-webkit-inner-spin-button
@@ -286,7 +284,6 @@ section.customizer > div.layers > div.textLayer > div.content > div.input > div.
 section.customizer > div.layers > div.textLayer > div.content > div.input > a.convertURL
 {
     margin: 0.5rem 0;
-    font-size: 0.6rem;
     text-decoration: none;
 }
 

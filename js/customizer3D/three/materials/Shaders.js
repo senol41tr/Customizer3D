@@ -454,10 +454,7 @@ export const fragmentShader2 = `
 
         float s = sin(uRotation);
         float c = cos(uRotation);
-        
-        uv.x *= uAspect;
-        mat2 r = mat2(c, -s, s, c);
-        uv = r * uv;
+        uv = mat2(c, -s, s, c) * uv;
 
         uv.x /= uAspect;
         uv += 0.5;
