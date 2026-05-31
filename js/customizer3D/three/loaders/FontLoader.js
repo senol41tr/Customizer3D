@@ -11,11 +11,11 @@ import {
  *
  * ```js
  * const loader = new FontLoader();
- * const font = await loader.loadAsync( 'fonts/helvetiker_regular.typeface.json?c3d=105' );
+ * const font = await loader.loadAsync( 'fonts/helvetiker_regular.typeface.json?c3d=106' );
  * ```
  *
  * @augments Loader
- * @three_import import { FontLoader } from 'three/addons/loaders/FontLoader.js?c3d=105';
+ * @three_import import { FontLoader } from 'three/addons/loaders/FontLoader.js?c3d=106';
  */
 class FontLoader extends Loader {
 

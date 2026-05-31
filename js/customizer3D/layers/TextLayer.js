@@ -1,14 +1,14 @@
 import * as THREE from 'three';
-import {uniforms2, vertexShader2, fragmentShader2} from 'customizer3D_dir/three/materials/Shaders.js?c3d=105';
-import {Three} from 'customizer3D_dir/three/Three.js?c3d=105';
+import {uniforms2, vertexShader2, fragmentShader2} from 'customizer3D_dir/three/materials/Shaders.js?c3d=106';
+import {Three} from 'customizer3D_dir/three/Three.js?c3d=106';
 import * as opentype from "base/opentype/opentype.esm.js";
-import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=105';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=105';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=105';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=105';
-import {createFiltersList} from 'customizer3D_dir/layers/Filters/createFiltersList.js?c3d=105';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=105';
-import {RulerSlider} from 'customizer3D_dir/ui/RulerSlider.js?c3d=105';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=106';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=106';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=106';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=106';
+import {createFiltersList} from 'customizer3D_dir/layers/Filters/createFiltersList.js?c3d=106';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=106';
+import {RulerSlider} from 'customizer3D_dir/ui/RulerSlider.js?c3d=106';
 
 export class TextLayer
 {
@@ -36,7 +36,7 @@ export class TextLayer
 
         <div class="title">
             <div class="back">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=105" alt="Icon" class="back" draggable="false">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=106" alt="Icon" class="back" draggable="false">
                 <p class="title" draggable="false">${this.c3d.lang['back']}</p>
             </div>
             <p class="label" draggable="false"></p>
@@ -50,13 +50,13 @@ export class TextLayer
 
                 <div class="builtInFonts">
                     <div class="button" title="${this.c3d.lang['font']}">
-                        <img src="${C3D_SERVER}svg/font_family.svg?c3d=105" alt="Icon">
+                        <img src="${C3D_SERVER}svg/font_family.svg?c3d=106" alt="Icon">
                     </div>
                 </div>
 
                 <div class="fontSizes">
                     <div class="button" title="${this.c3d.lang['size']}">
-                        <img src="${C3D_SERVER}svg/font_size.svg?c3d=105" alt="Icon">
+                        <img src="${C3D_SERVER}svg/font_size.svg?c3d=106" alt="Icon">
                     </div>
                 </div>
 
@@ -64,37 +64,37 @@ export class TextLayer
 
                 <div class="filters">
                     <div class="button" title="${this.c3d.lang['filter-gallery']}">
-                        <img src="${C3D_SERVER}svg/filters.svg?c3d=105" alt="Icon">
+                        <img src="${C3D_SERVER}svg/filters.svg?c3d=106" alt="Icon">
                     </div>
                 </div>
 
                 <div class="threeD">
                     <div class="button" title="${this.c3d.lang['3D-text']}">
-                        <img src="${C3D_SERVER}svg/3D.svg?c3d=105" alt="Icon">
+                        <img src="${C3D_SERVER}svg/3D.svg?c3d=106" alt="Icon">
                     </div>
                 </div>
 
                 <div class="png" title="${this.c3d.lang['export']}" style="padding-left:0.5rem;">
                     <div class="button" title="PNG">
-                        <img src="${C3D_SERVER}svg/png.svg?c3d=105" alt="Icon">
+                        <img src="${C3D_SERVER}svg/png.svg?c3d=106" alt="Icon">
                     </div>
                 </div>
 
                 <div class="snap toggle">
                     <div class="button" title="${this.c3d.lang['snap']}">
-                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=105" alt="Icon">
+                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=106" alt="Icon">
                     </div>
                 </div>
 
                 <div class="rotate">
                     <div class="button" title="${this.c3d.lang['rotate']}">
-                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=105" alt="Icon">
+                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=106" alt="Icon">
                     </div>
                 </div>
 
                 <div class="zoom">
                     <div class="button" title="${this.c3d.lang['zoom']}">
-                        <img src="${C3D_SERVER}svg/zoom.svg?c3d=105" alt="Icon">
+                        <img src="${C3D_SERVER}svg/zoom.svg?c3d=106" alt="Icon">
                     </div>
                 </div>
 
@@ -844,7 +844,7 @@ export class TextLayer
     // https://stackoverflow.com/a/42272155
     async _loadBuiltInFonts()
     {
-        const url = 'fonts/fonts.json?c3d=105'; // load all built-in fonts
+        const url = 'fonts/fonts.json?c3d=106'; // load all built-in fonts
         
         this.c3d.preloader.show();
         this.c3d.preloader.set(url);

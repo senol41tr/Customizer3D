@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import {uniforms2} from 'customizer3D_dir/three/materials/Shaders.js?c3d=105';
-import {RulerSlider} from 'customizer3D_dir/ui/RulerSlider.js?c3d=105';
+import {uniforms2} from 'customizer3D_dir/three/materials/Shaders.js?c3d=106';
+import {RulerSlider} from 'customizer3D_dir/ui/RulerSlider.js?c3d=106';
 
 // container: ImageLayer or TextLayer
 export const createFiltersList = (c3d, container, button) =>

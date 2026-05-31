@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=105';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=106';
 
 export class Sortable
 {

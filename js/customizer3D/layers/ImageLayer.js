@@ -1,13 +1,13 @@
 import * as THREE from 'three';
-import {uniforms2, vertexShader2, fragmentShader2} from 'customizer3D_dir/three/materials/Shaders.js?c3d=105';
-import {Three} from 'customizer3D_dir/three/Three.js?c3d=105';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=105';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=105';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=105';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=105';
-import {ExtractImages} from 'customizer3D_dir/layers/utils/ExtractImages.js?c3d=105';
-import {createFiltersList} from 'customizer3D_dir/layers/Filters/createFiltersList.js?c3d=105';
-import {RulerSlider} from 'customizer3D_dir/ui/RulerSlider.js?c3d=105';
+import {uniforms2, vertexShader2, fragmentShader2} from 'customizer3D_dir/three/materials/Shaders.js?c3d=106';
+import {Three} from 'customizer3D_dir/three/Three.js?c3d=106';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=106';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=106';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=106';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=106';
+import {ExtractImages} from 'customizer3D_dir/layers/utils/ExtractImages.js?c3d=106';
+import {createFiltersList} from 'customizer3D_dir/layers/Filters/createFiltersList.js?c3d=106';
+import {RulerSlider} from 'customizer3D_dir/ui/RulerSlider.js?c3d=106';
 
 export class ImageLayer
 {
@@ -34,7 +34,7 @@ export class ImageLayer
 
         <div class="title">
             <div class="back">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=105" alt="Icon" class="back" draggable="false">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=106" alt="Icon" class="back" draggable="false">
                 <p class="title" draggable="false">${this.c3d.lang['back']}</p>
             </div>
             <p class="label" draggable="false"></p>
@@ -51,13 +51,13 @@ export class ImageLayer
 
                 <div class="filters">
                     <div class="button" title="${this.c3d.lang['filter-gallery']}">
-                        <img src="${C3D_SERVER}svg/filters.svg?c3d=105" alt="Icon">
+                        <img src="${C3D_SERVER}svg/filters.svg?c3d=106" alt="Icon">
                     </div>
                 </div>
 
                 <div class="threeD">
                     <div class="button" title="${this.c3d.lang['to-3d']}">
-                        <img src="${C3D_SERVER}svg/3D.svg?c3d=105" alt="Icon">
+                        <img src="${C3D_SERVER}svg/3D.svg?c3d=106" alt="Icon">
                     </div>
                 </div>
 
@@ -65,23 +65,23 @@ export class ImageLayer
 
                 <div class="snap">
                     <div class="button" title="${this.c3d.lang['snap']}">
-                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=105" alt="Icon">
+                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=106" alt="Icon">
                     </div>
                 </div>
                 <div class="rotate">
                     <div class="button" title="${this.c3d.lang['rotate']}">
-                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=105" alt="Icon">
+                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=106" alt="Icon">
                     </div>
                 </div>
                 <div class="zoom">
                     <div class="button" title="${this.c3d.lang['zoom']}">
-                        <img src="${C3D_SERVER}svg/zoom.svg?c3d=105" alt="Icon">
+                        <img src="${C3D_SERVER}svg/zoom.svg?c3d=106" alt="Icon">
                     </div>
                 </div>
 
                 <div class="png" title="${this.c3d.lang['export']}" style="padding-left:0.5rem;">
                     <div class="button" title="PNG">
-                        <img src="${C3D_SERVER}svg/png.svg?c3d=105" alt="Icon">
+                        <img src="${C3D_SERVER}svg/png.svg?c3d=106" alt="Icon">
                     </div>
                 </div>
 

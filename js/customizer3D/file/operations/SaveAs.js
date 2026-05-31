@@ -1,6 +1,6 @@
 import * as fflate from 'base/fflate@0.8.2/fflate.esm.js';
-import {BlobtoUint8Array} from 'customizer3D_dir/utils/BlobtoUint8Array.js?c3d=105';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=105';
+import {BlobtoUint8Array} from 'customizer3D_dir/utils/BlobtoUint8Array.js?c3d=106';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=106';
 
 export class SaveAs
 {
