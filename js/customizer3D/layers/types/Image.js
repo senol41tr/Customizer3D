@@ -228,6 +228,7 @@ export class Image
         if(this.type == 'gradient')
         {
             this.gradient = new Gradient(this.c3d, this);
+            this.gradient.update();
         }
 
         // ADD TO SORTABLE LIST

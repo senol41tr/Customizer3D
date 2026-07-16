@@ -141,19 +141,6 @@ export const createFiltersList = (c3d, container, button) =>
             container.updatePreview(null, false, false);
         });
     });
-    
-    button.addEventListener('click', () =>
-    {
-        const canvas = container.htmlEl.querySelector('canvas.preview');
-        const isVisible = canvas.style.display == '' || canvas.style.display == 'block';
-        const filters = container.htmlEl.querySelector('div.content > div.filters');
-        const old = filters.querySelector('div.filters');
-        if(old) old.remove();
-        if(isVisible) filters.append(container.layer._C3D_Filter_Div);
-        canvas.style.display = isVisible ? 'none' : 'block';
-        filters.style.display = isVisible ? 'block' : 'none';
-        c3d._updateCanvasSize();
-    });
 
     for(const filter in container.layer.uniforms)
     {

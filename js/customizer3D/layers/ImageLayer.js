@@ -245,7 +245,7 @@ export class ImageLayer
             }
         });
 
-        this.three.setupAll();//Orthographic();
+        this.three.setupAll();
         this.three.camera.position.z = 1;
 
         this.canvas = document.createElement('canvas');
@@ -328,6 +328,25 @@ export class ImageLayer
         const snapping = parseInt(this.c3d.localStorage.get('snapping'));
         this._snap = snapping == 1;
         el.parentNode.classList[this._snap ? 'remove' : 'add']('toggle');
+
+
+        // FILTERS
+
+        el = this.htmlEl.querySelector('div.filters > div.button');
+        el.addEventListener('click', (e) =>
+        {
+            if(!this.layer._C3D_Filter_Div) return;
+          
+            const canvas = this.htmlEl.querySelector('canvas.preview');
+            const isVisible = canvas.style.display == '' || canvas.style.display == 'block';
+            const filters = this.htmlEl.querySelector('div.content > div.filters');
+            const old = filters.querySelector('div.filters');
+            if(old) old.remove();
+            if(isVisible) filters.append(this.layer._C3D_Filter_Div);
+            canvas.style.display = isVisible ? 'none' : 'block';
+            filters.style.display = isVisible ? 'block' : 'none';
+            this.c3d._updateCanvasSize();
+        });
         
     }
 
@@ -364,8 +383,8 @@ export class ImageLayer
             this.canvas.style.width = previewCanvasDims.width + 'px';
             this.canvas.style.height = previewCanvasDims.height + 'px';
         }
-        this.canvas.width = previewCanvasDims.width * (isExport ? 1 : this.c3d.PIXEL_RATIO);
-        this.canvas.height = previewCanvasDims.height * (isExport ? 1 : this.c3d.PIXEL_RATIO);
+        this.canvas.width = previewCanvasDims.width * (isExport ? 1 : this.zoomSlider.max / 100);
+        this.canvas.height = previewCanvasDims.height * (isExport ? 1 : this.zoomSlider.max / 100);
 
         if(!isExport)
         {
@@ -514,7 +533,7 @@ export class ImageLayer
 
             if(canvasData)
             {
-                ctx.drawImage(canvasData, 0, 0, this.canvas.width, this.canvas.height);
+                ctx.drawImage(canvasData, 0, 0, this.canvas.width, this.canvas.height);                
             }
             else if(this.layer.is3D)
             {
@@ -554,7 +573,7 @@ export class ImageLayer
         if(this._snap || !drawSnappingLines) ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         if(this._snap && drawSnappingLines)
-        {  
+        {
             ctx.beginPath();
             ctx.setLineDash([5, 3]);
             ctx.strokeStyle = 'rgb(128,128,128)';
@@ -595,27 +614,25 @@ export class ImageLayer
             uniforms.uZoom.value = layer.zoom / 100;
             uniforms.uRotation.value = -rotation;
             uniforms.uOffset.value.set(x, y);
-            uniforms.uBrightness.value = layer.uniforms.uBrightness || 1.0;
-            uniforms.uContrast.value = layer.uniforms.uContrast || 1.0;
-            uniforms.uHue.value = layer.uniforms.uHue || 0.0;
-            uniforms.uSaturation.value = layer.uniforms.uSaturation || 1.0;
-            uniforms.uSepia.value = layer.uniforms.uSepia || 0.0;
-            uniforms.uInvert.value = layer.uniforms.uInvert || 0.0;
-            uniforms.uVignette.value = layer.uniforms.uVignette || 0.0;
-            uniforms.uGrainAmount.value = layer.uniforms.uGrainAmount || 0.0;
-            uniforms.uOpacity.value = layer.opacity / 100;
+            uniforms.uBrightness.value = layer.uniforms.uBrightness ?? 1.0;
+            uniforms.uContrast.value = layer.uniforms.uContrast ?? 1.0;
+            uniforms.uHue.value = layer.uniforms.uHue ?? 0.0;
+            uniforms.uSaturation.value = layer.uniforms.uSaturation ?? 1.0;
+            uniforms.uSepia.value = layer.uniforms.uSepia ?? 0.0;
+            uniforms.uInvert.value = layer.uniforms.uInvert ?? 0.0;
+            uniforms.uVignette.value = layer.uniforms.uVignette ?? 0.0;
+            uniforms.uGrainAmount.value = layer.uniforms.uGrainAmount ?? 0.0;
+            uniforms.uOpacity.value = isExport ? 100 : layer.opacity / 100;
 
             uniforms.uChromaticAmount.value.set(
                 layer.uniforms.uChromaticAmount ? layer.uniforms.uChromaticAmount.x : 0.0,
                 layer.uniforms.uChromaticAmount ? -layer.uniforms.uChromaticAmount.y : 0.0
             );
 
-            uniforms.uIsGradient.value = layer.gradient ? 1 : 0;
-            if(layer.gradient) layer.gradient.setUniforms();
-
+            uniforms.uIsGradient.value = false;//layer.gradient ? true : false;
+            // if(layer.gradient) layer.gradient.setUniforms();
 
             layerMeshUniforms.uAspect.value = uniforms.uAspect.value;
-
 
             const PARAMS_PER_LAYER = 5;
             const data = layerMeshUniforms.uData.value.image.data;

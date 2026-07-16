@@ -213,11 +213,6 @@ section.customizer > div.layers > div.content > div.layer > div.content > div.la
     padding: 0.5rem;
 }
 
-section.customizer > div.layers > div.content > div.layer > div.content > div.layers > div:nth-child(even)
-{
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
 section.customizer > div.layers > div.content > div.layer > div.content > div.layers > div > p.title
 {
     padding: 0.1rem 0.2rem;

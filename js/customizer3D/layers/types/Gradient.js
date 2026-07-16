@@ -12,13 +12,16 @@ export class Gradient
 
         this._colorPickers = new Array(this.MAX_GRADIENT_COLORS);
         if(this.layer.gradientOptions) this.options = this.layer.gradientOptions;
-        else this.layer.gradientOptions = this.options = {
-            colors: new Array(this.MAX_GRADIENT_COLORS),
-            isRadial: false,
-            angle: 0.0,
-            scale: 0.0
-        };
-
+        else
+        {
+            this.options =
+            {
+                colors: new Array(this.MAX_GRADIENT_COLORS),
+                isRadial: false,
+                angle: 0.0,
+                scale: 0.0
+            };
+        }
     }
 
     hide()
@@ -27,13 +30,13 @@ export class Gradient
         const renderer = three.scene.getObjectByName('texture');
         const uniforms = renderer.material.uniforms;
 
-        uniforms.uIsGradient.value = 0;
+        uniforms.uIsGradient.value = false;
     }
 
     show()
     {
         this._createOptions();
-        if(!this.options.colors[0]) this.randomize();
+        if(this.options.colors[0] == null) this.randomize();
     }
 
     update()
@@ -42,7 +45,6 @@ export class Gradient
         this.layer.image = canvas;
 
         this.c3d.imageLayer.updatePreview(null, true, false);
-        this.c3d.three.render();
     }
 
     randomize()
@@ -67,7 +69,6 @@ export class Gradient
         three._onResize(null, w, h);
 
         this.setUniforms();
-        
         three.render();
 
         // COPY CANVAS
@@ -77,7 +78,7 @@ export class Gradient
         canvasImage.width = w;
         canvasImage.height = h;
         canvasImageCtx.drawImage(textureCanvas, 0, 0, w, h);
-
+        
         // RESTORE
         three.renderer.setPixelRatio(this.c3d.PIXEL_RATIO);
         three._onResize(null, oldCanvasSize.width, oldCanvasSize.height);
@@ -102,7 +103,7 @@ export class Gradient
             uniforms.uGradientColors.value[i] = new THREE.Color(c || 0x0);
         }
         
-        uniforms.uIsGradient.value = 1;
+        uniforms.uIsGradient.value = true;
         uniforms.uGradientCount.value = colorsLength;
         uniforms.uGradientIsRadial.value = this.options.isRadial;
         uniforms.uGradientScale.value = this.options.scale;
@@ -166,10 +167,11 @@ export class Gradient
 
         const _update = () =>
         {
-            this.update();
             this.setUniforms();
+            this.update();
             this.c3d.render3d.renderImageLayer(this.layer);
             this.c3d.three.render();
+            this.c3d.imageLayer.updatePreview(null, true, false, false);
         };
 
         type_linear.addEventListener('click', () => {
@@ -225,7 +227,8 @@ export class Gradient
             this._colorPickers[i] = colorPicker;
         }
 
-        randomize.addEventListener('click', () => {
+        randomize.addEventListener('click', () =>
+        {
 
             const randomScale = (Math.random() * parseFloat(scale.max)).toFixed(2);
             this.options.scale = randomScale;
@@ -240,22 +243,22 @@ export class Gradient
 
             for (let i = 0; i < this.options.colors.length; i++)
             {
-                this.options.colors[i] = new THREE.Color(Math.random() * 0xffffff);
-                this._colorPickers[i].setColor('#' + this.options.colors[i].getHexString());                
+                this.options.colors[i] = '#' + (new THREE.Color(Math.random() * 0xffffff).getHexString());
+                this._colorPickers[i].setColor(this.options.colors[i]);
             }
 
             if(randomIsRadial) type_linear.click();
             else type_radial.click();
 
-            _update();
-
             this.c3d.render3d.renderImageLayer(this.layer);
             this.c3d.three.render();
+            
+            this.c3d.imageLayer.updatePreview(null, true, false, false);
         });
 
 
-        reset.addEventListener('click', () => {
-
+        reset.addEventListener('click', () =>
+        {
             this.options =
             {
                 colors: new Array(this.MAX_GRADIENT_COLORS),

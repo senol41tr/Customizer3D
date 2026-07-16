@@ -336,7 +336,7 @@ export const uniforms2 =
 export const vertexShader2 = `
     varying vec2 vUv;
     void main() {
-        vUv = uv; // Map the texture coordinates (0.0 to 1.0)
+        vUv = uv;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
     }
 `;
@@ -527,8 +527,6 @@ export const fragmentShader2 = `
 
         color = mix(color, uTint, uTintAmount);
 
-        // 4. Final Output
-        // We let Three.js handle the color space conversion
         gl_FragColor = vec4(color, originalAlpha);
 
     }

@@ -177,10 +177,16 @@ export class Open
 
                     case 'gradient':         
                     case 'image':
-                        
-                        const blob = new Blob([unzipped[layerData.image]], {type: layerData.detectedFileType});
 
-                        if((layerData.changeable && layerData.detectedFileType != 'model/gltf-binary') || layerData.type == 'gradient')
+                        let blob;
+                        
+                        if(layerData.image) blob = new Blob([unzipped[layerData.image]], {type: layerData.detectedFileType});
+
+                        if(layerData.type == 'gradient')
+                        {
+                            await this.c3d.layers.addImage(layer, layerData);
+                        }
+                        else if((layerData.changeable && layerData.detectedFileType != 'model/gltf-binary'))
                         {
                             const img = new Image();
 

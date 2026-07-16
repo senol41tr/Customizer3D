@@ -321,7 +321,7 @@ export class Render3D
             // P0
 
             data[offset + 0] = (layer.zoom ?? 100) / 100; // zoom
-            data[offset + 1] = THREE.MathUtils.degToRad(layer.rotation ?? 0); // rotation
+            data[offset + 1] = THREE.MathUtils.degToRad(layer.rotation && layer.type != 'shape' ? layer.rotatio : 0); // rotation
             data[offset + 2] = 0.0; // offsetX
             data[offset + 3] = 0.0; // offsetY
 
@@ -354,7 +354,8 @@ export class Render3D
             data[offset + 19] = (layer.opacity ?? 100) / 100; // alpha
 
 
-            if(layer.type === 'image') {
+            if(layer.type === 'image')
+            {
                 data[offset + 2] = layer.imagePosition.x;
                 data[offset + 3] = -layer.imagePosition.y;
             }
@@ -370,7 +371,8 @@ export class Render3D
             if(lu.uGrainAmount !== undefined) data[offset + 10] = lu.uGrainAmount;
             if(lu.uVignette !== undefined)    data[offset + 11] = lu.uVignette;
 
-            if(layer.color && !layer.is3D) {
+            if(layer.color && !layer.is3D)
+            {
                 const ce = this.c3d.colorEngine;
                 ce.hex(layer.color, false);
                 const c = new THREE.Color(ce.color);
@@ -380,7 +382,8 @@ export class Render3D
                 data[offset + 15] = 1.0;
             }
 
-            if(lu.uChromaticAmount) {
+            if(lu.uChromaticAmount)
+            {
                 data[offset + 16] = lu.uChromaticAmount.x;
                 data[offset + 17] = lu.uChromaticAmount.y;
             }
@@ -510,12 +513,12 @@ export class Render3D
                 console.warn('Unknown layer type!');
             }
         }
-        else if(layer.type == 'gradient')
-        {
-            bigCanvas = layer.gradient.bakeImageToLayer(width, height, true, true);
-            width /= this.c3d.PIXEL_RATIO;
-            height /= this.c3d.PIXEL_RATIO;
-        }
+        // else if(layer.type == 'gradient')
+        // {
+        //     bigCanvas = layer.gradient.bakeImageToLayer(width, height, true, true);
+        //     width /= this.c3d.PIXEL_RATIO;
+        //     height /= this.c3d.PIXEL_RATIO;
+        // }
 
         container.show(layer, width, height);
         container.updatePreview(bigCanvas, true, false, true);

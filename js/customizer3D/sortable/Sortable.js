@@ -59,17 +59,18 @@ export class Sortable
         if (!this.dragItem || this.time + 250 >= new Date().getTime()) return;
 
         const point = e.touches ? e.touches[0] : e;
+        const layersRect = document.querySelector(this.c3d.props.layers).getBoundingClientRect();
+        const rect = this.dragItem.getBoundingClientRect();
         const deltaY = point.clientY - this.startY;
 
         if (this.pendingDrag) {
             if (Math.abs(deltaY) < 5) { return; } 
 
-            const layersRect = document.querySelector(this.c3d.props.layers).getBoundingClientRect();
-            const rect = this.dragItem.getBoundingClientRect();
             
             this.dragItem.classList.add('active');
             // this.dragItem.style.width = `${rect.width}px`;
             this.dragItem.style.position = 'fixed';
+            this.dragItem.style.zIndex = 10000;
             // this.dragItem.style.left = `${rect.left}px`;
             // this.dragItem.style.top = `${rect.top}px`;
             this.pendingDrag = false; 
@@ -77,7 +78,8 @@ export class Sortable
         }
 
         // if (e.cancelable) e.preventDefault();
-        this.dragItem.style.transform = `translate3d(0, ${deltaY}px, 0)`;
+        // this.dragItem.style.transform = `translate3d(0, ${deltaY}px, 0)`;
+        this.dragItem.style.top = `${deltaY}px`;
 
         const siblings = [...this.container.querySelectorAll(this.selector)];
 

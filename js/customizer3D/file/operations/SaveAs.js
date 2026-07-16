@@ -142,16 +142,16 @@ export class SaveAs
                             blob = await response.blob();
                             fileName = 'glb' + imageIndex;
                         }
-                        else if(layer.gradient && layer.type == 'gradient')
+                        // else if(layer.gradient && layer.type == 'gradient')
+                        // {
+                        //     const gradientDims = calculateAspectRatioFit(layer.image.width, layer.image.height, this.c3d.MAX_IMAGE_SIZE, this.c3d.MAX_IMAGE_SIZE);
+                        //     const gradientCanvas = layer.gradient.bakeImageToLayer(gradientDims.width, gradientDims.height, true, true);
+                        //     blob = await new Promise(resolve => gradientCanvas.toBlob(resolve, 'image/png', 1.0));
+                        //     fileName = 'gradient' + imageIndex;
+                        // }
+                        else if(!layer.gradient && layer.type != 'gradient')
                         {
-                            const gradientDims = calculateAspectRatioFit(layer.image.width, layer.image.height, this.c3d.MAX_IMAGE_SIZE, this.c3d.MAX_IMAGE_SIZE);
-                            const gradientCanvas = layer.gradient.bakeImageToLayer(gradientDims.width, gradientDims.height, true, true);
-                            blob = await new Promise(resolve => gradientCanvas.toBlob(resolve, 'image/png', 1.0));
-                            fileName = 'gradient' + imageIndex;
-                        }
-                        else
-                        {
-                            if((layer.image.naturalWidth >= this.c3d.MAX_IMAGE_SIZE || layer.image.naturalHeight >= this.c3d.MAX_IMAGE_SIZE))
+                            if((layer.image.naturalWidth >= this.c3d.MAX_IMAGE_SIZE || layer.image.naturalHeight >= this.c3d.MAX_IMAGE_SIZE) && layer.detectedFileType != 'image/svg+xml')
                             {
                                 const newDims = calculateAspectRatioFit(layer.image.naturalWidth, layer.image.naturalHeight, this.c3d.MAX_IMAGE_SIZE, this.c3d.MAX_IMAGE_SIZE);
                                 const canvas = document.createElement('canvas');
@@ -194,13 +194,15 @@ export class SaveAs
                             threeD: layer.threeDOptions,
                             threeDSVG: layer.threeDSVG?.options,
                             visible: layer.visible,
-                            gradient: layer.gradientOptions
+                            gradient: layer?.gradient?.options
                         });
 
-                        const uint8Array = await BlobtoUint8Array(blob);
-                        filesToZip[fileName] = [uint8Array];
-
-                        imageIndex++;
+                        if(blob)
+                        {
+                            const uint8Array = await BlobtoUint8Array(blob);
+                            filesToZip[fileName] = [uint8Array];
+                            imageIndex++;
+                        }
 
                     break;
 
