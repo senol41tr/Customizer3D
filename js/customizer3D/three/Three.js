@@ -1,11 +1,11 @@
 import * as THREE from 'three';
-import {Controls} from 'customizer3D_dir/three/Controls.js?c3d=106';
-import {Lights} from 'customizer3D_dir/three/Lights.js?c3d=106';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=106';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=106';
+import {Controls} from 'customizer3D_dir/three/Controls.js?c3d=107';
+import {Lights} from 'customizer3D_dir/three/Lights.js?c3d=107';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=107';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=107';
 import gsap from 'base/gsap@3.13.0/gsap@3.13.0.esm.js';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=106';
-import Stats from 'three_dir/libs/stats.module.js?c3d=106';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
+import Stats from 'three_dir/libs/stats.module.js?c3d=107';
 
 export class Three
 {

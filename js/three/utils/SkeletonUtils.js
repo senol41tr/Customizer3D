@@ -11,7 +11,7 @@ import {
 
 /**
  * @module SkeletonUtils
- * @three_import import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js?c3d=106';
+ * @three_import import * as SkeletonUtils from 'three/addons/utils/SkeletonUtils.js?c3d=107';
  */
 
 function getBoneName( bone, options ) {

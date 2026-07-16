@@ -1,11 +1,11 @@
-import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=106';
-import {langs} from './langs.js?c3d=106';
-import {changeUIColors, tintSVG} from './changeUIColors.js?c3d=106';
-import {GPUInfo} from './GPUInfo.js?c3d=106';
-import * as PDFExportOptions from './pdfExportOptions.js?c3d=106';
-import {takeAScreenshot} from './takeAScreenshot.js?c3d=106';
-import {about} from './about.js?c3d=106';
-import {stats} from './stats.js?c3d=106';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=107';
+import {langs} from './langs.js?c3d=107';
+import {changeUIColors, tintSVG} from './changeUIColors.js?c3d=107';
+import {GPUInfo} from './GPUInfo.js?c3d=107';
+import * as PDFExportOptions from './pdfExportOptions.js?c3d=107';
+import {takeAScreenshot} from './takeAScreenshot.js?c3d=107';
+import {about} from './about.js?c3d=107';
+import {stats} from './stats.js?c3d=107';
 
 export class Settings
 {

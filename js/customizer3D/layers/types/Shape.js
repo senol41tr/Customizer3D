@@ -1,6 +1,6 @@
-import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=106';
-import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=106';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=106';
+import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=107';
+import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=107';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=107';
 
 export class Shape
 {
@@ -95,12 +95,12 @@ export class Shape
         this.div = div;
 
         div.innerHTML = `
-            <img class="visibility" src="${C3D_SERVER}svg/show.svg?c3d=106" alt="Icon" style="opacity:1;">
+            <img class="visibility" src="${C3D_SERVER}svg/show.svg?c3d=107" alt="Icon" style="opacity:1;">
             <canvas class="thumbnail" oncontextmenu="return false;"></canvas>
-            <img src="${C3D_SERVER}svg/opacity.svg?c3d=106" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
-            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=106" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <img src="${C3D_SERVER}svg/opacity.svg?c3d=107" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
+            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=107" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
             <div class="spacer"></div>
-            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=106" title="${this.c3d.lang['delete-layer']}" class="remove">
+            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=107" title="${this.c3d.lang['delete-layer']}" class="remove">
         `;
 
         // VISIBILITY

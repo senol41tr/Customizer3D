@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=106';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
 
 export function lang(self)
 {

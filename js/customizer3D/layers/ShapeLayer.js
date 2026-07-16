@@ -1,9 +1,9 @@
 import * as THREE from 'three';
-import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=106';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=106';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=106';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=106';
-import {RulerSlider} from 'customizer3D_dir/ui/RulerSlider.js?c3d=106';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=107';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=107';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=107';
+import {RulerSlider} from 'customizer3D_dir/ui/RulerSlider.js?c3d=107';
 
 export class ShapeLayer
 {
@@ -26,7 +26,7 @@ export class ShapeLayer
 
         <div class="title">
             <div class="back">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=106" alt="Icon" class="back" draggable="false">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=107" alt="Icon" class="back" draggable="false">
                 <p class="title" draggable="false">${this.c3d.lang['back']}</p>
             </div>
             <p class="label" draggable="false"></p>
@@ -37,43 +37,43 @@ export class ShapeLayer
 
                 <div class="freeform" style="pointer-events:none; opacity:0.6;">
                     <div class="button" title="${this.c3d.lang['freeform']}">
-                        <img src="${C3D_SERVER}svg/freeform.svg?c3d=106" alt="Icon">
+                        <img src="${C3D_SERVER}svg/freeform.svg?c3d=107" alt="Icon">
                     </div>
                 </div>
 
                 <div class="triangle">
                     <div class="button" title="${this.c3d.lang['triangle']}">
-                        <img src="${C3D_SERVER}svg/triangle.svg?c3d=106" alt="Icon">
+                        <img src="${C3D_SERVER}svg/triangle.svg?c3d=107" alt="Icon">
                     </div>
                 </div>
 
                 <div class="circle">
                     <div class="button" title="${this.c3d.lang['circle']}">
-                        <img src="${C3D_SERVER}svg/circle.svg?c3d=106" alt="Icon">
+                        <img src="${C3D_SERVER}svg/circle.svg?c3d=107" alt="Icon">
                     </div>
                 </div>
 
                 <div class="square">
                     <div class="button" title="${this.c3d.lang['square']}">
-                        <img src="${C3D_SERVER}svg/square.svg?c3d=106" alt="Icon">
+                        <img src="${C3D_SERVER}svg/square.svg?c3d=107" alt="Icon">
                     </div>
                 </div>
 
                 <div class="snap toggle">
                     <div class="button" title="${this.c3d.lang['snap']}">
-                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=106" alt="Icon">
+                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=107" alt="Icon">
                     </div>
                 </div>
 
                 <div class="rotate">
                     <div class="button" title="${this.c3d.lang['rotate']}">
-                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=106" alt="Icon">
+                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=107" alt="Icon">
                     </div>
                 </div>
 
                 <div class="radius">
                     <div class="button" title="${this.c3d.lang['radius']}">
-                        <img src="${C3D_SERVER}svg/radius.svg?c3d=106" alt="Icon">
+                        <img src="${C3D_SERVER}svg/radius.svg?c3d=107" alt="Icon">
                     </div>
                 </div>
 

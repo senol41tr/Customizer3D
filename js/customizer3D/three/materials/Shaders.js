@@ -2,7 +2,7 @@
 // gemini.google.com
 
 import * as THREE from 'three';
-import {getMaxLayers} from 'customizer3D_dir/settings/GPUInfo.js?c3d=106';
+import {getMaxLayers} from 'customizer3D_dir/settings/GPUInfo.js?c3d=107';
 
 const MAX_GRADIENT_COLORS = 5;
 const PARAMS_PER_LAYER = 5;

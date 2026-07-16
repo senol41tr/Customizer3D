@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=106';
-import {Texture} from 'customizer3D_dir/three/loaders/Texture.js?c3d=106';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
+import {Texture} from 'customizer3D_dir/three/loaders/Texture.js?c3d=107';
 
 export function lang()
 {
@@ -101,7 +101,7 @@ export async function init()
     // set model material
     const model = this.glbScene.getObjectByName('model');
     model.material.dispose();
-    const matcap = await new Texture({url: C3D_MODELS_DIR + 'Cup/matcap_base.png?c3d=106', preloader: this.preloader}).load();
+    const matcap = await new Texture({url: C3D_MODELS_DIR + 'Cup/matcap_base.png?c3d=107', preloader: this.preloader}).load();
     model.material = new THREE.MeshMatcapMaterial({matcap});
 
     const modelInner = this.glbScene.getObjectByName('inner');

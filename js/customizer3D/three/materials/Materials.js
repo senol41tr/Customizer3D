@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import {getMainUniforms, getMainVertexShader, getMainFragmentShader} from 'customizer3D_dir/three/materials/Shaders.js?c3d=106';
-import {getMaxLayers, getTexureSize} from 'customizer3D_dir/settings/GPUInfo.js?c3d=106';
+import {getMainUniforms, getMainVertexShader, getMainFragmentShader} from 'customizer3D_dir/three/materials/Shaders.js?c3d=107';
+import {getMaxLayers, getTexureSize} from 'customizer3D_dir/settings/GPUInfo.js?c3d=107';
 
 
 export const setMainMaterial = (c3d, mesh) =>

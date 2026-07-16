@@ -1,4 +1,4 @@
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=106';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=107';
 
 export const getPrintDims = (c3d, layer, DPI) =>
 {
