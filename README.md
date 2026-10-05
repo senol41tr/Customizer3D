@@ -1,5 +1,5 @@
 # Customizer3D
-### 3D Product Configurator {Release Candidate}
+### 3D Product Configurator {Release Candidate} ###
 
 **Client Side Creation**
 No Server needed, all operations are performed on the device. Client Side
