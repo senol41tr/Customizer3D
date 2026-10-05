@@ -79,6 +79,24 @@ export class Size
 
     // Static methods
 
+    static meshDims(mesh, js = true)
+    {
+        const bb = new THREE.Box3().setFromObject(mesh);
+        let width = bb.max.x - bb.min.x;
+        let height = bb.max.y - bb.min.y;
+        let depth = bb.max.z - bb.min.z;
+
+        if (!js)
+        {
+            width += 'td';
+            height += 'td';
+            depth += 'td';
+        }
+
+        return {width:width, height:height, depth:depth};
+    }
+
+
     static htmlDims(elm, js = true)
     {
         let width, height;
@@ -97,7 +115,7 @@ export class Size
             height += 'px';
         }
 
-        return {width, height};
+        return {width:width, height:height};
     }
 
 
@@ -156,7 +174,8 @@ export class Size
         }
         else if(this.type == 'pt')
         {
-            size = this.size / 72 * this.DPI;
+            size = this._pixelToMM();
+            size = this._mmToPT();
         }
         else
         {
@@ -245,7 +264,7 @@ export class Size
         else if(this.type == 'pt')
         {
             size = this._3dToPixel();
-            size = this.size * 72 / this.DPI;
+            size = this.size * 0.74999943307122; //96 / this.DPI;
         }
         else
         {
@@ -261,7 +280,7 @@ export class Size
 
         if(this.type == 'px')
         {
-            size = this.size * 72 / this.DPI;
+            size = this.size * 0.74999943307122; //96 / this.DPI;
         }
         else if(this.type == 'mm')
         {
@@ -269,11 +288,11 @@ export class Size
         }
         else if(this.type == 'cm')
         {
-            size = this._mmToPT() * 10;
+            size = this._mmToPT() * 2.54;
         }
         else if(this.type == 'td')
         {
-            size = this.size * 72 / this.DPI;
+            size = this.size * 0.74999943307122; //96 / this.DPI;
             size = this._pixelToTD(size);
         }
         else
@@ -296,6 +315,7 @@ export class Size
         return (this.size * 25.4 / this.DPI);
     }
 
+    // https://copilot.microsoft.com/
     _cmToPixel()
     {
         return ((this.size / 2.54) * this.DPI);
@@ -307,6 +327,7 @@ export class Size
     }
 
 
+    // https://gemini.google.com // !!!
     _pixelToTD(size = this.size)
     {
         const {camera, canvas, mesh} = this.o;
@@ -322,6 +343,7 @@ export class Size
         return width;
     }
 
+    // https://gemini.google.com
     _3dToPixel()
     {
         let {mesh, scale, camera, renderer} = this.o;
@@ -383,12 +405,12 @@ export class Size
 
     _mmToPT()
     {
-        return this.size * 72 / 25.4;
+        return this.size * 2.83464567;
     }
 
     _ptToMM()
     {
-        return this.size / 72 * 25.4;
+        return this.size / 2.83464567;
     }
 
 }

@@ -1,22 +1,27 @@
-
-export const names = 
+export const BlendModes = 
 {
-    normal:     {value: 0,  label: 'Normal', pdf: 'Normal'},
-    multiply:   {value: 1,  label: 'Multiply', pdf: 'Multiply'},
-    screen:     {value: 2,  label: 'Screen', pdf: 'Screen'},
-    overlay:    {value: 3,  label: 'Overlay', pdf: 'Overlay'},
-    darken:     {value: 4,  label: 'Darken', pdf: 'Darken'},
-    lighten:    {value: 5,  label: 'Lighten', pdf: 'Lighten' },
-    colorDodge: {value: 6,  label: 'Color Dodge', pdf: 'ColorDodge'},
-    colorBurn:  {value: 7,  label: 'Color Burn', pdf: 'ColorBurn' },
-    hardLight:  {value: 8,  label: 'Hard Light', pdf: 'HardLight' },
-    softLight:  {value: 9,  label: 'Soft Light', pdf: 'SoftLight' },
-    difference: {value: 10, label: 'Difference', pdf: 'Difference' },
-    exclusion:  {value: 11, label: 'Exclusion', pdf: 'Exclusion'},
-    hue:        {value: 12, label: 'HUE', pdf: 'Hue'},
-    saturation: {value: 13, label: 'Saturation', pdf: 'Saturation' },
-    color:      {value: 14, label: 'Color', pdf: 'Color'},
-    luminosity: {value: 15, label: 'Luminosity', pdf: 'Luminosity'}
+    normal:         {canvas: 'normal',          label: 'Normal'},
+    multiply:       {canvas: 'multiply',        label: 'Multiply'},
+    screen:         {canvas: 'screen',          label: 'Screen'},
+    overlay:        {canvas: 'overlay',         label: 'Overlay'},
+    darken:         {canvas: 'darken',          label: 'Darken'},
+    lighten:        {canvas: 'lighten',         label: 'Lighten'},
+    lighter:        {canvas: 'lighter',         label: 'Lighter'},
+    colorDodge:     {canvas: 'color-dodge',     label: 'Color Dodge'},
+    colorBurn:      {canvas: 'color-burn',      label: 'Color Burn'},
+    hardLight:      {canvas: 'hard-light',      label: 'Hard Light'},
+    softLight:      {canvas: 'soft-light',      label: 'Soft Light'},
+    difference:     {canvas: 'difference',      label: 'Difference'},
+    exclusion:      {canvas: 'exclusion',       label: 'Exclusion'},
+    sourceOver:     {canvas: 'source-over',     label: 'Source Over'},
+    sourceIn:       {canvas: 'source-in',       label: 'Source In'},
+    sourceOut:      {canvas: 'source-out',      label: 'Source Out'},
+    sourceAtop:     {canvas: 'source-atop',     label: 'Source Atop'},
+    destinationOver:{canvas: 'destination-over',label: 'Destination Over'},
+    destinationIn:  {canvas: 'destination-in',  label: 'Destination In'},
+    destinationOut: {canvas: 'destination-out', label: 'Destination Out'},
+    destinationAtop:{canvas: 'destination-atop',label: 'Destination Atop'},
+    xor:            {canvas: 'xor',             label: 'XOR'}
 };
 
 export const createBlendModesList = (c3d, root, layer, button) =>
@@ -40,54 +45,33 @@ export const createBlendModesList = (c3d, root, layer, button) =>
         }
     });
 
-    const blendModes = Object.entries(names);
+    const blendModes = Object.entries(BlendModes);
     
     for (let i = 0; i < blendModes.length; i++)
     {
         const blendMode = blendModes[i];
         const p = document.createElement('p');
-        p.dataset.blendMode = blendMode[1].value;
+        p.dataset.blendMode = blendMode[1].canvas;
         p.innerText = blendMode[1].label;
 
-        const handler = () =>
+        p.addEventListener('mouseover', () =>
         {
-            layer.blendMode = blendMode[1].value;
+            layer.blendMode = blendMode[1].canvas;
             
-            const active = root.querySelector('p.active');
-            if(active) active.classList.remove('active');
+            root.style.display = 'block';
+            root.querySelector('p.active').classList.remove('active');
             p.classList.add('active');
 
-            const layerMeshUniforms = c3d.glbScene.getObjectByName(layer.name).material.uniforms;
-            const index = layer._mesh.userData.index;
-            const PARAMS_PER_LAYER = 5;
-            const data = layerMeshUniforms.uData.value.image.data;
-            const offset = index * PARAMS_PER_LAYER * 4;
-            data[offset + 18] = parseFloat(layer.blendMode);
-            layerMeshUniforms.uData.value.needsUpdate = true;
+            c3d.render3d.renderView(layer.name);
+            c3d.render2d.renderView(layer.name);
+        });
 
-            c3d.three.render();
-        };
-
-        p.addEventListener('click', () => {
-            handler();
+        p.addEventListener('click', () =>
+        {
             c3d.contextMenu.hide();
         });
-        p.addEventListener('mouseover', handler);
 
         root.appendChild(p);
     }
 
-}
-
-export const getName = (value) =>
-{
-    const data = Object.entries(names);
-    
-    for (let i = 0; i < data.length; i++)
-    {
-        const blendMode = data[i][1];
-        if(blendMode.value == value) return blendMode.pdf;
-    }
-
-    return 'Normal';
-}
+};

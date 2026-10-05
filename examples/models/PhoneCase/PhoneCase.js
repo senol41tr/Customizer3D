@@ -1,4 +1,6 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.0';
+
 
 export function lang(self)
 {
@@ -12,10 +14,8 @@ export function lang(self)
 export function parameters(self)
 {
     return {
-
         // unique name (module name) in models folder, the name is important for creating instance 
         // const {parameters, init, setView, onUnLoad} = await import('models/'+ data.modelName +'.js'); 
-        
         modelName: 'PhoneCase',
 
         container:      'section.customizer',
@@ -28,7 +28,7 @@ export function parameters(self)
         imageLayer:     'section.customizer > div.imageLayer',
         shapeLayer:     'section.customizer > div.shapeLayer',
         controls:       'section.customizer > div.controls',
-        canvas3d:       'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d',
+        canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
         three:
@@ -36,8 +36,8 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: 0.5,
-                maxDistance: 2.5,
+                minDistance: isMobile() ? 1 : 0.5,
+                maxDistance: 4
             },
 
             // set initial z position
@@ -45,8 +45,14 @@ export function parameters(self)
             {
                 position:
                 {
-                    z: isMobile() ? 1.75 : 1.25
+                    z: isMobile() ? 1.5 : 1
                 }
+            },
+
+            //
+            rendererOptions:
+            {
+                canvas: 'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d'
             }
         },
 
@@ -67,7 +73,8 @@ export function parameters(self)
     };
 }
 
-export async function init()
+// modify all wanted things
+export async function init(self)
 {
     // enable zoom with mouse or tap (2 fingers)
     this.enableAutoZoom();

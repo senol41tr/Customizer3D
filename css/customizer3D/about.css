@@ -6,12 +6,12 @@ section.customizer > div.about
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #000;
-    border-radius: 7px;
-    filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
+    border-radius: 6px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
     width: 30vw;
-    max-width: 320px;
+    max-width: 30vw;
     height: fit-content;
-    max-height: 85vh;
+    max-height: 70vh;
     overflow: auto;
     display: none;
     flex-wrap: wrap;
@@ -35,10 +35,6 @@ section.customizer > div.about p
 section.customizer > div.about p.title
 {
     flex-basis: 100%;
-    background-color: #DAFF02;
-    color: #000 !important;
-    padding: 0.5rem;
-    border-radius: 7px;
 }
 
 section.customizer > div.about > div.thanks
@@ -48,7 +44,7 @@ section.customizer > div.about > div.thanks
 
 section.customizer > div.about > img.logo
 {
-    width: 15vw;
+    width: 20vw;
     margin-bottom: 2rem;
 }
 
@@ -62,6 +58,8 @@ section.customizer > div.about > div
     background-color: #222;
     white-space: nowrap;
 }
+
+
 
 @media screen and (max-width: 500px)
 {

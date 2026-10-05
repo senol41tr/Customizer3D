@@ -5,12 +5,11 @@ export class ContextMenu
         this.c3d = c3d;
         this.el = document.querySelector(this.c3d.props.contextMenu);
         
+        this._mleave = this.hide.bind(this);
         this._mdown = this._onClickOutside.bind(this);
-        this._menter = this._onMouseEnter.bind(this);
-        this._mleave = this._onMouseLeave.bind(this);
     }
 
-    show(parentEl, hideOnMouseOut = true)
+    show(parentEl)
     {
         this.el.classList.remove('hide');
         this.el.classList.add('show');
@@ -24,12 +23,12 @@ export class ContextMenu
         
         if(bbEl.height + top > window.innerHeight)
         {
-            top = window.innerHeight - bbEl.height - 32; // 2rem
+            top -= bbEl.height + top + 16 - window.innerHeight;
         }
 
         if(bbEl.width + left > window.innerWidth)
         {
-            left = window.innerWidth - bbEl.width - 32;
+            left -= bbEl.width + left + 16 - window.innerWidth;
         }
         
         this.el.style.left = left + 'px';
@@ -37,22 +36,16 @@ export class ContextMenu
 
         this.el.style.zIndex = this.c3d.zIndex.index; // move to top
 
-        if(hideOnMouseOut)
-        {
-            this.el.addEventListener('mouseenter', this._menter);
-            this.el.addEventListener('mouseleave', this._mleave);
-            window.addEventListener('mousedown', this._mdown);
-            window.addEventListener('touchend', this._mdown);
-        }
+        this.el.addEventListener('mouseleave', this._mleave);
+        window.addEventListener('mousedown', this._mdown);
+        window.addEventListener('touchend', this._mdown);
     }
 
     hide()
     {
         this.el.classList.remove('show');
         this.el.classList.add('hide');
-        this.setHTML('');
 
-        this.el.removeEventListener('mouseenter', this._menter);
         this.el.removeEventListener('mouseleave', this._mleave);
         window.removeEventListener('mousedown', this._mdown);
         window.removeEventListener('touchend', this._mdown);
@@ -69,12 +62,6 @@ export class ContextMenu
         this.el.appendChild(el);
     }
 
-    setPosition(left, top)
-    {
-        this.el.style.left = left + 'px';
-        this.el.style.top = top + 'px';
-    }
-
     setWidth(px)
     {
         this.el.style.width = typeof px == 'string' ? px : px + 'px';
@@ -86,17 +73,6 @@ export class ContextMenu
         {
             this.hide();
         }
-    }
-    
-    _onMouseEnter(e)
-    {
-        this.c3d.eventsManager.raycaster.layers.disableAll();
-    }
-
-    _onMouseLeave(e)
-    {
-        this.hide();
-        this.c3d.eventsManager.raycaster.layers.enableAll();
-    }
+    };        
 
 }

@@ -1,0 +1,51 @@
+section.customizer >  div.webgl_2d_canvas
+{
+    position: absolute;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    overflow-y: auto;
+    padding-bottom: 2rem;
+    padding-top: 1rem;
+    scroll-behavior: smooth;
+}
+
+section.customizer >  div.webgl_2d_canvas > div.container > canvas.webgl_2d
+{
+    background: repeating-conic-gradient(#F5F5F5 0 25%, #DEDEDE 0 50%) 50% / 8px 8px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+section.customizer >  div.webgl_2d_canvas > div.container
+{
+    width: fit-content;
+    height: fit-content;
+    filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.1));
+}
+
+section.customizer >  div.webgl_2d_canvas > div.container > p.label
+{
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--customizerColorPrimary);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+section.customizer >  div.webgl_2d_canvas > div.container > p.label > span.label
+{
+    text-transform: uppercase;
+    font-size: calc(var(--customizerFontSizeDefault) - 0.15rem);
+}
+
+section.customizer >  div.webgl_2d_canvas > div.container > p.label > img.arrow
+{
+    width: 19px;
+}

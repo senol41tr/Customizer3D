@@ -1,0 +1,8 @@
+/**
+ * Bundled by jsDelivr using Rollup v2.79.2 and Terser v5.39.0.
+ * Original file: /npm/@babel/runtime@7.28.4/helpers/esm/slicedToArray.js
+ *
+ * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
+ */
+function r(r,t){(null==t||t>r.length)&&(t=r.length);for(var n=0,e=Array(t);n<t;n++)e[n]=r[n];return e}function t(t,n){return function(r){if(Array.isArray(r))return r}(t)||function(r,t){var n=null==r?null:"undefined"!=typeof Symbol&&r[Symbol.iterator]||r["@@iterator"];if(null!=n){var e,o,l,a,u=[],i=!0,f=!1;try{if(l=(n=n.call(r)).next,0===t){if(Object(n)!==n)return;i=!1}else for(;!(i=(e=l.call(n)).done)&&(u.push(e.value),u.length!==t);i=!0);}catch(r){f=!0,o=r}finally{try{if(!i&&null!=n.return&&(a=n.return(),Object(a)!==a))return}finally{if(f)throw o}}return u}}(t,n)||function(t,n){if(t){if("string"==typeof t)return r(t,n);var e={}.toString.call(t).slice(8,-1);return"Object"===e&&t.constructor&&(e=t.constructor.name),"Map"===e||"Set"===e?Array.from(t):"Arguments"===e||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(e)?r(t,n):void 0}}(t,n)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}export{t as default};
+//# sourceMappingURL=/sm/5a9f9d108437da579a15dd9bf1d09e56ffd0adf514d37e31f0585fd93939b0c5.map

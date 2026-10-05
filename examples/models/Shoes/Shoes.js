@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.0';
 
 export function lang(self)
 {
@@ -23,10 +24,8 @@ export function lang(self)
 export function parameters(self)
 {
     return {
-        
         // unique name (module name) in models folder, the name is important for creating instance 
         // const {parameters, init, setView, onUnLoad} = await import('models/'+ data.modelName +'.js'); 
-
         modelName: 'Shoes',
 
         container:      'section.customizer',
@@ -39,7 +38,7 @@ export function parameters(self)
         imageLayer:     'section.customizer > div.imageLayer',
         shapeLayer:     'section.customizer > div.shapeLayer',
         controls:       'section.customizer > div.controls',
-        canvas3d:       'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d',
+        canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
         three:
@@ -47,8 +46,8 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: 0.25,
-                maxDistance: 2
+                minDistance: isMobile() ? 1 : 0.5,
+                maxDistance: 3
             },
 
             // set initial z position
@@ -56,8 +55,14 @@ export function parameters(self)
             {
                 position:
                 {
-                    z: isMobile() ? 1.5 : 0.75
+                    z: isMobile() ? 1.5 : 1
                 }
+            },
+
+            //
+            rendererOptions:
+            {
+                canvas: 'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d'
             }
         },
 
@@ -145,27 +150,26 @@ export function parameters(self)
 }
 
 // modify all wanted things
-export async function init()
+export async function init(self)
 {
-    this.glbScene.position.y = -0.05;
-
-    // set initial rotation
-   this.three.rotateToAngle(0, 90, 0);
+    // default view
+    this.three.rotateToAngle(30, 30, 0);
 
     // show notice
     const p = document.createElement('p');
     p.style.position = 'absolute';
-    p.style.zIndex = this.zIndex.index;
-    p.style.right = '1rem';
-    p.style.bottom = '1rem';
+    p.style.zIndex = 10;
+    p.style.left = '50%';
+    p.style.top = '80%';
+    p.style.transform = 'translateX(-50%)';
     p.style.padding = '0.5rem';
     p.style.color = '#ffffff';
     p.style.backgroundColor = '#0081ff';
     p.style.borderRadius = '6px';
-    p.innerText = this.lang['shoes-notice'];
+    p.innerText = self.lang['shoes-notice'];
 
     // append to container
-    document.querySelector(this.props.container).appendChild(p);
+    document.querySelector(self.props.container).appendChild(p);
     
     // remove after 10 seconds
     setTimeout(() => { p.remove(); delete this.userData.p;}, 10000);
@@ -173,8 +177,18 @@ export async function init()
     // enable zoom with mouse or tap (2 fingers)
     this.enableAutoZoom();
 
-    // store as user data
+    // remove p tag
     this.userData.p = p;
+
+    // reset position by click
+    this.userData.onClick = () =>
+    {
+        this.three.rotateToAngle(0, 90, 0);
+        this.three.moveToAngle(0, -0.05, 0.35);
+        window.removeEventListener('click', this.userData.onClick);
+        delete this.userData.onClick;
+    };
+    window.addEventListener('click', this.userData.onClick);
 }
 
 // set model views

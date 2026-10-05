@@ -1,7 +1,6 @@
 import * as THREE from 'three';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
-import {Texture} from 'customizer3D_dir/three/loaders/Texture.js?c3d=107';
-
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
+import {Texture} from 'customizer3D_dir/three/loaders/Texture.js?c3d=0.5.0';
 
 export function lang()
 {
@@ -16,10 +15,8 @@ export function parameters(self)
     const root = C3D_MODELS_DIR + 'Vase/';
 
     return {
-
         // unique name (module name) in models folder, the name is important for creating instance 
         // const {parameters, init, setView, onUnLoad} = await import('models/'+ data.modelName +'.js');
-
         modelName: 'Vase',
 
         container:      'section.customizer',
@@ -32,7 +29,7 @@ export function parameters(self)
         imageLayer:     'section.customizer > div.imageLayer',
         shapeLayer:     'section.customizer > div.shapeLayer',
         controls:       'section.customizer > div.controls',
-        canvas3d:       'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d',
+        canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
         three:
@@ -40,8 +37,8 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: 0.25,
-                maxDistance: 3,
+                minDistance: isMobile() ? 0.25 : 0.5,
+                maxDistance: 3
             },
 
             // set initial z position
@@ -49,8 +46,14 @@ export function parameters(self)
             {
                 position:
                 {
-                    z: isMobile() ? 2.5 : 1.5
+                    z: isMobile() ? 2 : 1.3
                 }
+            },
+
+            //
+            rendererOptions:
+            {
+                canvas: 'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d'
             }
         },
 
@@ -59,15 +62,16 @@ export function parameters(self)
             vase:
             {
                 label: self.lang['vase-texture'],
+                printSize: {width: '10cm', height: '10cm'},
                 materials: 
                 [
-                    {url: root + 'textures/5.jpg?c3d=107', repeatX: 2, repeatY: 2},
-                    {url: root + 'textures/1.jpg?c3d=107', repeatX: 4, repeatY: 4},
-                    {url: root + 'textures/2.jpg?c3d=107', repeatX: 4, repeatY: 4},
-                    {url: root + 'textures/3.jpg?c3d=107', repeatX: 4, repeatY: 4},
-                    {url: root + 'textures/4.jpg?c3d=107', repeatX: 4, repeatY: 4},
-                    {url: root + 'textures/6.jpg?c3d=107', repeatX: 3, repeatY: 3},
-                    {url: root + 'textures/7.jpg?c3d=107', repeatX: 2, repeatY: 2}
+                    {url: root + 'textures/5.jpg?c3d=0.5.0', repeatX: 2, repeatY: 2},
+                    {url: root + 'textures/1.jpg?c3d=0.5.0', repeatX: 4, repeatY: 4},
+                    {url: root + 'textures/2.jpg?c3d=0.5.0', repeatX: 4, repeatY: 4},
+                    {url: root + 'textures/3.jpg?c3d=0.5.0', repeatX: 4, repeatY: 4},
+                    {url: root + 'textures/4.jpg?c3d=0.5.0', repeatX: 4, repeatY: 4},
+                    {url: root + 'textures/6.jpg?c3d=0.5.0', repeatX: 2, repeatY: 2},
+                    {url: root + 'textures/7.jpg?c3d=0.5.0', repeatX: 2, repeatY: 2}
                 ]
             }
         }
@@ -83,15 +87,15 @@ export async function init()
     this.enableAutoZoom();
 
     // set mesh materials
-    const soilMap = await new Texture({url: root + 'maps/Plant-Set-002-grass.jpg?c3d=107', preloader: this.preloader}).load();
+    const soilMap = await new Texture({url: root + 'maps/Plant-Set-002-grass.jpg?c3d=0.5.0', preloader: this.preloader}).load();
 
     this.glbScene.getObjectByName('vase').material = new THREE.MeshPhysicalMaterial({map:soilMap, metalness: 0.3, roughness: 0.5});
     
     this.glbScene.getObjectByName('soil').material = new THREE.MeshBasicMaterial({map: soilMap, side: THREE.DoubleSide});
     
-    const leavesMap = await new Texture({url: root + 'maps/03.jpg?c3d=107', preloader: this.preloader}).load();
-    const leavesAlphaMap = await new Texture({url: root + 'maps/03_Opacity.jpg?c3d=107', preloader: this.preloader}).load();
-    const leavesNormalMap = await new Texture({url: root + 'maps/03_Normal.jpg?c3d=107', preloader: this.preloader}).load();
+    const leavesMap = await new Texture({url: root + 'maps/03.jpg?c3d=0.5.0', preloader: this.preloader}).load();
+    const leavesAlphaMap = await new Texture({url: root + 'maps/03_Opacity.jpg?c3d=0.5.0', preloader: this.preloader}).load();
+    const leavesNormalMap = await new Texture({url: root + 'maps/03_Normal.jpg?c3d=0.5.0', preloader: this.preloader}).load();
     this.glbScene.getObjectByName('leaves').material = new THREE.MeshStandardMaterial({
         map: leavesMap, 
         alphaMap: leavesAlphaMap, 
@@ -99,8 +103,8 @@ export async function init()
         transparent: true, 
         alphaTest: 0.5, 
         side: THREE.DoubleSide, 
-        metalness: 0.85, 
-        roughness: 0.75
+        metalness: 0, 
+        roughness: 1
     });
 }
 

@@ -8,29 +8,31 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <meta name="theme-color" content="#ffffff">
         
-        <title>Customizer3D {beta}</title>
+        <title>Customizer3D {release candidate}</title>
+
+        <link rel="icon" type="image/png" href="./favicon.png?c3d=0.5.0">
 
         <script src="js/pdfjs-dist@3.4.120/pdf.min.js"></script>
+        <script src="js/JSManipulate@1.0/jsmanipulate.js?c3d=0.5.0"></script>
+                
+        <link rel="stylesheet" href="js/jscolorpicker/colorpicker.css?c3d=0.5.0">
 
-        <link rel="icon" href="favicon.ico" type="image/x-icon">
-
-        <link rel="stylesheet" href="js/jscolorpicker/colorpicker.css?c3d=107">
-
-        <link rel="stylesheet" href="css/customizer3D/style.css?c3d=110">
-        <link rel="stylesheet" href="css/customizer3D/preloader.css?c3d=107">
-        <link rel="stylesheet" href="css/customizer3D/cookies.css?c3d=107">
-        <link rel="stylesheet" href="css/customizer3D/secure.css?c3d=107">
-        <link rel="stylesheet" href="css/customizer3D/layers.css?c3d=107">
-        <link rel="stylesheet" href="css/customizer3D/textLayers.css?c3d=107">
-        <link rel="stylesheet" href="css/customizer3D/imageLayer.css?c3d=107">
-        <link rel="stylesheet" href="css/customizer3D/shapeLayer.css?c3d=107">
-        <link rel="stylesheet" href="css/customizer3D/canvas3D.css?c3d=107">
-        <link rel="stylesheet" href="css/customizer3D/export.css?c3d=107">
-        <link rel="stylesheet" href="css/customizer3D/settings.css?c3d=107">
-        <link rel="stylesheet" href="css/customizer3D/contextMenu.css?c3d=107">
-        <link rel="stylesheet" href="css/customizer3D/help.css?c3d=107">
-        <link rel="stylesheet" href="css/customizer3D/controls.css?c3d=107">
-        <link rel="stylesheet" href="css/customizer3D/about.css?c3d=107">
+        <link rel="stylesheet" href="css/customizer3D/style.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/preloader.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/cookies.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/secure.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/layers.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/textLayers.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/imageLayer.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/shapeLayer.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/canvas2D.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/canvas3D.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/export.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/settings.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/contextMenu.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/help.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/controls.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/about.css?c3d=0.5.0">
 
         <script type="importmap">
         {
@@ -45,10 +47,8 @@
         </script>
 
         <script>
-
             // with a slash at the end
             window.C3D_SERVER = document.location.href.substring(0, document.location.href.lastIndexOf('/') + 1);
-            //'http://localhost/Customizer3D/';
             window.C3D_MODELS_DIR = C3D_SERVER + 'examples/models/';
         </script>
 
@@ -56,12 +56,12 @@
 
     <body>
 
-        <!--
-        <script type="module">
+        
+        <!-- <script type="module">
             import eruda from 'https://cdn.jsdelivr.net/npm/eruda@3.4.3/+esm';
             eruda.init(); // For debugging on iOS, Android etc.
-        </script>
-        -->
+        </script> -->
+       
 
         <section class="customizer">
             
@@ -70,6 +70,8 @@
                 <p>...</p>
             </div>
             
+            <div class="webgl_2d_canvas"></div>
+
             <div class="webgl_3d_canvas">
                 <canvas class="webgl_3d"></canvas>
             </div>
@@ -93,13 +95,14 @@
         </section>
 
 
+        <!-- END OF CUSTOMIZER 3D SECTION -->
 
 
         <section class="examples"></section>
 
 
 
-        <link rel="stylesheet" href="examples/assets/css/examples.css?c3d=107">
+        <link rel="stylesheet" href="examples/assets/css/examples.css?c3d=0.5.0">
         <link rel="stylesheet" href="examples/assets/js/prism/prism.min.css">
 
         <script src="examples/assets/js/prism/prism.min.js" data-manual></script>
@@ -120,7 +123,7 @@
             <div class="code" title="Code View">
                 <label>
                     <input type="checkbox">
-                    <img src="svg/code.svg" alt="Icon">
+                    <img src="svg/code.svg?c3d=0.5.0" alt="Icon">
                     <p>CODE</p>
                 </label>
             </div>
@@ -128,7 +131,7 @@
             <div class="design" title="Design View">
                 <label>
                     <input type="checkbox">
-                    <img src="svg/design.svg" alt="Icon">
+                    <img src="svg/design.svg?c3d=0.5.0" alt="Icon">
                     <p>DESIGN</p>
                 </label>
             </div>
@@ -138,12 +141,12 @@
 
         <script type="module">
 
-            import {Customizer3D} from 'customizer3D_dir/Customizer3D.js?c3d=107';
-            import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=107';
+            import {Customizer3D} from 'customizer3D_dir/Customizer3D.js?c3d=0.5.0';
+            import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.0';
 
 
             // 
-            const modules = ['NoteBook', 'TShirt', 'Vase', 'Package', 'Sink', 'Shoes', 'PhoneCase', 'Necklace', 'BMW', 'Cup', 'KitchenSink', 'Bag', 'Chair', 'Flyer'];
+            const modules = ['TShirt', 'Vase', 'Sticker', 'Sink', 'Shoes', 'PhoneCase', 'Necklace', 'BMW', 'Cup', 'KitchenSink', 'Bag', 'Chair', 'Flyer'];
 
             const C3D_DIR = C3D_SERVER + 'examples/C3D/';
             
@@ -166,7 +169,7 @@
             }
 
             // set active module
-            let activeModule = hash != '' && found ? hash.substring(1) : 'TShirt';
+            let activeModule = hash != '' && found ? hash.substring(1) : 'KitchenSink';
 
 
             // Initialize Customizer3D
@@ -184,7 +187,7 @@
             container.innerHTML = `
             <div class="title" title="${C3D.lang.examples}">
                 <p draggable="false">${C3D.lang.examples}</p>
-                <img src="svg/arrow-drop-down.svg?c3d=107" alt="Icon" class="rollup" draggable="false">
+                <img src="svg/arrow-drop-down.svg?c3d=0.5.0" alt="Icon" class="rollup" draggable="false">
             </div>
             <div class="content"></div>`;
 
@@ -262,7 +265,7 @@
                 });
 
                 thumb.innerHTML = `
-                    <img src="${C3D_DIR + module + '_Screenshot.png?c3d=107'}" alt="${module}">
+                    <img src="${C3D_DIR + module + '_Screenshot.png?c3d=0.5.0'}" alt="${module}">
                     <p>${module}</p>
                 `;
 
@@ -302,10 +305,7 @@
         </script>
 
 
-
     </body>
 
 
 </html>
-
-

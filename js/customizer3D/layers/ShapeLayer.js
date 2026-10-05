@@ -1,113 +1,106 @@
 import * as THREE from 'three';
-import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=107';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=107';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=107';
-import {RulerSlider} from 'customizer3D_dir/ui/RulerSlider.js?c3d=107';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=0.5.0';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.0';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.0';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.0';
+import {createFiltersList, applyFilter} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.0';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.0';
 
 export class ShapeLayer
 {
     constructor(c3d)
     {
         this.c3d = c3d;
-        this.htmlEl = document.querySelector(this.c3d.props.layers + ' > div.shapeLayer');
-
-        this.gridLines = null;
-        this.rotationSlider = null;
-        this.radiusSlider = null;
-
+        this.htmlEl = document.querySelector(this.c3d.props.shapeLayer);
 
         this.layer = {};
-        this._snap = false;
 
         let el;
 
         this.htmlEl.innerHTML = `
 
         <div class="title">
-            <div class="back">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=107" alt="Icon" class="back" draggable="false">
-                <p class="title" draggable="false">${this.c3d.lang['back']}</p>
+            <p class="label" draggable="false">${this.c3d.lang['add-shape-layer']}</p>
+            <div class="buttons">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.0" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
+                <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.0" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
             </div>
-            <p class="label" draggable="false"></p>
         </div>
 
         <div class="content">
             <div class="menu">
 
-                <div class="freeform" style="pointer-events:none; opacity:0.6;">
-                    <div class="button" title="${this.c3d.lang['freeform']}">
-                        <img src="${C3D_SERVER}svg/freeform.svg?c3d=107" alt="Icon">
-                    </div>
-                </div>
-
                 <div class="triangle">
                     <div class="button" title="${this.c3d.lang['triangle']}">
-                        <img src="${C3D_SERVER}svg/triangle.svg?c3d=107" alt="Icon">
+                        <img src="${C3D_SERVER}svg/triangle.svg?c3d=0.5.0" alt="Icon">
                     </div>
                 </div>
 
                 <div class="circle">
                     <div class="button" title="${this.c3d.lang['circle']}">
-                        <img src="${C3D_SERVER}svg/circle.svg?c3d=107" alt="Icon">
+                        <img src="${C3D_SERVER}svg/circle.svg?c3d=0.5.0" alt="Icon">
                     </div>
                 </div>
 
                 <div class="square">
                     <div class="button" title="${this.c3d.lang['square']}">
-                        <img src="${C3D_SERVER}svg/square.svg?c3d=107" alt="Icon">
-                    </div>
-                </div>
-
-                <div class="snap toggle">
-                    <div class="button" title="${this.c3d.lang['snap']}">
-                        <img src="${C3D_SERVER}svg/magnet.svg?c3d=107" alt="Icon">
+                        <img src="${C3D_SERVER}svg/square.svg?c3d=0.5.0" alt="Icon">
                     </div>
                 </div>
 
                 <div class="rotate">
                     <div class="button" title="${this.c3d.lang['rotate']}">
-                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=107" alt="Icon">
+                        <img src="${C3D_SERVER}svg/rotate.svg?c3d=0.5.0" alt="Icon">
+                    </div>
+                    <div class="list">
+                        <div class="inputPercent" data-icon="°" title="${this.c3d.lang['degree']}"><input type="number" min="-180" max="180" value="0"></div>
+                        <input type="range" min="-180" max="180" value="0" step="0.1">
                     </div>
                 </div>
 
                 <div class="radius">
                     <div class="button" title="${this.c3d.lang['radius']}">
-                        <img src="${C3D_SERVER}svg/radius.svg?c3d=107" alt="Icon">
+                        <img src="${C3D_SERVER}svg/radius.svg?c3d=0.5.0" alt="Icon">
+                    </div>
+                    <div class="list">
+                        <div class="inputPercent" data-icon="r"><input type="number" min="1" max="500" value="50"></div>
+                        <input type="range" min="1" max="500" value="50" step="0.1">
+                    </div>
+                </div>
+
+                <div class="filters">
+                    <div class="button" title="${this.c3d.lang['filter-gallery']}"><img src="${C3D_SERVER}svg/filters.svg?c3d=0.5.0" alt="Icon"></div>
+                    <div class="list">
                     </div>
                 </div>
 
             </div>
 
-            <div class="slider slider_rotation">
-                <canvas></canvas>
-                <span></span>
-            </div>
+            <div class="menu2" style="justify-content: center; align-items: center; padding-top:0.5rem;flex-direction:column;">
 
-            <div class="slider slider_radius">
-                <canvas></canvas>
-                <span></span>
-            </div>
+                <div style="display:flex; flex-direction:column; gap:1rem;">
+                
+                    <div class="stroke" style="display:flex; gap:0.5rem; align-items: center;">
+                        <div class="color_picker" data-color-type="stroke" title="${this.c3d.lang['stroke']} ${this.c3d.lang['color']}"></div>
+                        <label style="display:flex; gap:0.25rem; align-items:center;">
+                            <input data-type="stroke" type="checkbox" checked>
+                            <p>${this.c3d.lang['stroke']}</p>
+                        </label>
+                        <input type="range" class="lineWidth" min="0" max="150" value="5" step="1">
+                    </div>
 
-            <div class="menu2" style="justify-content: center; align-items: center; padding-top:0.5rem;">
-                <div class="stroke" style="display:flex; gap:0.5rem; align-items: center;">
-                    <div class="color_picker" data-color-type="stroke" title="${this.c3d.lang['stroke']} ${this.c3d.lang['color']}"></div>
-                    <label style="display:flex; gap:0.25rem; align-items:center;">
-                        <input data-type="stroke" type="checkbox" checked>
-                        <p>${this.c3d.lang['stroke']}</p>
-                    </label>
-                    <input type="range" class="lineWidth" min="0" max="150" value="5" step="1">
+                    <div class="fill" style="display:flex; gap:0.5rem; align-items:center;">
+                        <div class="color_picker" data-color-type="fill" title="${this.c3d.lang['fill']} ${this.c3d.lang['color']}"></div>
+                        <label style="display:flex; gap:0.25rem;">
+                            <input data-type="fill" type="checkbox" checked>
+                            <p>${this.c3d.lang['fill']}</p>
+                        </label>
+                    </div>
+
                 </div>
 
-                <div class="fill" style="display:flex; gap:0.5rem; align-items:center;">
-                    <div class="color_picker" data-color-type="fill" title="${this.c3d.lang['fill']} ${this.c3d.lang['color']}"></div>
-                    <label style="display:flex; gap:0.25rem;">
-                        <input data-type="fill" type="checkbox" checked>
-                        <p>${this.c3d.lang['fill']}</p>
-                    </label>
-                </div>
-
-                <div style="display:flex; gap:1.5rem;">
+                <div style="display:flex; gap:0.75rem;">
 
                     <label style="display:flex; gap:0.25rem;">
                         <input name="lineJoin" type="radio" value="miter">
@@ -132,16 +125,28 @@ export class ShapeLayer
 
         </div>`;
 
-        const canvas = this.htmlEl.querySelector('canvas.preview');
 
-        // BACK
+        const dragable = new Dragable({
+            dragEl: this.htmlEl.querySelector('div.title'),
+            container: this.htmlEl,
+            root: document.querySelector(this.c3d.props.container),
+            c3d: this.c3d
+        });
 
-        this.htmlEl.querySelector('div.title > div.back').addEventListener('click', (e) => {
-            this.htmlEl.querySelector('div.slider_rotation').classList.remove('show');
-            this.htmlEl.querySelector('div.slider_radius').classList.remove('show');
+
+        this.htmlEl.querySelector('div.title > div.buttons > img.rollup').addEventListener('click', (e) => {
+            const content = this.htmlEl.querySelector('div.content');
+            const visible = content.style.display == 'none' || content.style.display == '';
+            content.style.display = visible ? 'flex' : 'none';
+            e.currentTarget.style.rotate = visible ? '-180deg' : '0deg';
+        });
+
+        this.htmlEl.querySelector('div.title > div.buttons > img.icon').addEventListener('click', () => {
             this.hide();
         });
 
+
+        const canvas = this.htmlEl.querySelector('canvas.preview');
 
         const canvasMouseUp = () =>
         {
@@ -156,8 +161,7 @@ export class ShapeLayer
                 container.removeEventListener('pointermove', canvasMouseMove);
                 container.removeEventListener('pointerup', canvasMouseUp);
             }
-
-           this.updatePreview(null, true, false);
+           this.updatePreview();
         };
 
         const canvasMouseDown = (e) => 
@@ -189,89 +193,118 @@ export class ShapeLayer
 
             this.layer.shapePosition =
             {
-                x: (((clientX - bb.left) / bb.width) - 0.5), 
-                y: (0.5 - ((clientY - bb.top) / bb.height))
+                x: -canvas.width / 2 + clientX - bb.x, 
+                y: -canvas.height / 2 + clientY - bb.y
 
             };
 
-            this.updatePreview();
+            this.layer.updateCanvas();
+            this.updatePreview(true);
         };
 
 
+        const _listOnclick = (e) =>
+        {
+            const divList = e.currentTarget.parentNode.querySelector('div.list');
+            divList.style.display = divList.style.display == '' || divList.style.display == 'none' ? 'block' : 'none';
+        };
+
+        const _listClickOutside = (e) =>
+        {
+            if(!this.htmlEl.querySelector('div.rotate > div.list').contains(e.target) && !this.htmlEl.querySelector('div.rotate > div.button').contains(e.target))
+            {
+                this.htmlEl.querySelector('div.rotate > div.list').style.display = 'none';
+            }
+            if(!this.htmlEl.querySelector('div.radius > div.list').contains(e.target) && !this.htmlEl.querySelector('div.radius > div.button').contains(e.target))
+            {
+                this.htmlEl.querySelector('div.radius > div.list').style.display = 'none';
+            }
+            if(!this.htmlEl.querySelector('div.filters > div.list').contains(e.target) && !this.htmlEl.querySelector('div.filters > div.button').contains(e.target))
+            {
+                this.htmlEl.querySelector('div.filters > div.list').style.display = 'none';
+            }
+        };
+        
+        if(isMobile()) window.addEventListener('touchstart', _listClickOutside);
+        else window.addEventListener('click', _listClickOutside);
+
         // ROTATION
         
-        this.rotationSlider = new RulerSlider(
-            this.htmlEl.querySelector('div.slider_rotation > canvas'), 
-            this.htmlEl.querySelector('div.slider_rotation > span'),
+        el = this.htmlEl.querySelector('div.rotate input[type="number"]');
+        el.addEventListener('input', (e) => {
+            let val = parseInt(e.currentTarget.value);
+            if(isNaN(val)) return;
+            e.currentTarget.value = val;
+            this.htmlEl.querySelector('div.rotate input[type="range"]').value = val;
+            this.layer.rotation = parseFloat(val);
+            this.layer.updateCanvas();
+            this.updatePreview();
+        });
+        el.addEventListener('focus', (e) => e.currentTarget.select());
+        el.addEventListener('keydown', (e) => 
             {
-                min: -180,
-                max: 180,
-                value: 0,
-                suffix: '°',
-                onChange: (val) =>
+                if (e.keyCode === 13)
                 {
-                    this.layer.rotation = parseFloat(val);
-                    this.updatePreview(null, true, false);
+                    e.preventDefault();
+                    const input = this.htmlEl.querySelector('div.rotate input[type="number"]');
+                    if(input.value < parseInt(input.min)) input.value = input.min;
+                    if(input.value > parseInt(input.max)) input.value = input.max;
+                    this.htmlEl.querySelector('div.rotate input[type="range"]').value = input.value;
+                    this.layer.rotation = parseFloat(input.value);
+                    this.layer.updateCanvas();
+                    this.updatePreview();
+                    input.parentNode.parentNode.style.display = 'none'; // hide list
                 }
             }
         );
-
-        this.htmlEl.querySelector('div.rotate').addEventListener('click', () => {
-            this.htmlEl.querySelector('div.slider_rotation').classList.toggle('show');
-            this.c3d._updateCanvasSize();
+        
+        this.htmlEl.querySelector('div.rotate input[type="range"]').addEventListener('input', (e) => {
+            this.layer.rotation = parseFloat(e.currentTarget.value);
+            this.htmlEl.querySelector('div.rotate input[type="number"]').value = e.currentTarget.value;
+            this.layer.updateCanvas();
+            this.updatePreview();
         });
+        this.htmlEl.querySelector('div.rotate > div.button').addEventListener('click', _listOnclick.bind(this));
 
 
         // RADIUS
 
-        this.radiuslider = new RulerSlider(
-            this.htmlEl.querySelector('div.slider_radius > canvas'), 
-            this.htmlEl.querySelector('div.slider_radius > span'),
+        el = this.htmlEl.querySelector('div.radius input[type="number"]');
+        el.addEventListener('input', (e) => {
+            let val = parseInt(e.currentTarget.value);
+            if(isNaN(val)) return;
+            e.currentTarget.value = val;
+            this.htmlEl.querySelector('div.radius input[type="range"]').value = val;
+            this.layer.radius = parseFloat(val);
+            this.layer.updateCanvas();
+            this.updatePreview();
+        });
+        el.addEventListener('focus', (e) => e.currentTarget.select());
+        el.addEventListener('keydown', (e) => 
             {
-                min: 10,
-                max: 400,
-                value: 50,
-                step: 8,
-                suffix: ' r',
-                onChange: (val) =>
+                if (e.keyCode === 13)
                 {
-                    this.layer.radius = val;
-                    this.updatePreview(null, true, false);
+                    e.preventDefault();
+                    const input = this.htmlEl.querySelector('div.radius input[type="number"]');
+                    if(input.value < parseInt(input.min)) input.value = input.min;
+                    if(input.value > parseInt(input.max)) input.value = input.max;
+                    this.htmlEl.querySelector('div.radius input[type="range"]').value = input.value;
+                    this.layer.radius = parseFloat(input.value);
+                    this.layer.updateCanvas();
+                    this.updatePreview();
+                    input.parentNode.parentNode.style.display = 'none'; // hide list
                 }
             }
         );
-
-        this.htmlEl.querySelector('div.radius').addEventListener('click', () => {
-            this.htmlEl.querySelector('div.slider_radius').classList.toggle('show');
-            this.c3d._updateCanvasSize();
+        
+        this.htmlEl.querySelector('div.radius input[type="range"]').addEventListener('input', (e) => {
+            this.layer.radius = parseFloat(e.currentTarget.value);
+            this.htmlEl.querySelector('div.radius input[type="number"]').value = e.currentTarget.value;
+            this.layer.updateCanvas();
+            this.updatePreview();
         });
 
-
-        // SNAP
-
-        el = this.htmlEl.querySelector('div.snap > div.button');
-        el.addEventListener('click', (e) =>
-        {
-            this._snap = !this._snap;
-
-            const el = e.currentTarget.parentNode;       
-            el.classList[this._snap ? 'remove' : 'add']('toggle');
-            this.c3d.localStorage.set('snapping', this._snap ? 1 : 0);
-
-        });
-        const snapping = parseInt(this.c3d.localStorage.get('snapping'));
-        this._snap = snapping == 1;
-        el.parentNode.classList[this._snap ? 'remove' : 'add']('toggle');
-
-
-        // FREEFORM
-
-        el = this.htmlEl.querySelector('div.freeform > div.button');
-        el.addEventListener('click', (e) =>
-        {
-            this.layer.shapeType = 'freeform';
-            this.updatePreview(null, true, false);
-        });
+        this.htmlEl.querySelector('div.radius > div.button').addEventListener('click', _listOnclick.bind(this));
 
 
         // TRIANGLE
@@ -280,7 +313,8 @@ export class ShapeLayer
         el.addEventListener('click', (e) =>
         {
             this.layer.shapeType = 'triangle';
-            this.updatePreview(null, true, false);
+            this.layer.updateCanvas();
+            this.updatePreview();
         });
 
 
@@ -290,7 +324,8 @@ export class ShapeLayer
         el.addEventListener('click', (e) =>
         {
             this.layer.shapeType = 'circle';
-            this.updatePreview(null, true, false);
+            this.layer.updateCanvas();
+            this.updatePreview();
         });
 
 
@@ -301,7 +336,8 @@ export class ShapeLayer
         el.addEventListener('click', (e) =>
         {
             this.layer.shapeType = 'square';
-            this.updatePreview(null, true, false);
+            this.layer.updateCanvas();
+            this.updatePreview();
         });
 
 
@@ -337,7 +373,8 @@ export class ShapeLayer
 
                 if((this.htmlEl.querySelector('input[data-type="stroke"]').checked && active == 'stroke') ||
                 (this.htmlEl.querySelector('input[data-type="fill"]').checked && active == 'fill')) {
-                    this.updatePreview(null, true, false);
+                    this.layer.updateCanvas();
+                    this.updatePreview();
                 }
 
             });
@@ -357,7 +394,8 @@ export class ShapeLayer
             this.layer.lineWidth = val;
 
             this.layer.strokeColor = val == 0 ? null : cp.dataset.color;
-            this.updatePreview(null, true, false);
+            this.layer.updateCanvas();
+            this.updatePreview();
         });
 
 
@@ -373,7 +411,8 @@ export class ShapeLayer
             const cp = this.htmlEl.querySelector('div.color_picker[data-color-type="stroke"]');
             this.layer.strokeColor = e.currentTarget.checked ? cp.dataset.color : null;
             
-            this.updatePreview(null, true, false);
+            this.layer.updateCanvas();
+            this.updatePreview();
         });
 
 
@@ -385,7 +424,8 @@ export class ShapeLayer
             const cp = this.htmlEl.querySelector('div.color_picker[data-color-type="fill"]');
             this.layer.fillColor = e.currentTarget.checked ? cp.dataset.color : null;
             
-            this.updatePreview(null, true, false);
+            this.layer.updateCanvas();
+            this.updatePreview();
         });
 
 
@@ -395,8 +435,21 @@ export class ShapeLayer
             radio.addEventListener('change', () =>
             {
                 this.layer.lineJoin = radio.value;
-                this.updatePreview(null, true, false);
+                this.layer.updateCanvas();
+                this.updatePreview();
             });
+        });
+
+        // FILTERS
+        
+        el = this.htmlEl.querySelector('div.filters > div.button');
+        el.addEventListener('click', _listOnclick);
+        el.addEventListener('click', () => {
+            createFiltersList(
+                this.c3d, 
+                this.htmlEl.querySelector('div.filters > div.list'), 
+                'shapeLayer'
+            );
         });
 
     }
@@ -404,20 +457,25 @@ export class ShapeLayer
 
     show(shapeLayer, width, height)
     {
-        if(!shapeLayer._mesh) return;
-
         // set as active layer
         this.layer = shapeLayer;
 
         //
         this.htmlEl.style.display = 'block';
 
-        //
-        this.htmlEl.querySelector('div.title > p.label').innerText = this.layer.shapeType || '';
-        const layersDiv = document.querySelector(this.c3d.props.layers);
-        layersDiv.querySelector('div.title').style.display = 'none';
-        layersDiv.querySelector('div.content').style.display = 'none';
-        layersDiv.querySelector('div.bottomNav').style.display = 'none';
+        // set window position
+        const bb = document.querySelector(this.c3d.props.layers).getBoundingClientRect();
+        const bbContainer = document.querySelector(this.c3d.props.container).getBoundingClientRect();
+        const top = bb.top - bbContainer.y + (isMobile() ? 32 : 0);
+        const left = bb.left + (isMobile() ? 32 : bb.width + 16);
+
+        this.c3d.imageLayer.hide();
+        this.c3d.textLayer.hide();
+        document.querySelector(this.c3d.props.layers).style.opacity = 0.25;
+
+        this.htmlEl.style.left = left + 'px';
+        this.htmlEl.style.top = top + 'px';
+        this.htmlEl.style.display = 'block';
 
         // CANVAS
         const previewCanvas = this.htmlEl.querySelector('canvas.preview');
@@ -456,115 +514,68 @@ export class ShapeLayer
         lwRange.style.opacity = this.layer.strokeColor == null ? 0.5 : 1;
 
         // 
-        this.updatePreview(null, true, false);
-        this.c3d._updateCanvasSize();
+        this.updatePreview();
     }
 
     hide()
     {
         this.htmlEl.style.display = 'none';
-
-        const layersDiv = document.querySelector(this.c3d.props.layers);
-        layersDiv.querySelector('div.content').style.display = 'flex';
-        layersDiv.querySelector('div.title').style.display = 'flex';
-        const bottomNav = layersDiv.querySelector('div.bottomNav');
-        if(bottomNav) bottomNav.style.display = 'flex';
-        this.c3d._updateCanvasSize();
+        document.querySelector(this.c3d.props.layers).style.opacity = 1;
     }
 
 
-    updatePreview(canvasData = null, reDraw = true, drawSnappingLines = true)
+    updatePreview(drawLines = false)
     {     
-        if(!this.layer || !this.layer._mesh) return;
+        // if(!this.layer) return;
 
         const canvas = this.htmlEl.querySelector('canvas.preview');
         const ctx = canvas.getContext('2d');
+        const snapX = Math.abs(this.layer.shapePosition.x) < 5;
+        const snapY = Math.abs(this.layer.shapePosition.y) < 5;
+
+        if(snapX && drawLines) {
+            this.layer.shapePosition.x = 0;
+        }
+
+        if(snapY && drawLines) {
+            this.layer.shapePosition.y = 0;
+        }
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        let snapX, snapY;
-
-        if(this._snap)
-        {
-            const snap = 0.05;
-            const snapXPos = this.layer.shapePosition.x;
-            const snapYPos = this.layer.shapePosition.y;
-            snapX = (snapXPos >= -snap) && (snapXPos <= snap);
-            snapY = (snapYPos >= -snap) && (snapYPos <= snap);
-            if(snapX) this.layer.shapePosition.x = 0;
-            if(snapY) this.layer.shapePosition.y = 0;
-        }
-
-        if(reDraw)
-        {
-            const ratio = canvas.width / parseInt(canvas.style.width) / this.c3d.PIXEL_RATIO;
-            const radius = this.layer.radius * ratio;
-
-            const angle = THREE.MathUtils.degToRad(this.layer.rotation);
-
-            ctx.save();
-            if(this.layer.fillColor != null) ctx.fillStyle = this.layer.fillColor;
-            if(this.layer.strokeColor != null) ctx.strokeStyle = this.layer.strokeColor;
-            ctx.lineWidth = this.layer.lineWidth * ratio;
-            ctx.lineJoin = this.layer.lineJoin; 
-
-            ctx.translate(
-                canvas.width / 2 + (this.layer.shapePosition.x * canvas.width), 
-                canvas.height / 2 - (this.layer.shapePosition.y * canvas.height)
-            );
-
-            ctx.rotate(angle);
-            ctx.globalAlpha = this.layer.opacity / 100;
-            
-            ctx.beginPath();
-            this.drawShape(ctx, radius);
-            ctx.closePath();
-
-            if(this.layer.strokeColor != null) ctx.stroke();
-            if(this.layer.fillColor != null) ctx.fill();
-            ctx.restore();
-
-        }
+        ctx.save();
+        ctx.globalAlpha = this.layer.opacity / 100;
+        ctx.drawImage(this.layer.canvas, 0, 0, canvas.width, canvas.height);
+        ctx.restore();
 
 
         // DRAW GRID LINES
 
-        // if(this._snap || !drawSnappingLines) ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        if(this._snap && drawSnappingLines)
+        if(drawLines)
         {
+            // const ce = this.c3d.colorEngine;
+            // ce.invert(canvas.style.backgroundColor, true, false);
             ctx.save();
             ctx.beginPath();
-            ctx.setLineDash([5, 3]);
-            ctx.strokeStyle = 'rgb(128,128,128)';
-            ctx.lineWidth = 2;// * this.c3d.PIXEL_RATIO;
-            if(snapX)
-            {
-                ctx.moveTo(canvas.width / 2, 0);
-                ctx.lineTo(canvas.width / 2, canvas.height);
-            }
+            ctx.setLineDash([3, 2]);
+            ctx.strokeStyle = '#000';//ce.color;
+            ctx.lineWidth = 1;
             if(snapY)
             {
-                ctx.moveTo(0, canvas.height / 2);
-                ctx.lineTo(canvas.width, canvas.height / 2);
+                ctx.moveTo(0, Math.round(canvas.height / 2));
+                ctx.lineTo(canvas.width, Math.round(canvas.height / 2));
+            }
+            if(snapX)
+            {
+                ctx.moveTo(Math.round(canvas.width / 2), 0);
+                ctx.lineTo(Math.round(canvas.width / 2), canvas.height);
             }
             ctx.stroke();
             ctx.restore();
         }
 
-        //if(reDraw && !drawSnappingLines)
-        this.c3d.render3d.renderShapeLayer(this.layer);
-
         this.layer.updateThumbnail();
-        this.c3d.three.render();
-
-    }
-
-
-    _listOnclick(e)
-    {
-        const divList = e.currentTarget.parentNode.querySelector('div.list');
-        divList.style.display = divList.style.display == '' || divList.style.display == 'none' ? 'block' : 'none';
+        this.c3d.render3d.renderView(this.layer.name);
+        this.c3d.render2d.renderView(this.layer.name);
     }
 
     drawShape(ctx, r)
@@ -572,12 +583,6 @@ export class ShapeLayer
 
         switch(this.layer.shapeType)
         {
-
-            case 'freeform':
-
-                console.log('Not implemented!');
-
-            break;
 
             case 'triangle':
 

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
-import {Texture} from 'customizer3D_dir/three/loaders/Texture.js?c3d=107';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
+import {Texture} from 'customizer3D_dir/three/loaders/Texture.js?c3d=0.5.0';
 
 export function lang()
 {
@@ -29,7 +29,7 @@ export function parameters(self)
         imageLayer:     'section.customizer > div.imageLayer',
         shapeLayer:     'section.customizer > div.shapeLayer',
         controls:       'section.customizer > div.controls',
-        canvas3d:       'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d',
+        canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
         three:
@@ -48,6 +48,12 @@ export function parameters(self)
                 {
                     z: isMobile() ? 1 : 0.5
                 }
+            },
+
+            //
+            rendererOptions:
+            {
+                canvas: 'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d'
             }
         },
 
@@ -93,7 +99,7 @@ export function parameters(self)
 export async function init()
 {
     // set default rotation
-    this.three.rotateToAngle(0, 70, 0);
+    this.three.rotateToAngle(10, 70, 0);
 
     // enable zoom with mouse or tap (2 fingers)
     this.enableAutoZoom();
@@ -101,7 +107,7 @@ export async function init()
     // set model material
     const model = this.glbScene.getObjectByName('model');
     model.material.dispose();
-    const matcap = await new Texture({url: C3D_MODELS_DIR + 'Cup/matcap_base.png?c3d=107', preloader: this.preloader}).load();
+    const matcap = await new Texture({url: C3D_MODELS_DIR + 'Cup/matcap_base.png?c3d=0.5.0', preloader: this.preloader}).load();
     model.material = new THREE.MeshMatcapMaterial({matcap});
 
     const modelInner = this.glbScene.getObjectByName('inner');
@@ -117,15 +123,18 @@ export function setView(view, fn = 'to')
     {
         case 'label':
             this.three.rotateToAngle(0, 0, 0, fn);
+            this.three.moveToAngle(0, 0, 0, fn);
         break;
 
         case 'bottom':
             this.three.rotateToAngle(90, 0, 180, fn);
+            this.three.moveToAngle(0, 0, 0.15, fn);
         break;
 
         default:
         case 'model':
             this.three.rotateToAngle(0, 90, 0, fn);
+            this.three.moveToAngle(0, 0, 0, fn);
         break;
     }
 

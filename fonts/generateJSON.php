@@ -51,7 +51,7 @@ if($_SERVER['PHP_AUTH_USER'] !== 'FONT' && $_SERVER['PHP_AUTH_PW'] !== 'SECRET_P
         flush();
     }
 
-    $file = fopen('fonts.json','w');
+    $file = fopen('fonts.json?c3d=0.5.0','w');
     $success = fwrite($file, json_encode($json, JSON_PRETTY_PRINT));
     fclose($file);
 

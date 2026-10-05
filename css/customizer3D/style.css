@@ -3,29 +3,27 @@
  * IMPORTANT! USE THIS HEX FORMAT: #RRGGBB
  */
 
+html, body
+{
+    overscroll-behavior: none; /* prevent page reload on mobile */
+    margin: 0;
+    padding: 0;
+}
+
 @font-face
 {
-    font-family: KodeMonoSemiBold;
-    src: url(../../ttf/KodeMono-SemiBold.ttf);
+    font-family: SignikaRegular;
+    src: url(../../ttf/Signika-Regular.ttf);
 }
 
 :root
 {
-    --customizerFontSizeDefault: 0.8rem;
-    --customizerFontFamily: KodeMonoSemiBold, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    --customizerColorText: #ffffff;
-    --customizerColorPrimary: #000000;
-    --customizerColorBG1: #f9f4dd;
-    --customizerColorBG2: #abddda;
-}
-
-html, body
-{
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: none; /* prevent page reload on mobile */
-    margin: 0;
-    padding: 0;
-    background-color: var(--customizerColorBG2);
+    --customizerFontSizeDefault: 0.75rem;
+    --customizerFontFamily: SignikaRegular, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --customizerColorText: #000000;
+    --customizerColorPrimary: #ffffff;
+    --customizerColorBG1: #ffffff;
+    --customizerColorBG2: #ebebeb;
 }
 
 section.customizer ::placeholder
@@ -51,6 +49,44 @@ section.customizer input[type="number"]::-webkit-inner-spin-button
     -webkit-appearance: none;
     -moz-appearance: none;
 }
+
+
+div.inputPercent
+{
+    position: relative;
+}
+
+div.inputPercent::after
+{
+    content: attr(data-icon);
+    position: absolute;
+    font-size: 0.65rem;
+    line-height: 0;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+
+
+section.customizer input[type='range'] {
+    width: 100%;
+    height: 2px;
+    background-color: var(--customizerColorText);
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: 2px;
+}
+
+section.customizer input[type='range']::-webkit-slider-thumb {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--customizerColorText);
+    -webkit-appearance: none;
+}
+
 
 section.customizer button
 {
@@ -82,14 +118,13 @@ section.customizer div.color_picker
     align-items: center;
     justify-content: center;
     border-radius: 4px;
-    width: 50px;
-    height: 50px;
+    width: 16px;
+    min-width: 16px;
+    height: 16px;
+    max-height: 16px;
 }
 
-section.customizer img[src*=".svg" i],
-section.examples img[src*=".svg" i],
-div.switchView img[src*=".svg" i],
-div.cp_dialog img[src*=".svg" i]
+section.customizer img[src*=".svg" i]
 {
     filter: var(--customizerSVGFilter);
     -webkit-filter: var(--customizerSVGFilter);
@@ -112,7 +147,7 @@ section.customizer
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-    width: 100%;
+    height: 100vh;
     height: 100svh;
 }
 
@@ -125,27 +160,23 @@ section.customizer *
     font-family: var(--customizerFontFamily);
     color: var(--customizerColorText);
     user-select: none;
-    /* accent-color: var(--customizerColorPrimary); */
     -webkit-user-select: none;
-    -webkit-tap-highlight-color: transparent;
-    -moz-user-select: none;
-    -webkit-user-drag: none;
-    text-transform: uppercase;
+    accent-color: var(--customizerColorText);
 }
 
 section.customizer *::-webkit-scrollbar {
-width: 6px;
-height: 6px;
+width: 8px;
+height: 8px;
 }
 
 section.customizer *::-webkit-scrollbar-track {
 background: var(--customizerColorPrimary);
-border-radius: 4px;
+border-radius: 6px;
 }
 
 section.customizer *::-webkit-scrollbar-thumb {
 background: var(--customizerColorText);
-border-radius: 4px;
+border-radius: 6px;
 
 }
 
@@ -161,5 +192,8 @@ section.customizer * {
 
 @media screen and (max-width: 500px)
 {
-
+    :root
+    {
+        --customizerFontSizeDefault: 0.75rem;
+    }
 }

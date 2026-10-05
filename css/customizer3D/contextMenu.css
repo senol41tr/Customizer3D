@@ -2,9 +2,10 @@ section.customizer > div.contextMenu
 {
     position: absolute;
     z-index: 9;
-    backdrop-filter: blur(20px) brightness(75%);
-    -webkit-backdrop-filter: blur(20px) brightness(75%);
-    border-radius: 7px;
+    background-color: var(--customizerColorPrimary);
+    color: var(--customizerColorText);
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.33);
     max-height: 90vh;
     max-width: 90vw;
     overflow: auto;
@@ -31,10 +32,12 @@ section.customizer > div.contextMenu ul
 
 section.customizer > div.contextMenu li
 {
+    font-size: 0.65rem;
     padding-top: 0.1rem;
 }
 
 section.customizer > div.contextMenu p
 {
+    font-size: 0.7rem;
     line-height: 1.5;
 }

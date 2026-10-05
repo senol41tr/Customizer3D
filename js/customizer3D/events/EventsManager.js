@@ -1,3 +1,8 @@
+/*
+ * BETA
+ * 03.03.2025
+ * 
+ * 
 // _onMouseEnter(e)
 // {
 //     this.c3d.eventsManager.raycaster.layers.disableAll();
@@ -7,9 +12,13 @@
 // {
 //     this.c3d.eventsManager.raycaster.layers.enableAll();
 // }
+ * 
+ * 
+ */
+
 
 import * as THREE from 'three';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
 
 export class EventsManager
 {

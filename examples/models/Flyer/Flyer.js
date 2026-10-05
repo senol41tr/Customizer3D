@@ -1,4 +1,5 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.0';
 
 export function lang()
 {
@@ -12,10 +13,8 @@ export function lang()
 export function parameters(self)
 {
     return {
-        
         // unique name (module name) in models folder, the name is important for creating instance 
         // const {parameters, init, setView, onUnLoad} = await import('models/'+ data.modelName +'.js');  
-
         modelName: 'Flyer',
 
         container:      'section.customizer',
@@ -28,7 +27,7 @@ export function parameters(self)
         imageLayer:     'section.customizer > div.imageLayer',
         shapeLayer:     'section.customizer > div.shapeLayer',
         controls:       'section.customizer > div.controls',
-        canvas3d:       'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d',
+        canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
         three:
@@ -36,8 +35,23 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: 0.25,
-                maxDistance: 4,
+                minDistance: isMobile() ? 1 : 0.5,
+                maxDistance: 4
+            },
+
+            // set initial z position
+            cameraOptions:
+            {
+                position:
+                {
+                    z: isMobile() ? 1.5 : 0.75
+                }
+            },
+
+            //
+            rendererOptions:
+            {
+                canvas: 'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d'
             }
         },
 
@@ -46,36 +60,38 @@ export function parameters(self)
             front:
             {
                 label: self.lang['flyer-front'],
-                printSize: {width: '24.26cm', height: '30.34cm'}
+                printSize: {width: '12.13cm', height: '15.17cm'}
             },
             
             back:
             {
                 label: self.lang['flyer-back'], 
-                printSize: {width: '24.26cm', height: '30.34cm'}
+                printSize: {width: '12.13cm', height: '15.17cm'}
             }
         }
     };
 }
 
-// module has been loaded, you can modify module elements in this function, if you wish
 export async function init()
 {
-    // this == Customizer3D class
+    // enable zoom with mouse or tap (2 fingers)
+    this.enableAutoZoom();
+
 }
 
 // set model views
-export function setView(view, fn = 'to') // fn = 'to' => animated, 'set' => instant 
+// op = 'to' or 'set' => to=animated, set for to take screenshot (by exporting PDF)
+export function setView(view, fn = 'to')
 {
     switch (view)
     {
         default:
         case 'front':
-            this.three.rotateToAngle(0, 0, 0, fn);
+            this.three.rotateToAngle(0, 0, 0);
         break;
 
         case 'back':
-            this.three.rotateToAngle(0, 180, 0, fn);
+            this.three.rotateToAngle(0, 180, 0);
         break;
     }
 

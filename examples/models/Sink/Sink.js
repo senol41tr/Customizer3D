@@ -1,4 +1,5 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.0';
 
 export function lang()
 {
@@ -15,10 +16,8 @@ export function parameters(self)
     const root = C3D_MODELS_DIR + 'Sink/';
 
     return {
-
         // unique name (module name) in models folder, the name is important for creating instance 
         // const {parameters, init, setView, onUnLoad} = await import('models/'+ data.modelName +'.js'); 
-
         modelName: 'Sink',
 
         container:      'section.customizer',
@@ -31,7 +30,7 @@ export function parameters(self)
         imageLayer:     'section.customizer > div.imageLayer',
         shapeLayer:     'section.customizer > div.shapeLayer',
         controls:       'section.customizer > div.controls',
-        canvas3d:       'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d',
+        canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
         three:
@@ -39,7 +38,7 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: isMobile() ? 0.5 : 1,
+                minDistance: isMobile() ? 1 : 0.5,
                 maxDistance: 6,
             },
 
@@ -48,8 +47,14 @@ export function parameters(self)
             {
                 position:
                 {
-                    z: isMobile() ? 5 : 3
+                    z: isMobile() ? 2 : 1
                 }
+            },
+
+            //
+            rendererOptions:
+            {
+                canvas: 'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d'
             }
         },
 
@@ -58,10 +63,11 @@ export function parameters(self)
             cabinet:
             {
                 label: self.lang['cabinet-texture'],
+                printSize: {width: '10cm', height: '10cm'},
                 materials:
                 [
                     {
-                        url: root + 'cabinet/dark.jpg?c3d=107', 
+                        url: root + 'cabinet/dark.jpg?c3d=0.5.0', 
                         repatX: 4, 
                         repeatY: 4, 
                         material: 'MeshStandardMaterial', 
@@ -72,7 +78,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'cabinet/middle.jpg?c3d=107', 
+                        url: root + 'cabinet/middle.jpg?c3d=0.5.0', 
                         repatX: 4, 
                         repeatY: 4, 
                         material: 'MeshStandardMaterial', 
@@ -83,7 +89,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'cabinet/light.jpg?c3d=107', 
+                        url: root + 'cabinet/light.jpg?c3d=0.5.0', 
                         repatX: 4, 
                         repeatY: 4, 
                         material: 'MeshStandardMaterial', 
@@ -98,10 +104,11 @@ export function parameters(self)
             marmour:
             {
                 label: self.lang['marble-type'],
+                printSize: {width: '10cm', height: '10cm'},
                 materials:
                 [
                     {
-                        url: root + 'marmour/black_gold.jpg?c3d=107', 
+                        url: root + 'marmour/black_gold.jpg?c3d=0.5.0', 
                         material: 'MeshStandardMaterial', 
                         materialOptions: 
                         {
@@ -110,7 +117,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'marmour/white_gold.jpg?c3d=107', 
+                        url: root + 'marmour/white_gold.jpg?c3d=0.5.0', 
                         material: 'MeshStandardMaterial', 
                         materialOptions: 
                         {
@@ -119,7 +126,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'marmour/middle.jpg?c3d=107', 
+                        url: root + 'marmour/middle.jpg?c3d=0.5.0', 
                         material: 'MeshStandardMaterial', 
                         materialOptions: 
                         {
@@ -128,7 +135,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'marmour/black.jpg?c3d=107', 
+                        url: root + 'marmour/black.jpg?c3d=0.5.0', 
                         material: 'MeshStandardMaterial', 
                         materialOptions: 
                         {
@@ -137,7 +144,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'marmour/white.jpg?c3d=107', 
+                        url: root + 'marmour/white.jpg?c3d=0.5.0', 
                         material: 'MeshStandardMaterial', 
                         materialOptions: 
                         {
@@ -150,34 +157,35 @@ export function parameters(self)
             metal_pieces:
             {
                 label: self.lang['metal_pieces-texture'],
+                printSize: {width: '10cm', height: '10cm'},
                 materials:
                 [
                     {
-                        url: root + 'metal_pieces/gold.jpg?c3d=107', 
+                        url: root + 'metal_pieces/gold.jpg?c3d=0.5.0', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/anthracite.jpg?c3d=107', 
+                        url: root + 'metal_pieces/anthracite.jpg?c3d=0.5.0', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/metal.jpg?c3d=107', 
+                        url: root + 'metal_pieces/metal.jpg?c3d=0.5.0', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/green_metal.jpg?c3d=107', 
+                        url: root + 'metal_pieces/green_metal.jpg?c3d=0.5.0', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/orange_metal.jpg?c3d=107', 
+                        url: root + 'metal_pieces/orange_metal.jpg?c3d=0.5.0', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/red_metal.jpg?c3d=107', 
+                        url: root + 'metal_pieces/red_metal.jpg?c3d=0.5.0', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/white_metal.jpg?c3d=107', 
+                        url: root + 'metal_pieces/white_metal.jpg?c3d=0.5.0', 
                         material: 'MeshMatcapMaterial'
                     }
                 ]
@@ -186,9 +194,10 @@ export function parameters(self)
     };
 }
 
+// modify all wanted things
 export async function init()
 {
-    // set initial position
+    // initial position
     this.three.rotateToAngle(30, 30, 0);
 
     // enable zoom with mouse or tap (2 fingers)

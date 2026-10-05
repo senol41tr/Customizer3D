@@ -14,6 +14,7 @@ section.examples *
 {
   user-select: none;
   -webkit-user-drag: none;
+  -webkit-user-select: none;
 }
 
 section.examples > div.content
@@ -46,6 +47,7 @@ section.examples > div.title
   display: flex;
   justify-content: space-between;
   padding: 0 0.75rem;
+  padding-right: 0.25rem;
   cursor: move;
   border-radius: 7px;
 }
@@ -65,7 +67,7 @@ section.examples > div.title > p
 
 section.examples > div.title > img.rollup
 {
-  width: 8px;
+  width: 22px;
   cursor: auto;
   transition: rotate 0.25s cubic-bezier(0.45, 0, 0.55, 1);
 }
@@ -149,6 +151,13 @@ section.code
 
 
 
+
+div.switchView *
+{
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+}
 
 div.switchView
 {

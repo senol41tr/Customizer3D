@@ -1,3 +1,6 @@
+
+
+
 <?php
 
     // WARNING! [MAKE COPY OF YOUR DATA] {EXPERIMENTAL}
@@ -62,8 +65,8 @@
 // NoCache::end();
 
 $CONFIG = [
-    'DOC_ROOT' => $_SERVER['DOCUMENT_ROOT'] . '/Customizer3D/',
-    'version' => 101
+    'DOC_ROOT' => $_SERVER['DOCUMENT_ROOT'] . '/Customizer3DCanvasTest/',
+    'version' => '0.5.0'
 ];
 
 
@@ -71,7 +74,7 @@ class NoCache
 {
     public static $debug = false;
     private static $versionGetParamName = 'c3d'; // ?version=00000 get parameter
-    private static $acceptableFileTypes = ['css', 'js', 'html', 'json']; // read and change/update inline links   
+    private static $acceptableFileTypes = ['css', 'js', 'html', 'json', 'php']; // read and change/update inline links   
     private static $exceptFileNames = ['min', 'esm', ' ', 'NoCache.php']; // pass file if filename contains
     private static $extensions = ['.css', '.png', '.jpg', '.svg', '.js', '.mp4', '.glb']; // add version to these extensions
     private static $isFileConditions = ['http', '.', '/']; // check if founded string contains acceptable link
@@ -117,7 +120,7 @@ class NoCache
         
     }
 
-    public static function replaceAllInline($excludeFolders, $cleanUp = false)
+    public static function replaceAllInline($excludeFolders = [], $cleanUp = false)
     {
         $DOC_ROOT = $GLOBALS['CONFIG']['DOC_ROOT'];
         $rii = self::_getAllFilesAndFolders($excludeFolders);

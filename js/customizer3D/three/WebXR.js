@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { ARButton } from './webxr/ARButton.js?c3d=107';
 import {Three} from 'customizer3D_dir/three/Three.js?c3d=107';
+import {Lights} from 'customizer3D_dir/three/Lights.js?c3d=0.5.0';
 
 export class WebXR
 {
@@ -20,7 +21,7 @@ export class WebXR
         this.__onSelect = this.onSelect.bind(this);
         this.__onEnterFrame = this._onEnterFrame.bind(this);
 
-        ARButton.createButton({requiredFeatures: ['hit-test']}, this.c3d);
+        ARButton.createButton({requiredFeatures: ['hit-test']}, this.c3d, this);
 
     }
 
@@ -35,35 +36,30 @@ export class WebXR
         this.canvas.style.zIndex = this.c3d.zIndex.index;
         document.querySelector(this.c3d.props.container).appendChild(this.canvas);
 
-        this.three = new Three(this.c3d, {
-            rendererOptions:
-            {
-                canvas: this.canvas
-            }
-        });
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 20 );
 
-        this.three.setupAll();
-        this.three.setupLights();
-        this.three.renderer.xr.enabled = true;
-        this.three.renderer.setPixelRatio(window.devicePixelRatio);
-        this.three.camera.position.z = 1;
-        this.three._onResize(null, window.innerWidth, window.innerHeight);
+        new Lights(this)['studio']();
 
+        this.renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true, canvas : this.canvas } );
+        this.renderer.setPixelRatio( window.devicePixelRatio );
+        this.renderer.setSize( window.innerWidth, window.innerHeight );
+        this.renderer.xr.enabled = true;
+
+        //this.camera.position.z = 1;
 
         this.glbScene = this.c3d.glbScene.clone();
-        this.three.scene.add(this.glbScene);
+        this.scene.add(this.glbScene);
         this.glbScene.visible = false;
         
-        this.c3d.glbScene.visible = false;
         this.c3d.three.controls.orbit.enabled = false;
-        this.c3d.three.stop();
 
-        this.controller1 = this.three.renderer.xr.getController(0);
-        this.three.scene.add(this.controller1);
+        this.controller1 = this.renderer.xr.getController(0);
+        this.scene.add(this.controller1);
         this.controller1.addEventListener('select', this.__onSelect);
 
-        this.controller2 = this.three.renderer.xr.getController(1);
-        this.three.scene.add(this.controller2);
+        this.controller2 = this.renderer.xr.getController(1);
+        this.scene.add(this.controller2);
         this.controller2.addEventListener('select', this.__onSelect);
 
         const outerRadius = 0.1;
@@ -75,28 +71,23 @@ export class WebXR
         );
         this.reticle.matrixAutoUpdate = false;
         this.reticle.visible = false;
-        this.three.scene.add( this.reticle );
+        this.scene.add( this.reticle );
 
-        this.three.renderer.setAnimationLoop( this.__onEnterFrame );
+        this.renderer.setAnimationLoop( this.__onEnterFrame );
 
     }
 
     stop()
     {
-        this.three.renderer.setAnimationLoop(null);
+        this.renderer.setAnimationLoop(null);
 
         setTimeout(() =>
         {
-            this.c3d.three._clearThree(this.three.scene);
-            
             this.canvas.remove();
-
-            this.c3d.glbScene.visible = true;
 
             this.hitTestSource = null;
             this.hitTestSourceRequested = false;
 
-            this.c3d.three.start();
             this.c3d.three.controls.orbit.enabled = true;
         }, 100);
     }
@@ -115,8 +106,8 @@ export class WebXR
     {
         if ( frame ) {
 
-            const referenceSpace = this.three.renderer.xr.getReferenceSpace();
-            const session = this.three.renderer.xr.getSession();
+            const referenceSpace = this.renderer.xr.getReferenceSpace();
+            const session = this.renderer.xr.getSession();
 
             if ( this.hitTestSourceRequested === false ) {
                 const self = this;
@@ -162,7 +153,7 @@ export class WebXR
 
         }
 
-        this.three.renderer.render(this.three.scene, this.three.camera);
+        this.renderer.render(this.scene, this.camera);
     }
 
 }

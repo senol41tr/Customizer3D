@@ -1,4 +1,5 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.0';
 
 export function lang()
 {
@@ -23,7 +24,6 @@ export function parameters(self)
     return {
         // unique name (module name) in models folder, the name is important for creating instance 
         // const {parameters, init, setView, onUnLoad} = await import('models/'+ data.modelName +'.js'); 
-
         modelName: 'KitchenSink',
 
         container:      'section.customizer',
@@ -36,7 +36,7 @@ export function parameters(self)
         imageLayer:     'section.customizer > div.imageLayer',
         shapeLayer:     'section.customizer > div.shapeLayer',
         controls:       'section.customizer > div.controls',
-        canvas3d:       'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d',
+        canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
         three:
@@ -44,8 +44,8 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: isMobile() ? 0.6 : 0.3,
-                maxDistance: isMobile() ? 2 : 2,
+                minDistance: isMobile() ? 0.25 : 0.5,
+                maxDistance: 3
             },
 
             // set initial z position
@@ -53,8 +53,14 @@ export function parameters(self)
             {
                 position:
                 {
-                    z: isMobile() ? 2 : 1.25
+                    z: isMobile() ? 2 : 1
                 }
+            },
+
+            //
+            rendererOptions:
+            {
+                canvas: 'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d'
             }
         },
 
@@ -63,22 +69,17 @@ export function parameters(self)
             cabinet:
             {
                 label: self.lang['ks-cabinet'],
+                printSize: {width: '10cm', height: '10cm'},
                 materials:
                 [
                     {
-                        url: root + 'cabinet/dark.jpg?c3d=107', 
-                        repatX: 4, 
-                        repeatY: 4
+                        url: root + 'cabinet/dark.jpg?c3d=0.5.0'
                     },
                     {
-                        url: root + 'cabinet/middle.jpg?c3d=107', 
-                        repatX: 4, 
-                        repeatY: 4
+                        url: root + 'cabinet/middle.jpg?c3d=0.5.0' 
                     },
                     {
-                        url: root + 'cabinet/light.jpg?c3d=107', 
-                        repatX: 4, 
-                        repeatY: 4
+                        url: root + 'cabinet/light.jpg?c3d=0.5.0' 
                     }
                 ]
             },
@@ -143,27 +144,23 @@ export function parameters(self)
             marble:
             {
                 label: self.lang['ks-marble'],
+                printSize: {width: '10cm', height: '10cm'},
                 materials:
                 [
                     {
-                        url: root + 'marmour/black_gold.jpg?c3d=107', 
-                        material: 'MeshStandardMaterial'
+                        url: root + 'marmour/black_gold.jpg?c3d=0.5.0'
                     },
                     {
-                        url: root + 'marmour/white_gold.jpg?c3d=107', 
-                        material: 'MeshStandardMaterial'
+                        url: root + 'marmour/white_gold.jpg?c3d=0.5.0' 
                     },
                     {
-                        url: root + 'marmour/middle.jpg?c3d=107', 
-                        material: 'MeshStandardMaterial'
+                        url: root + 'marmour/middle.jpg?c3d=0.5.0'
                     },
                     {
-                        url: root + 'marmour/black.jpg?c3d=107', 
-                        material: 'MeshStandardMaterial'
+                        url: root + 'marmour/black.jpg?c3d=0.5.0'
                     },
                     {
-                        url: root + 'marmour/white.jpg?c3d=107', 
-                        material: 'MeshStandardMaterial'
+                        url: root + 'marmour/white.jpg?c3d=0.5.0'
                     }
                 ]
             },
@@ -218,14 +215,11 @@ export function parameters(self)
     };
 }
 
+// modify all wanted things
 export async function init()
 {
-    // initial position
-    this.three.rotateToAngle(30, 30, 0);
-
     // enable zoom with mouse or tap (2 fingers)
     this.enableAutoZoom();
-
 }
 
 // set model views
@@ -234,14 +228,46 @@ export function setView(view, fn = 'to')
 {
     switch (view)
     {
+        case 'cabinet':
+            this.three.rotateToAngle(0, 180, 0);
+            this.three.moveToAngle(0, 0.1, 0.75);
+        break;
+
+        case 'doors':
+        case 'handles':
+            this.three.rotateToAngle(0, 0, 0);
+            this.three.moveToAngle(0, 0.1, 0.75);
+        break;
+
+        case 'frame':
+            this.three.rotateToAngle(0, 0, 0);
+            this.three.moveToAngle(0, -0.1, 0.5);
+        break;
+
+        case 'faucet':
+            this.three.rotateToAngle(30, 30, 0);
+            this.three.moveToAngle(0.1, 0.05, 0.75);
+        break;
+
+        case 'pans':
+            this.three.rotateToAngle(0, 0, 0);
+            this.three.moveToAngle(0, -0.15, 0.75);
+        break;
+
+        case 'towel':
+            this.three.rotateToAngle(0, 0, 0);
+            this.three.moveToAngle(0.1, -0.1, 1);
+        break;
+
         case 'marble':
         case 'sink':
-            this.three.rotateToAngle(90, 0, 0, fn);
+            this.three.rotateToAngle(90, 0, 0);
+            this.three.moveToAngle(0, 0, 0.75);
         break;
 
         default:
-        case 'cabinet':
-            this.three.rotateToAngle(0, 0, 0, fn);
+            this.three.rotateToAngle(0, 0, 0);
+            this.three.moveToAngle(0, 0, 0);
         break;
 
     }

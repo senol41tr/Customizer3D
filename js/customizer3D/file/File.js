@@ -1,6 +1,6 @@
-import {Open} from 'customizer3D_dir/file/operations/Open.js?c3d=110';
-import {SaveAs} from 'customizer3D_dir/file/operations/SaveAs.js?c3d=110';
-import {Export} from 'customizer3D_dir/file/operations/Export.js?c3d=107';
+import {Open} from 'customizer3D_dir/file/Open.js?c3d=0.5.0';
+import {SaveAs} from 'customizer3D_dir/file/SaveAs.js?c3d=0.5.0';
+import {Export} from 'customizer3D_dir/file/Export.js?c3d=0.5.0';
 
 export class File
 {

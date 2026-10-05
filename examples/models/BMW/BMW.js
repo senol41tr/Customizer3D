@@ -1,13 +1,9 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.0';
 
 export function lang(self)
 {
-    return {
-        'body':         {en: 'Body Color',      de: 'Karosserie Farbe',         tr: 'Gövde Rengi'},
-        'bumper':       {en: 'Bumper Color',    de: 'Stoßstange Farbe',         tr: 'Tampon Rengi'},
-        'sideskirt':    {en: 'Sideskirt Color', de: 'Seitenschweller Farbe',    tr: 'Etek Rengi'},
-        'wheels':       {en: 'Wheels Color',    de: 'Felgen Farbe',             tr: 'Jant Rengi'}
-    };
+    return {};
 }
 
 
@@ -28,7 +24,7 @@ export function parameters(self)
         imageLayer:     'section.customizer > div.imageLayer',
         shapeLayer:     'section.customizer > div.shapeLayer',
         controls:       'section.customizer > div.controls',
-        canvas3d:       'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d',
+        canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
         three:
@@ -36,10 +32,8 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: isMobile() ? 2 : 1,
-                maxDistance: isMobile() ? 4 : 2,
-                minPolarAngle: Math.PI / 2,
-                maxPolarAngle: Math.PI / 2
+                minDistance: isMobile() ? 1 : 0.5,
+                maxDistance: 4
             },
 
             // set initial z position
@@ -47,66 +41,46 @@ export function parameters(self)
             {
                 position:
                 {
-                    z: isMobile() ? 4 : 2
+                    z: isMobile() ? 3 : 2
                 }
             },
+
+            //
+            rendererOptions:
+            {
+                canvas: 'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d'
+            }
         },
 
         data:
         {
-            'body': { materials: [{colorOnly: true}]},
-            'bumper': { materials: [{colorOnly: true}]},
-            'sideskirt': { materials: [{colorOnly: true}]},
-            'wheels': { materials: [{colorOnly: true}]}
+            '*': { materials: [{colorOnly: true}]}
         }
     };
 }
 
-export async function init()
+export async function init(self)
 {
-    this.three.rotateToAngle(0, 40, 0);
+    // default view
+    this.three.rotateToAngle(0, 30, 0);
+
+    // this.glbScene.position.x =  isMobile() ? 0 : 4;
+    // this.glbScene.position.y =  isMobile() ? -4 : -20;
 
     // enable zoom with mouse or tap (2 fingers)
     this.enableAutoZoom();
 
-    // disable pan
-    this.three.controls.orbit.enablePan = false;
-
 }
 
 // set model views
-// op = 'to' or 'set' => to=animated, set=instant
+// op = 'to' or 'set' => to=animated
 export function setView(view, fn = 'to')
 {
-    switch (view)
-    {
-        case 'bumper':
-            this.three.rotateToAngle(0, 180, 0, fn);
-        break;
-
-        case 'sideskirt':
-            this.three.rotateToAngle(0, -90, 0, fn);
-        break;
-
-        case 'wheels':
-            this.three.rotateToAngle(0, 90, 0, fn);
-        break;
-
-        case 'body':
-        default:
-            this.three.rotateToAngle(0, 40, 0, fn);
-        break;
-    }
-
-    this.three.controls.restoreSettings(fn);
 }
 
 
 // callback onUnLoad
 export async function onUnLoad()
 {
-    // restore changed settings
-    this.three.controls.orbit.minPolarAngle = 0;
-    this.three.controls.orbit.maxPolarAngle = Math.PI;
-    this.three.controls.orbit.enablePan = true;
+
 }

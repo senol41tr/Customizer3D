@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
 
 export function lang()
 {
@@ -29,7 +29,7 @@ export function parameters(self)
         imageLayer:     'section.customizer > div.imageLayer',
         shapeLayer:     'section.customizer > div.shapeLayer',
         controls:       'section.customizer > div.controls',
-        canvas3d:       'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d',
+        canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
         three:
@@ -37,8 +37,8 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: 0.5,
-                maxDistance: 3,
+                minDistance: isMobile() ? 1 : 0.5,
+                maxDistance: 4
             },
 
             // set initial z position
@@ -48,6 +48,12 @@ export function parameters(self)
                 {
                     z: isMobile() ? 3 : 2
                 }
+            },
+
+            //
+            rendererOptions:
+            {
+                canvas: 'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d'
             }
         },
 
@@ -56,25 +62,25 @@ export function parameters(self)
             model:
             {
                 label: self.lang['bag-texture'],
+                printSize:  {width: '20cm', height: '20cm'},
                 materials:
                 [
-                    {url: root + 'Fabric067_2K-JPG_Color.jpg?c3d=107', repeatX: 2, repeatY: 2},
-                    {url: root + 'Fabric018_2K-JPG_Color.jpg?c3d=107', repeatX: 3, repeatY: 3},
-                    {url: root + 'Fabric061_2K-JPG_Color.jpg?c3d=107', repeatX: 3, repeatY: 3},
-                    {url: root + 'Fabric026_2K-JPG_Color.jpg?c3d=107', repeatX: 3, repeatY: 3},
-                    {url: root + 'Fabric039_1K-JPG_Color.jpg?c3d=107', repeatX: 3, repeatY: 3},
-                    {url: root + 'Fabric024_2K-JPG_Color.jpg?c3d=107', repeatX: 3, repeatY: 3}
+                    {url: root + 'Fabric067_2K-JPG_Color.jpg?c3d=0.5.0', repeatX: 2, repeatY: 2},
+                    {url: root + 'Fabric018_2K-JPG_Color.jpg?c3d=0.5.0', repeatX: 2, repeatY: 2},
+                    {url: root + 'Fabric061_2K-JPG_Color.jpg?c3d=0.5.0', repeatX: 2, repeatY: 2},
+                    {url: root + 'Fabric026_2K-JPG_Color.jpg?c3d=0.5.0', repeatX: 2, repeatY: 2},
+                    {url: root + 'Fabric024_2K-JPG_Color.jpg?c3d=0.5.0', repeatX: 2, repeatY: 2},
                 ]
             },
             front:
             {
                 label: self.lang['bag-front'],
-                printSize:  {width: '20.9cm', height: '21.7cm'}
+                printSize:  {width: '20cm', height: '20cm'}
             },
             back:
             {
                 label: self.lang['bag-back'],
-                printSize:  {width: '20.9cm', height: '21.7cm'}
+                printSize:  {width: '20cm', height: '20cm'}
             }
         }
     };
@@ -82,21 +88,30 @@ export function parameters(self)
 
 export async function init()
 {
-    
+    // enable zoom with mouse or tap (2 fingers)
+    this.enableAutoZoom();
+
 }
 
-// fn = 'to' or 'set' => to=animated, set=instant
+// set model views
+// op = 'to' or 'set' => to=animated, set for to take screenshot (by exporting PDF)
 export function setView(view, fn = 'to')
 {
     switch (view)
     {
-        case 'model':
         case 'front':
             this.three.rotateToAngle(0, 0, 0, fn);
+            this.three.moveToAngle(0, 0.1, 0.8, fn);
         break;
 
         case 'back':
             this.three.rotateToAngle(0, 180, 0, fn);
+            this.three.moveToAngle(0, 0.1, 0.8, fn);
+        break;
+
+        default:
+            this.three.rotateToAngle(0, 0, 0, fn);
+            this.three.moveToAngle(0, 0, 0, fn);
         break;
     }
 

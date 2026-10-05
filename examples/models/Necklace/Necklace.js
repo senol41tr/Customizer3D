@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
 
 export function lang()
 {
@@ -14,10 +14,8 @@ export function parameters(self)
     const root = C3D_MODELS_DIR + 'Necklace/';
 
     return {
-
         // unique name (module name) in models folder, the name is important for creating instance 
         // const {parameters, init, setView, onUnLoad} = await import('models/'+ data.modelName +'.js'); 
-
         modelName: 'Necklace',
 
         container:      'section.customizer',
@@ -30,7 +28,7 @@ export function parameters(self)
         imageLayer:     'section.customizer > div.imageLayer',
         shapeLayer:     'section.customizer > div.shapeLayer',
         controls:       'section.customizer > div.controls',
-        canvas3d:       'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d',
+        canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
         three:
@@ -38,8 +36,8 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: isMobile() ? 1 : 0.5,
-                maxDistance: 4,
+                minDistance: isMobile() ? 0.25 : 0.5,
+                maxDistance: 5
             },
 
             // set initial z position
@@ -47,8 +45,14 @@ export function parameters(self)
             {
                 position:
                 {
-                    z: isMobile() ? 2.5 : 2
+                    z: isMobile() ? 2.5 : 1.75
                 }
+            },
+
+            //
+            rendererOptions:
+            {
+                canvas: 'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d'
             }
         },
 
@@ -57,22 +61,24 @@ export function parameters(self)
             chain:
             {
                 label: self.lang['necklace-chain'],
+                // printSize: {width: '10cm', height: '10cm'},
                 materials:
                 [
-                    {url:root + 'matcap-1764731458681.jpg?c3d=107', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764731647559.jpg?c3d=107', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764787557882.jpg?c3d=107', material:'MeshMatcapMaterial'}
+                    {url:root + 'matcap-1764731458681.jpg?c3d=0.5.0', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764731647559.jpg?c3d=0.5.0', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764787557882.jpg?c3d=0.5.0', material:'MeshMatcapMaterial'}
                 ]
             },
             heart:
             {
                 label: self.lang['necklace-heart'],
+                // printSize: {width: '10cm', height: '10cm'},
                 materials:
                 [
-                    {url:root + 'matcap-1764731458681.jpg?c3d=107', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764731647559.jpg?c3d=107', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764787557882.jpg?c3d=107', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764731550075.jpg?c3d=107', material:'MeshMatcapMaterial'}
+                    {url:root + 'matcap-1764731458681.jpg?c3d=0.5.0', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764731647559.jpg?c3d=0.5.0', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764787557882.jpg?c3d=0.5.0', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764731550075.jpg?c3d=0.5.0', material:'MeshMatcapMaterial'}
                 ]
             }
         }
@@ -83,6 +89,7 @@ export async function init()
 {
     // enable zoom with mouse or tap (2 fingers)
     this.enableAutoZoom();
+
 }
 
 // set model views
@@ -93,15 +100,13 @@ export function setView(view, fn = 'to')
     {
         case 'chain':
 
-            this.three.moveToAngle(0, 0, 2.5, fn);
-            this.three.controls.orbit.enabled = true;
+            this.three.moveToAngle(0, 0, 0);
 
         break;
 
         case 'heart':
 
-            this.three.moveToAngle(0, 25, 80, fn);
-            this.three.controls.orbit.enabled = false;
+            this.three.moveToAngle(0, 0.5, 1.25);
             
         break;
     }

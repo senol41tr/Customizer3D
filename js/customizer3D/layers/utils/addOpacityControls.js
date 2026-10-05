@@ -1,67 +1,30 @@
-export const addOpacityControls = (c3d, layer, button) =>
+export const addOpacityControls = (c3d, layer, button, layerName) =>
 {
 
     const div = document.createElement('div');
     div.innerHTML = `
-        <div class="inputPercent" title="%">
+        <div class="inputPercent" data-icon="%">
             <input type="number" value="${layer.opacity}" style="display:block; width:50px; padding:0.25rem; margin-bottom: 0.5rem; font-size: 0.65rem;">
         </div>
         <input type="range" min="0" max="100" value="${layer.opacity}" style="display:block; width:50px;">
     `;
     const inputNumber = div.querySelector('input[type="number"');
     const inputRange = div.querySelector('input[type="range"');
-    const update = async (value) =>
+    const update = (value) =>
     {
-        const layerType = button.parentNode.self.type;
-
         let val = parseInt(value || inputNumber.value);
         if(val < 0 || val > 100) val = 100;
         inputNumber.value = val;
         inputRange.value = val;
         layer.opacity = val;
-        
-        switch (layerType)
-        {
-            case 'solid':
-
-                layer.updatePreview();
-
-            break;
-
-            case 'text':
-
-                c3d.textLayer.show(layer);
-
-            break;
-
-            case 'image':
-            case 'gradient':
-
-                c3d.imageLayer.show(layer);
-                
-            break;
-
-            case 'shape':
-
-                c3d.shapeLayer.show(layer);
-
-            break;
-
-            default:
-
-                console.warn("Unknown Layer Type!");
-                
-            break;
-        }
+        c3d.render3d.renderView(layer.name);
+        c3d.render2d.renderView(layer.name);
+        if(layerName) c3d[layerName].updatePreview();
     };
 
     div.addEventListener('keydown', (e) =>
     {
-        if(e.key == 'Enter')
-        {
-            update();
-            c3d.contextMenu.hide();
-        }
+        if(e.key == 'Enter') update();
     });
 
     button.addEventListener('click', () =>
@@ -85,8 +48,5 @@ export const addOpacityControls = (c3d, layer, button) =>
     {
         update(e.currentTarget.value);
     });
-
-
-    return div;
 
 };

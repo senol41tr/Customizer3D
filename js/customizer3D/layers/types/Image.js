@@ -1,35 +1,24 @@
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=107';
-import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=107';
-import * as BlendModes from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=107';
-import {ThreeD} from 'customizer3D_dir/layers/types/ThreeD.js?c3d=107';
-import {ThreeDSVG} from 'customizer3D_dir/layers/types/ThreeDSVG.js?c3d=107';
-import {Gradient} from 'customizer3D_dir/layers/types/Gradient.js?c3d=107';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=107';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.0';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.0';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.0';
+import {BlendModes, createBlendModesList} from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=0.5.0';
+import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=0.5.0';
+import {applyFilter} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.0';
 
 export class Image
 {
     constructor(root, c3d, data)
     {
-        this.type = data.type || 'image';
+        this.type = 'image';
         
         this.root = root;
         this.c3d = c3d;
         this.div = null;
-        this.input = null;
-        
-        this.threeDSVGOptions = data.threeDSVG || null;
-        this.threeDSVG = null;
-        
-        this.threeDOptions = data.threeD || {};
-        this.threeD = null;
 
-        this.gradientOptions = data.gradient || null;
-        this.gradient = null;
-        
         this.image = data.image || null;
+        this.canvas = document.createElement('canvas');
         this.fileName = data.fileName || null;
         this.detectedFileType = data.detectedFileType || null;
-        this.mimeType = data.mimeType || 'image/*, application/pdf';
         this.imagePosition = data.imagePosition || {x:0, y:0};
         this.rotation = data.rotation || 0;
         this.opacity = data.opacity || 100;
@@ -37,14 +26,16 @@ export class Image
         this.changeable = typeof data.changeable == 'boolean' ? data.changeable : true;
         this.material = data.material;
         this.materialOptions = data.materialOptions;
-        this.repeatX = data.repeatX || 1;
-        this.repeatY = data.repeatY || 1;
-        this.blendMode = typeof data.blendMode == 'number' ? data.blendMode : 0;
-        this.uniforms = data.uniforms || {};
+        this.repeatX = data.repeatX;
+        this.repeatY = data.repeatY;
+        this.blendMode = data.blendMode || BlendModes.normal.canvas;
+        this.filters = data.filters || {};
         this.visible = typeof data.visible == 'boolean' ? data.visible : true;
 
-        this._mesh = null;
+        this.input = null;
+        this.previewCanvas = null;
         
+        this._insertHTML();
     }
 
     // GETTERS
@@ -54,17 +45,11 @@ export class Image
         return this.root.parentNode.parentNode.dataset.mesh;
     }
 
-    get is3D()
-    {
-        return this.threeDSVG?.mesh || this.threeD?.mesh ? true : false;
-    }
-
 
     // PUBLIC METHODS
 
-    updateThumbnail()
+    updateThumbnail(previewCanvas)
     {
-        const previewCanvas = this.c3d.imageLayer.htmlEl.querySelector('canvas.preview');
         const canvas = this.div.querySelector('canvas.thumbnail');
         const ctx = canvas.getContext('2d');
         const width = 50;
@@ -72,41 +57,82 @@ export class Image
 
         const imgDims = calculateAspectRatioFit(previewCanvas.width, previewCanvas.height, width, height);
 
-        canvas.width = imgDims.width * 2;
-        canvas.height = imgDims.height * 2;
-        canvas.style.width = Math.round(imgDims.width) + 'px';
-        canvas.style.height = Math.round(imgDims.height) + 'px';
-
-        imgDims.width *= this.c3d.PIXEL_RATIO;
-        imgDims.height *= this.c3d.PIXEL_RATIO;
+        canvas.width = imgDims.width;
+        canvas.height = imgDims.height;
+        canvas.style.width = imgDims.width + 'px';
+        canvas.style.height = imgDims.height + 'px';
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(previewCanvas, (canvas.width - imgDims.width) / 2, (canvas.height - imgDims.height) / 2, imgDims.width, imgDims.height);
     }
 
-    converTo3D()
-    {
-        if(this.detectedFileType == 'image/svg+xml')
-        {
-            this.threeDSVG.show();
-        }
-        else if(this.detectedFileType == 'model/gltf-binary')
-        {
-            this.threeD.show();
-        }
-    }
-
-
     destroy()
     {
-        this.div.querySelector('img.remove').click();
+        this.div.remove();
+        if(this.image) URL.revokeObjectURL(this.image.src);
+    }
+
+    getCanvas(crop = false)
+    {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const orgPrintSize = this.c3d.props.data[this.name].printSize;
+
+        let dims;
+        if(orgPrintSize) dims = [orgPrintSize.width, orgPrintSize.height];
+        else dims = [this.image.naturalWidth + 'px', this.image.naturalWidth + 'px'];
+
+        const printWidth = new Size({size:dims[0], DPI:300}).px;
+        const printHeight = new Size({size:dims[1], DPI:300}).px;
+        const imgDims = calculateAspectRatioFit(this.image.width, this.image.height, printWidth, printHeight);
+        
+        // CROP CANVAS
+        if(crop)
+        {
+            const width = this.previewCanvas ? this.previewCanvas.width : this.image.naturalWidth;
+            const height = this.previewCanvas ? this.previewCanvas.height : this.image.naturalHeight;
+
+            canvas.width = printWidth;
+            canvas.height = printHeight;
+
+            const x = canvas.width / width * this.imagePosition.x;
+            const y = canvas.height / height * this.imagePosition.y;
+            
+            ctx.save();
+            ctx.translate(canvas.width / 2 + x, canvas.height / 2 + y);
+            ctx.rotate(degToRad(this.rotation));
+            ctx.scale(this.zoom / 100, this.zoom / 100);
+            ctx.drawImage(this.image, -imgDims.width / 2, -imgDims.height / 2, imgDims.width, imgDims.height);
+            ctx.restore();
+
+        }
+        else
+        {
+            if(this.detectedFileType == 'image/svg+xml')
+            {
+                const imgDims = calculateAspectRatioFit(this.image.naturalWidth, this.image.naturalHeight, printWidth, printHeight);
+                canvas.width = imgDims.width;
+                canvas.height = imgDims.height;
+            }
+            else
+            {
+                canvas.width = this.image.naturalWidth;
+                canvas.height = this.image.naturalHeight;    
+            }
+
+            ctx.drawImage(this.image, 0, 0);
+
+        }
+
+        return canvas;
+
     }
 
     
     // PRIVATE METHODS
 
 
-    async _init()
+    _insertHTML()
     {
         const div = document.createElement('div');
         div.setAttribute('class', this.type);
@@ -115,52 +141,39 @@ export class Image
         this.div = div;
 
         div.innerHTML = `
-            <img class="visibility" src="${C3D_SERVER}svg/show.svg?c3d=107" alt="Icon" style="opacity:1;">
+            <img class="visibility" src="${C3D_SERVER}svg/visibility.svg?c3d=0.5.0" alt="Icon" style="opacity:1;width: 12px;">
             <canvas class="thumbnail" oncontextmenu="return false;"></canvas>
-            <img src="${C3D_SERVER}svg/opacity.svg?c3d=107" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
-            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=107" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
-            <div class="spacer"></div>
-            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=107" title="${this.c3d.lang['delete-layer']}" class="remove">
+            <div style="width:100%;"></div>
+            <img src="${C3D_SERVER}svg/opacity.svg?c3d=0.5.0" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
+            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=0.5.0" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=0.5.0" title="${this.c3d.lang['delete-layer']}" class="remove">
         `;
 
-        // VISIBILITY
+        // CANVAS
 
-        div.querySelector('img.visibility').addEventListener('click', (e) =>
+        div.querySelector('canvas.thumbnail').addEventListener('click', () =>
         {
-            const img = e.currentTarget;
-            const isHidden = parseFloat(img.style.opacity) == 1;
-
-            img.style.opacity = isHidden ? 0.5 : 1;
-            this.c3d.render3d.setVisibility(this, isHidden);
-            this.visible = !isHidden;
-            this.div.style.opacity = isHidden ? 0.5 : 1;
-
-        });
-
-        // ONCLİCK
-
-        const _onClick = () => {
             this.c3d.imageLayer.show(this);
-            if(this.gradient) this.gradient.show();
-        };
-        const thumbCanvas = div.querySelector('canvas.thumbnail');
-        thumbCanvas.addEventListener('click', _onClick);
-        div.querySelector('div.spacer').addEventListener('click', _onClick);
+        });        
 
-
-
+        if(this.changeable) {
+            div.querySelector('canvas.thumbnail').click();
+        } else {
+            this.div.style.display = 'none';
+        }
 
         // OPACITY
 
-        await addOpacityControls(this.c3d, this, div.querySelector('img.opacity'));
+        const opacityButton = div.querySelector('img.opacity');
+        addOpacityControls(this.c3d, this, opacityButton, 'imageLayer');
 
 
-        // BLEND MODES
+        // BLEND MODE
 
         const blendModesList = document.createElement('div');
-        blendModesList.classList.add('blend-modes')
+        blendModesList.classList.add('blend-modes');
         const blendModesButton = div.querySelector('img.blend-modes');
-        BlendModes.createBlendModesList(this.c3d, blendModesList, this, blendModesButton);
+        createBlendModesList(this.c3d, blendModesList, this, blendModesButton);
         blendModesButton.addEventListener('click', () =>
         {
             this.c3d.contextMenu.setWidth('fit-content');
@@ -174,75 +187,41 @@ export class Image
         div.querySelector('img.remove').addEventListener('click', () =>
         {
             if(this.input) this.input.remove();
-            if(this.image) URL.revokeObjectURL(this.image.src);
-            if(this._mesh) this.c3d.render3d.removeLayer(this);
             div.remove();
+            URL.revokeObjectURL(this.image);
             this.c3d.imageLayer.hide();
-            this.c3d.three.render();
+            this.c3d.render3d.renderView(this.name);
+            this.c3d.render2d.renderView(this.name);
         });
 
-        // ADD NEW MESH
+        // VISIBILITY
+
+        div.querySelector('img.visibility').addEventListener('click', (e) =>
+        {
+            const img = e.currentTarget;
+            const isHidden = this.visible;
+
+            img.style.opacity = isHidden ? 0.5 : 1;
+            this.visible = !isHidden;
+            this.div.style.opacity = isHidden ? 0.5 : 1;
+
+            this.c3d.render3d.renderView(this.name);
+            this.c3d.render2d.renderView(this.name);
+
+        });
+        div.querySelector('img.visibility').style.opacity = this.visible ? 1 : 0.5;
+        div.style.opacity = this.visible ? 1 : 0.5;
+
+        //
         
-        this.c3d.render3d.addImageLayer(this);
-
-
-        // RENDER LAYER
-
-        if(this.image && this.detectedFileType != 'model/gltf-binary')
-        {
-            this.c3d.render3d.renderImageLayer(this);
-        }
-
-        // EXTRUDE SVG
-
-        if(this.detectedFileType == 'image/svg+xml')
-        {
-            this.threeDSVG = new ThreeDSVG(this.c3d, this);
-            await this.threeDSVG.loadSVGString();
-
-            if(this.threeDSVGOptions)
-            {
-                this.threeDSVG.show();
-                this.threeDSVG.bakeImageToLayer();
-                this.threeDSVG.hide();
-            }
-        }
-
-        // 3D MODEL
-
-        if(this.detectedFileType == 'model/gltf-binary')
-        {
-            this.threeD = new ThreeD(this.c3d, this);
-            await this.threeD.loadGLB();
-            this.threeD.show();
-
-            if(this.threeDOptions)
-            {
-                this.threeD.bakeImageToLayer();
-                this.threeD.hide();
-            }
-        }
-
-        // GRADIENT
-
-        if(this.type == 'gradient')
-        {
-            this.gradient = new Gradient(this.c3d, this);
-            this.gradient.update();
-        }
-
-        // ADD TO SORTABLE LIST
-
         if(this.root.__C3D_Sortable)
         {
-            this.root.__C3D_Sortable.addElement(thumbCanvas);
+            this.root.__C3D_Sortable.addElement(div.querySelector('canvas.thumbnail'));
         }
 
-        
-        if (this.changeable || this.gradientOptions || this.gradient) thumbCanvas.click();
-        else this.div.style.display = 'none';
+        // DRAW IMAGE
 
-        this.c3d.render3d.updateRenderOrder(this.name);
-        
+        if(this.changeable) applyFilter(this.c3d, this, 'imageLayer');
+
     }
 }

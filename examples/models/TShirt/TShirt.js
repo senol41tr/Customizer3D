@@ -1,5 +1,4 @@
-import * as THREE from 'three';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
 
 export function lang()
 {
@@ -15,10 +14,8 @@ export function lang()
 export function parameters(self)
 {
     return {
-
         // unique name (module name) in models folder, the name is important for creating instance 
         // const {parameters, init, setView, onUnLoad} = await import('models/'+ data.modelName +'.js');
-
         modelName: 'TShirt',
 
         container:      'section.customizer',
@@ -31,16 +28,16 @@ export function parameters(self)
         imageLayer:     'section.customizer > div.imageLayer',
         shapeLayer:     'section.customizer > div.shapeLayer',
         controls:       'section.customizer > div.controls',
-        canvas3d:       'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d',
-
+        canvas2d:       'section.customizer > div.webgl_2d_canvas',
+        
         // Three.js options
         three:
         {
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: 0.5,
-                maxDistance: 5,
+                minDistance: isMobile() ? 0.25 : 0.5,
+                maxDistance: 4
             },
 
             // set initial z position
@@ -48,8 +45,14 @@ export function parameters(self)
             {
                 position:
                 {
-                    z: isMobile() ? 3 : 2.5
+                    z: isMobile() ? 2 : 1
                 }
+            },
+
+            // 
+            rendererOptions:
+            {
+                canvas: 'section.customizer > div.webgl_3d_canvas > canvas.webgl_3d'
             }
         },
 
@@ -75,8 +78,7 @@ export function parameters(self)
                             '#ffd461', 
                             '#ef783e', 
                             '#ea5455', 
-                            '#2c4059',
-                            '#5ACBCB'
+                            '#2c4059'
                         ],
                         material: 'MeshPhongMaterial'
                     }
@@ -110,10 +112,11 @@ export function parameters(self)
     };
 }
 
+// initialization callback
 export async function init()
 {
     // enable zoom with mouse or tap (2 fingers)
-    this.enableAutoZoom();    
+    this.enableAutoZoom();
 }
 
 // set model views
@@ -121,28 +124,27 @@ export async function init()
 export function setView(view, fn = 'to')
 {
     const multiplyer = isMobile() ? 1.5 : 1;
-    
+
     switch (view)
     {
         case 'back':
-
             this.three.rotateToAngle(0, 180, 0, fn);
-            this.three.moveToAngle(0, 0, 70 * multiplyer, fn);
+            this.three.moveToAngle(0, 0, 1, fn);
         break;
 
         case 'left':
             this.three.rotateToAngle(0, 90, 30, fn);
-            this.three.moveToAngle(0, 0, 60 * multiplyer, fn);
+            this.three.moveToAngle(0, -0.05, 1, fn);
         break;
 
         case 'right':
             this.three.rotateToAngle(0, -90, -30, fn);
-            this.three.moveToAngle(0, 0, 60 * multiplyer, fn);
+            this.three.moveToAngle(0, -0.05, 1, fn);
         break;
 
         case 'front':
             this.three.rotateToAngle(0, 0, 0, fn);
-            this.three.moveToAngle(0, 0, 70 * multiplyer, fn);
+            this.three.moveToAngle(0, 0, 1, fn);
         break;
 
         default:
@@ -158,5 +160,5 @@ export function setView(view, fn = 'to')
 // callback onUnLoad
 export async function onUnLoad()
 {
-    
+
 }

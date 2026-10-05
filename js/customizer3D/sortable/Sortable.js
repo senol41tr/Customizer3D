@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
 
 export class Sortable
 {
@@ -15,7 +15,6 @@ export class Sortable
             div.image:not(.active), 
             div.text:not(.active), 
             div.solid:not(.active), 
-            div.gradient:not(.active),
             div.shape:not(.active)
         `;
 
@@ -36,12 +35,13 @@ export class Sortable
         
         if (!item) return;
 
-        document.querySelector(this.c3d.props.layers).style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+
         const point = e.touches ? e.touches[0] : e;
 
         this.pendingDrag = true; 
         this.dragItem = item;
-        this.startY = point.clientY;
+        this.startY = point.clientY - item.getBoundingClientRect().top;
 
         if(isMobile())
         {
@@ -68,11 +68,11 @@ export class Sortable
 
             
             this.dragItem.classList.add('active');
-            // this.dragItem.style.width = `${rect.width}px`;
+            this.dragItem.style.width = `${rect.width}px`;
             this.dragItem.style.position = 'fixed';
-            this.dragItem.style.zIndex = 10000;
-            // this.dragItem.style.left = `${rect.left}px`;
-            // this.dragItem.style.top = `${rect.top}px`;
+            this.dragItem.style.zIndex = this.c3d.zIndex.index; // move to top
+            this.dragItem.style.left = `${rect.left}px`;
+            this.dragItem.style.top = `${rect.top}px`;
             this.pendingDrag = false; 
 
         }
@@ -129,6 +129,6 @@ export class Sortable
 
         this.dragItem = null;
         if(this.callbacks?.onDragEnd && this.time + 250 <= new Date().getTime()) this.callbacks.onDragEnd();
-        document.querySelector(this.c3d.props.layers).style.overflow = 'auto';
+        document.body.style.overflow = 'auto';
     }
 }

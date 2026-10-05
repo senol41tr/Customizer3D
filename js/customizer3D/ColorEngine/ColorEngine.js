@@ -73,7 +73,7 @@ export class ColorEngine
         this.__toCMYK();
         this.js = jsState;
 
-        return this.color;
+        return this.js ? this.color : `C: ${Math.floor(this.color.C * 100)}, M: ${Math.floor(this.color.M * 100)}, Y: ${Math.floor(this.color.Y * 100)}, K: ${Math.floor(this.color.K * 100)}`;
     }
 
     // https://stackoverflow.com/questions/35969656/how-can-i-generate-the-opposite-color-according-to-current-color
@@ -249,6 +249,21 @@ export class ColorEngine
             r = parseInt(c[0]);
             g = parseInt(c[1]);
             b = parseInt(c[2]);
+        }
+
+        // CMYK
+
+        else if(this.color.indexOf('%') >= 0)
+        {
+            this.color = this.color.replace(/\s/ig, '');
+            if((/\d{1,4}%\d{1,4}%\d{1,4}%\d{1,4}%/ig).test(this.color) === false) {
+                console.warn('Unknown Color Format!! Correct Format is: 0-100% 0-100% 0-100% 0-100%');
+            }
+            const c = this.color.split('%', 4);
+            const {R, G, B} = this.cmykToRgb.transform(jsColorEngine.color.CMYK(parseInt(c[0]), parseInt(c[1]), parseInt(c[2]), parseInt(c[3])));
+            r = R;
+            g = G;
+            b = B;
         }
 
         // UNKNOWN

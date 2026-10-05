@@ -1,31 +1,31 @@
 import * as THREE from 'three';
 import gsap from 'base/gsap@3.13.0/gsap@3.13.0.esm.js';
-import * as Materials from 'customizer3D_dir/three/materials/Materials.js?c3d=107';
-import {Three} from 'customizer3D_dir/three/Three.js?c3d=107';
-import {createMaterial} from 'customizer3D_dir/utils/createMaterial.js?c3d=107';
-import {Render3D} from 'customizer3D_dir/three/Render3D.js?c3d=110';
-import {GLB} from 'customizer3D_dir/three/loaders/GLB.js?c3d=107';
-import {WebXR} from 'customizer3D_dir/three/WebXR.js?c3d=107';
-import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=107';
-import {File} from 'customizer3D_dir/file/File.js?c3d=110';
-import {EventsManager} from 'customizer3D_dir/events/EventsManager.js?c3d=107';
-import {LocalStorage} from 'customizer3D_dir/cookie/LocalStorage.js?c3d=107';
-import {Preloader} from 'customizer3D_dir/preloader/Preloader.js?c3d=107';
-import {Settings} from 'customizer3D_dir/settings/Settings.js?c3d=107';
-import {Layers} from 'customizer3D_dir/layers/Layers.js?c3d=107';
-import {TextLayer} from 'customizer3D_dir/layers/TextLayer.js?c3d=107';
-import {ImageLayer} from 'customizer3D_dir/layers/ImageLayer.js?c3d=110';
-import {ShapeLayer} from 'customizer3D_dir/layers/ShapeLayer.js?c3d=107';
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=107';
-import {ContextMenu} from 'customizer3D_dir/contextMenu/ContextMenu.js?c3d=107';
-import {Help} from 'customizer3D_dir/help/Help.js?c3d=107';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
-import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=107';
-import {ZIndex} from 'customizer3D_dir/utils/ZIndex.js?c3d=107';
-import {ShowHideUI} from 'customizer3D_dir/utils/ShowHideUI.js?c3d=107';
-import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=107';
-import {ColorEngine} from 'customizer3D_dir/ColorEngine/ColorEngine.js?c3d=107';
-import {Sortable} from 'base/customizer3D/sortable/Sortable.js?c3d=107';
+import {File} from 'customizer3D_dir/file/File.js?c3d=0.5.0';
+import {Three} from 'customizer3D_dir/three/Three.js?c3d=0.5.0';
+import {Render3D} from 'customizer3D_dir/three/Render3D.js?c3d=0.5.0';
+import {Render2D} from 'customizer3D_dir/render2d/Render2D.js?c3d=0.5.0';
+import {GLB} from 'customizer3D_dir/three/loaders/GLB.js?c3d=0.5.0';
+import {EventsManager} from 'customizer3D_dir/events/EventsManager.js?c3d=0.5.0';
+import {LocalStorage} from 'customizer3D_dir/cookie/LocalStorage.js?c3d=0.5.0';
+import {Preloader} from 'customizer3D_dir/preloader/Preloader.js?c3d=0.5.0';
+import {Settings} from 'customizer3D_dir/settings/Settings.js?c3d=0.5.0';
+import {Layers} from 'customizer3D_dir/layers/Layers.js?c3d=0.5.0';
+import {TextLayer} from 'customizer3D_dir/layers/TextLayer.js?c3d=0.5.0';
+import {ImageLayer} from 'customizer3D_dir/layers/ImageLayer.js?c3d=0.5.0';
+import {ShapeLayer} from 'customizer3D_dir/layers/ShapeLayer.js?c3d=0.5.0';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.0';
+import {ContextMenu} from 'customizer3D_dir/contextMenu/ContextMenu.js?c3d=0.5.0';
+import {Help} from 'customizer3D_dir/help/Help.js?c3d=0.5.0';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.0';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
+import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
+import {ZIndex} from 'customizer3D_dir/utils/ZIndex.js?c3d=0.5.0';
+import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.5.0';
+import {WebXR} from 'customizer3D_dir/three/WebXR.js?c3d=0.5.0';
+import {ShowHideUI} from 'customizer3D_dir/utils/ShowHideUI.js?c3d=0.5.0';
+import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=0.5.0';
+import {ColorEngine} from 'customizer3D_dir/ColorEngine/ColorEngine.js?c3d=0.5.0';
+import {Sortable} from 'customizer3D_dir/sortable/Sortable.js?c3d=0.5.0';
 
 export class Customizer3D
 {
@@ -59,27 +59,6 @@ export class Customizer3D
         this.setView = setView;
         this.onUnLoad = onUnLoad;
 
-        // UI
-
-        const layersDiv = document.querySelector(this.props.layers);
-
-        layersDiv.innerHTML = `
-            <div class="title">
-                <div class="title">
-                    <img src="${C3D_SERVER}svg/layers.svg?c3d=107" alt="Icon" class="icon" draggable="false">
-                    <p class="title">${this.lang['layers']}</p>
-                </div>
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=107" alt="Icon" class="rollup" draggable="false">
-            </div>
-
-            <div class="content"></div>
-            <div class="settings"></div>
-            <div class="imageLayer"></div>
-            <div class="textLayer"></div>
-            <div class="shapeLayer"></div>
-        `;
-
-
         //
         this.preloader = new Preloader(this);
 
@@ -89,18 +68,12 @@ export class Customizer3D
 
         // set class variables
         this.file = new File(this);
-        this.layers = null;
         this.contextMenu = new ContextMenu(this);
         this.help = new Help(this);
         this.localStorage = new LocalStorage(this);
         this.textLayer = new TextLayer(this);
         this.imageLayer = new ImageLayer(this);
         this.shapeLayer = new ShapeLayer(this);
-        this.settings = null;
-        this.glbScene = null;
-        this.zIndex = null;
-        this.webXR = null;
-        this.showHideUI = null;
 
         // show secure decription
         if(this.localStorage.get('secureText') == null)
@@ -112,7 +85,7 @@ export class Customizer3D
                 secureDiv.remove();
             });
             secureDiv.innerHTML = this.lang['secure-text'];
-            secureDiv.innerHTML += '<img src="' + C3D_SERVER + 'svg/plus.svg?c3d=107" alt="Icon" class="close">';
+            secureDiv.innerHTML += '<img src="' + C3D_SERVER + 'svg/plus.svg?c3d=0.5.0" alt="Icon" class="close">';
             document.querySelector(this.props.container).appendChild(secureDiv);
         }
 
@@ -124,10 +97,6 @@ export class Customizer3D
 
         //
         this.three = new Three(this);
-        this.three.setupAll();
-        this.three.setupLights();
-
-        // add THREE.OrbitControls
         this.three.addControls(this.props.orbitControlOptions);
 
         //
@@ -140,6 +109,7 @@ export class Customizer3D
         this.layers = new Layers(this);
 
         // 
+        this.render2d = new Render2D(this);
         this.render3d = new Render3D(this);
 
         // load model
@@ -147,56 +117,65 @@ export class Customizer3D
 
         // set html, options, tint all loaded svg's etc.
         this.settings = new Settings(this);
-        await this.settings.init();
+        await this.settings._init();
 
         // 
         // HTML STUFF
         //
 
-        // https://discourse.threejs.org/t/how-to-prevent-raycast-from-firing-when-i-touch-an-html-element/30262/2
-        layersDiv.addEventListener('mouseenter', () =>
-        {
-            this.eventsManager.raycaster.layers.disableAll();
+        const layersDiv = document.querySelector(this.props.layers);
+
+        layersDiv.innerHTML = `
+        <div class="title">
+            <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.0" alt="Icon" class="icon" draggable="false">
+            <div class="title">
+                <img src="${C3D_SERVER}svg/layers.svg?c3d=0.5.0" alt="Icon" class="icon" draggable="false">
+                <p class="title">${this.lang['layers']}</p>
+            </div>
+        </div>
+
+        <div class="content"></div>`;
+
+        const dragable = new Dragable({
+            dragEl: layersDiv.querySelector('div.title'),
+            container: layersDiv,
+            root: document.querySelector(this.props.container),
+            c3d: this
         });
 
-        layersDiv.addEventListener('mouseleave', () =>
+        layersDiv.addEventListener('mouseup', () =>
         {
-            this.eventsManager.raycaster.layers.enableAll();
+            document.querySelector(this.props.layers).style.opacity = 1;
         });
 
-        const titleRollUpIcon = layersDiv.querySelector('div.title > img.rollup');
-        titleRollUpIcon.addEventListener('click', (e, state) =>
+        document.querySelector('div.title > img.icon').addEventListener('click', (e) =>
         {
             const layers = document.querySelector(this.props.layers);
             const content = layers.querySelector('div.content');
-            const settings = layers.querySelector('div.settings');
-            const bottomNav = layers.querySelector('div.bottomNav');
-            const visible = typeof state == 'boolean' ? state : content.style.display == 'none';
-            
-            titleRollUpIcon.style.rotate = visible ? '0deg' : '180deg';
-            content.style.display = visible ? 'flex' : 'none';
-            settings.style.display = visible ? 'block' : 'none';
-            bottomNav.style.display = visible ? 'flex' : 'none';
+            const fileMenu = layers.querySelector('div.fileMenu');
+            const switchTo2D = layers.querySelector('div.switchTo2D');
+
+            const visible = content.style.display == 'none';
+
+            e.currentTarget.style.rotate = visible ? '180deg' : '0deg';
+            content.style.display = 
+            fileMenu.style.display = 
+            switchTo2D.style.display = visible ? 'flex' : 'none';
             
             layers.dataset.minHeight = window.getComputedStyle(layers)['minHeight'];
             layers.style.minHeight = visible ? layers.dataset.minHeight : 'auto';
-
-            this._updateCanvasSize();
         });
 
-
-        // CONTROLS
-
+        // set controls
         const controlsDiv = document.querySelector(this.props.controls);
-        controlsDiv.style.display = 'none';
         const deviceIcon = isMobile() ? 'tap' : 'mouse';
         controlsDiv.innerHTML = `
-            <img src="${C3D_SERVER}svg/zoom-out.svg?c3d=107" class="zoomOut" draggable="false">
+            <img src="${C3D_SERVER}svg/zoom-out.svg?c3d=0.5.0" class="zoomOut" draggable="false">
             <div class="inputDiv">
                 <input type="checkbox" class="checkbox" checked>
-                <img src="${C3D_SERVER}svg/${deviceIcon}.svg?c3d=107" class="deviceIcon" draggable="false">
+                <img src="${C3D_SERVER}svg/${deviceIcon}.svg?c3d=0.5.0" class="deviceIcon" draggable="false">
             </div>
-            <img src="${C3D_SERVER}svg/zoom-in.svg?c3d=107" class="zoomIn" data-factor="0.01" draggable="false">
+            <img src="${C3D_SERVER}svg/zoom-in.svg?c3d=0.5.0" class="zoomIn" data-factor="0.01" draggable="false">
         `;
 
         const dragableControls = new Dragable({
@@ -208,39 +187,25 @@ export class Customizer3D
 
         controlsDiv.querySelector('img.zoomIn').addEventListener('click', (e) =>
         {
-            const event = new WheelEvent('wheel', {
-                deltaY: -200,
-                deltaMode: 0,
-                bubbles: true,
-                cancelable: true
-            });
-            this.three.controls.orbit.enableZoom = true;
-            this.three.renderer.domElement.dispatchEvent(event);
-            this.three.controls.orbit.enableZoom = false;
+            if(this.three.camera.position.z <= this.three.controls.orbit.minDistance) return;
+            this.three.camera.position.z -= 0.5;
         });
 
         controlsDiv.querySelector('img.zoomOut').addEventListener('click', (e) =>
         {
-            const event = new WheelEvent('wheel', {
-                deltaY: 200,
-                deltaMode: 0,
-                bubbles: true,
-                cancelable: true
-            });
-            this.three.controls.orbit.enableZoom = true;
-            this.three.renderer.domElement.dispatchEvent(event);
-            this.three.controls.orbit.enableZoom = false;
+            if(this.three.camera.position.z >= this.three.controls.orbit.maxDistance) return;
+            this.three.camera.position.z += 0.5;
         });
         
         const zoomCheckBox = controlsDiv.querySelector('input.checkbox');
         zoomCheckBox.addEventListener('click', () =>
         {
             const checked = zoomCheckBox.checked;
-            this.three.controls.orbit.enableZoom = checked;
-            if(isMobile())
-            {
-                const canvas3d = document.querySelector(this.props.canvas3d);
-                canvas3d.style.touchAction = checked ? 'none' : 'auto';
+            if(isMobile()) {
+                this.three.getCanvas().style.pointerEvents = checked ? 'all' : 'none';
+            }
+            else {
+                this.three.controls.orbit.enableZoom = checked;
             }
             controlsDiv.querySelector('img.zoomIn').style.display = 
             controlsDiv.querySelector('img.zoomOut').style.display = checked ? 'none' : 'block';
@@ -250,9 +215,16 @@ export class Customizer3D
         const webXRDiv = document.createElement('div');
         webXRDiv.className = 'webXR';
         webXRDiv.innerHTML = `
-            <img src="${C3D_SERVER}svg/xr.svg?c3d=107" class="button" alt="XR Button" draggable="false">
+            <img src="${C3D_SERVER}svg/xr.svg?c3d=0.5.0" class="button" alt="XR Button" draggable="false">
         `;
         document.querySelector(this.props.container).appendChild(webXRDiv);
+
+        const dragableWebXR = new Dragable({
+            dragEl: webXRDiv,
+            container: webXRDiv,
+            root: document.querySelector(this.props.container),
+            c3d: this
+        });
         
 
         // z-index manager
@@ -267,18 +239,42 @@ export class Customizer3D
         // create layer(s) data
         await this._createLayerData();
 
+
         // render all views
         this.render3d.renderAll();
 
-        // start render
-        this.three.start();
-
         // add onResize event
-        window.addEventListener('resize', this.onResize.bind(this));
+        // this.onResize();
+        if(!isMobile()) window.addEventListener('resize', this.onResize.bind(this));
 
+        // 
+        this.three.start();
+        this._setNavActive();
+    }
+
+
+    switchTo2D()
+    {
+        this._set2D3DView(false);
+    }
+
+    switchTo3D()
+    {
+        this._set2D3DView();
+    }
+
+    _set2D3DView(state = true)
+    {
+        const button = document.querySelector(this.props.layers + ' > div.switchTo2D > button');
+        this.render2d[state ? 'hide' : 'show']();
+        button.classList[state ? 'remove' : 'add']('threeD');
+        button.innerHTML = this.lang[state ? 'design-in-2d' : 'back-to-3d'];
+        this.textLayer.hide();
+        this.imageLayer.hide();
+        this.shapeLayer.hide();
     }
     
-    
+
     enableAutoZoom()
     {
         this._setAutoZoom(true);
@@ -289,19 +285,27 @@ export class Customizer3D
         this._setAutoZoom(false);
     }
 
-    _setAutoZoom(auto = true)
+    onResize()
     {
-        const controlsDiv = document.querySelector(this.props.controls);
-        const setZoomCheckbox = controlsDiv.querySelector('input.checkbox');
-        controlsDiv.style.display = auto ? 'none' : 'flex';
-        setZoomCheckbox.checked = !auto; // true: manuel zoom, false: auto (default: auto)
-        setZoomCheckbox.click();
+        // if (this.props.three?.cameraOptions?.position?.z) return;
+        fitMeshToScreen(this.three.camera, this.glbScene, 1.5);
+        this.three.controls.saveSettings();
+        setTimeout(() => { // !!!
+            this.three.controls.update();
+            this.three.render();
+        }, 100);
     }
-
 
 
     // PRIVATE METHODS
 
+
+    _setAutoZoom(auto = true)
+    {
+        const setZoomCheckbox = document.querySelector(this.props.controls).querySelector('input.checkbox');
+        setZoomCheckbox.checked = !auto; // true: manuel zoom, false: auto (default: auto)
+        setZoomCheckbox.click();
+    }
 
     async _loadGLB(path)
     {
@@ -309,9 +313,40 @@ export class Customizer3D
         const glb = await glbLoader.load();
 
         this.glbScene = glb.scene;
+        this.glbScene.userData.dims = Size.meshDims(this.glbScene);
         this.three.scene.add(this.glbScene);
     }
 
+    _setNavActive(name, rotate = true)
+    {
+        const layersDivContent = document.querySelector(this.props.layers + ' > div.content');
+        const layers = layersDivContent.querySelectorAll('div.layer');
+
+        for (let i = 0; i < layers.length; i++)
+        {
+            const layer = layers[i];
+            const title = layer.querySelector('div.title');
+            const content = layer.querySelector('div.content');
+            const icon = title.querySelector('img.icon');
+
+            if(layer.classList.contains(name))
+            {
+                title.classList.add('active');
+                icon.style.opacity = 0;
+                content.style.display = 'block';
+                content.style.maxHeight = (content.scrollHeight + 2) + 'px';
+                if(rotate) this.setView(name);
+                // title.scrollIntoView();
+            }
+            else
+            {
+                title.classList.remove('active');
+                icon.style.opacity = 1;
+                content.style.display = 'none';
+                content.style.maxHeight = null;
+            }
+        }
+    }
 
     async _createLayerData()
     {
@@ -322,44 +357,26 @@ export class Customizer3D
         const layersDiv = document.querySelector(this.props.layers);
         layersDiv.dispatchEvent(new MouseEvent('mouseleave'));
 
+
         const layersDivContent = layersDiv.querySelector('div.content');
         const data = Object.entries(this.props.data);
         
         for (let i = 0; i < data.length; i++)
         {
-            const meshName = data[i][0];
-            const label = data[i][1].label || this.lang[meshName] || data[i][0];
+            const label = data[i][1].label || data[i][0];
             const group = data[i][1].group;
             const materials = data[i][1].materials;
-            const printSize = data[i][1].printSize;
+            const meshName = data[i][0];
 
             // create layers bottom
             if(meshName == '*') continue;
-
-
-            // SET RAWSHADER MATERIAL
-
-
-            if((!materials || materials[0].image || materials[0].text || materials[0].solid) && printSize)
-            {
-                const renderer = this.glbScene.getObjectByName(meshName);
-                if(!renderer) {
-                    alert("Mesh in 3D Model not found!\nLabel or mesh name: " + label);
-                    continue;
-                }
-                renderer.material = Materials.setMainMaterial(this, renderer);
-            }
-
 
             const layer = document.createElement('div');
             layer.className = 'layer ' + meshName;
             layer.dataset.mesh = meshName;
             layer.innerHTML = `
                 <div class="title">
-                    <div class="back">
-                        <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=107" alt="Icon" class="back" draggable="false">
-                        <p class="label">${this.lang['back']}</p>
-                    </div>
+                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.0" alt="Icon" class="icon" draggable="false">
                     <p class="name">${label}</p>
                 </div>
                 <div class="content">
@@ -368,21 +385,16 @@ export class Customizer3D
                 </div>`;
             
             layersDivContent.appendChild(layer);
-
-            // add back button listener
-            layer.querySelector('div.title > div.back').addEventListener('click', () =>
-            {
-                this._setNavActive('C3D_reset'); // show all layers
-            });
             
-            // set nav. item as active
-            layer.querySelector('div.title > p.name').addEventListener('click', () =>
+            // add button listener
+            layer.querySelector('div.title').addEventListener('click', () =>
             {
+                this.render2d.scrollTo(meshName);
                 this._setNavActive(meshName);
-                this.textLayer.hide();
-                this.imageLayer.hide();
+                document.querySelector(this.props.textLayer).style.display = 
+                document.querySelector(this.props.imageLayer).style.display = 
+                document.querySelector(this.props.shapeLayer).style.display = 'none';
             });
-
 
             // create material data
             const mesh = group ? this.glbScene.getObjectByName(group).getObjectByName(meshName) : this.glbScene.getObjectByName(meshName);
@@ -397,50 +409,69 @@ export class Customizer3D
                 event:'mouseup', 
                 callback:(o) => {
                     this._setNavActive(mesh.name, false);
-                    layersDiv.dispatchEvent(new MouseEvent('mouseup'));
                 }
             });
             
             await this._createMaterials(mesh, materials);
+
 
             //
             if(!materials)
             {
                 const layers = layersDivContent.querySelector('div.'+ meshName +' > div.content > div.layers');
                 layers.__C3D_Sortable = new Sortable(this, layers, {onDragEnd: () => {
-                    this.render3d.updateRenderOrder(meshName);
-                    this.three.render();
+                    this.render3d.renderView(meshName);
+                    this.render2d.renderView(meshName);
                 }});
             }
 
         }
 
-        // BOTTOM NAV.
+        // SWITCH TO 2D
 
-        const bottomNav = document.createElement('div');
-        bottomNav.className = 'bottomNav';
-        bottomNav.innerHTML = `
-
-            <div class="file">
-                <a href="javascript:void(0);" class="menu">${this.lang['file']}</a>
-                <div class="menu">
-                    <a href="javascript:void(0);" class="saveAs" title="${this.lang['save-as']}">${this.lang['save-as']}</a>  
-                    <a href="javascript:void(0);" class="exportAsPDF" title="${this.lang['export']}">${this.lang['export']}</a>  
-                </div>
-            </div>
-
-            <div class="add_layer" title="${this.lang['add-layer']}">
-                <img src="${C3D_SERVER}svg/plus.svg?c3d=107" alt="Icon" draggable="false">
-                <span>${this.lang['add-layer']}</span>
-            </div>
-
-            <div class="settings">
-                <a href="javascript:void(0);" class="settings">${this.lang['settings']}</a>
-            </div>
-
+        const switchTo2DDiv = document.createElement('div');
+        switchTo2DDiv.className = 'switchTo2D';
+        switchTo2DDiv.innerHTML = `
+            <button class="button">${this.lang['design-in-2d']}</button>
         `;
+        const switchTo2DButton = switchTo2DDiv.querySelector('button.button');
+        switchTo2DButton.addEventListener('click', (e) =>
+        {
+            const showing3D = switchTo2DButton.classList.contains('threeD');
+            this._set2D3DView(showing3D);
+        });
+        document.querySelector(this.props.layers).appendChild(switchTo2DDiv);
 
-        const menuDiv = bottomNav.querySelector('div.file > div.menu');
+        // FILE MENU
+
+        const fileDiv = document.createElement('div');
+        fileDiv.className = 'fileMenu';
+        fileDiv.innerHTML = `
+            <button class="menu">${this.lang['file']}</button>
+            <div class="menu">
+                <a href="javascript:void(0);" class="saveAs" title="${this.lang['save-as']}">${this.lang['save-as']}</a>  
+                <a href="javascript:void(0);" class="exportAsPDF" title="${this.lang['export']}">${this.lang['export']}</a>  
+            </div>`;
+        
+        // show file menu button and content
+        const menuButton = fileDiv.querySelector('button.menu');
+        const menuDiv = fileDiv.querySelector('div.menu');
+
+        menuButton.addEventListener('click', (e) => {
+            const visible = menuDiv.style.display == 'none' || menuDiv.style.display == '' ;
+            menuDiv.style.display = visible ? 'flex' : 'none';
+        });
+
+        // on click outside hide the menu
+        const _menuClickOutside = (e) =>
+        {
+            if(!fileDiv.contains(e.target) && !menuButton.contains(e.target))
+            {
+                menuDiv.style.display = 'none';
+            }
+        };
+        window.addEventListener('click', _menuClickOutside);
+        window.addEventListener('touchstart', _menuClickOutside);
 
         // 
         const openDiv = document.createElement('div');
@@ -450,6 +481,9 @@ export class Customizer3D
         const openLabel = document.createElement('label');
         openLabel.setAttribute('for', openInputID);
         openLabel.innerText = this.lang['open'];
+        openLabel.addEventListener('click', (e) => {
+            menuDiv.style.display = 'none';
+        });
         openDiv.appendChild(openLabel);
 
         const openInput = document.createElement('input');
@@ -467,107 +501,28 @@ export class Customizer3D
         openDiv.appendChild(openInput);
 
         menuDiv.prepend(openDiv);
-        
+
         // 
-        const saveAsButton = bottomNav.querySelector('a.saveAs');
+        const saveAsButton = fileDiv.querySelector('a.saveAs');
         saveAsButton.addEventListener('click', () => {
             this.file.saveAs();
+            menuDiv.style.display = 'none';
         });
 
         //
-        const exportAsPDFButton = bottomNav.querySelector('a.exportAsPDF');
+        const exportAsPDFButton = fileDiv.querySelector('a.exportAsPDF');
         exportAsPDFButton.addEventListener('click', (e) =>
         {
-            this.textLayer.hide();
-            this.imageLayer.hide();
-            this.shapeLayer.hide();
+            document.querySelector(this.props.textLayer).style.display = 'none';
+            document.querySelector(this.props.imageLayer).style.display = 'none';
+            document.querySelector(this.props.shapeLayer).style.display = 'none';
 
-            let notice = '<img src="' + C3D_SERVER + 'svg/warning.svg?c3d=107" style="width:28px;filter:none !important;align-self: center;">' + this.lang['convert-to-cmyk-notice'];
-
-            notice = notice.replace('[ILLUSTRATOR_SCREENSHOT]', '<a href="' + C3D_SERVER + 'jpg/convert_to_cmyk_illustrator.jpg?c3d=107" target="_blank" style="font-size:0.7rem;">'+ this.lang['screenshot'] +'</a>');
-            notice = notice.replace('[COREL_SCREENSHOT]', '<a href="' + C3D_SERVER + 'jpg/convert_to_cmyk_corel.jpg?c3d=107" target="_blank" style="font-size:0.7rem;">'+ this.lang['screenshot'] +'</a>');
-            notice = notice.replace('[DOWNLOAD]', '<button class="download">'+ this.lang['download'] +'</button>');
-            notice = notice.replace('[PDFTOCMYK_COM]', '<a href="' + C3D_SERVER + 'jpg/pdf2cmyk.com.jpg?c3d=107" target="_blank" style="font-size:0.7rem;">'+ this.lang['screenshot'] +'</a> <a href="https://www.pdf2cmyk.com" target="_blank" style="font-size:0.7rem;">pdf2cmyk.com</a>');
-
-            this.contextMenu.setWidth(350);
-            this.contextMenu.setHTML(notice);
-            this.contextMenu.show(e.currentTarget);
-            
-            this.contextMenu.el.querySelector('button.download').addEventListener('click', (e) => {
-                this.file.export();
-                this.contextMenu.hide();  
-            });
+            this.file.export();
+            menuDiv.style.display = 'none'; 
 
         });
 
-
-        const addLayerButton = bottomNav.querySelector('div.add_layer');
-        addLayerButton.addEventListener('click', () =>
-        {
-            const activeDiv = layersDiv.querySelector('div.content > div.active');
-            const buttons = activeDiv.querySelector('div.content > div.buttons');
-            const content = activeDiv.querySelector('div.content');
-            const isVisible = buttons.style.display == '' || buttons.style.display == 'none';
-
-            const maxHeight = parseInt(content.style.maxHeight);
-            buttons.style.display = isVisible ? 'flex' : 'none';
-            content.style.maxHeight = isVisible ? (buttons.offsetHeight + maxHeight) + 'px' : (maxHeight - buttons.offsetHeight) + 'px';
-            setTimeout(() => buttons.scrollIntoView(), 300);
-
-            addLayerButton.querySelector('img').style.rotate = isVisible ? '45deg' : '0deg';
-            addLayerButton.querySelector('span').innerText = this.lang[isVisible ? 'close' : 'add-layer'];
-        });
-
-
-        layersDiv.appendChild(bottomNav);
-
-
-
-        // SETTINGS
-
-        const settingsButton = bottomNav.querySelector('a.settings');
-        settingsButton.addEventListener('click', () => 
-        {
-            const title = layersDiv.querySelector('div.title > p.title');
-            const titleIcon = layersDiv.querySelector('div.title > img.icon');
-            const fileDiv = bottomNav.querySelector('div.file');
-            const addLayerDiv = bottomNav.querySelector('div.add_layer');
-
-            let maxHeight = this.settings.htmlEl.style.maxHeight;
-            let maxHeightLayer;
-
-            if(maxHeight == '' || maxHeight == '0px') 
-            {
-                const bb = this.settings.htmlEl.querySelector('div.content').scrollHeight;
-                maxHeight = bb + 'px';
-                maxHeightLayer = 0;
-
-                title.innerText = this.lang['settings'];
-                titleIcon.src = C3D_SERVER + 'svg/settings.svg?c3d=107';
-                settingsButton.innerText = this.lang['close'];
-
-                fileDiv.style.visibility = 'hidden';
-                addLayerDiv.style.visibility = 'hidden';
-            }
-            else
-            {
-                const bb = layersDiv.querySelector('div.content').scrollHeight;
-                maxHeightLayer = bb + 'px';
-                maxHeight = 0;
-
-                title.innerText = this.lang['layers'];
-                titleIcon.src = C3D_SERVER + 'svg/layers.svg?c3d=107';
-                settingsButton.innerText = this.lang['settings'];
-
-                fileDiv.style.visibility = 'visible';
-                addLayerDiv.style.visibility = 'visible';
-            }
-
-            this.settings.htmlEl.style.maxHeight = maxHeight;
-            layersDiv.querySelector('div.content').style.maxHeight = maxHeightLayer;
-
-        });
-
+        document.querySelector(this.props.layers).appendChild(fileDiv);
 
 
         //
@@ -613,7 +568,7 @@ export class Customizer3D
                     layer.dataset.mesh = mesh.name;
                     layer.innerHTML = `
                         <div class="title">
-                            <img src="${C3D_SERVER}svg/plus.svg?c3d=107" alt="Icon" class="icon" draggable="false">
+                            <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.0" alt="Icon" class="icon" draggable="false">
                             <p class="name" title="${label}">${label}</p>
                         </div>
                         <div class="content">
@@ -624,11 +579,21 @@ export class Customizer3D
                     layersDivContent.appendChild(layer);
                     
                     // add button listener
-                    layer.querySelector('div.title').addEventListener('click', (e) =>
+                    layer.querySelector('div.title').addEventListener('click', () =>
                     {
+                        this.render2d.scrollTo(mesh.name);
                         this._setNavActive(mesh.name);
-                        this.textLayer.hide();
-                        this.imageLayer.hide();
+                        document.querySelector(this.props.textLayer).style.display = 'none';
+                        document.querySelector(this.props.imageLayer).style.display = 'none';
+                        document.querySelector(this.props.shapeLayer).style.display = 'none';
+                    });
+
+                    this.eventsManager.addEventListener({
+                        mesh, 
+                        event:'mouseup', 
+                        callback:(o) => {
+                            this._setNavActive(mesh.name, false);
+                        }
                     });
 
                     await this._createMaterials(mesh, materialData.materials);
@@ -641,116 +606,52 @@ export class Customizer3D
         // init. model (e.g. T-Shirt)
         await this.modelInit(this);
 
-        // !!!
-        const layersData = Object.keys(this.props.data);
-        for (const meshName in layersData)
-        {
-            const view = layersData[meshName];
-            const layers = layersDiv.querySelectorAll('[data-mesh=\'' + view + '\'] > div.content > div.layers > div');
-
-            for (let i = 0; i < layers.length; i++)
-            {
-                const layer = layers[i].self;
-
-                if(layer.type == 'image')
-                {
-                    if(!layer.changeable) {
-                        layer.image.click();                        
-                    }
-                }
-            }
-        }
-
         // show UI
         this.showHideUI.show();
-        this.onResize(); // fit mesh to screen
-        // layersDiv.querySelector('div.title > img.rollup').click(null, true);
+
     }
 
-    _setNavActive(name, rotate = true, fn = 'to')
+
+    createMaterial(c3d, data)
     {
-        const layersDiv = document.querySelector(this.props.layers);
-        const layersDivContent = layersDiv.querySelector('div.content');
-        const layers = layersDivContent.querySelectorAll('div.layer');
-        const add_layer = layersDiv.querySelector('div.bottomNav > div.add_layer');        
-
-        // show if window rolled up
-        if(layersDivContent.style.display == 'none') return;
-
-        for (let i = 0; i < layers.length; i++)
+        if(data.colorOnly || data == 'default')
         {
-            const layer = layers[i];
-            const title = layer.querySelector('div.title');
-            const content = layer.querySelector('div.content');
-            const back = title.querySelector('div.back');
+            return false;
+        }
 
-            if(layer.classList.contains(name))
+        if(!data.materialOptions) data.materialOptions = {};
+
+        if(data.url && !data.material)
+        {
+            return new THREE.MeshBasicMaterial(data.materialOptions);
+        }
+
+        const materials =
+        [
+            'MeshBasicMaterial', 
+            'MeshLambertMaterial', 
+            'MeshPhongMaterial', 
+            'MeshStandardMaterial', 
+            'MeshPhysicalMaterial',
+            'MeshMatcapMaterial'
+        ];
+        
+        for (let i = 0; i < materials.length; i++)
+        {
+            const material = materials[i];
+            if(data.material == material)
             {
-                const layersDivContentMaxHeight = layersDivContent.style.maxHeight;
-
-                layer.style.display = 'flex';
-                layer.classList.add('active');
-                title.classList.add('active');
-                back.style.display = 'flex';
-                content.style.display = 'block';
-                content.style.maxHeight = content.scrollHeight + 'px';
-                layersDivContent.style.maxHeight = (layersDiv.offsetHeight + content.scrollHeight) + 'px';              
-
-                if(rotate) this.setView(name, fn);
-                title.scrollIntoView();
-            }
-            else
-            {
-                layer.style.display = name == 'C3D_reset' ? 'flex' : 'none';
-                layer.classList.remove('active');
-                title.classList.remove('active');
-                back.style.display = 'none';
-                content.style.display = 'none';
-                content.style.maxHeight = null;
-            }
-
-            if(name == 'C3D_reset')
-            {
-                this.three.rotateToAngle(0, 0, 0);
-                this.three.moveToAngle(0, 0, 0);
-                if(parseInt(add_layer.querySelector('img').style.rotate) == 45) {
-                    add_layer.click();
-                }
+                const mat = new THREE[data.material](data.materialOptions);
+                return mat;
             }
         }
 
+        return false;
+    };
 
-        const hasButtons = layersDiv.querySelector('div.content > div.active div.buttons > div');
-        add_layer.style.display = hasButtons ? 'flex' : 'none';
 
-        this._updateCanvasSize();
 
-    }
 
-    _updateCanvasSize(instant = false)
-    {
-        const canvas3d = document.querySelector(this.props.canvas3d);
-        const container = document.querySelector(this.props.container);
-        const layersDiv = document.querySelector(this.props.layers);
-
-        setTimeout(() =>
-        {
-            if(instant)
-            {
-                canvas3d.style.height = (container.offsetHeight - layersDiv.offsetHeight) + 'px';
-                this.three._onResize();
-            }
-            else
-            {
-                gsap.to(canvas3d, {
-                    height: container.offsetHeight - layersDiv.offsetHeight,
-                    duration: 0.5,
-                    ease: "power2.inOut",
-                    onUpdate: () => this.three._onResize()
-                });
-            }
-        }, 750);
-    }
 
     async _createMaterials(mesh, materials = [])
     {
@@ -772,50 +673,52 @@ export class Customizer3D
             if(data.url) this.preloader.set(data.url);
 
             // set material if defined
-            const material = createMaterial(data);
+            const material = this.createMaterial(this, data);
             if(material) mesh.material = material;
-
-            // hide border
-            if(data.url || data.colors) {
-                layers.style.border = 'none';
-            }
-
 
             // COLORS
 
             // change only material color
             if(data.hasOwnProperty('colorOnly'))
             {
-                layer = await this.layers.addSolid(layers, {color: '#' + mesh.material.color.getHexString(), type: 'colorOnly'});
-                layer._mesh = mesh;
+                this.layers.addSolid(layers, {color: '#' + mesh.material.color.getHexString(), type: 'colorOnly'});
             }
 
-            // add predefined colors exists
+            // add predefined colors
             else if(data.hasOwnProperty('colors'))
             {
-                layer = await this.layers.addSolid(layers, {type: 'color'});
-                layer._mesh = mesh;
 
                 // create available color array
                 for (let j = 0; j < data.colors.length; j++)
                 {
+
+                    const color = data.colors[j];   
                     const activeSpan = document.createElement('span');
-                    activeSpan.dataset.color = data.colors[j];
-                    activeSpan.style.backgroundColor = data.colors[j];
+                    const ce = this.colorEngine;
+
+                    activeSpan.style.backgroundColor = ce.hex(color, false);
                     
                     activeSpan.addEventListener('click', () => 
                     {
-                        const spans = materialButtons.querySelectorAll('span');                        
+                        const spans = materialButtons.querySelectorAll('span');
                         
                         for (let z = 0; z < spans.length; z++)
                         {
                             const span = spans[z];
-
+                            
                             if(span === activeSpan)
                             {
                                 span.classList.add('active');
-                                layer.color = data.colors[j];
-                                layer.updatePreview();
+                                this.render2d.renderView(mesh.name);
+                                
+                                const color = new THREE.Color(data.colors[z]);
+                                gsap.to(mesh.material.color, {
+                                    r:color.r,
+                                    g:color.g,
+                                    b:color.b,
+                                    duration: 0.3,
+                                    onUpdate: () => this.three.render()
+                                });
                             }
                             else
                             {
@@ -831,19 +734,15 @@ export class Customizer3D
 
             }
 
+
             // TEXTURES
 
             else if(data.hasOwnProperty('url'))
             {
                 if(!layer) layer = await this.layers.addImage(layers, {changeable:false});
 
-                // strip get parameters
-                let image_src = data.url.substring(data.url.lastIndexOf('/') + 1);
-                if(image_src.indexOf('?') > -1) image_src = image_src.substring(0, image_src.indexOf('?'));
-
                 const img = document.createElement('img');
                 img.classList.add('texture');
-                img.dataset.image_src = image_src;
                 img.src = data.url;
 
                 await img.decode();
@@ -862,70 +761,19 @@ export class Customizer3D
                             layer.image = img;
                             layer.fileName = data.url.substring(data.url.lastIndexOf('/') + 1);
                             if(layer.fileName.indexOf('?') > -1) layer.fileName = layer.fileName.substring(0, layer.fileName.indexOf('?'));
-                            
-                            if(data.material) layer.material = data.material;
-                            if(data.repeatX) layer.repeatX = data.repeatX || 1;
-                            if(data.repeatY) layer.repeatY = data.repeatY || 1;
-                            if(data.materialOptions) layer.materialOptions = data.materialOptions;
-                            
-                            const mesh = this.glbScene.getObjectByName(layer.name);
-                            
-                            if(mesh.material)
-                            {
-                                if(mesh.material.map) mesh.material.map.dispose();
-                                if(mesh.material.matcap) mesh.material.matcap.dispose();
-                            }
-                            else
-                            {
-                                const material = createMaterial(data);
-                                mesh.material = material;
-                            }
-
-                            const canvas = document.createElement('canvas');
-                            const ctx = canvas.getContext('2d');
-                            canvas.width = layer.image.naturalWidth;
-                            canvas.height = layer.image.naturalHeight;
-                            ctx.drawImage(layer.image, 0, 0);
-
-                            const texture = new THREE.CanvasTexture(canvas);
-                            texture.colorSpace = THREE.SRGBColorSpace;
-                            texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-                            texture.offset.set(0, 0);
-                            texture.repeat.set(layer.repeatX, layer.repeatY);
-
-                            switch (layer.material)
-                            {
-                                case 'MeshMatcapMaterial':
-
-                                    mesh.material.matcap = texture;
-
-                                break;
-
-                                case 'MeshBasicMaterial': 
-                                case 'MeshLambertMaterial':  
-                                case 'MeshPhongMaterial': 
-                                case 'MeshStandardMaterial':  
-                                case 'MeshPhysicalMaterial': 
-
-                                    mesh.material.map = texture;
-
-                                break;
-                            
-                                default:
-
-                                    mesh.material.map = texture;
-
-                                break;
-                            }
-
-                            mesh.material.needsUpdate = true;
-                            this.three.render();
+                            layer.material = data.material;
+                            layer.materialOptions = data.materialOptions;
+                            layer.repeatX = data.repeatX;
+                            layer.repeatY = data.repeatY;
+                            this.render2d.renderView(mesh.name);
+                            this.render3d.renderView(mesh.name);
                         }
                         else
                         {
                             activeImg.classList.remove('active');
                         }
-                    }                    
+
+                    }
                 });
 
                 materialButtons.appendChild(img);
@@ -944,7 +792,7 @@ export class Customizer3D
                 div.setAttribute('class', 'button');
                 div.setAttribute('title', this.lang['add-solid-layer']);
 
-                img.src = C3D_SERVER + 'svg/solid.svg?c3d=107';
+                img.src = C3D_SERVER + 'svg/solid.svg?c3d=0.5.0';
                 img.alt = 'Icon';
                 img.dataset.type = 'Solid';
                 img.draggable = false;
@@ -952,8 +800,6 @@ export class Customizer3D
                 div.addEventListener('click', async () =>
                 {
                     await this.layers.addSolid(layers);
-                    this._setNavActive(mesh.name, false);
-                    this.three.render();
                 });
 
                 materialButtons.appendChild(div);
@@ -971,7 +817,7 @@ export class Customizer3D
                 div.setAttribute('class', 'button');
                 div.setAttribute('title', this.lang['add-text-layer']);
 
-                img.src = C3D_SERVER + 'svg/text.svg?c3d=107';
+                img.src = C3D_SERVER + 'svg/text.svg?c3d=0.5.0';
                 img.alt = 'Icon';
                 img.dataset.type = 'Text';
                 img.draggable = false;
@@ -979,7 +825,6 @@ export class Customizer3D
                 div.addEventListener('click', async () =>
                 {
                     await this.layers.addText(layers);
-                    this._setNavActive(mesh.name, false);
                 });
 
                 materialButtons.appendChild(div);
@@ -997,18 +842,40 @@ export class Customizer3D
                 div.setAttribute('class', 'button');
                 div.setAttribute('title', this.lang['add-image-layer']);
 
-                img.src = C3D_SERVER + 'svg/image.svg?c3d=107';
+                img.src = C3D_SERVER + 'svg/image.svg?c3d=0.5.0';
                 img.alt = 'Icon';
                 img.dataset.type = 'Image';
                 img.draggable = false;
                 
                 div.addEventListener('click', async () =>
                 {
-                    const imageLayer = await this.layers.addImage(layers);
-                    this.imageLayer.layer = imageLayer;
-                    imageLayer.input = this.imageLayer._addSelectImageInput();
-                    imageLayer.input.click();
-                    this._setNavActive(mesh.name, false);
+                    const layer = await this.layers.addImage(layers);
+                    layer.input.click();
+                });
+
+                materialButtons.appendChild(div);
+            }
+
+            // SHAPE LAYER
+            
+            else if(data.hasOwnProperty('shape'))
+            {
+                const div = document.createElement('div');
+                const img = document.createElement('img');
+
+                div.appendChild(img);
+
+                div.setAttribute('class', 'button');
+                div.setAttribute('title', this.lang['add-shape-layer']);
+
+                img.src = C3D_SERVER + 'svg/shapes.svg?c3d=0.5.0';
+                img.alt = 'Icon';
+                img.dataset.type = 'Image';
+                img.draggable = false;
+                
+                div.addEventListener('click', async () =>
+                {
+                    const layer = await this.layers.addShape(layers);
                 });
 
                 materialButtons.appendChild(div);
@@ -1019,43 +886,20 @@ export class Customizer3D
             else
             {
                 materialButtons.innerHTML += `
-                <div class="button solid" title="${this.lang['add-solid-layer']}">
-                    <img src="${C3D_SERVER}svg/solid.svg?c3d=107" alt="Icon" draggable="false">
-                </div>
-
-                <div class="button gradient" title="${this.lang['add-gradient-layer']}">
-                    <img src="${C3D_SERVER}svg/gradient.svg?c3d=107" alt="Icon" draggable="false">
-                </div>
-
-                <div class="button text" title="${this.lang['add-text-layer']}">
-                    <img src="${C3D_SERVER}svg/text.svg?c3d=107" alt="Icon" draggable="false">
-                </div>
-
-                <div class="button image" title="${this.lang['add-image-layer']}">
-                    <img src="${C3D_SERVER}svg/image.svg?c3d=107" alt="Icon" draggable="false">
-                </div>
-
-                <div class="button threeD" title="${this.lang['add-3d-model']}">
-                    <img src="${C3D_SERVER}svg/3D.svg?c3d=107" alt="Icon" draggable="false">
-                </div>
-
-                <div class="button shape" title="${this.lang['add-shape-layer']}">
-                    <img src="${C3D_SERVER}svg/shapes.svg?c3d=107" alt="Icon" draggable="false">
-                </div>
+                <div class="button solid" title="${this.lang['add-solid-layer']}"><img src="${C3D_SERVER}svg/solid.svg?c3d=0.5.0" alt="Icon" data-type="Solid" draggable="false"></div>
+                <div class="button text" title="${this.lang['add-text-layer']}"><img src="${C3D_SERVER}svg/text.svg?c3d=0.5.0" alt="Icon" data-type="Text" draggable="false"></div>
+                <div class="button image" title="${this.lang['add-image-layer']}"><img src="${C3D_SERVER}svg/image.svg?c3d=0.5.0" alt="Icon" data-type="Image" draggable="false"></div>
+                <div class="button shape" title="${this.lang['add-shape-layer']}"><img src="${C3D_SERVER}svg/shapes.svg?c3d=0.5.0" alt="Icon" data-type="Shape" draggable="false"></div>
                 `;
-
 
                 materialButtons.querySelector('div.solid').addEventListener('click', async () =>
                 {
                     await this.layers.addSolid(layers);
-                    this._setNavActive(mesh.name, false);
-                    this.three.render();
                 });
                 
                 materialButtons.querySelector('div.text').addEventListener('click', async () =>
                 {
                     await this.layers.addText(layers);
-                    this._setNavActive(mesh.name, false);
                 });
 
                 materialButtons.querySelector('div.image').addEventListener('click', async () =>
@@ -1064,41 +908,31 @@ export class Customizer3D
                     layer.input.click();
                 });
 
-                materialButtons.querySelector('div.threeD').addEventListener('click', async () =>
-                {
-                    const layer = await this.layers.addImage(layers, {mimeType:'.glb'});
-                    layer.input.click();
-                });
+                // materialButtons.querySelector('div.threeD').addEventListener('click', async () =>
+                // {
+                //     const layer = await this.layers.addImage(layers, {mimeType:'.glb'});
+                //     layer.input.click();
+                // });
 
-                materialButtons.querySelector('div.gradient').addEventListener('click', async () =>
-                {
-                    const layer = await this.layers.addImage(layers, {type:'gradient', changeable: false});
-                    this._setNavActive(mesh.name, false);
-                });
+                // materialButtons.querySelector('div.gradient').addEventListener('click', async () =>
+                // {
+                //     const layer = await this.layers.addImage(layers, {type:'gradient', changeable: false});
+                //     this._setNavActive(mesh.name, false);
+                // });
 
                 materialButtons.querySelector('div.shape').addEventListener('click', async () =>
                 {
                     await this.layers.addShape(layers);
-                    this._setNavActive(mesh.name, false);
                 });
 
+                // set default material (EDIT AREA)
+                mesh.material = new THREE.MeshBasicMaterial({color: 0x0, opacity: 0.1, transparent: true, depthWrite: false});
             }
             
         }
 
         this.preloader.hide();
 
-        this.onResize(); // fit GLB to Screen
-        this.three.controls.saveSettings();
-    }
-
-    onResize()
-    {
-        if (!this.props.three?.cameraOptions?.position?.z)
-        {
-            fitMeshToScreen(this.three.camera, this.glbScene, 1.5);
-        }
-        this._updateCanvasSize(true);
     }
 
 }

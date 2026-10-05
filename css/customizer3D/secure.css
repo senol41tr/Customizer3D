@@ -7,8 +7,8 @@ section.customizer > div.secure
     transform: translateX(-50%);
     background-color: #0073ff;
     color: #ffffff;
-    border-radius: 7px;
-    filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
+    border-radius: 6px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
     touch-action: none;
     max-width: 240px;
     padding: 1rem;

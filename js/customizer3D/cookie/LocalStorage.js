@@ -16,17 +16,6 @@ export class LocalStorage
         window.localStorage.setItem(name, value);
     }
 
-    setObject(name, value)
-    {
-        this.setAsArray(name, value);    
-    }
-
-    getObject(name)
-    {
-        const arr = this.getAsArray(name);
-        return arr.length == 0 ? null : arr;
-    }
-
     setAsArray(name, value)
     {
         this.set(name, JSON.stringify(value));
@@ -53,7 +42,7 @@ export class LocalStorage
         this.div.setAttribute('class', 'cookies');
         this.div.addEventListener('click', this._hideDialog.bind(this));
         this.div.innerHTML = this.c3d.lang['cookie-information'];
-        this.div.innerHTML += '<img src="' + C3D_SERVER + 'svg/plus.svg?c3d=107" alt="Icon" class="close">';
+        this.div.innerHTML += '<img src="' + C3D_SERVER + 'svg/plus.svg?c3d=0.5.0" alt="Icon" class="close">';
         this.htmlEl.appendChild(this.div);
     }
 
