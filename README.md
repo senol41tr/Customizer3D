@@ -10,6 +10,9 @@ It requires an http server.
 **Layer based editing**
 Add Image, Text and all available Layer types, rearrange with drag'n drop
 
+**Filter & Effects Gallery**
+You can add filter or effect to your image, shape or text. 
+
 **PDF export**
 300 DPI PDF Export
 
