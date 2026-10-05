@@ -25,5 +25,8 @@ You can load your Custom Fonts too.
 **WebXR Feature (currently only on Android with Chrome)**
 Place your designed Model in your environment
 
+**Responsive**
+Work on desktop and mobile
+
 **Online Demo** 
 https://ssarigul.tr/Customizer3D
