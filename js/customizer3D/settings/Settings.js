@@ -239,7 +239,7 @@ export class Settings
             const a = document.createElement('a');
             const blobUrl = URL.createObjectURL(blob);
             a.href = blobUrl;
-            a.download = this.c3d.props.modelName + '_Screenshot.png?c3d=0.5.0';
+            a.download = this.c3d.props.modelName + '_Screenshot.png';
             a.click();
             a.remove();
             setTimeout(() =>
@@ -318,6 +318,11 @@ export class Settings
             <div>
                 <p>ambientCG</p>
                 <a href="https://ambientcg.com" target="_blank">#</a>
+            </div>
+            <p class="title">AI</p>
+            <div>
+                <p>gemini</p>
+                <a href="https://gemini.google.com" target="_blank">#</a>
             </div>
         `;
         container.appendChild(aboutContainer);
