@@ -230,39 +230,39 @@ export function setView(view, fn = 'to')
     {
         case 'cabinet':
             this.three.rotateToAngle(0, 180, 0);
-            this.three.moveToAngle(0, 0.1, 0.75);
+            this.three.moveToAngle(0, 0.1, 0.35);
         break;
 
         case 'doors':
         case 'handles':
             this.three.rotateToAngle(0, 0, 0);
-            this.three.moveToAngle(0, 0.1, 0.75);
+            this.three.moveToAngle(0, 0.1, 0.35);
         break;
 
         case 'frame':
             this.three.rotateToAngle(0, 0, 0);
-            this.three.moveToAngle(0, -0.1, 0.5);
+            this.three.moveToAngle(0, -0.1, 0.35);
         break;
 
         case 'faucet':
             this.three.rotateToAngle(30, 30, 0);
-            this.three.moveToAngle(0.1, 0.05, 0.75);
+            this.three.moveToAngle(0.1, 0.05, 0.35);
         break;
 
         case 'pans':
             this.three.rotateToAngle(0, 0, 0);
-            this.three.moveToAngle(0, -0.15, 0.75);
+            this.three.moveToAngle(0, -0.15, 0.35);
         break;
 
         case 'towel':
             this.three.rotateToAngle(0, 0, 0);
-            this.three.moveToAngle(0.1, -0.1, 1);
+            this.three.moveToAngle(0.1, -0.1, 0.35);
         break;
 
         case 'marble':
         case 'sink':
             this.three.rotateToAngle(90, 0, 0);
-            this.three.moveToAngle(0, 0, 0.75);
+            this.three.moveToAngle(0, 0, 0.35);
         break;
 
         default:

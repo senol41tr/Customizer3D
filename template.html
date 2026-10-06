@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="theme-color" content="#ffffff">
+        
+        <title>Customizer3D Project</title>
+
+        <link rel="icon" type="image/png" href="./favicon.png?c3d=0.5.0">
+
+        <script src="js/pdfjs-dist@3.4.120/pdf.min.js"></script>
+        <script src="js/JSManipulate@1.0/jsmanipulate.js?c3d=0.5.0"></script>
+                
+        <link rel="stylesheet" href="js/jscolorpicker/colorpicker.css?c3d=0.5.0">
+
+        <link rel="stylesheet" href="css/customizer3D/style.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/preloader.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/cookies.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/secure.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/layers.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/textLayers.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/imageLayer.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/shapeLayer.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/canvas2D.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/canvas3D.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/export.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/settings.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/contextMenu.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/help.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/controls.css?c3d=0.5.0">
+        <link rel="stylesheet" href="css/customizer3D/about.css?c3d=0.5.0">
+
+        <script type="importmap">
+        {
+            "imports":
+            {
+                "base/": "./js/",
+                "customizer3D_dir/": "./js/customizer3D/",
+                "three": "./js/three/build/three.module.min.js",
+                "three_dir/": "./js/three/"
+            }
+        }
+        </script>
+
+        <script>
+            // with a slash at the end
+            window.C3D_SERVER = document.location.href.substring(0, document.location.href.lastIndexOf('/') + 1);
+            window.C3D_MODELS_DIR = C3D_SERVER + 'examples/models/';
+        </script>
+
+    </head>
+
+    <body>
+
+        <section class="customizer">
+            
+            <div class="preloader">
+
+                <div class="indicator"></div>
+                <p>...</p>
+
+            </div>
+            
+            <div class="webgl_2d_canvas"></div>
+
+            <div class="webgl_3d_canvas">
+
+                <canvas class="webgl_3d"></canvas>
+
+            </div>
+
+            <div class="layers"></div>
+
+            <div class="settings"></div>
+
+            <div class="contextMenu"></div>
+
+            <div class="help"></div>
+
+            <div class="textLayer"></div>
+
+            <div class="imageLayer"></div>
+
+            <div class="shapeLayer"></div>
+
+            <div class="controls"></div>
+
+        </section>
+
+
+        <script type="module">
+
+            import {Customizer3D} from 'customizer3D_dir/Customizer3D.js';
+
+            const C3D = new Customizer3D(
+                C3D_MODELS_DIR + 'TShirt/TShirt.glb',
+                C3D_MODELS_DIR + 'TShirt/TShirt.js'
+            );
+
+            // await C3D.file.open(
+            //     C3D_SERVER + 'C3D/TShirt.c3d'
+            // );
+
+        </script>
+
+
+    </body>
+
+
+</html>
