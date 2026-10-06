@@ -425,16 +425,17 @@ export class Settings
 
             const remoteData = await response.json();
 
-            if (isNewerVersion(remoteData.version, CURRENT_VERSION)) {
+            if (isNewerVersion(remoteData.version, this.c3d.CURRENT_VERSION)) {
                 updateStatus.innerHTML = `
                     🎉 <strong>New Version Available! (v${remoteData.version})</strong><br>
                     <em>${remoteData.releaseNotes}</em><br>
                     <a href="${remoteData.downloadUrl}" target="_blank">Download Now</a>
                 `;
             } else {
-                updateStatus.innerText = `✅ Your application is up to date! (v${CURRENT_VERSION})`;
+                updateStatus.innerText = `✅ Your application is up to date! (v${this.c3d.CURRENT_VERSION})`;
             }
         } catch (error) {
+            alert(error);
             updateStatus.innerText = "❌ Update check failed. Please check your network connection.";
         } finally {
             updateBtn.disabled = false;
