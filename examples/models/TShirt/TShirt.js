@@ -129,22 +129,22 @@ export function setView(view, fn = 'to')
     {
         case 'back':
             this.three.rotateToAngle(0, 180, 0, fn);
-            this.three.moveToAngle(0, 0, 1, fn);
+            this.three.moveToAngle(0, 0, 0.5, fn);
         break;
 
         case 'left':
             this.three.rotateToAngle(0, 90, 30, fn);
-            this.three.moveToAngle(0, -0.05, 1, fn);
+            this.three.moveToAngle(0, -0.05, 0.5, fn);
         break;
 
         case 'right':
             this.three.rotateToAngle(0, -90, -30, fn);
-            this.three.moveToAngle(0, -0.05, 1, fn);
+            this.three.moveToAngle(0, -0.05, 0.5, fn);
         break;
 
         case 'front':
             this.three.rotateToAngle(0, 0, 0, fn);
-            this.three.moveToAngle(0, 0, 1, fn);
+            this.three.moveToAngle(0, 0, 0.5, fn);
         break;
 
         default:
