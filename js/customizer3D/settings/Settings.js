@@ -427,10 +427,12 @@ export class Settings
 
             if (isNewerVersion(remoteData.version, this.c3d.CURRENT_VERSION)) {
                 updateStatus.innerHTML = `
-                    🎉 <strong>New Version Available! (v${remoteData.version})</strong><br>
-                    <em>${remoteData.releaseNotes}</em><br>
+                    <span style="font-size:2rem;">🎉</span>
+                    <strong>New Version Available! (v${remoteData.version})</strong>
+                    <em>${remoteData.releaseNotes}</em>
                     <a href="${remoteData.downloadUrl}" target="_blank">Download Now</a>
                 `;
+                updateBtn.style.display = 'none';
             } else {
                 updateStatus.innerText = `✅ Your application is up to date! (v${this.c3d.CURRENT_VERSION})`;
             }

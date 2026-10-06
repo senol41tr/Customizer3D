@@ -49,7 +49,7 @@
         <script>
             // with a slash at the end
             window.C3D_SERVER = document.location.href.substring(0, document.location.href.lastIndexOf('/') + 1);
-            window.C3D_MODELS_DIR = C3D_SERVER + 'examples/models/';
+            window.C3D_MODELS_DIR = C3D_SERVER + 'INSERT_FOLDER_NAME_HERE/';
         </script>
 
     </head>
@@ -96,13 +96,15 @@
 
             import {Customizer3D} from 'customizer3D_dir/Customizer3D.js';
 
+            // init. with a blank file
             const C3D = new Customizer3D(
-                C3D_MODELS_DIR + 'TShirt/TShirt.glb',
-                C3D_MODELS_DIR + 'TShirt/TShirt.js'
+                C3D_MODELS_DIR + 'INSERT_MODULE_NAME_HERE/INSERT_MODULE_NAME_HERE.glb',
+                C3D_MODELS_DIR + 'INSERT_MODULE_NAME_HERE/INSERT_MODULE_NAME_HERE.js'
             );
 
+            // you can open precreated .c3d too
             // await C3D.file.open(
-            //     C3D_SERVER + 'C3D/TShirt.c3d'
+            //     C3D_SERVER + 'INSERT_C3D_URL_HERE.c3d'
             // );
 
         </script>

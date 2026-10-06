@@ -169,7 +169,7 @@
             }
 
             // set active module
-            let activeModule = hash != '' && found ? hash.substring(1) : 'KitchenSink';
+            let activeModule = hash != '' && found ? hash.substring(1) : 'Flyer';
 
 
             // Initialize Customizer3D
@@ -270,6 +270,18 @@
                 `;
 
                 container.querySelector('div.content').appendChild(thumb);
+
+
+                const blankButton = document.createElement('a');
+                blankButton.setAttribute('href', 'javascript:void(0);');
+                blankButton.innerText = 'BLANK';
+                blankButton.addEventListener('click', async () => {
+                    await C3D.file.loadModule(
+                        C3D_MODELS_DIR + module + '/' + module + '.js',
+                        C3D_MODELS_DIR + module + '/' + module + '.glb'
+                    );
+                });
+                container.querySelector('div.content').appendChild(blankButton);
 
             }
 
