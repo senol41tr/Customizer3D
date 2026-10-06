@@ -185,13 +185,17 @@ section.customizer > div.layers > div.content > div.layer > div.content > div.la
 
 section.customizer > div.layers > div.content > div.layer > div.content > div.layers > div > canvas.thumbnail
 {
-    background: repeating-conic-gradient(#FFFFFF 0 25%, #EBEBEB 0 50%) 50% / 6px 6px; /* https://stackoverflow.com/a/65129916 */
+    background: repeating-conic-gradient(#FFFFFF 0 25%, #EBEBEB 0 50%) 50% / 6px 6px;
     border-radius: 6px;
     cursor: pointer;
     width: 50px;
     height: 50px;
 }
 
+section.customizer > div.layers > div.content > div.layer > div.content > div.layers > div.text > canvas.thumbnail
+{
+    background: none;
+}
 
 
 section.customizer > div.layers > div.content > div.layer > div.content > div.buttons

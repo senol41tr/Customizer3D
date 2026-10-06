@@ -219,7 +219,7 @@ section.customizer > div.textLayer > div.content > canvas.preview
     border: 1px dashed var(--customizerColorText);
     align-self: center;
     cursor: move;
-    background: repeating-conic-gradient(#FFFFFF 0 25%, #EBEBEB 0 50%) 50% / 6px 6px;
+    /* background: repeating-conic-gradient(#FFFFFF 0 25%, #EBEBEB 0 50%) 50% / 6px 6px; */
 }
 
 

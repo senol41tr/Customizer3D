@@ -87,6 +87,7 @@ export class Text
 
         const imgDims = calculateAspectRatioFit(previewCanvas.width, previewCanvas.height, width, height);
 
+        canvas.style.backgroundColor = previewCanvas.style.backgroundColor;
         canvas.width = imgDims.width;
         canvas.height = imgDims.height;
         canvas.style.width = imgDims.width + 'px';
@@ -157,12 +158,11 @@ export class Text
             const isHidden = this.visible;
 
             img.style.opacity = isHidden ? 0.5 : 1;
-            div.style.opacity = isHidden ? 0.5 : 1;
-            
+            this.visible = !isHidden;
+            this.div.style.opacity = isHidden ? 0.5 : 1;
+
             this.c3d.render3d.renderView(this.name);
             this.c3d.render2d.renderView(this.name);
-
-            this.visible = !this.visible;
         });
         div.querySelector('img.visibility').style.opacity = this.visible ? 1 : 0.5;
         div.style.opacity = this.visible ? 1 : 0.5;

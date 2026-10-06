@@ -80,8 +80,8 @@ export class TextLayer
         });
         
         this.colorPicker.on('pick', (color) => {
-            // ce.invert(color.string('hex'), true, false);
-            // canvasPreview.style.backgroundColor = ce.color;
+            ce.invert(color.string('hex'), true, false);
+            canvasPreview.style.backgroundColor = ce.color;
             this.layer.color = color.string('hex');
             this.layer.updateCanvas();
             this.updatePreview();
@@ -455,8 +455,8 @@ export class TextLayer
 
         if(drawLines)
         {
-            // const ce = this.c3d.colorEngine;
-            // ce.invert(canvas.style.backgroundColor, true, false);
+            const ce = this.c3d.colorEngine;
+            ce.invert(canvas.style.backgroundColor, true, false);
             ctx.beginPath();
             ctx.setLineDash([3, 2]);
             ctx.strokeStyle = '#000';//ce.color;
