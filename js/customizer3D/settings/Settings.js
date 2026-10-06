@@ -152,7 +152,11 @@ export class Settings
             </div>
 
             <div class="about">
-                <button>About</button>
+                <button class="about">About</button>
+                <button class="update">Check For Updates</button>
+            </div>
+
+            <div class="updateStatus" style="padding:0.5rem;">
             </div>
 
         </div>`;
@@ -331,9 +335,14 @@ export class Settings
             aboutContainer.style.display = 'none';
         });
 
-        this.htmlEl.querySelector('div.content > div.about > button').addEventListener('click', () => {
+        this.htmlEl.querySelector('div.content > div.about > button.about').addEventListener('click', () => {
             aboutContainer.style.display = 'flex';
             aboutContainer.style.zIndex = this.c3d.zIndex.index; // move to top
+        });
+
+
+        this.htmlEl.querySelector('div.content > div.about > button.update').addEventListener('click', async () => {
+            await this.checkForUpdates();
         });
 
 
@@ -386,6 +395,50 @@ export class Settings
         ce.rgb(c);
         const set_svgs_color = new SVGFill(new SVGFillColor(ce.color)).applyAll();
         this.htmlEl.querySelector('div.content div.text_color').value = c;
+    }
+
+    async checkForUpdates()
+    {
+        const VERSION_CHECK_URL = 'https://raw.githubusercontent.com/senol41tr/Customizer3D/main/version.json';
+        const updateBtn = this.htmlEl.querySelector('div.content > div.about > button.update');
+        const updateStatus = this.htmlEl.querySelector('div.content > div.updateStatus');
+        const isNewerVersion = (remoteVersion, currentVersion) =>
+        {
+            const vRemote = remoteVersion.split('.').map(Number);
+            const vCurrent = currentVersion.split('.').map(Number);
+
+            for (let i = 0; i < Math.max(vRemote.length, vCurrent.length); i++) {
+                const r = vRemote[i] || 0;
+                const c = vCurrent[i] || 0;
+                if (r > c) return true;
+                if (r < c) return false;
+            }
+            return false;
+        };
+
+        try {
+            updateBtn.disabled = true;
+            updateStatus.innerText = "Checking for updates...";
+
+            const response = await fetch(`${VERSION_CHECK_URL}?t=${Date.now()}`);
+            if (!response.ok) throw new Error("Server response failed.");
+
+            const remoteData = await response.json();
+
+            if (isNewerVersion(remoteData.version, CURRENT_VERSION)) {
+                updateStatus.innerHTML = `
+                    🎉 <strong>New Version Available! (v${remoteData.version})</strong><br>
+                    <em>${remoteData.releaseNotes}</em><br>
+                    <a href="${remoteData.downloadUrl}" target="_blank">Download Now</a>
+                `;
+            } else {
+                updateStatus.innerText = `✅ Your application is up to date! (v${CURRENT_VERSION})`;
+            }
+        } catch (error) {
+            updateStatus.innerText = "❌ Update check failed. Please check your network connection.";
+        } finally {
+            updateBtn.disabled = false;
+        }
     }
 
 }

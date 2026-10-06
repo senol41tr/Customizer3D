@@ -33,6 +33,7 @@ export class Customizer3D
     {
         this.PIXEL_RATIO = 2;
         this.MAX_IMAGE_SIZE = 4096;
+        this.CURRENT_VERSION = '0.5.0';
 
         if(glbPath && jsPath) this.initialize(glbPath, jsPath);
     }
