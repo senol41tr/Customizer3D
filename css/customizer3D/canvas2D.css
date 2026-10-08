@@ -12,7 +12,16 @@ section.customizer >  div.webgl_2d_canvas
     padding-bottom: 2rem;
     padding-top: 1rem;
     scroll-behavior: smooth;
+    transition: filter 0.4s ease;
 }
+
+
+section.customizer > div.webgl_2d_canvas.blur
+{
+    filter: blur(50px);
+    -webkit-filter: blur(50px);
+}
+
 
 section.customizer >  div.webgl_2d_canvas > div.container > canvas.webgl_2d
 {

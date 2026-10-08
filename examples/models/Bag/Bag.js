@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.1';
 
 export function lang()
 {
@@ -65,11 +65,11 @@ export function parameters(self)
                 printSize:  {width: '20cm', height: '20cm'},
                 materials:
                 [
-                    {url: root + 'Fabric067_2K-JPG_Color.jpg?c3d=0.5.0', repeatX: 2, repeatY: 2},
-                    {url: root + 'Fabric018_2K-JPG_Color.jpg?c3d=0.5.0', repeatX: 2, repeatY: 2},
-                    {url: root + 'Fabric061_2K-JPG_Color.jpg?c3d=0.5.0', repeatX: 2, repeatY: 2},
-                    {url: root + 'Fabric026_2K-JPG_Color.jpg?c3d=0.5.0', repeatX: 2, repeatY: 2},
-                    {url: root + 'Fabric024_2K-JPG_Color.jpg?c3d=0.5.0', repeatX: 2, repeatY: 2},
+                    {url: root + 'Fabric067_2K-JPG_Color.jpg?c3d=0.5.1', repeatX: 2, repeatY: 2},
+                    {url: root + 'Fabric018_2K-JPG_Color.jpg?c3d=0.5.1', repeatX: 2, repeatY: 2},
+                    {url: root + 'Fabric061_2K-JPG_Color.jpg?c3d=0.5.1', repeatX: 2, repeatY: 2},
+                    {url: root + 'Fabric026_2K-JPG_Color.jpg?c3d=0.5.1', repeatX: 2, repeatY: 2},
+                    {url: root + 'Fabric024_2K-JPG_Color.jpg?c3d=0.5.1', repeatX: 2, repeatY: 2},
                 ]
             },
             front:

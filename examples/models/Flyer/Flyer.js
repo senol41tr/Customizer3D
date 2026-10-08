@@ -1,5 +1,5 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.0';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.1';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.1';
 
 export function lang()
 {
@@ -35,7 +35,7 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: isMobile() ? 1 : 0.5,
+                minDistance: isMobile() ? 1 : 0.25,
                 maxDistance: 4
             },
 

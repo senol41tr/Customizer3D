@@ -1,7 +1,7 @@
 import * as fflate from 'base/fflate@0.8.2/fflate.esm.js';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.0';
-import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.5.0';
-import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=0.5.0';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.1';
+import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.5.1';
+import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=0.5.1';
 
 export class Open
 {
@@ -330,7 +330,13 @@ export class Open
 
     _destroyUI()
     {
-        document.querySelectorAll(this.c3d.props.layers + ' > div.content > div').forEach((e) => e.remove());
+        document.querySelectorAll(this.c3d.props.layers + ' > div.content > div').forEach((div) => {
+            div.querySelectorAll('div.image').forEach((imageDiv) => {
+                const layer = imageDiv.self;
+                if(layer && layer.image.src) URL.revokeObjectURL(layer.image.src);
+            });
+            div.remove();
+        });
         document.querySelector(this.c3d.props.layers + ' > div.switchTo2D').remove();
         document.querySelector(this.c3d.props.layers + ' > div.fileMenu').remove();
         this.c3d.textLayer.hide();

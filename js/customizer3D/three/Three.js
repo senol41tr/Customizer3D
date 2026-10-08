@@ -1,9 +1,9 @@
 import * as THREE from 'three';
-import {Controls} from './Controls.js?c3d=0.5.0';
-import {Lights} from './Lights.js?c3d=0.5.0';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.0';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.0';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
+import {Controls} from './Controls.js?c3d=0.5.1';
+import {Lights} from './Lights.js?c3d=0.5.1';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.1';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.1';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.1';
 import gsap from 'base/gsap@3.13.0/gsap@3.13.0.esm.js';
 
 export class Three
@@ -184,7 +184,10 @@ export class Three
 
     _onResize(e, width, height)
     {
-        this._screeDims = Size.htmlDims(this.getCanvas());
+        const canvasDims = Size.htmlDims(this.getCanvas());
+        this._screeDims.width = canvasDims.width || window.innerWidth;
+        this._screeDims.height = canvasDims.height || window.innerHeight;
+        
         if(width) this._screeDims.width = width;
         if(height) this._screeDims.height = height;
 

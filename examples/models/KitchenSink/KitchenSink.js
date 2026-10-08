@@ -1,5 +1,5 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.0';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.1';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.1';
 
 export function lang()
 {
@@ -73,13 +73,13 @@ export function parameters(self)
                 materials:
                 [
                     {
-                        url: root + 'cabinet/dark.jpg?c3d=0.5.0'
+                        url: root + 'cabinet/dark.jpg?c3d=0.5.1'
                     },
                     {
-                        url: root + 'cabinet/middle.jpg?c3d=0.5.0' 
+                        url: root + 'cabinet/middle.jpg?c3d=0.5.1' 
                     },
                     {
-                        url: root + 'cabinet/light.jpg?c3d=0.5.0' 
+                        url: root + 'cabinet/light.jpg?c3d=0.5.1' 
                     }
                 ]
             },
@@ -148,19 +148,19 @@ export function parameters(self)
                 materials:
                 [
                     {
-                        url: root + 'marmour/black_gold.jpg?c3d=0.5.0'
+                        url: root + 'marmour/black_gold.jpg?c3d=0.5.1'
                     },
                     {
-                        url: root + 'marmour/white_gold.jpg?c3d=0.5.0' 
+                        url: root + 'marmour/white_gold.jpg?c3d=0.5.1' 
                     },
                     {
-                        url: root + 'marmour/middle.jpg?c3d=0.5.0'
+                        url: root + 'marmour/middle.jpg?c3d=0.5.1'
                     },
                     {
-                        url: root + 'marmour/black.jpg?c3d=0.5.0'
+                        url: root + 'marmour/black.jpg?c3d=0.5.1'
                     },
                     {
-                        url: root + 'marmour/white.jpg?c3d=0.5.0'
+                        url: root + 'marmour/white.jpg?c3d=0.5.1'
                     }
                 ]
             },

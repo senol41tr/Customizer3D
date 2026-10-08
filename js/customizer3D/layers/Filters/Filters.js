@@ -1,8 +1,8 @@
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.0';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.1';
 
 export const applyFilter = (c3d, layer, layerName) =>
 {
-    if(!layer.image) return;
+    if(!layer.image || !layer.canvas) return;
     
     try
     {
@@ -32,7 +32,8 @@ export const applyFilter = (c3d, layer, layerName) =>
     }
     catch (e)
     {
-        alert(e);
+        alert("Filters.js:\n" + e);
+        console.warn(e);
     }
 };
 

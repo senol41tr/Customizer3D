@@ -1,418 +1,126 @@
 /*
- * 26.01.2026 19:30
- * @TODO check the calculations
- */
-
-
-/*
-    let s = '1481 px';
-    // s = '10.2 cm';
-    // s = '297 mm';
-    // s = '5,254 TD';
+    const size = new Size({size: '1024px', DPI: 72});
     // s = Size.meshDims(this.glbScene, false);
-    const size = new Size({
-        size: s, 
-        DPI:300, 
-        js:true, 
-        mesh:this.glbScene.getObjectByName('model'), 
-        camera:this.three.camera, 
-        canvas: this.three.renderer.domElement,
-        renderer: this.three.renderer
-    });
+    // s = Size.htmlDims('#canvas_id', false);
     console.log('DEFINED: ' + size.org);
     console.log('px: ' + size.px);
     console.log('mm: ' + size.mm);
     console.log('cm: ' + size.cm);
-    console.log('td: ' + size.td);
-*/
-
-
-
+    console.log('pt: ' + size.pt);
+    console.log('in: ' + size.in);
+ */
 import * as THREE from 'three';
 
-export class Size
-{
-    constructor(o)
-    {
-        this.o = Object.assign({
-            DPI:72,
-            js:true,
-            size:'0px'
-        }, o);
-
-        this.size = this.o.size.replace(/\s/g, '').replace(',', '.').toLowerCase();
-        this.DPI = this.o.DPI || 72;//Math.max(this.o.DPI, 72);
-        this.js = this.o.js || false;
+export class Size {
+    constructor(o) {
         
-        if(this.size.indexOf('px') >= 0) // default unit
-        {
-            this.type = 'px';
-            this.size = parseInt(this.size.replace(this.type, ''));
-        }
-        else if(this.size.indexOf('mm') >= 0)
-        {
-            this.type = 'mm';
-            this.size = parseFloat(this.size.replace(this.type, ''));
-        }
-        else if(this.size.indexOf('cm') >= 0)
-        {
-            this.type = 'cm';
-            this.size = parseFloat(this.size.replace(this.type, ''));
-        }
-        else if(this.size.indexOf('td') >= 0) // 3D
-        {
-            this.type = 'td';
-            this.size = parseFloat(this.size.replace(this.type, ''));
-        }
-        else if(this.size.indexOf('pt') >= 0)
-        {
-            this.type = 'pt';
-            this.size = parseFloat(this.size.replace(this.type, ''));
-        }
-        else
-        {
-            console.warn('Unknown Size!!');
-        }
+        this.o = o;
 
+        const rawSize = String(this.o.size || '0px').replace(/\s/g, '').replace(',', '.').toLowerCase();
+        this.DPI = this.o.DPI || 72;
+        this.js = this.o.js || false;
+
+        // Unit Extraction
+        if (rawSize.includes('px')) {
+            this.type = 'px';
+            this.size = parseFloat(rawSize.replace('px', '')) || 0;
+        } else if (rawSize.includes('mm')) {
+            this.type = 'mm';
+            this.size = parseFloat(rawSize.replace('mm', '')) || 0;
+        } else if (rawSize.includes('cm')) {
+            this.type = 'cm';
+            this.size = parseFloat(rawSize.replace('cm', '')) || 0;
+        } else if (rawSize.includes('pt')) {
+            this.type = 'pt';
+            this.size = parseFloat(rawSize.replace('pt', '')) || 0;
+        } else if (rawSize.includes('in')) {
+            this.type = 'in';
+            this.size = parseFloat(rawSize.replace('in', '')) || 0;
+        } else {
+            this.type = 'px';
+            this.size = parseFloat(rawSize) || 0;
+            console.warn('Unknown Size Unit! Defaulting to px.');
+        }
     }
 
-
-    // Static methods
-
-    static meshDims(mesh, js = true)
-    {
+    // Static Methods
+    static meshDims(mesh, js = true) {
         const bb = new THREE.Box3().setFromObject(mesh);
         let width = bb.max.x - bb.min.x;
         let height = bb.max.y - bb.min.y;
         let depth = bb.max.z - bb.min.z;
 
-        if (!js)
-        {
-            width += 'td';
-            height += 'td';
-            depth += 'td';
-        }
-
-        return {width:width, height:height, depth:depth};
+        return { width, height, depth };
     }
 
+    static htmlDims(elm, js = true) {
+        let width = 0, height = 0;
 
-    static htmlDims(elm, js = true)
-    {
-        let width, height;
-        
-        if(typeof(elm) != 'undefined')
-        {
-            if(typeof(elm) == 'string') elm = document.querySelector(elm);
-            const cs = window.getComputedStyle(elm);
-            width = parseInt(cs.width);
-            height = parseInt(cs.height);
+        if (typeof elm !== 'undefined') {
+            const element = typeof elm === 'string' ? document.querySelector(elm) : elm;
+            if (element) {
+                const cs = window.getComputedStyle(element);
+                width = parseFloat(cs.width) || 0;
+                height = parseFloat(cs.height) || 0;
+            }
         }
 
-        if (!js)
-        {
-            width += 'px';
-            height += 'px';
+        if (!js) {
+            return {
+                width: width + 'px',
+                height: height + 'px'
+            };
         }
 
-        return {width:width, height:height};
+        return { width, height };
     }
-
-
 
     // Getters
+    get px() { return this._toPX(); }
+    get mm() { return this._toMM(); }
+    get cm() { return this._toCM(); }
+    get pt() { return this._toPT(); }
+    get in() { return this._toIN(); }
+    get org() { return this.o.size; }
 
-    get px()
-    {
-        return this._toPX();
+    // Private Conversion Methods
+    _toPX() {
+        if (this.type === 'mm') return (this.size / 25.4) * this.DPI;
+        if (this.type === 'cm') return (this.size / 2.54) * this.DPI;
+        if (this.type === 'pt') return (this.size / 72) * this.DPI;
+        if (this.type === 'in') return this.size * this.DPI;
+        return this.size;
     }
 
-    get mm()
-    {
-        return this._toMM();
+    _toMM() {
+        if (this.type === 'px') return (this.size * 25.4) / this.DPI;
+        if (this.type === 'cm') return this.size * 10;
+        if (this.type === 'pt') return (this.size / 72) * 25.4;
+        if (this.type === 'in') return this.size * 25.4;
+        return this.size;
     }
 
-    get cm()
-    {
-        return this._toCM();
+    _toCM() {
+        if (this.type === 'px') return (this.size * 2.54) / this.DPI;
+        if (this.type === 'mm') return this.size / 10;
+        if (this.type === 'pt') return (this.size / 72) * 2.54;
+        if (this.type === 'in') return this.size * 2.54;
+        return this.size;
     }
 
-    get td()
-    {
-        return this._toTD();
+    _toPT() {
+        if (this.type === 'px') return (this.size / this.DPI) * 72;
+        if (this.type === 'mm') return (this.size / 25.4) * 72;
+        if (this.type === 'cm') return (this.size / 2.54) * 72;
+        if (this.type === 'in') return this.size * 72;
+        return this.size;
     }
 
-    get pt()
-    {
-        return this._toPT();
+    _toIN() {
+        if (this.type === 'px') return this.size / this.DPI;
+        if (this.type === 'mm') return this.size / 25.4;
+        if (this.type === 'cm') return this.size / 2.54;
+        if (this.type === 'pt') return this.size / 72;
+        return this.size;
     }
-
-    get org()
-    {
-        return this.o.size;
-    }
-
-
-
-    // Private Methods
-
-    _toPX()
-    {
-        let size;
-
-        if(this.type == 'mm')
-        {
-            size = this.size / 25.4 * this.DPI;
-        }
-        else if(this.type == 'cm')
-        {
-            size = this.size / 2.54 * this.DPI;
-        }
-        else if(this.type == 'td')
-        {
-            size = this._3dToPixel();
-        }
-        else if(this.type == 'pt')
-        {
-            size = this._pixelToMM();
-            size = this._mmToPT();
-        }
-        else
-        {
-            size = this.size;
-        }
-
-        return size;
-    }
-
-    _toMM()
-    {
-        let size;
-
-        if(this.type == 'px')
-        {
-            size = this._pixelToMM();
-        }
-        else if(this.type == 'cm')
-        {
-            size = (this.size * 10);
-        }
-        else if(this.type == 'td')
-        {
-            size = this._mmToPixel();
-            size = this._pixelToTD(size);
-        }
-        else if(this.type == 'pt')
-        {
-            size = this._mmToPT();
-        }
-        else
-        {
-            size = this.size;
-        }
-
-        return size;
-    }
-
-    _toCM()
-    {
-        let size;
-
-        if(this.type == 'px')
-        {
-            size = this._pixelToCM();
-        }
-        else if(this.type == 'mm')
-        {
-            size = this._mmToPixel();
-        }
-        else if(this.type == 'td')
-        {
-            size = this._cmToPixel();
-            size = this._pixelToTD(size);
-        }
-        else if(this.type == 'pt')
-        {
-            size = this.size * 2.54 / this.DPI;
-        }
-        else
-        {
-            size = this.size;
-        }
-
-        return size;
-    }
-
-    _toTD()
-    {
-        let size;
-
-        if(this.type == 'px')
-        {
-            size = this._pixelToTD();
-        }
-        else if(this.type == 'cm')
-        {
-            size = this._cmToPixel();
-            size = this._3dToPixel();
-        }
-        else if(this.type == 'mm')
-        {
-            size = this._mmToPixel();
-            size = this._pixelToTD(size);
-        }
-        else if(this.type == 'pt')
-        {
-            size = this._3dToPixel();
-            size = this.size * 0.74999943307122; //96 / this.DPI;
-        }
-        else
-        {
-            size = this.size;
-        }
-
-        return size;
-    }
-
-    _toPT()
-    {
-        let size;
-
-        if(this.type == 'px')
-        {
-            size = this.size * 0.74999943307122; //96 / this.DPI;
-        }
-        else if(this.type == 'mm')
-        {
-            size = this._mmToPT();
-        }
-        else if(this.type == 'cm')
-        {
-            size = this._mmToPT() * 2.54;
-        }
-        else if(this.type == 'td')
-        {
-            size = this.size * 0.74999943307122; //96 / this.DPI;
-            size = this._pixelToTD(size);
-        }
-        else
-        {
-            size = this.size;
-        }
-
-        return size;
-    }
-
-
-    // https://stackoverflow.com/questions/54430842/how-can-i-get-dpi-from-image-in-js
-    _pixelToCM()
-    {
-        return (this.size * 2.54 / this.DPI);
-    }
-
-    _pixelToMM()
-    {
-        return (this.size * 25.4 / this.DPI);
-    }
-
-    // https://copilot.microsoft.com/
-    _cmToPixel()
-    {
-        return ((this.size / 2.54) * this.DPI);
-    }
-
-    _mmToPixel()
-    {
-        return ((this.size / 2.54) * this.DPI);
-    }
-
-
-    // https://gemini.google.com // !!!
-    _pixelToTD(size = this.size)
-    {
-        const {camera, canvas, mesh} = this.o;
-
-
-        const {height} = this.constructor.htmlDims(canvas);
-        const vFOV = THREE.MathUtils.degToRad(camera.fov);
-        const visibleHeight = 2 * Math.tan(vFOV / 2) * (camera.position.z - mesh.position.z);
-        const worldUnitPerPixel = visibleHeight / height;
-        const width = size * worldUnitPerPixel;
-        
-        if(!this.js) return 'width:' + width + 'td';
-        return width;
-    }
-
-    // https://gemini.google.com
-    _3dToPixel()
-    {
-        let {mesh, scale, camera, renderer} = this.o;
-
-        if(!scale) scale = mesh.scale;
-
-        camera.updateMatrixWorld();
-
-        const box = new THREE.Box3().setFromObject(mesh);
-        
-        const min = box.min;
-        const max = box.max;
-    
-        const minPoint = min.clone();
-        const maxPoint = max.clone();
-    
-        minPoint.project(camera);
-        maxPoint.project(camera);
-    
-        const viewportWidth = renderer.domElement.clientWidth;
-        const viewportHeight = renderer.domElement.clientHeight;
-        
-        const minPixelX = (minPoint.x * 0.5 + 0.5) * viewportWidth;
-        const minPixelY = (-minPoint.y * 0.5 + 0.5) * viewportHeight;
-    
-        const maxPixelX = (maxPoint.x * 0.5 + 0.5) * viewportWidth;
-        const maxPixelY = (-maxPoint.y * 0.5 + 0.5) * viewportHeight;
-        
-        const pixelWidth = Math.abs(maxPixelX - minPixelX * scale.x); // !!!
-        const pixelHeight = Math.abs(maxPixelY - minPixelY * scale.x); // !!!
-
-        if(!this.js) return 'width:' + pixelWidth + ', height:' + pixelHeight;
-        return {width: pixelWidth, height: pixelHeight};
-    }
-
-    /*
-    _pixelDimToTD()
-    {
-        const desiredWidthInPixels = 150;
-        const desiredHeightInPixels = 75;
-        
-        const canvasSize = new THREE.Vector2();
-        renderer.getSize(canvasSize);
-        const canvasPixelHeight = canvasSize.height;
-        
-        const vFOV = THREE.MathUtils.degToRad(camera.fov);
-        const distance = camera.position.z - mesh.position.z;
-        const visibleHeight = 2 * Math.tan(vFOV / 2) * distance;
-        
-        const worldUnitsPerPixel = visibleHeight / canvasPixelHeight;
-        
-        const worldWidth = desiredWidthInPixels * worldUnitsPerPixel;
-        const worldHeight = desiredHeightInPixels * worldUnitsPerPixel;
-        
-        console.log(`Gerekli Dünya Birimi Boyutları: ${worldWidth} x ${worldHeight}`);
-        mesh.scale.set(worldWidth, worldHeight, 1);
-    }
-    */
-
-    _mmToPT()
-    {
-        return this.size * 2.83464567;
-    }
-
-    _ptToMM()
-    {
-        return this.size / 2.83464567;
-    }
-
 }
-
-

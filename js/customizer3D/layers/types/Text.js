@@ -1,8 +1,8 @@
-import {BlendModes, createBlendModesList} from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=0.5.0';
-import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=0.5.0';
-import {applyFilter} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.0';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.0';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.0';
+import {BlendModes, createBlendModesList} from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=0.5.1';
+import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=0.5.1';
+import {applyFilter} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.1';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.1';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.1';
 
 export class Text
 {
@@ -107,12 +107,12 @@ export class Text
         this.div = div;
 
         div.innerHTML = `
-            <img class="visibility" src="${C3D_SERVER}svg/visibility.svg?c3d=0.5.0" alt="Icon" style="opacity:1;width: 12px;">
+            <img class="visibility" src="${C3D_SERVER}svg/visibility.svg?c3d=0.5.1" alt="Icon" style="opacity:1;width: 12px;">
             <canvas class="thumbnail" oncontextmenu="return false;"></canvas>
             <div style="width:100%;"></div>
-            <img src="${C3D_SERVER}svg/opacity.svg?c3d=0.5.0" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
-            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=0.5.0" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
-            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=0.5.0" title="${this.c3d.lang['delete-layer']}" class="delete-layer">
+            <img src="${C3D_SERVER}svg/opacity.svg?c3d=0.5.1" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
+            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=0.5.1" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=0.5.1" title="${this.c3d.lang['delete-layer']}" class="delete-layer">
         `;
 
         div.querySelector('canvas.thumbnail').addEventListener('click', async () =>

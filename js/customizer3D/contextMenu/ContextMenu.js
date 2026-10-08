@@ -7,6 +7,7 @@ export class ContextMenu
         
         this._mleave = this.hide.bind(this);
         this._mdown = this._onClickOutside.bind(this);
+        this._resize = this._onResize.bind(this);
     }
 
     show(parentEl)
@@ -15,30 +16,42 @@ export class ContextMenu
         this.el.classList.add('show');
 
         const bbContainer = document.querySelector(this.c3d.props.container).getBoundingClientRect();
-        const bb = parentEl.getBoundingClientRect();
         const bbEl = this.el.getBoundingClientRect();
 
-        let top = bb.y + bb.height - bbContainer.y;
-        let left = bb.x;
+        let bb, top, left;
         
-        if(bbEl.height + top > window.innerHeight)
+        if(!parentEl)
         {
-            top -= bbEl.height + top + 16 - window.innerHeight;
+            this._onResize();
+            window.addEventListener('resize', this._resize);
+        }
+        else
+        {
+        
+            bb = parentEl.getBoundingClientRect();
+            top = bb.y + bb.height - bbContainer.y;
+            left = bb.x;
+            
+            if(bbEl.height + top > window.innerHeight)
+            {
+                top -= bbEl.height + top + 16 - window.innerHeight;
+            }
+
+            if(bbEl.width + left > window.innerWidth)
+            {
+                left -= bbEl.width + left + 16 - window.innerWidth;
+            }
+
+            this.el.addEventListener('mouseleave', this._mleave);
+            window.addEventListener('mousedown', this._mdown);
+            window.addEventListener('touchend', this._mdown);
+
         }
 
-        if(bbEl.width + left > window.innerWidth)
-        {
-            left -= bbEl.width + left + 16 - window.innerWidth;
-        }
-        
         this.el.style.left = left + 'px';
         this.el.style.top = top + 'px';
 
         this.el.style.zIndex = this.c3d.zIndex.index; // move to top
-
-        this.el.addEventListener('mouseleave', this._mleave);
-        window.addEventListener('mousedown', this._mdown);
-        window.addEventListener('touchend', this._mdown);
     }
 
     hide()
@@ -49,6 +62,7 @@ export class ContextMenu
         this.el.removeEventListener('mouseleave', this._mleave);
         window.removeEventListener('mousedown', this._mdown);
         window.removeEventListener('touchend', this._mdown);
+        window.removeEventListener('resize', this._resize);
     }
 
     setHTML(html)
@@ -73,6 +87,17 @@ export class ContextMenu
         {
             this.hide();
         }
-    };        
+    }
+    
+    _onResize()
+    {
+        const bbContainer = document.querySelector(this.c3d.props.container).getBoundingClientRect();
+        const bbEl = this.el.getBoundingClientRect();
+        const left = (bbContainer.width - bbEl.width) / 2;
+        const top = (bbContainer.height - bbEl.height) / 2 / 1.666;
+
+        this.el.style.left = left + 'px';
+        this.el.style.top = top + 'px';
+    }
 
 }

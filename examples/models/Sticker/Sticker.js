@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.0';
-import {Texture} from 'customizer3D_dir/three/loaders/Texture.js?c3d=0.5.0';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.1';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.1';
+import {Texture} from 'customizer3D_dir/three/loaders/Texture.js?c3d=0.5.1';
 
 
 export function lang()
@@ -103,7 +103,7 @@ export async function init()
 
     // set model material
     const box = this.glbScene.getObjectByName('box');
-    const boxTexture = await new Texture({url: C3D_MODELS_DIR + 'Sticker/baseColor.jpg?c3d=0.5.0', preloader: this.preloader}).load();
+    const boxTexture = await new Texture({url: C3D_MODELS_DIR + 'Sticker/baseColor.jpg?c3d=0.5.1', preloader: this.preloader}).load();
     box.material = new THREE.MeshStandardMaterial({map:boxTexture, roughness:0.5, metalness:0.75});
     
     const top = this.glbScene.getObjectByName('top');

@@ -1,8 +1,8 @@
 import * as THREE from 'three';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.0';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.0';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.0';
-import {applyFilter} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.0';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.1';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.1';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.1';
+import {applyFilter} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.1';
 
 export class Render3D
 {
@@ -129,8 +129,9 @@ export class Render3D
                         canvas.height
                     );
                     const canvasPreviewImage = this.c3d.imageLayer.htmlEl.querySelector('canvas.preview');
-                    const xImage = canvas.width / canvasPreviewImage.width * layer.imagePosition.x;
-                    const yImage = canvas.height / canvasPreviewImage.height * layer.imagePosition.y;
+                    const multiplyer = Math.max(1, layer.zoom / 100);
+                    const xImage = canvas.width / canvasPreviewImage.width * (layer.imagePosition.x * multiplyer);
+                    const yImage = canvas.height / canvasPreviewImage.height * (layer.imagePosition.y * multiplyer);
                     
                     ctx.save();
                     ctx.globalCompositeOperation = layer.blendMode;

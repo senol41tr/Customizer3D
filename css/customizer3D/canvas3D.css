@@ -4,7 +4,15 @@ section.customizer > div.webgl_3d_canvas
     z-index: 1;
     width: 100%;
     height: 100%;
+    transition: filter 0.4s ease;
 }
+
+section.customizer > div.webgl_3d_canvas.blur
+{
+    filter: blur(50px);
+    -webkit-filter: blur(50px);
+}
+
 
 section.customizer > div.webgl_3d_canvas > canvas.webgl_3d
 {

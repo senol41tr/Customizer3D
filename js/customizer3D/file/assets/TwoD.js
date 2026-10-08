@@ -1,9 +1,11 @@
 import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.1';
 import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.1';
 
-export function lang(self)
+export function lang()
 {
-    return {};
+    return {
+        'design-layer':  {en: 'Design Layer',    de: 'Design Ebene',     tr: 'Tasarım Katmanı'}
+    };
 }
 
 
@@ -11,8 +13,8 @@ export function parameters(self)
 {
     return {
         // unique name (module name) in models folder, the name is important for creating instance 
-        // const {parameters, init, setView, onUnLoad} = await import('models/'+ data.modelName +'.js'); 
-        modelName: 'BMW',
+        // const {parameters, init, setView, onUnLoad} = await import('models/'+ data.modelName +'.js');  
+        modelName: 'TwoD',
 
         container:      'section.customizer',
         preloader:      'section.customizer > div.preloader',
@@ -32,8 +34,12 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: isMobile() ? 1 : 0.5,
-                maxDistance: 4
+                minDistance: isMobile() ? 1 : 0.2,
+                maxDistance: 2,
+                minPolarAngle: degToRad(5),
+                maxPolarAngle: degToRad(170),
+                minAzimuthAngle: degToRad(-85),
+                maxAzimuthAngle: degToRad(85)
             },
 
             // set initial z position
@@ -41,7 +47,7 @@ export function parameters(self)
             {
                 position:
                 {
-                    z: isMobile() ? 3 : 2
+                    z: isMobile() ? 1.5 : 0.75
                 }
             },
 
@@ -54,33 +60,41 @@ export function parameters(self)
 
         data:
         {
-            '*': { materials: [{colorOnly: true}]}
+            front:
+            {
+                label: self.lang['design-layer'],
+                printSize: {width: '2048px', height: '2048px'}
+            }
         }
     };
 }
 
-export async function init(self)
+export async function init()
 {
-    // default view
-    this.three.rotateToAngle(0, 30, 0);
-
-    // this.glbScene.position.x =  isMobile() ? 0 : 4;
-    // this.glbScene.position.y =  isMobile() ? -4 : -20;
-
-    // enable zoom with mouse or tap (2 fingers)
-    this.enableAutoZoom();
-
+    setTimeout(() => this._setNavActive('front', true, false), 100);
 }
 
 // set model views
-// op = 'to' or 'set' => to=animated
+// op = 'to' or 'set' => to=animated, set for to take screenshot (by exporting PDF)
 export function setView(view, fn = 'to')
 {
-}
+    switch (view)
+    {
+        case 'front':
+            this.three.rotateToAngle(0, 0, 0);
+        break;
+    }
 
+    this.three.controls.restoreSettings(fn);
+}
 
 // callback onUnLoad
 export async function onUnLoad()
 {
-
+    // revert orbit control options
+    const oc = this.three.controls.orbit;
+    oc.minPolarAngle = 0;
+    oc.maxPolarAngle = Math.PI;
+    oc.minAzimuthAngle = -Infinity;
+    oc.maxAzimuthAngle = -Infinity;
 }

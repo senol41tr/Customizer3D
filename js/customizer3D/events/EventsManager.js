@@ -18,7 +18,7 @@
 
 
 import * as THREE from 'three';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.1';
 
 export class EventsManager
 {

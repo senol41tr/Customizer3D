@@ -1,24 +1,21 @@
 import jsPDF from 'base/jspdf@4.0.0/jspdf.es.min.js';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.0';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.0';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.0';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.0';
-import {applyFilter} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.0';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.1';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.1';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.1';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.1';
+import {applyFilter} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.1';
 
 export class Export
 {
     constructor(c3d)
     {
-        this.c3d = c3d;
+      this.c3d = c3d;
     }
 
     async exportAsPDF()
     {
 
       this.c3d.showHideUI.hide();
-
-      const filesToZip = {};
-
       this.c3d.preloader.show();
       this.c3d.preloader.set(this.c3d.lang['creating-pdf']);
 
@@ -148,8 +145,8 @@ export class Export
         const printSize = layersData[i][1].printSize;
         if(printSize)
         {
-          printWidth = new Size({size: printSize.width, DPI: 96}).mm;
-          printHeight = new Size({size: printSize.height, DPI: 96}).mm;
+          printWidth = new Size({size: printSize.width, DPI: 72}).mm;
+          printHeight = new Size({size: printSize.height, DPI: 72}).mm;
         }
         else
         {
@@ -163,92 +160,14 @@ export class Export
         pdf.addPage([printHeight, printWidth], printHeight > printWidth ? 'portrait' : 'landscape');
 
         const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
 
         canvas.width = new Size({size: printWidth + 'mm', DPI: 300}).px;
         canvas.height = new Size({size: printHeight + 'mm', DPI: 300}).px;
 
-        // write layers
-        for (let j = layers.length - 1; j >= 0; j--)
-        {
-          const layer = layers[j].self;
-
-          if(!layer.visible) continue;
-          
-          switch (layer.type)
-          {
-              case 'solid':
-
-                ctx.save();
-                ctx.fillStyle = layer.color;
-                ctx.globalAlpha = layer.opacity / 100;
-                ctx.globalCompositeOperation = layer.blendMode;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.restore();
-
-              break;
-  
-              case 'text':
-
-                const canvasPreview = this.c3d.textLayer.htmlEl.querySelector('canvas.preview');
-                
-                if(layer.text == '' || !canvasPreview) continue;
-                
-                ctx.save();
-                ctx.globalCompositeOperation = layer.blendMode;
-                ctx.globalAlpha = layer.opacity / 100;
-                ctx.drawImage(layer.canvas, 0, 0, canvas.width, canvas.height);
-                ctx.restore();
-
-              break;
-  
-              case 'image':
-
-                const textureDims = calculateAspectRatioFit(
-                    layer.image.naturalWidth,
-                    layer.image.naturalHeight,
-                    canvas.width,
-                    canvas.height
-                );
-                const canvasPreviewImage = this.c3d.imageLayer.htmlEl.querySelector('canvas.preview');
-                const xImage = canvas.width / canvasPreviewImage.width * layer.imagePosition.x;
-                const yImage = canvas.height / canvasPreviewImage.height * layer.imagePosition.y;
-                
-                ctx.save();
-                ctx.globalCompositeOperation = layer.blendMode;
-                ctx.globalAlpha = layer.opacity / 100;
-                ctx.translate(canvas.width / 2 + xImage, canvas.height / 2 + yImage);
-                ctx.rotate(degToRad(layer.rotation));
-                ctx.scale(layer.zoom / 100, layer.zoom / 100);
-                ctx.drawImage(
-                    layer.changeable ? layer.canvas : layer.image, 
-                    -textureDims.width / 2, 
-                    -textureDims.height / 2, 
-                    textureDims.width, 
-                    textureDims.height
-                );
-                ctx.restore();
-
-              break;
-
-              case 'shape':
-
-                ctx.save();
-                ctx.globalCompositeOperation = layer.blendMode;
-                ctx.globalAlpha = layer.opacity / 100;
-                ctx.drawImage(layer.canvas, 0, 0, canvas.width, canvas.height);
-                ctx.restore();
-
-              break;
-          }
-
-        }
-
-        const blob = await this.c3d.imageLayer.canvasToBlob(canvas);
+        const blob = await this._getCanvasBlob(canvas, meshName);
         uint8Array = await this.c3d.imageLayer.toUint8Array(blob);
 
         pdf.addImage(uint8Array, 'PNG', 0, 0,printWidth, printHeight, null, 'FAST', 0);
-
 
         // ADD TITLE
 
@@ -273,6 +192,143 @@ export class Export
 
       setTimeout(() => this.c3d.preloader.hide(), 1000);
       this.c3d.showHideUI.show();
+
+    }
+
+    async exportAsPNG()
+    {
+      this.c3d.showHideUI.hide();
+      this.c3d.preloader.show();
+      this.c3d.preloader.set(this.c3d.lang['exporting-png']);
+
+      const layersData = Object.entries(this.c3d.props.data);
+      const layersDiv = document.querySelector(this.c3d.props.layers);
+
+      for (let i = 0; i < layersData.length; i++)
+      {
+        const meshName = layersData[i][0];
+
+        if(meshName == '*') continue;
+
+        const layers = layersDiv.querySelectorAll('[data-mesh=\'' + meshName + '\'] > div.content > div.layers > div');
+
+        // mesh colorOnly
+        if(layers.length == 1 && layers[0].classList.contains('colorOnly')) continue;
+
+        // mesh with predefined color(s)
+        if(layersData[i][1].hasOwnProperty('materials') && layersData[i][1]['materials'][0].hasOwnProperty('colors')) continue;
+
+        this.c3d.preloader.set(this.c3d.lang['being-exported'] + '<br>' + layersData[i][1].label + '...');
+
+        // get size
+        const printSize = layersData[i][1].printSize;
+        const canvas = document.createElement('canvas');
+
+        canvas.width = new Size({size: printSize.width, DPI: 300}).px;
+        canvas.height = new Size({size: printSize.height, DPI: 300}).px;
+
+        const blob = await this._getCanvasBlob(canvas, meshName);
+        const a = document.createElement('a');
+        const blobUrl = URL.createObjectURL(blob);
+        a.href = blobUrl;
+        a.download = meshName + '.png';
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 200);
+      }
+
+      setTimeout(() => this.c3d.preloader.hide(), 1000);
+      this.c3d.showHideUI.show();
+
+    }
+
+
+
+    async _getCanvasBlob(canvas, meshName)
+    {
+      const ctx = canvas.getContext('2d');
+      const layersDiv = document.querySelector(this.c3d.props.layers);
+      const layers = layersDiv.querySelectorAll('[data-mesh=\'' + meshName + '\'] > div.content > div.layers > div');
+
+      // write layers
+      for (let j = layers.length - 1; j >= 0; j--)
+      {
+        const layer = layers[j].self;
+
+        if(!layer.visible) continue;
+        
+        switch (layer.type)
+        {
+            case 'solid':
+
+              ctx.save();
+              ctx.fillStyle = layer.color;
+              ctx.globalAlpha = layer.opacity / 100;
+              ctx.globalCompositeOperation = layer.blendMode;
+              ctx.fillRect(0, 0, canvas.width, canvas.height);
+              ctx.restore();
+
+            break;
+
+            case 'text':
+
+              const canvasPreview = this.c3d.textLayer.htmlEl.querySelector('canvas.preview');
+              
+              if(layer.text == '' || !canvasPreview) continue;
+              
+              ctx.save();
+              ctx.globalCompositeOperation = layer.blendMode;
+              ctx.globalAlpha = layer.opacity / 100;
+              ctx.drawImage(layer.canvas, 0, 0, canvas.width, canvas.height);
+              ctx.restore();
+
+            break;
+
+            case 'image':
+
+              const textureDims = calculateAspectRatioFit(
+                  layer.image.naturalWidth,
+                  layer.image.naturalHeight,
+                  canvas.width,
+                  canvas.height
+              );
+              const canvasPreviewImage = this.c3d.imageLayer.htmlEl.querySelector('canvas.preview');
+              const xImage = canvas.width / canvasPreviewImage.width * layer.imagePosition.x;
+              const yImage = canvas.height / canvasPreviewImage.height * layer.imagePosition.y;
+              
+              ctx.save();
+              ctx.globalCompositeOperation = layer.blendMode;
+              ctx.globalAlpha = layer.opacity / 100;
+              ctx.translate(canvas.width / 2 + xImage, canvas.height / 2 + yImage);
+              ctx.rotate(degToRad(layer.rotation));
+              ctx.scale(layer.zoom / 100, layer.zoom / 100);
+              ctx.drawImage(
+                  layer.changeable ? layer.canvas : layer.image, 
+                  -textureDims.width / 2, 
+                  -textureDims.height / 2, 
+                  textureDims.width, 
+                  textureDims.height
+              );
+              ctx.restore();
+
+            break;
+
+            case 'shape':
+
+              ctx.save();
+              ctx.globalCompositeOperation = layer.blendMode;
+              ctx.globalAlpha = layer.opacity / 100;
+              ctx.drawImage(layer.canvas, 0, 0, canvas.width, canvas.height);
+              ctx.restore();
+
+            break;
+        }
+
+      }
+
+      const blob = await this.c3d.imageLayer.canvasToBlob(canvas);
+
+      return blob;
 
     }
 

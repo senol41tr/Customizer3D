@@ -1,7 +1,7 @@
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.0';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.0';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.0';
-import {applyFilter} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.0';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.1';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.1';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.1';
+import {applyFilter} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.1';
 
 export class Render2D
 {
@@ -59,7 +59,6 @@ export class Render2D
 
         document.querySelector(this.c3d.props.canvas2d + ' > div.' + side).scrollIntoView({behavior: 'instant', block: 'center'});
 
-        this.c3d._setNavActive(side, true);
         // const layersDiv = document.querySelector(this.c3d.props.layers);
         // layersDiv.style.top = (window.scrollY + 16) + 'px';
     }
@@ -75,7 +74,7 @@ export class Render2D
 
             const label = document.createElement('p');
             label.setAttribute('class', 'label');
-            label.innerHTML = '<img src="' + C3D_SERVER + 'svg/arrow-drop-down.svg?c3d=0.5.0" class="arrow"><span class="label">'+ layerDesc +'</span>';
+            label.innerHTML = '<img src="' + C3D_SERVER + 'svg/arrow-drop-down.svg?c3d=0.5.1" class="arrow"><span class="label">'+ layerDesc +'</span>';
             div.appendChild(label);
 
             // Canvas
@@ -85,10 +84,11 @@ export class Render2D
 
             meshCanvas.addEventListener('click', () =>
             {
-                this.c3d._setNavActive(meshName, false);
+                this.c3d._setNavActive(meshName, true);
                 this.scrollTo(meshName);
                 this.c3d.textLayer.hide();
                 this.c3d.imageLayer.hide();
+                this.c3d.shapeLayer.hide();
             });
             meshCanvas.addEventListener('contextmenu', (e) => {e.preventDefault(); return false;});
             div.appendChild(meshCanvas);
@@ -199,6 +199,7 @@ export class Render2D
 
         const canvas2dDiv = document.querySelector(this.c3d.props.canvas2d);
         const canvas = canvas2dDiv.querySelector('canvas.' + side);
+        if(!canvas) return;
         const ctx = canvas.getContext('2d');
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -318,57 +319,8 @@ export class Render2D
             return calculateAspectRatioFit(printWidth, printHeight, screenDims.width, screenDims.height);
         }
 
-        let scene = this.c3d.glbScene;
-        let mesh = scene.getObjectByName(name);
-        
-        const data = Object.entries(this.c3d.props.data);
-
-        for (let i = 0; i < data.length; i++)
-        {
-            const meshName = data[i][0];
-            
-            if(meshName == '*')
-            {
-                if(data[i][1].hasOwnProperty('group'))
-                {
-                    scene = this.c3d.glbScene.getObjectByName(group);
-                    mesh = scene.getObjectByName(name);
-                    break;
-                }
-                else
-                {
-                    mesh = scene.getObjectByName(name);
-                    break;
-                }
-            }
-        }
-
-        // To calculate the canvas's offsetWidth and offsetHeight, it needs to be visible.
-        canvas3D.style.display = 'block';
-        canvas3D.style.visibility = 'hidden';
-
-        let {width, height} = Size.meshDims(mesh);
-                
-        width = new Size({
-            size: width + 'td',
-            mesh, 
-            DPI, 
-            renderer: this.c3d.three.renderer, 
-            camera: this.c3d.three.camera
-        }).px.width;
-        
-        height = new Size({
-            size: height + 'td',
-            mesh, 
-            DPI, 
-            renderer: this.c3d.three.renderer, 
-            camera: this.c3d.three.camera
-        }).px.height;
-
-        canvas3D.style.display = 'none';
-        canvas3D.style.visibility = 'visible';
-
-        return calculateAspectRatioFit(width, height, screenDims.width, screenDims.height);
+        return {width: screenDims.width, height: screenDims.height};
+        console.log('Undefined printSize!');
 
     }
 

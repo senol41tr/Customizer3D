@@ -1,11 +1,11 @@
 <?php
     
-    if(isset($_POST['op']))
-    {
-        echo '<h1>DEMO MODE!</h1>';
-        echo '<a href="language.php">BACK</a>';
-        exit;
-    }
+    // if(isset($_POST['op']))
+    // {
+    //     echo '<h1>DEMO MODE!</h1>';
+    //     echo '<a href="language.php">BACK</a>';
+    //     exit;
+    // }
 
     define('PATH', './');
     define('COOKIE_NAME', 'C3D_UserLogged');

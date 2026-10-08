@@ -1,11 +1,11 @@
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.0';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.0';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.0';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.0';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.0';
-import {ExtractImages} from 'customizer3D_dir/layers/utils/ExtractImages.js?c3d=0.5.0';
-import {createFiltersList} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.0';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.0';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.1';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.1';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.1';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.1';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.1';
+import {ExtractImages} from 'customizer3D_dir/layers/utils/ExtractImages.js?c3d=0.5.1';
+import {createFiltersList} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.1';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.1';
 
 export class ImageLayer
 {
@@ -24,8 +24,8 @@ export class ImageLayer
         <div class="title">
             <p class="label" draggable="false">${this.c3d.lang['add-image-layer']}</p>
             <div class="buttons">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.0" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
-                <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.0" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.1" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
+                <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.1" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
             </div>
         </div>
 
@@ -36,7 +36,7 @@ export class ImageLayer
                     <div class="inputs"></div>
                 </div>
                 <div class="rotate">
-                    <div class="button" title="${this.c3d.lang['rotate']}"><img src="${C3D_SERVER}svg/rotate.svg?c3d=0.5.0" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['rotate']}"><img src="${C3D_SERVER}svg/rotate.svg?c3d=0.5.1" alt="Icon"></div>
                     <div class="list">
                         <div class="inputPercent" data-icon="°" title="${this.c3d.lang['degree']}">
                             <input type="number" min="-180" max="180" value="0">
@@ -45,14 +45,14 @@ export class ImageLayer
                     </div>
                 </div>
                 <div class="zoom">
-                    <div class="button" title="${this.c3d.lang['zoom']}"><img src="${C3D_SERVER}svg/zoom.svg?c3d=0.5.0" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['zoom']}"><img src="${C3D_SERVER}svg/zoom.svg?c3d=0.5.1" alt="Icon"></div>
                     <div class="list">
                         <div class="inputPercent" data-icon="%"><input type="number" min="10" max="2000" value="100"></div>
                         <input type="range" min="10" max="2000" value="100" step="1">
                     </div>
                 </div>
                 <div class="filters">
-                    <div class="button" title="${this.c3d.lang['filter-gallery']}"><img src="${C3D_SERVER}svg/filters.svg?c3d=0.5.0" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['filter-gallery']}"><img src="${C3D_SERVER}svg/filters.svg?c3d=0.5.1" alt="Icon"></div>
                     <div class="list">
                     </div>
                 </div>
@@ -249,7 +249,7 @@ export class ImageLayer
         else canvasPreview.addEventListener('pointerdown', canvasMouseDown);
 
         // show preferred size notice
-        const smallerThanPreffered = this.c3d.lang['smaller-than-preffered'].replace('[warningIcon]', '<img src="' + C3D_SERVER + 'svg/warning.svg?c3d=0.5.0" alt="Icon">');
+        const smallerThanPreffered = this.c3d.lang['smaller-than-preffered'].replace('[warningIcon]', '<img src="' + C3D_SERVER + 'svg/warning.svg?c3d=0.5.1" alt="Icon">');
         this.htmlEl.querySelector('p.smaller-than-preffered').innerHTML = smallerThanPreffered;
         
     }
@@ -382,7 +382,7 @@ export class ImageLayer
 
     async canvasToBlob(canvas)
     {        
-        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1));
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
         return blob;
     }
 
@@ -409,7 +409,8 @@ export class ImageLayer
         const layer = this.layer;
         const snapX = Math.abs(layer.imagePosition.x) < 5;
         const snapY = Math.abs(layer.imagePosition.y) < 5;
-
+        const multiplyer = Math.max(1, layer.zoom / 100);
+        
         const {width, height} = calculateAspectRatioFit(layer.image.width, layer.image.height, canvasPreview.width, canvasPreview.height);
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -424,10 +425,12 @@ export class ImageLayer
             layer.imagePosition.y = 0;
         }
 
+        
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.save();
         ctx.globalAlpha = layer.opacity / 100;
-        ctx.translate(canvas.width / 2 + layer.imagePosition.x, canvas.height / 2 + layer.imagePosition.y);
+        ctx.translate(canvas.width / 2 + (layer.imagePosition.x * multiplyer), canvas.height / 2 + (layer.imagePosition.y * multiplyer));
         ctx.rotate(degToRad(layer.rotation));
         ctx.scale(layer.zoom / 100, layer.zoom / 100);
         ctx.drawImage(layer.canvas, -width / 2, -height / 2, width, height);
@@ -510,7 +513,7 @@ export class ImageLayer
 
                 // update UI
                 document.querySelector(this.c3d.props.layers).style.visibility = 'visible';
-                this.c3d._setNavActive(layerName, false); // update only style.maxHeight
+                this.c3d._setNavActive(layerName, false, false); // update only style.maxHeight
                 this.show(this.layer);
             }
         }
