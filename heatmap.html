@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js v184 - Pure Thermal Heatmap Only Engine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #050508;
+        }
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+    <!-- Import Map for Three.js v184 and Lil-GUI -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.184.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+
+        function initThermalOnlyEngine() {
+            const containerEl = document.getElementById('canvas-container');
+            const scene = new THREE.Scene();
+
+            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.set(0, 0, 2.5);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.outputColorSpace = THREE.SRGBColorSpace;
+            containerEl.appendChild(renderer.domElement);
+
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+
+            // ================================================================
+            // 1. UNIFORMS VE SHADER MALZEMESİ (PURE THERMAL CONTROL CONFIG)
+            // ================================================================
+            const uniforms = {
+                tMap: { value: null },
+                uTime: { value: 0.0 },
+                uHeatSensitivity: { value: 1.2 },  // CRITICAL: Isı Hassasiyeti
+                uHeatOffset: { value: 0.0 }       // CRITICAL: Isı Parlaklık Eşiği
+            };
+
+            const vertexShader = `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `;
+
+            // PURE FULL-FRAME THERMAL HEATMAP FRAGMENT SHADER
+            const fragmentShader = `
+                precision highp float;
+
+                uniform float uTime;
+                uniform float uHeatSensitivity;
+                uniform float uHeatOffset;
+                uniform sampler2D tMap;
+
+                varying vec2 vUv;
+
+                // GLSL THERMAL HEATMAP COLOR CONVERSION
+                vec3 applyThermalHeatmap(vec3 color, float sensitivity, float offset) {
+                    // 1. Piksel Parlaklığı (Luminance) Hesabı
+                    float lum = dot(color, vec3(0.299, 0.587, 0.114));
+                    
+                    // 2. Isı Hassasiyeti ve Ofset Parametrelerinin Uygulanması
+                    lum = clamp((lum + offset) * sensitivity, 0.0, 1.0);
+
+                    // 3. 5-Aşamalı Isı Spektrumu (Deep Blue -> Magenta -> Red -> Yellow -> White)
+                    vec3 c1 = vec3(0.0, 0.0, 0.4);  // Soğuk / Derin Mavi
+                    vec3 c2 = vec3(0.5, 0.0, 0.8);  // Mor / Macenta
+                    vec3 c3 = vec3(1.0, 0.0, 0.0);  // Kırmızı (Ilık)
+                    vec3 c4 = vec3(1.0, 0.9, 0.0);  // Sarı (Sıcak)
+                    vec3 c5 = vec3(1.0, 1.0, 1.0);  // Aşırı Sıcak / Beyaz
+
+                    vec3 thermalColor;
+                    if (lum < 0.25) {
+                        thermalColor = mix(c1, c2, lum / 0.25);
+                    } else if (lum < 0.50) {
+                        thermalColor = mix(c2, c3, (lum - 0.25) / 0.25);
+                    } else if (lum < 0.75) {
+                        thermalColor = mix(c3, c4, (lum - 0.50) / 0.25);
+                    } else {
+                        thermalColor = mix(c4, c5, (lum - 0.75) / 0.25);
+                    }
+
+                    return thermalColor;
+                }
+
+                void main() {
+                  vec2 uv = vUv;
+
+                  // 1. ORİJİNAL NET RENK OKUNUR
+                  vec3 originalColor = texture2D(tMap, uv).rgb;
+
+                  // 2. PURE THERMAL HEATMAP DÖNÜŞÜMÜ (TAM EKRAN)
+                  vec3 finalColor = applyThermalHeatmap(originalColor, uHeatSensitivity, uHeatOffset);
+
+                  gl_FragColor = vec4(finalColor, 1.0);
+                }
+            `;
+
+            const shaderMaterial = new THREE.ShaderMaterial({
+                vertexShader,
+                fragmentShader,
+                uniforms,
+                side: THREE.DoubleSide
+            });
+
+            const planeMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), shaderMaterial);
+            scene.add(planeMesh);
+
+            // ================================================================
+            // 2. DOKU YÜKLEME PIPELINE (EYE.JPG + FALLBACK)
+            // ================================================================
+            const textureLoader = new THREE.TextureLoader();
+
+            function loadPhoto() {
+                const imageUrl = 'face.jpg_';
+                textureLoader.load(
+                    imageUrl,
+                    (tex) => {
+                        tex.colorSpace = THREE.SRGBColorSpace;
+                        uniforms.tMap.value = tex;
+                    },
+                    undefined,
+                    () => {
+                        textureLoader.load(`https://picsum.photos/1024/1024?random=${Date.now()}`, (fallbackTex) => {
+                            fallbackTex.colorSpace = THREE.SRGBColorSpace;
+                            uniforms.tMap.value = fallbackTex;
+                        });
+                    }
+                );
+            }
+
+            // ================================================================
+            // 3. LIL-GUI KONTROL PANELİ (SADECE THERMAL HEATMAP CONTROLS)
+            // ================================================================
+            const gui = new GUI({ title: ' Thermal Heatmap Engine' });
+
+            gui.add({ reload: loadPhoto }, 'reload').name(' Reload Image');
+
+            // CRITICAL STEP: SADECE THERMAL HEATMAP CONTROLS KLASÖRÜ KALDI
+            const thermalFolder = gui.addFolder('Thermal Heatmap Controls');
+            thermalFolder.add(uniforms.uHeatSensitivity, 'value', 0.2, 3.0, 0.05).name(' Heat Sensitivity');
+            thermalFolder.add(uniforms.uHeatOffset, 'value', -0.5, 0.5, 0.02).name(' Heat Offset Threshold');
+
+            loadPhoto();
+
+            // ================================================================
+            // 4. RENDER DÖNGÜSÜ
+            // ================================================================
+            const clock = new THREE.Clock();
+
+            function animate() {
+                requestAnimationFrame(animate);
+                uniforms.uTime.value = clock.getElapsedTime();
+                controls.update();
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        initThermalOnlyEngine();
+    </script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="theme-color" content="#ffffff">
+        
+        <title>Customizer3D {release candidate}</title>
+
+        <link rel="icon" type="image/png" href="./favicon.png?c3d=0.5.4">
+
+        <script src="js/pdfjs-dist@3.4.120/pdf.min.js"></script>
+        <script src="js/JSManipulate@1.0/jsmanipulate.js?c3d=0.5.4"></script>
+                
+        <link rel="stylesheet" href="js/jscolorpicker/colorpicker.css?c3d=0.5.4">
+
+        <link rel="stylesheet" href="css/c3d/style.css?c3d=0.5.4">
+        <link rel="stylesheet" href="css/c3d/preloader.css?c3d=0.5.4">
+        <link rel="stylesheet" href="css/c3d/cookies.css?c3d=0.5.4">
+        <link rel="stylesheet" href="css/c3d/secure.css?c3d=0.5.4">
+        <link rel="stylesheet" href="css/c3d/layers.css?c3d=0.5.4">
+        <link rel="stylesheet" href="css/c3d/canvas2D.css?c3d=0.5.4">
+        <link rel="stylesheet" href="css/c3d/canvas3D.css?c3d=0.5.4">
+        <link rel="stylesheet" href="css/c3d/export.css?c3d=0.5.4">
+        <link rel="stylesheet" href="css/c3d/settings.css?c3d=0.5.4">
+        <link rel="stylesheet" href="css/c3d/contextMenu.css?c3d=0.5.4">
+        <link rel="stylesheet" href="css/c3d/help.css?c3d=0.5.4">
+        <link rel="stylesheet" href="css/c3d/controls.css?c3d=0.5.4">
+        <link rel="stylesheet" href="css/c3d/about.css?c3d=0.5.4">
+
+        <script type="importmap">
+        {
+            "imports":
+            {
+                "base/": "./js/",
+                "customizer3D_dir/": "./js/customizer3D/",
+                "three": "./js/three/build/three.module.min.js",
+                "three_dir/": "./js/three/"
+            }
+        }
+        </script>
+
+        <script>
+            // with a slash at the end
+            window.C3D_SERVER = document.location.href.substring(0, document.location.href.lastIndexOf('/') + 1);
+            window.C3D_MODELS_DIR = C3D_SERVER + 'examples/models/';
+        </script>
+
+    </head>
+
+    <body>
+
+        
+        <!-- <script type="module">
+            import eruda from 'https://cdn.jsdelivr.net/npm/eruda@3.4.3/+esm';
+            eruda.init(); // For debugging on iOS, Android etc.
+        </script> -->
+       
+
+        <section class="customizer">
+            <div class="preloader">
+                <div class="indicator"></div>
+                <p>...</p>
+            </div>
+            <div class="webgl_2d_canvas"></div>
+            <div class="webgl_3d_canvas">
+                <canvas class="webgl_3d"></canvas>
+            </div>
+            <div class="layers"></div>
+            <div class="settings"></div>
+            <div class="contextMenu"></div>
+            <div class="help"></div>
+            <div class="controls"></div>
+        </section>
+
+
+        <!-- END OF CUSTOMIZER 3D SECTION -->
+
+
+        <section class="examples"></section>
+
+
+
+        <link rel="stylesheet" href="examples/assets/css/examples.css?c3d=0.5.4">
+        <link rel="stylesheet" href="examples/assets/js/prism/prism.min.css">
+
+        <script src="examples/assets/js/prism/prism.min.js" data-manual></script>
+
+        <section class="code">
+            
+            <pre>
+                <code class="language-javascript match-braces keep-initial-line-feed"></code>
+            </pre>
+
+        </section>
+
+
+
+
+        <div class="switchView">
+
+            <div class="code" title="Code View">
+                <label>
+                    <input type="checkbox">
+                    <img src="svg/code.svg?c3d=0.5.4" alt="Icon">
+                    <p>CODE</p>
+                </label>
+            </div>
+
+            <div class="design" title="Design View">
+                <label>
+                    <input type="checkbox">
+                    <img src="svg/design.svg?c3d=0.5.4" alt="Icon">
+                    <p>DESIGN</p>
+                </label>
+            </div>
+
+        </div>
+
+
+        <script type="module">
+
+            import {Customizer3D} from 'customizer3D_dir/Customizer3D.js?c3d=0.5.4';
+            import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.4';
+
+
+            // 
+            const modules = ['TShirt', 'Vase', 'Sticker', 'Sink', 'Shoes', 'PhoneCase', 'Necklace', 'BMW', 'Cup', 'KitchenSink', 'Bag', 'Chair', 'Flyer'];
+
+            const C3D_DIR = C3D_SERVER + 'examples/C3D/';
+            
+            // parse url
+            const hash = new URL(document.location.href).hash;
+
+            //
+            let found = false;
+            if (hash != '')
+            {
+                for (let i = 0; i < modules.length; i++)
+                {
+                    const module = modules[i];
+                    if(module == hash.substring(1))
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            // set active module
+            let activeModule = hash != '' && found ? hash.substring(1) : 'Flyer';
+
+
+            // Initialize Customizer3D
+
+            const C3D = new Customizer3D();
+
+            await C3D.initialize(
+                C3D_MODELS_DIR + activeModule + '/' + activeModule + '.glb',
+                C3D_MODELS_DIR + activeModule + '/' + activeModule + '.js'
+            );
+
+            // Create examples
+
+            const container = document.querySelector('section.examples');
+            container.innerHTML = `
+            <div class="title" title="${C3D.lang.examples}">
+                <p draggable="false">${C3D.lang.examples}</p>
+                <img src="svg/arrow-drop-down.svg?c3d=0.5.4" alt="Icon" class="rollup" draggable="false">
+            </div>
+            <div class="content"></div>`;
+
+            const title = container.querySelector('div.title');
+
+            const dragable = new Dragable({
+                dragEl: title,
+                container,
+                root: document.querySelector('section.customizer'),
+                c3d: C3D
+            });
+
+            container.style.top = '3rem';
+            container.style.right = '75px';
+
+            const rollup = container.querySelector('div.title > img.rollup');
+            rollup.addEventListener('click', (e) =>
+            {
+                const rotate = rollup.style.rotate;
+                const hide = rotate == '' || rotate == '180deg';
+                
+                title.classList[hide ? 'remove' : 'add']('title_active');
+                rollup.style.rotate = hide ? '0deg' : '180deg';
+                container.querySelector('div.content').style.display = hide ? 'none' : 'flex';
+            });
+
+            const switchView = document.querySelector('div.switchView');
+            
+            const dragableView = new Dragable({
+                dragEl: switchView,
+                container: switchView,
+                root: document.querySelector('section.customizer'),
+                c3d: C3D
+            });
+
+            for (let i = 0; i < modules.length; i++)
+            {
+                const module = modules[i];
+                const thumb = document.createElement('div');
+                
+                thumb.dataset.module = module;
+                if(activeModule == module) thumb.classList.add('active');
+                
+                thumb.addEventListener('click', async (e) =>
+                {
+                    switchViewFN('design');
+                    // document.location.href = '#' + module;
+
+                    container.style.display = 'none';
+                    switchView.style.display = 'none';
+
+                    await C3D.file.open(
+                        C3D_DIR + module + '.c3d'
+                    );
+
+                    const code = document.querySelector('code');
+                    code.innerHTML = await (await fetch(C3D_MODELS_DIR + module + '/' + module + '.js')).text();
+                    Prism.highlightAllUnder(document.querySelector('section.code'));
+
+                    const preThumb = container.querySelector('[data-module="' + activeModule + '"]');
+                    if(preThumb && preThumb.classList.contains('active'))
+                    {
+                        preThumb.classList.remove('active');
+                    }
+
+                    thumb.classList.add('active');
+
+                    activeModule = module;
+                    container.style.display = 'flex';
+                    switchView.style.display = 'block';
+                    thumb.scrollIntoView({ behavior: 'instant', block: 'center'});
+                    rollup.click();
+
+                });
+
+                thumb.innerHTML = `
+                    <img src="${C3D_DIR + module + '_Screenshot.png?c3d=0.5.4'}" alt="${module}">
+                    <p>${module}</p>
+                `;
+
+                container.querySelector('div.content').appendChild(thumb);
+
+
+                const blankButton = document.createElement('a');
+                blankButton.setAttribute('href', 'javascript:void(0);');
+                blankButton.innerText = 'BLANK';
+                blankButton.addEventListener('click', async () => {
+                    await C3D.file.loadModule(
+                        C3D_MODELS_DIR + module + '/' + module + '.js',
+                        C3D_MODELS_DIR + module + '/' + module + '.glb'
+                    );
+                });
+                container.querySelector('div.content').appendChild(blankButton);
+
+            }
+
+            const examples = container;
+            const code = document.querySelector('section.code');
+            const customizer = document.querySelector('section.customizer');
+            const codeView = switchView.querySelector('div.code');
+            const designView = switchView.querySelector('div.design');
+
+            const switchViewFN = (view) =>
+            {
+                examples.style.visibility = 
+                customizer.style.visibility = 
+                codeView.style.visibility = view == 'code' ? 'hidden' : 'visible';
+                
+                code.style.visibility = 
+                code.style.visibility = 
+                designView.style.visibility = view == 'code' ? 'visible' : 'hidden';
+
+                code.style.zIndex = C3D.zIndex.index; // move to top
+                switchView.style.zIndex = C3D.zIndex.index;
+            };
+
+            codeView.addEventListener('click', () => switchViewFN('code'));
+            designView.addEventListener('click', () => switchViewFN());
+
+
+            const thumb = container.querySelector('div.active');
+            if(thumb) thumb.click();
+
+
+
+        </script>
+
+    </body>
+
+</html>

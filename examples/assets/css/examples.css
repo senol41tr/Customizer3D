@@ -1,0 +1,212 @@
+section.examples
+{
+  position: absolute;
+  z-index: 6;
+  top: 3rem;
+  right: 75x;
+  display: flex;
+  flex-direction: column;
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
+  width: 150px;
+}
+
+section.examples *
+{
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+}
+
+section.examples > div.content
+{
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  overflow: auto;
+  padding: 1rem 0;
+  background: linear-gradient(0deg, var(--c3dColorBG1), var(--c3dColorBG2));
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+
+section.examples *
+{
+  font-family: var(--c3dFontFamily);
+  font-size: 0.75rem;
+  color: var(--c3dColorText);
+}
+
+section.examples > div.title
+{
+  background-color: var(--c3dColorPrimary);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.75rem;
+  padding-right: 0.25rem;
+  cursor: move;
+  border-radius: 7px;
+}
+
+section.examples > div.title_active /* !!! */
+{
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+section.examples > div.title > p
+{
+  user-select: none;
+}
+
+section.examples > div.title > img.rollup
+{
+  width: 22px;
+  cursor: auto;
+  transition: rotate 0.25s cubic-bezier(0.45, 0, 0.55, 1);
+  filter: var(--c3dSVGFilter);
+  -webkit-filter: var(--c3dSVGFilter);
+  -moz-filter: var(--c3dSVGFilter);
+}
+
+section.examples > div.content
+{
+  display: none;
+}
+
+section.examples > div.content > div
+{
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: var(--c3dColorPrimary);
+  border-radius: 7px;
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
+  cursor: pointer;
+}
+
+section.examples > div.content > div.active p
+{
+  color: var(--c3dColorPrimary);
+}
+
+section.examples > div.content > div.active
+{
+  background-color: var(--c3dColorText);
+}
+
+section.examples img
+{
+  width: 100%;
+}
+
+section.examples *::-webkit-scrollbar
+{
+  width: 6px;
+  height: 6px;
+}
+
+section.examples *::-webkit-scrollbar-track
+{
+  background: var(--c3dColorPrimary);
+  border-radius: 4px;
+}
+
+section.examples *::-webkit-scrollbar-thumb
+{
+  background: var(--c3dColorText);
+  border-radius: 4px;
+}
+
+
+
+
+
+
+
+
+
+section.code
+{
+  width: 100%;
+  height: 100svh;
+  overflow: auto;
+  visibility: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 5;
+}
+
+
+
+
+
+
+div.switchView *
+{
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+}
+
+div.switchView
+{
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 1rem;
+  display: none;
+  height: 50px;
+  width: 70px;
+}
+
+div.switchView input
+{
+  display: none;
+}
+
+div.switchView > div
+{
+  position: absolute;
+  background-color: var(--c3dColorPrimary);
+  padding: 0 0.75rem;
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
+  border-radius: 7px;
+  cursor: pointer;
+  z-index: 0;
+}
+
+div.switchView > div.design
+{
+  visibility: hidden;
+}
+
+div.switchView > div > label
+{
+  font-size: var(--c3dFontSizeDefault);
+  font-family: var(--c3dFontFamily);
+  color: var(--c3dColorText);
+  pointer-events: none;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+div.switchView > div > label > img
+{
+  width: 14px;
+  filter: var(--c3dSVGFilter);
+  -webkit-filter: var(--c3dSVGFilter);
+  -moz-filter: var(--c3dSVGFilter);
+}

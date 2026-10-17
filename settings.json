@@ -1,0 +1,13 @@
+{
+    // Git entegrasyonunu ve otomatik yenilemeyi aktif et
+    "git.enabled": true,
+    "git.autorefresh": true,
+
+    // Dosya Gezgini (Explorer) üzerinde M, U, D rozetlerini görünür yap
+    "git.decorations.enabled": true,
+    "explorer.decorations.badges": true,
+    "explorer.decorations.colors": true,
+
+    // Değiştirilen satırların renkli gösterimini aktif et
+    "scm.diffDecorations": "all"
+}

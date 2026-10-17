@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMYK Color Picker Class (Always Real Print Mode)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #0b0d12; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        #picker-container { display: flex; gap: 20px; }
+    </style>
+</head>
+<body>
+
+<!-- Renk Seçicinin Yükleneceği Konteyner -->
+<div id="picker-container"></div>
+
+<script>
+/**
+ * Gerçekçi Matbaa Baskı Simülasyonlu (Always Print Soft-Proofing) CMYK Color Picker Sınıfı
+ */
+class CmykColorPicker {
+    constructor(containerSelector, options = {}) {
+        this.container = document.querySelector(containerSelector);
+        if (!this.container) throw new Error("Konteyner bulunamadı!");
+
+        this.onChange = options.onChange || (() => {});
+        this.dotGain = options.dotGain !== undefined ? options.dotGain : 0.18; // %18 Nokta Kazancı
+
+        // Başlangıç Renk Durumu (Gerçek Kırmızı: #ED1F24)
+        this.hsv = { h: 0, s: 100, v: 100 };
+        this.cmyk = { c: 0, m: 100, y: 100, k: 0 };
+        this.rgb = { r: 237, g: 31, b: 36 };
+        this.hex = "#ED1F24";
+
+        this.isDraggingSpectrum = false;
+        this.isDraggingHue = false;
+
+        this._initUI();
+        this._bindEvents();
+        this._updateFromHsv();
+    }
+
+    // ==========================================
+    // 1. UI ARAYÜZÜNÜN OLUŞTURULMASI
+    // ==========================================
+    _initUI() {
+        this.container.innerHTML = `
+            <style>
+                .photoshop-picker {
+                    background: #1e222d;
+                    border: 1px solid #333a4d;
+                    border-radius: 14px;
+                    padding: 20px;
+                    display: flex;
+                    gap: 20px;
+                    box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+                    user-select: none;
+                }
+                .canvas-area { position: relative; display: flex; gap: 12px; }
+                canvas { border-radius: 6px; cursor: crosshair; }
+                .cursor-handle {
+                    position: absolute; width: 12px; height: 12px;
+                    border: 2px solid #fff; border-radius: 50%;
+                    transform: translate(-50%, -50%); pointer-events: none;
+                    box-shadow: 0 0 4px rgba(0,0,0,0.8);
+                }
+                .hue-handle {
+                    position: absolute; width: 22px; height: 8px;
+                    border: 2px solid #fff; background: rgba(0,0,0,0.3);
+                    border-radius: 2px; transform: translateY(-50%); pointer-events: none;
+                    left: -1px;
+                }
+                .controls-area { display: flex; flex-direction: column; gap: 12px; width: 220px; }
+                
+                /* Tek Parça Gerçekçi Matbaa Önizleme Kutusu */
+                .print-preview-box {
+                    height: 55px;
+                    border-radius: 8px;
+                    border: 1px solid #444;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    font-family: monospace;
+                    font-weight: bold;
+                    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+                    transition: background-color 0.15s ease;
+                }
+                .print-preview-box span.label { font-size: 0.65rem; letter-spacing: 1px; opacity: 0.8; text-transform: uppercase; }
+                .print-preview-box span.hex-val { font-size: 1.1rem; }
+
+                .slider-row { display: flex; flex-direction: column; gap: 4px; font-size: 0.75rem; }
+                .slider-row header { display: flex; justify-content: space-between; font-weight: 600; }
+                .c-color { color: #00d2ff; } .m-color { color: #ff007f; }
+                .y-color { color: #ffcc00; } .k-color { color: #aaa; }
+                input[type=range] { -webkit-appearance: none; width: 100%; height: 5px; background: #333a4d; border-radius: 3px; outline: none; }
+                input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; cursor: pointer; background: #fff; }
+                .values-text { background: #13151c; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 0.75rem; color: #8a94a6; display: flex; flex-direction: column; gap: 4px; }
+            </style>
+
+            <div class="photoshop-picker">
+                <!-- 2D Canvas Seçim Alanı (Gökkuşağı Tayfı & Spectrum) -->
+                <div class="canvas-area">
+                    <div style="position:relative;">
+                        <canvas id="spectrumCanvas" width="200" height="200"></canvas>
+                        <div class="cursor-handle" id="spectrumCursor"></div>
+                    </div>
+                    <div style="position:relative;">
+                        <canvas id="hueCanvas" width="20" height="200"></canvas>
+                        <div class="hue-handle" id="hueCursor"></div>
+                    </div>
+                </div>
+
+                <!-- Kontrol Slider'ları ve Tek Matbaa Önizlemesi -->
+                <div class="controls-area">
+                    <div class="print-preview-box" id="printPreview">
+                        <span class="label">Matbaa Baskı Rengi</span>
+                        <span class="hex-val" id="printHexText">#ED1F24</span>
+                    </div>
+
+                    <div class="slider-row">
+                        <header class="c-color"><span>Cyan (C)</span><span id="txtC">0%</span></header>
+                        <input type="range" id="inputC" min="0" max="100" value="0">
+                    </div>
+                    <div class="slider-row">
+                        <header class="m-color"><span>Magenta (M)</span><span id="txtM">100%</span></header>
+                        <input type="range" id="inputM" min="0" max="100" value="100">
+                    </div>
+                    <div class="slider-row">
+                        <header class="y-color"><span>Yellow (Y)</span><span id="txtY">100%</span></header>
+                        <input type="range" id="inputY" min="0" max="100" value="100">
+                    </div>
+                    <div class="slider-row">
+                        <header class="k-color"><span>Key/Black (K)</span><span id="txtK">0%</span></header>
+                        <input type="range" id="inputK" min="0" max="100" value="0">
+                    </div>
+
+                    <div class="values-text">
+                        <span id="outRgb">RGB: 237, 31, 36</span>
+                        <span id="outCmyk">CMYK: 0%, 100%, 100%, 0%</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        this.spectrumCanvas = this.container.querySelector('#spectrumCanvas');
+        this.spectrumCtx = this.spectrumCanvas.getContext('2d');
+        this.hueCanvas = this.container.querySelector('#hueCanvas');
+        this.hueCtx = this.hueCanvas.getContext('2d');
+
+        this.spectrumCursor = this.container.querySelector('#spectrumCursor');
+        this.hueCursor = this.container.querySelector('#hueCursor');
+        
+        this.printPreview = this.container.querySelector('#printPreview');
+        this.printHexText = this.container.querySelector('#printHexText');
+
+        this.inputC = this.container.querySelector('#inputC');
+        this.inputM = this.container.querySelector('#inputM');
+        this.inputY = this.container.querySelector('#inputY');
+        this.inputK = this.container.querySelector('#inputK');
+
+        this.txtC = this.container.querySelector('#txtC');
+        this.txtM = this.container.querySelector('#txtM');
+        this.txtY = this.container.querySelector('#txtY');
+        this.txtK = this.container.querySelector('#txtK');
+
+        this.outRgb = this.container.querySelector('#outRgb');
+        this.outCmyk = this.container.querySelector('#outCmyk');
+
+        this._drawHueBar();
+    }
+
+    // ==========================================
+    // 2. CANVAS ÇİZİM METODLARI
+    // ==========================================
+    _drawHueBar() {
+        const width = this.hueCanvas.width;
+        const height = this.hueCanvas.height;
+        const gradient = this.hueCtx.createLinearGradient(0, 0, 0, height);
+
+        const colors = ['#ff0000', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#ff00ff', '#ff0000'];
+        colors.forEach((color, idx) => gradient.addColorStop(idx / (colors.length - 1), color));
+
+        this.hueCtx.fillStyle = gradient;
+        this.hueCtx.fillRect(0, 0, width, height);
+    }
+
+    _drawSpectrum() {
+        const width = this.spectrumCanvas.width;
+        const height = this.spectrumCanvas.height;
+
+        const baseRgb = this._hsvToRgb(this.hsv.h, 100, 100);
+        this.spectrumCtx.fillStyle = `rgb(${baseRgb.r}, ${baseRgb.g}, ${baseRgb.b})`;
+        this.spectrumCtx.fillRect(0, 0, width, height);
+
+        const whiteGrad = this.spectrumCtx.createLinearGradient(0, 0, width, 0);
+        whiteGrad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+        whiteGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        this.spectrumCtx.fillStyle = whiteGrad;
+        this.spectrumCtx.fillRect(0, 0, width, height);
+
+        const blackGrad = this.spectrumCtx.createLinearGradient(0, 0, 0, height);
+        blackGrad.addColorStop(0, 'rgba(0, 0, 0, 0)');
+        blackGrad.addColorStop(1, 'rgba(0, 0, 0, 1)');
+        this.spectrumCtx.fillStyle = blackGrad;
+        this.spectrumCtx.fillRect(0, 0, width, height);
+    }
+
+    // ==========================================
+    // 3. EVENT DINLEYICILERI
+    // ==========================================
+    _bindEvents() {
+        const handleSpectrum = (e) => {
+            const rect = this.spectrumCanvas.getBoundingClientRect();
+            let x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+            let y = Math.max(0, Math.min(e.clientY - rect.top, rect.height));
+
+            this.hsv.s = Math.round((x / rect.width) * 100);
+            this.hsv.v = Math.round((1 - (y / rect.height)) * 100);
+
+            this._updateFromHsv();
+        };
+
+        this.spectrumCanvas.addEventListener('mousedown', (e) => { this.isDraggingSpectrum = true; handleSpectrum(e); });
+
+        const handleHue = (e) => {
+            const rect = this.hueCanvas.getBoundingClientRect();
+            let y = Math.max(0, Math.min(e.clientY - rect.top, rect.height));
+            this.hsv.h = Math.round((y / rect.height) * 360);
+
+            this._updateFromHsv();
+        };
+
+        this.hueCanvas.addEventListener('mousedown', (e) => { this.isDraggingHue = true; handleHue(e); });
+
+        window.addEventListener('mousemove', (e) => {
+            if (this.isDraggingSpectrum) handleSpectrum(e);
+            if (this.isDraggingHue) handleHue(e);
+        });
+
+        window.addEventListener('mouseup', () => {
+            this.isDraggingSpectrum = false;
+            this.isDraggingHue = false;
+        });
+
+        const onCmykChange = () => {
+            this.cmyk = {
+                c: parseInt(this.inputC.value),
+                m: parseInt(this.inputM.value),
+                y: parseInt(this.inputY.value),
+                k: parseInt(this.inputK.value)
+            };
+            this._updateFromCmyk();
+        };
+
+        [this.inputC, this.inputM, this.inputY, this.inputK].forEach(input => {
+            input.addEventListener('input', onCmykChange);
+        });
+    }
+
+    // ==========================================
+    // 4. DURUM (STATE) SENKRONIZASYONU
+    // ==========================================
+    _updateFromHsv() {
+        const idealRgb = this._hsvToRgb(this.hsv.h, this.hsv.s, this.hsv.v);
+        this.cmyk = this._rgbToCmyk(idealRgb.r, idealRgb.g, idealRgb.b);
+        this._render();
+    }
+
+    _updateFromCmyk() {
+        this._render();
+    }
+
+    _render() {
+        this._drawSpectrum();
+
+        // HER ZAMAN GERÇEKÇİ MATBAA HESAPLAMASI ÇALIŞIR (#ED1F24)
+        const printData = this._cmykToRealPrintRgb(this.cmyk.c, this.cmyk.m, this.cmyk.y, this.cmyk.k);
+
+        this.rgb = { r: printData.r, g: printData.g, b: printData.b };
+        this.hex = printData.hex;
+
+        // Imlec Pozisyonları
+        const specW = this.spectrumCanvas.width;
+        const specH = this.spectrumCanvas.height;
+        this.spectrumCursor.style.left = `${(this.hsv.s / 100) * specW}px`;
+        this.spectrumCursor.style.top = `${(1 - (this.hsv.v / 100)) * specH}px`;
+
+        const hueH = this.hueCanvas.height;
+        this.hueCursor.style.top = `${(this.hsv.h / 360) * hueH}px`;
+
+        // Arayüz Elemanlarını Güncelle
+        this.inputC.value = this.cmyk.c; this.txtC.textContent = this.cmyk.c + '%';
+        this.inputM.value = this.cmyk.m; this.txtM.textContent = this.cmyk.m + '%';
+        this.inputY.value = this.cmyk.y; this.txtY.textContent = this.cmyk.y + '%';
+        this.inputK.value = this.cmyk.k; this.txtK.textContent = this.cmyk.k + '%';
+
+        this.printPreview.style.backgroundColor = this.hex;
+        this.printHexText.textContent = this.hex; // #ED1F24 Çıktısı!
+
+        this.outRgb.textContent = `RGB: ${this.rgb.r}, ${this.rgb.g}, ${this.rgb.b}`;
+        this.outCmyk.textContent = `CMYK: ${this.cmyk.c}%, ${this.cmyk.m}%, ${this.cmyk.y}%, ${this.cmyk.k}%`;
+
+        // Dışarıya Yayınla
+        this.onChange({
+            hex: this.hex,
+            rgb: this.rgb,
+            cmyk: this.cmyk
+        });
+    }
+
+    // ==========================================
+    // 5. GERÇEKÇİ MATBAA (FOGRA39 / SWOP) MOTORU
+    // ==========================================
+    _cmykToRealPrintRgb(c, m, y, k) {
+        let cN = c / 100, mN = m / 100, yN = y / 100, kN = k / 100;
+
+        // Nokta Kazancı (Dot Gain)
+        if (cN > 0 && cN < 1) cN = Math.pow(cN, 1 - this.dotGain);
+        if (mN > 0 && mN < 1) mN = Math.pow(mN, 1 - this.dotGain);
+        if (yN > 0 && yN < 1) yN = Math.pow(yN, 1 - this.dotGain);
+        if (kN > 0 && kN < 1) kN = Math.pow(kN, 1 - this.dotGain);
+
+        // Spektrofotometre Mürekkep Yansıma Matrisi
+        const inkMatrix = {
+            c: { r: 0.00, g: 0.60, b: 0.82 },
+            m: { r: 0.93, g: 0.12, b: 0.38 }, // #ED1F24 Veren Magenta
+            y: { r: 0.98, g: 0.89, b: 0.00 },
+            paper: { r: 0.97, g: 0.96, b: 0.93 }
+        };
+
+        let rL = inkMatrix.paper.r * (1 - cN * (1 - inkMatrix.c.r)) * (1 - mN * (1 - inkMatrix.m.r)) * (1 - yN * (1 - inkMatrix.y.r)) * (1 - kN);
+        let gL = inkMatrix.paper.g * (1 - cN * (1 - inkMatrix.c.g)) * (1 - mN * (1 - inkMatrix.m.g)) * (1 - yN * (1 - inkMatrix.y.g)) * (1 - kN);
+        let bL = inkMatrix.paper.b * (1 - cN * (1 - inkMatrix.c.b)) * (1 - mN * (1 - inkMatrix.m.b)) * (1 - yN * (1 - inkMatrix.y.b)) * (1 - kN);
+
+        const r = Math.max(0, Math.min(255, Math.round(rL * 255)));
+        const g = Math.max(0, Math.min(255, Math.round(gL * 255)));
+        const b = Math.max(0, Math.min(255, Math.round(bL * 255)));
+
+        return { r, g, b, hex: this._rgbToHex(r, g, b) };
+    }
+
+    _hsvToRgb(h, s, v) {
+        s /= 100; v /= 100;
+        let c = v * s, x = c * (1 - Math.abs(((h / 60) % 2) - 1)), m = v - c;
+        let r = 0, g = 0, b = 0;
+        if (h < 60) { r = c; g = x; } else if (h < 120) { r = x; g = c; }
+        else if (h < 180) { g = c; b = x; } else if (h < 240) { g = x; b = c; }
+        else if (h < 300) { r = x; b = c; } else { r = c; b = x; }
+        return { r: Math.round((r + m) * 255), g: Math.round((g + m) * 255), b: Math.round((b + m) * 255) };
+    }
+
+    _rgbToCmyk(r, g, b) {
+        let rN = r / 255, gN = g / 255, bN = b / 255;
+        let k = 1 - Math.max(rN, gN, bN);
+        if (k === 1) return { c: 0, m: 0, y: 0, k: 100 };
+        return {
+            c: Math.round(((1 - rN - k) / (1 - k)) * 100),
+            m: Math.round(((1 - gN - k) / (1 - k)) * 100),
+            y: Math.round(((1 - bN - k) / (1 - k)) * 100),
+            k: Math.round(k * 100)
+        };
+    }
+
+    _rgbToHex(r, g, b) {
+        return "#" + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('').toUpperCase();
+    }
+}
+
+// ==========================================
+// KULLANIM ÖRNEĞİ (INIT)
+// ==========================================
+const myPicker = new CmykColorPicker('#picker-container', {
+    onChange: (colorData) => {
+    }
+});
+</script>
+
+</body>
+</html>

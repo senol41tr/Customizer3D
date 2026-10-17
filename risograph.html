@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js r148 - Risograph Shader + lil-gui</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #0d0d11; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        canvas { display: block; }
+    </style>
+
+    <!-- 1. IMPORT MAP: Three.js r148 ve lil-gui ESM Tanımlamaları -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.148.0/build/three.module.js",
+                "lil-gui": "https://unpkg.com/lil-gui@0.18.0/dist/lil-gui.esm.min.js"
+            }
+        }
+    </script>
+</head>
+<body>
+
+<script type="module">
+import * as THREE from 'three';
+import GUI from 'lil-gui';
+
+// 2. Sahne, Kamera ve Renderer Kurulumu
+const scene = new THREE.Scene();
+const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.outputEncoding = THREE.sRGBEncoding;
+document.body.appendChild(renderer.domElement);
+
+// 3. Risograph GLSL Shader Material
+const RisographShader = {
+    uniforms: {
+        'tDiffuse': { value: null },
+        'uResolution': { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+        'uDotScale': { value: 160.0 },      
+        'uColorOffset': { value: 0.003 },   
+        'uGrainAmount': { value: 0.12 },    
+        'uInkColor1': { value: new THREE.Color('#ff2a6d') }, 
+        'uInkColor2': { value: new THREE.Color('#05d9e8') }  
+    },
+    vertexShader: `
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = vec4(position, 1.0);
+        }
+    `,
+    fragmentShader: `
+        uniform sampler2D tDiffuse;
+        uniform vec2 uResolution;
+        uniform float uDotScale;
+        uniform float uColorOffset;
+        uniform float uGrainAmount;
+        uniform vec3 uInkColor1;
+        uniform vec3 uInkColor2;
+
+        varying vec2 vUv;
+
+        float rand(vec2 co) {
+            return fract(sin(dot(co.xy ,vec2(12.9898, 78.233))) * 43758.5453);
+        }
+
+        float halftone(vec2 uv, float angle, float scale) {
+            float rad = radians(angle);
+            mat2 rot = mat2(cos(rad), -sin(rad), sin(rad), cos(rad));
+            vec2 st = rot * (uv * uResolution / scale);
+            vec2 nearest = floor(st + 0.5);
+            vec2 dist = st - nearest;
+            return length(dist);
+        }
+
+        void main() {
+            // Misregistration
+            float r = texture2D(tDiffuse, vUv + vec2(uColorOffset, 0.0)).r;
+            float g = texture2D(tDiffuse, vUv).g;
+            float b = texture2D(tDiffuse, vUv - vec2(uColorOffset, 0.0)).b;
+            
+            float lum = dot(vec3(r, g, b), vec3(0.299, 0.587, 0.114));
+
+            // Halftone Matrix
+            float dotDist = halftone(vUv, 45.0, uDotScale);
+            float dotThreshold = sqrt(1.0 - lum) * 0.6;
+            float dotPattern = step(dotDist, dotThreshold);
+
+            // Color Blend
+            vec3 paperColor = vec3(0.96, 0.94, 0.90);
+            vec3 finalColor = mix(paperColor, uInkColor1, (1.0 - lum) * dotPattern);
+            finalColor = mix(finalColor, uInkColor2, (1.0 - r) * (1.0 - dotPattern));
+
+            // Paper Grain
+            float noise = (rand(vUv * uResolution) - 0.5) * uGrainAmount;
+            finalColor += noise;
+
+            gl_FragColor = vec4(finalColor, 1.0);
+        }
+    `
+};
+
+const material = new THREE.ShaderMaterial({
+    uniforms: THREE.UniformsUtils.clone(RisographShader.uniforms),
+    vertexShader: RisographShader.vertexShader,
+    fragmentShader: RisographShader.fragmentShader
+});
+
+// Texture Yükleyici
+const textureLoader = new THREE.TextureLoader();
+textureLoader.crossOrigin = 'Anonymous';
+
+textureLoader.load('https://picsum.photos/800/800?random=15', (texture) => {
+    texture.encoding = THREE.sRGBEncoding;
+    material.uniforms.tDiffuse.value = texture;
+    material.needsUpdate = true;
+});
+
+const geometry = new THREE.PlaneGeometry(2, 2);
+const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
+
+// 4. LIL-GUI KONTROL PANELİ ENTEGRASYONU
+const gui = new GUI({ title: 'Risograph Kontrol Paneli' });
+
+// Shader uniform değerleri ile eşleşen GUI parametre objesi
+const guiParams = {
+    dotScale: material.uniforms.uDotScale.value,
+    colorOffset: material.uniforms.uColorOffset.value,
+    grainAmount: material.uniforms.uGrainAmount.value,
+    inkColor1: '#' + material.uniforms.uInkColor1.value.getHexString(),
+    inkColor2: '#' + material.uniforms.uInkColor2.value.getHexString()
+};
+
+// Slider ve Renk Seçicilerin Eklemesi
+gui.add(guiParams, 'dotScale', 10.0, 500.0, 1.0)
+   .name('Nokta Yoğunluğu')
+   .onChange(value => { material.uniforms.uDotScale.value = value; });
+
+gui.add(guiParams, 'colorOffset', 0.0, 0.01, 0.0001)
+   .name('Renk Kayması (Offset)')
+   .onChange(value => { material.uniforms.uColorOffset.value = value; });
+
+gui.add(guiParams, 'grainAmount', 0.0, 0.5, 0.01)
+   .name('Kağıt Kum Oranı')
+   .onChange(value => { material.uniforms.uGrainAmount.value = value; });
+
+gui.addColor(guiParams, 'inkColor1')
+   .name('1. Mürekkep Rengi')
+   .onChange(value => { material.uniforms.uInkColor1.value.set(value); });
+
+gui.addColor(guiParams, 'inkColor2')
+   .name('2. Mürekkep Rengi')
+   .onChange(value => { material.uniforms.uInkColor2.value.set(value); });
+
+
+// 5. Render Loop & Window Resize
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    material.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
+});
+</script>
+
+</body>
+</html>

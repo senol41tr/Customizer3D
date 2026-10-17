@@ -1,0 +1,767 @@
+import * as THREE from 'three';
+import {TTFLoader} from 'three_dir/loaders/TTFLoader.js?c3d=0.5.4';
+import {Font} from 'three_dir/loaders/FontLoader.js?c3d=0.5.4';
+import {TextGeometry} from 'three_dir/geometries/TextGeometry.js?c3d=0.5.4';
+import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.4';
+import {GUI} from 'three_dir/libs/lil-gui.module.min.js';
+
+
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.4';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.4';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.4';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.4';
+import {createFiltersList, applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.4';
+import {createEffectsList, applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.5.4';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.4';
+
+export class ThreeDTextLayer
+{
+    constructor(c3d)
+    {
+        this.c3d = c3d;
+
+        this.htmlEl = document.createElement('div');
+        this.htmlEl.classList.add('threeDTextLayer');
+        document.querySelector(this.c3d.props.container).append(this.htmlEl);
+
+        this.layer = null; // active layer (new Image(): Image.js)
+        this.mesh = null;
+        this.is2DViewing = null;
+        this.controls = null;
+        this.oldCamState = null;
+        this.__mouseUp = this._mouseUp.bind(this);
+        this._baked = null;
+
+        let el;
+
+        this.htmlEl.innerHTML = `
+        <div class="title">
+            <p class="label" draggable="false">${this.c3d.lang['add-3d-text-layer']}</p>
+            <div class="buttons">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.4" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
+                <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.4" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="menu">
+                <div class="rotate">
+                    <div class="button" title="${this.c3d.lang['rotate']}"><img src="${C3D_SERVER}svg/rotate.svg?c3d=0.5.4" alt="Icon"></div>
+                    <div class="list">
+                        <div class="inputPercent" data-icon="°" title="${this.c3d.lang['degree']}">
+                            <input type="number" min="-180" max="180" value="0">
+                        </div>
+                        <input type="range" min="-180" max="180" value="0" step="1">
+                    </div>
+                </div>
+                <div class="zoom">
+                    <div class="button" title="${this.c3d.lang['zoom']}"><img src="${C3D_SERVER}svg/zoom.svg?c3d=0.5.4" alt="Icon"></div>
+                    <div class="list">
+                        <div class="inputPercent" data-icon="%"><input type="number" min="1" max="2000" value="100"></div>
+                        <input type="range" min="1" max="2000" value="100" step="0.5">
+                    </div>
+                </div>
+                <div class="filters">
+                    <div class="button" title="${this.c3d.lang['filter-gallery']}"><img src="${C3D_SERVER}svg/filters.svg?c3d=0.5.4" alt="Icon"></div>
+                    <div class="list">
+                    </div>
+                </div>
+                <div class="effects">
+                    <div class="button" title="${this.c3d.lang['effects-gallery']}"><img src="${C3D_SERVER}svg/effects.svg?c3d=0.5.4" alt="Icon"></div>
+                    <div class="list">
+                    </div>
+                </div>
+                <div class="settings">
+                    <div class="button" title="${this.c3d.lang['settings']}"><img src="${C3D_SERVER}svg/settings.svg?c3d=0.5.4" alt="Icon" style="height:24px;"></div>
+                </div>
+            </div>
+            <canvas class="preview" oncontextmenu="return false;"></canvas>
+        </div>`;
+
+        const dragable = new Dragable({
+            dragEl: this.htmlEl.querySelector('div.title'),
+            container: this.htmlEl,
+            root: document.querySelector(this.c3d.props.container),
+            c3d: this.c3d
+        });
+
+        this.htmlEl.querySelector('div.title > div.buttons > img.rollup').addEventListener('click', (e) => {
+            const content = this.htmlEl.querySelector('div.content');
+            const visible = content.style.display == 'none' || content.style.display == '' ;
+            content.style.display = visible ? 'flex' : 'none';
+            e.currentTarget.style.rotate = visible ? '-180deg' : '0deg';
+        });
+
+        this.htmlEl.querySelector('div.title > div.buttons > img.icon').addEventListener('click', () => {
+            this.hide();
+        });
+
+        // Click outside of element
+
+        const _listClickOutside = (e) => // !!!
+        {
+            if(!this.htmlEl.querySelector('div.rotate > div.list').contains(e.target) && !this.htmlEl.querySelector('div.rotate > div.button').contains(e.target))
+            {
+                this.htmlEl.querySelector('div.rotate > div.list').style.display = 'none';
+            }
+
+            if(!this.htmlEl.querySelector('div.zoom > div.list').contains(e.target) && !this.htmlEl.querySelector('div.zoom > div.button').contains(e.target))
+            {
+                this.htmlEl.querySelector('div.zoom > div.list').style.display = 'none';
+            }
+
+            if(!this.htmlEl.querySelector('div.filters > div.list').contains(e.target) && !this.htmlEl.querySelector('div.filters > div.button').contains(e.target))
+            {
+                this.htmlEl.querySelector('div.filters > div.list').style.display = 'none';
+            }
+
+            if(!this.htmlEl.querySelector('div.effects > div.list').contains(e.target) && !this.htmlEl.querySelector('div.effects > div.button').contains(e.target))
+            {
+                this.htmlEl.querySelector('div.effects > div.list').style.display = 'none';
+            }
+        };
+        window.addEventListener('click', _listClickOutside);
+        window.addEventListener('touchstart', _listClickOutside);
+
+
+        const _listOnclick = (e) =>
+        {
+            const divList = e.currentTarget.parentNode.querySelector('div.list');
+            divList.style.display = divList.style.display == '' || divList.style.display == 'none' ? 'block' : 'none';
+        };
+
+
+
+        // ROTATION
+
+        this.htmlEl.querySelector('div.rotate > div.button').addEventListener('click', _listOnclick);
+        el = this.htmlEl.querySelector('div.rotate input[type="number"]');
+        el.addEventListener('input', (e) => {
+            let val = parseFloat(e.currentTarget.value);
+            if(isNaN(val)) return;
+            e.currentTarget.value = val;
+            this.htmlEl.querySelector('div.rotate input[type="range"]').value = val;
+            this.layer.rotation = val;
+            this.updatePreview();
+        });
+        el.addEventListener('focus', (e) => e.currentTarget.select());
+        el.addEventListener('keydown', (e) => {
+            if (e.keyCode === 13)
+            {
+                e.preventDefault();
+                const input = this.htmlEl.querySelector('div.rotate input[type="number"]');
+                if(input.value < parseInt(input.min)) input.value = input.min;
+                if(input.value > parseInt(input.max)) input.value = input.max;
+                this.htmlEl.querySelector('div.rotate input[type="range"]').value = input.value;
+                this.layer.rotation = parseFloat(input.value);
+                input.parentNode.parentNode.style.display = 'none'; // hide list
+                this.updatePreview();
+            }
+        });
+        
+        this.htmlEl.querySelector('div.rotate input[type="range"]').addEventListener('input', (e) => {
+            this.layer.rotation = parseFloat(e.currentTarget.value);
+            this.htmlEl.querySelector('div.rotate input[type="number"]').value = e.currentTarget.value;
+            this.updatePreview();
+        });
+
+        // ZOOM
+
+        this.htmlEl.querySelector('div.zoom > div.button').addEventListener('click', _listOnclick);
+        el = this.htmlEl.querySelector('div.zoom input[type="number"]');
+        el.addEventListener('input', (e) => {
+            let val = parseFloat(e.currentTarget.value);
+            if(isNaN(val)) return;
+            e.currentTarget.value = val;
+            this.htmlEl.querySelector('div.zoom input[type="range"]').value = val;
+            this.layer.zoom = val;
+            this.updatePreview();
+        });
+        el.addEventListener('focus', (e) => e.currentTarget.select());
+        el.addEventListener('keyup', (e) => {
+            const input = this.htmlEl.querySelector('div.zoom input[type="number"]');
+            if(parseInt(input.value) < parseInt(input.min)) input.value = input.min;
+            if(parseInt(input.value) > parseInt(input.max)) input.value = input.max;
+            this.htmlEl.querySelector('div.zoom input[type="range"]').value = input.value;
+            this.layer.zoom = parseFloat(input.value);
+            this.updatePreview();
+            if(e.keyCode === 13) input.parentNode.parentNode.style.display = 'none'; // hide list
+        });
+        
+        this.htmlEl.querySelector('div.zoom input[type="range"]').addEventListener('input', (e) => {
+            this.layer.zoom = parseFloat(e.currentTarget.value);
+            this.htmlEl.querySelector('div.zoom input[type="number"]').value = e.currentTarget.value;
+            this.updatePreview();
+        });
+
+
+        // FILTERS
+        
+        el = this.htmlEl.querySelector('div.filters > div.button');
+        el.addEventListener('click', _listOnclick);
+        el.addEventListener('click', () => {
+            createFiltersList(
+                this.c3d, 
+                this.htmlEl.querySelector('div.filters > div.list'), 
+                'threeDTextLayer'
+            );
+        });
+
+
+        // EFFECTS
+        
+        el = this.htmlEl.querySelector('div.effects > div.button');
+        el.addEventListener('click', _listOnclick);
+        el.addEventListener('click', () => {
+            createEffectsList(
+                this.c3d, 
+                this.htmlEl.querySelector('div.effects > div.list'), 
+                'threeDTextLayer'
+            );
+        });
+
+        // SHOW SETTINGS
+
+        this.htmlEl.querySelector('div.settings > div.button').addEventListener('click', () => {
+            this.showGUI();
+            this._create();
+        });
+
+
+        // CANVAS
+
+        const canvasPreview = this.htmlEl.querySelector('canvas.preview');
+
+        const canvasMouseMove = (e) =>
+        {
+            // https://stackoverflow.com/a/69023543
+            const touch = (e.touches && e.touches[0]) || (e.pointerType && e.pointerType === 'touch' && e);
+            const clientX = (touch || e).clientX;
+            const clientY = (touch || e).clientY;
+            const bb = canvasPreview.getBoundingClientRect();
+
+            this.layer.imagePosition =
+            {
+                x: -canvasPreview.width / 2 + ((clientX - bb.x) * 2), 
+                y: -canvasPreview.height / 2 + ((clientY - bb.y) * 2)
+            };
+            
+            this.updatePreview(true);
+        };
+
+        const canvasMouseUp = () =>
+        {
+            const container = document.querySelector(this.c3d.props.container);
+            if(isMobile())
+            {
+                container.removeEventListener('touchend', canvasMouseUp);
+                container.removeEventListener('touchmove', canvasMouseMove);
+                document.body.style.overflow = 'auto';
+            }
+            else
+            {
+                container.removeEventListener('pointermove', canvasMouseMove);
+                container.removeEventListener('pointerup', canvasMouseUp);
+            }
+
+            this.updatePreview(false);
+        };
+
+        const canvasMouseDown = (e) => 
+        {
+            canvasMouseMove(e);
+            const container = document.querySelector(this.c3d.props.container);
+            if(isMobile())
+            {
+                document.body.style.overflow = 'hidden';
+                container.addEventListener('touchend', canvasMouseUp);
+                container.addEventListener('touchmove', canvasMouseMove);
+            }
+            else
+            {
+                container.addEventListener('pointermove', canvasMouseMove);
+                container.addEventListener('pointerup', canvasMouseUp);
+            }
+        };
+
+        if(isMobile()) canvasPreview.addEventListener('touchstart', canvasMouseDown);
+        else canvasPreview.addEventListener('pointerdown', canvasMouseDown);
+
+    }
+
+
+    show(layer)
+    {
+        // set active layer
+        if(layer) this.layer = layer;
+        const canvasPreview = this.htmlEl.querySelector('canvas.preview');
+
+        //
+        this.c3d.showHideUI.hideSubWindows();
+        document.querySelector(this.c3d.props.layers).style.opacity = 0.25;
+
+        // set top of window
+        this.htmlEl.style.zIndex = this.c3d.zIndex.index;
+
+        // 
+        const printDims = getPrintDims(this.c3d, this.layer, 72);
+        const printWidth = printDims.width;
+        const printHeight = printDims.height;
+
+        // as default show window
+        this.htmlEl.querySelector('div.content').style.display = 'flex'; // show content
+        this.htmlEl.querySelector('div.title > div.buttons > img.rollup').style.rotate = '180deg';
+
+
+        // set window position
+        const bb = document.querySelector(this.c3d.props.layers).getBoundingClientRect();
+        const bbContainer = document.querySelector(this.c3d.props.container).getBoundingClientRect();
+        const top = bb.top - bbContainer.y + 32;
+        let left = bb.left;
+        if(bb.width + bb.x > bbContainer.width + bbContainer.x) left = bbContainer.width + bbContainer.x - bb.width;
+        // this.htmlEl.style.left = left + 'px';
+        this.htmlEl.style.top = top + 'px';
+        this.htmlEl.style.display = 'block';
+
+        // set preview canvas dims.
+        const previewDims = calculateAspectRatioFit(printWidth, printHeight, 150, 150);
+        canvasPreview.style.width = Math.floor(previewDims.width) + 'px';
+        canvasPreview.style.height = Math.floor(previewDims.height) + 'px';
+        canvasPreview.width = previewDims.width * 2;
+        canvasPreview.height = previewDims.height * 2;
+
+        if(!this.layer.options)
+        {
+            this.showGUI();
+            this._create();
+            this.layer.updateThumbnail(canvasPreview);
+        }
+
+        this.updatePreview();
+    }
+
+    hide()
+    {
+        this.htmlEl.style.display = 'none';
+        document.querySelector(this.c3d.props.layers).style.opacity = 1;
+    }
+
+    updatePreview(drawLines = false)
+    {
+        if(this.layer == null) return;
+
+        const canvas = this.htmlEl.querySelector('canvas.preview');
+        const ctx = canvas.getContext('2d', {willReadFrequently: true});
+        const layer = this.layer;
+        const snapX = Math.abs(layer.imagePosition.x) < 5;
+        const snapY = Math.abs(layer.imagePosition.y) < 5;
+        const multiplyer = Math.max(1, layer.zoom / 100);
+        const x = layer.imagePosition.x * multiplyer;
+        const y = layer.imagePosition.y * multiplyer;
+        const source = layer.canvas;
+        const textureDims = calculateAspectRatioFit(
+            source.width, 
+            source.height, 
+            canvas.width,
+            canvas.height
+        );
+
+        if(snapX && drawLines) layer.imagePosition.x = 0;
+        if(snapY && drawLines) layer.imagePosition.y = 0;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.save();
+        ctx.globalAlpha = layer.opacity / 100;
+        ctx.imageSmoothingEnabled = false;
+        ctx.translate(canvas.width / 2 + x, canvas.height / 2 + y);
+        ctx.rotate(degToRad(layer.rotation));
+        ctx.scale(layer.zoom / 100, layer.zoom / 100);
+        ctx.drawImage(
+            source, 
+            -textureDims.width / 2, 
+            -textureDims.height / 2, 
+            textureDims.width, 
+            textureDims.height
+        );
+        ctx.restore();
+
+        if(drawLines)
+        {        
+            ctx.beginPath();
+            ctx.setLineDash([5, 3]);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 1;
+            if(snapY)
+            {
+                ctx.moveTo(0, Math.round(canvas.height / 2));
+                ctx.lineTo(canvas.width, Math.round(canvas.height / 2));
+            }
+            if(snapX)
+            {
+                ctx.moveTo(Math.round(canvas.width / 2), 0);
+                ctx.lineTo(Math.round(canvas.width / 2), canvas.height);
+            }
+            ctx.stroke();
+        }
+
+        this.layer.updateThumbnail(canvas);
+        this.c3d.render3d.renderView(this.layer.name);
+        this.c3d.render2d.renderView(this.layer.name);
+
+    }
+
+
+    bakeImageToLayer()
+    {
+        if(!this.layer) return;
+        
+        const printDims = getPrintDims(this.c3d, this.layer, this.c3d.settings.getRenderDPI());
+        const c3d = this.c3d;
+        const canvas = this.layer.image || document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const w = Math.round(printDims.width);
+        const h = Math.round(printDims.height);
+console.log(canvas);
+
+canvas.width = w;
+canvas.height = h;
+
+console.log(canvas);
+        if(!this.layer.image) this.layer.image = canvas;
+
+        const renderTargetOptions = 
+        {
+            format: THREE.RGBAFormat,
+            samples: 4,
+            stencilBuffer: false,
+            depthBuffer: false,
+            type: THREE.UnsignedByteType,
+            colorSpace: THREE.SRGBColorSpace
+        };
+
+        const oldCanvasSize = {...c3d.three._canvasDims};
+        const target = new THREE.WebGLRenderTarget(w, h, renderTargetOptions);
+        c3d.three.renderer.setRenderTarget(target);
+        c3d.three.renderer.setPixelRatio(1);
+        c3d.three._onResize(null, w, h);
+        c3d.three.render();
+
+        const pixels = new Uint8Array(w * h * 4);
+        c3d.three.renderer.readRenderTargetPixels(target, 0, 0, w, h, pixels);
+
+        c3d.three.renderer.setRenderTarget(null);
+        c3d.three.renderer.setPixelRatio(c3d.PIXEL_RATIO);
+        c3d.three._onResize(null, oldCanvasSize.width, oldCanvasSize.height);
+
+        target.dispose();
+        
+        canvas.width = w;
+        canvas.height = h;
+
+        const imageData = ctx.createImageData(w, h);
+
+        for (let y = 0; y < h; y++)
+        {
+            const sourceRow = y * w * 4;
+            const targetRow = (h - 1 - y) * w * 4;
+            imageData.data.set(pixels.subarray(sourceRow, sourceRow + w * 4), targetRow);
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+
+        this.hide();
+        this.hideGUI();
+        // applyEffects(this.c3d, this.layer, 'threeDTextLayer');
+        // applyFilters(this.c3d, this.layer, 'threeDTextLayer');
+        this._baked = true;
+
+    }
+
+    showGUI()
+    {
+        this.is2DViewing = document.querySelector(this.c3d.props.layers + ' > div.switchTo2D > button').classList.contains('threeD');
+        if(this.is2DViewing) this.c3d.switchTo3D();
+        this.c3d.showHideUI.hide();
+        this.c3d.glbScene.visible = false;
+        this.hide();
+        this.c3d.three.controls.orbit.enabled = false;
+
+        const options =
+        {
+            text: 'Q',
+
+            material:
+            {
+                name: 'MeshStandardMaterial',
+                color: '#ffffff',
+                emissive: '#000000',
+                roughness: 0.5,
+                metalness: 1.0,
+                flatShading: false,
+                wireframe: false
+            },
+
+            geometry:
+            {
+                font: 'ScotchDisplay-SemiBold',
+                height: 0.01,
+                size: 500,
+                curveSegments: 16,
+                bevelEnabled: true,
+                bevelThickness: 10,
+                bevelSize: 5,
+                bevelSegments: 3,
+            }
+        };
+
+        if(!this.layer.options) this.layer.options = options;
+
+        const gui = this.gui = new GUI({title: '3D Text Options'});
+
+        const guiSettings =
+        {
+            copyToCanvas: () =>
+            {
+                this._baked = false;
+                this.bakeImageToLayer();
+                this.show(this.layer);
+            },
+            cancel: () =>
+            {
+                
+                this.show(this.layer);
+
+                if(this._baked) {
+                    this.hideGUI();
+                    return;
+                }
+
+                this.layer.options = null;
+                this.hideGUI();
+                this.hide();
+                this.layer.div.querySelector('img.remove').click();
+            }
+        };
+
+        const txtFolder = gui.addFolder('Please Insert your text below:');
+
+        txtFolder.add(this.layer.options, 'text')
+            .name('Text')
+            .onChange((value) => {
+                this._create();
+            }).domElement.querySelector('div.name').remove();        
+
+        
+        const fontFolder = gui.addFolder('Select Font');
+        fontFolder.add(this.layer.options.geometry, 'font', this.c3d.textLayer.getFontList())
+            .name('Font Family')
+            .onChange((value) => {
+                this._create();
+            });
+
+
+        const geoFolder = gui.addFolder('Geometry');
+
+        geoFolder.add(this.layer.options.geometry, 'size')
+            .name('Size')
+            .min(100)
+            .max(1000)
+            .step(30)
+            .onChange((value) => {
+                this._create();
+            });
+
+        geoFolder.add(this.layer.options.geometry, 'curveSegments')
+            .name('Curve Segments')
+            .min(1)
+            .max(64)
+            .step(1)
+            .onChange((value) => {
+                this._create();
+            });
+
+        geoFolder.add(this.layer.options.geometry, 'bevelEnabled')
+            .name('Enable Bevel')
+            .onChange((value) => {
+                this._create();
+            });
+
+        geoFolder.add(this.layer.options.geometry, 'bevelThickness')
+            .name('Bevel Thickness')
+            .min(0.01)
+            .max(500)
+            .step(0.01)
+            .onChange((value) => {
+                this._create();
+            });
+
+        geoFolder.add(this.layer.options.geometry, 'bevelSize')
+            .name('Bevel Size')
+            .min(0.01)
+            .max(50)
+            .step(0.01)
+            .onChange((value) => {
+                this._create();
+            });
+
+        geoFolder.add(this.layer.options.geometry, 'bevelSegments')
+            .name('Bevel Segments')
+            .min(1)
+            .max(32)
+            .step(1)
+            .onChange((value) => {
+                this._create();
+            });
+
+
+        const matFolder = gui.addFolder('Material');
+
+        matFolder.addColor(this.layer.options.material, 'color')
+            .name('Base Color')
+            .onChange((value) => {
+                this._create();
+            });
+
+        matFolder.addColor(this.layer.options.material, 'emissive')
+            .name('Emissive Color')
+            .onChange((value) => {
+                this._create();
+            });
+
+        matFolder.add(this.layer.options.material, 'roughness')
+            .name('Roughness')
+            .min(0.0)
+            .max(1.0)
+            .step(0.01)
+            .onChange((value) => {
+                this._create();
+            });
+
+        matFolder.add(this.layer.options.material, 'metalness')
+            .name('Metalness')
+            .min(0.0)
+            .max(1.0)
+            .step(0.01)
+            .onChange((value) => {
+                this._create();
+            });
+
+        matFolder.add(this.layer.options.material, 'wireframe')
+            .name('Wireframe')
+            .onChange((value) => {
+                this._create();
+            });
+        
+        gui.add(guiSettings, 'copyToCanvas').name('Render to Canvas');
+        gui.add(guiSettings, 'cancel').name('Cancel').domElement.classList.add('btn-cancel');
+    }
+
+    hideGUI()
+    {
+        if(this.mesh)
+        {
+            this.mesh.clear();
+            this.mesh.removeFromParent();
+        }
+
+        this.gui.destroy();
+        this.c3d.three.camera.position.copy(this.oldCamState.position);
+        this.c3d.three.camera.rotation.copy(this.oldCamState.rotation);
+        this.c3d.three.controls.orbit.target.copy(this.oldCamState.target);
+
+        this.c3d.showHideUI.show();
+        this.c3d.glbScene.visible = true;
+        this.c3d.three.controls.orbit.enabled = true;
+        this.c3d.three.render();
+        window.removeEventListener(isMobile() ? 'touchend' : 'mouseup', this.__mouseUp);
+        this.controls.removeEventListeners();
+    }
+
+    _create()
+    {
+        if(this.mesh)
+        {
+            this.mesh.clear();
+            this.mesh.removeFromParent();
+        }
+
+        const geoOptions = this.layer.options.geometry;
+
+        const base64 = this.c3d.textLayer.getFontData(geoOptions.font).base64.split(',')[1];
+        const uint8Array = Uint8Array.fromBase64(base64);
+        const arrayBuffer = uint8Array.buffer;
+
+        let geo;
+
+        try
+        {
+            const ttfLoader = new TTFLoader();
+            const json = ttfLoader.parse(arrayBuffer);
+
+            const meshGeoOptions = {...geoOptions};
+            meshGeoOptions.font = new Font(json);
+            geo = new TextGeometry(this.layer.options.text, meshGeoOptions);
+            geo.center();
+        }
+        catch(e)
+        {
+            alert("An error occurred while converting the text to 3D!\nMessage: " + e.message);
+            this.hide();
+            return;
+        }
+
+        this.oldCamState = {
+            position: this.c3d.three.camera.position.clone(), 
+            rotation: this.c3d.three.camera.rotation.clone(),
+            target: this.c3d.three.controls.orbit.target.clone()
+        };
+        this.c3d.three.camera.rotation.set(0, 0, 0);
+        this.c3d.three.camera.position.set(0, 0, isMobile() ? 1.5 : 1);
+
+        const matOptions = this.layer.options.material;
+
+        const mat = new THREE[matOptions.name](matOptions);
+        this.mesh = new THREE.Mesh(geo, mat);
+
+        if(this.layer.options.meshState)
+        {
+            let o = this.layer.options.meshState.scale;
+            this.mesh.scale.set(o.x, o.y, o.z);
+            o = this.layer.options.meshState.position;
+            this.mesh.position.set(o.x, o.y, o.z);
+            o = this.layer.options.meshState.rotation;
+            this.mesh.rotation.set(o.x, o.y, o.z);
+        }
+        else
+        {
+            this.mesh.rotation.set(0, 0.5, 0);
+            this.mesh.scale.setScalar(0.0008);
+        }
+
+        this.controls = new Controls(this.mesh, this.c3d.three.getCanvas());
+        this.controls.addEventListeners();
+
+        // this.controls.mesh = this.mesh;
+        this.c3d.three.scene.add(this.mesh);
+        this.c3d.three.render();
+
+        window.addEventListener(isMobile() ? 'touchend' : 'mouseup', this.__mouseUp);
+        if(!isMobile()) window.addEventListener('wheel', this.__mouseUp);
+    }
+
+    _mouseUp()
+    {
+        if(this.mesh)
+        {
+            this.layer.options.meshState =
+            {
+                scale: {x: this.mesh.scale.x, y: this.mesh.scale.y, z: this.mesh.scale.z}, 
+                position: {x: this.mesh.position.x, y: this.mesh.position.y, z: this.mesh.position.z},
+                rotation: {x: this.mesh.rotation.x, y: this.mesh.rotation.y, z: this.mesh.rotation.z} 
+            };
+        }
+    }
+
+
+
+}
