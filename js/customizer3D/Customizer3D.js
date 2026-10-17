@@ -917,7 +917,7 @@ export class Customizer3D
                 <div class="button text" title="${this.lang['add-text-layer']}"><img src="${C3D_SERVER}svg/text.svg?c3d=0.5.4" alt="Icon" data-type="Text" draggable="false"></div>
                 <div class="button image" title="${this.lang['add-image-layer']}"><img src="${C3D_SERVER}svg/image.svg?c3d=0.5.4" alt="Icon" data-type="Image" draggable="false"></div>
                 <div class="button shape" title="${this.lang['add-shape-layer']}"><img src="${C3D_SERVER}svg/shapes.svg?c3d=0.5.4" alt="Icon" data-type="Shape" draggable="false"></div>
-                <div class="button threeDText" title="${this.lang['add-3d-text-layer']}"><img src="${C3D_SERVER}svg/3d-text.svg?c3d=0.5.4" alt="Icon" data-type="threeDText" draggable="false"></div>
+                <div style="pointer-events:none;opacity:0.4;" class="button threeDText" title="${this.lang['add-3d-text-layer']}"><img src="${C3D_SERVER}svg/3d-text.svg?c3d=0.5.4" alt="Icon" data-type="threeDText" draggable="false"></div>
                 `;
 
                 materialButtons.querySelector('div.solid').addEventListener('click', async () =>
@@ -936,10 +936,10 @@ export class Customizer3D
                     layer.input.click();
                 });
 
-                materialButtons.querySelector('div.threeDText').addEventListener('click', async () =>
-                {
-                    const layer = await this.layers.addThreeDText(layers);
-                });
+                // materialButtons.querySelector('div.threeDText').addEventListener('click', async () =>
+                // {
+                //     const layer = await this.layers.addThreeDText(layers);
+                // });
 
                 // materialButtons.querySelector('div.threeD').addEventListener('click', async () =>
                 // {
