@@ -5,8 +5,6 @@ export const applyFilters = (c3d, layer, layerName) =>
     if(!layer.canvas) return;
     const filtersCount = Object.keys(layer.filters).length;
     const effectsCount = layer.effects ? Object.keys(layer.effects).length : 0;
-    // if(filtersCount == 0 && effectsCount == 0) return;
-
 
     if(filtersCount > 0 && !layer.effects) source = layer.canvas;
     else if(filtersCount > 0 && effectsCount == 0) source = layer.image;
@@ -20,7 +18,7 @@ export const applyFilters = (c3d, layer, layerName) =>
         ctx.clearRect(0, 0, layer.canvas.width, layer.canvas.height);
         ctx.drawImage(source, 0, 0, layer.canvas.width, layer.canvas.height);
     }
-    else if(layer.type == 'text' || layer.type == 'shape')
+    else if(layer.type == 'text' || layer.type == 'shape' || layer.type == 'threeDText')
     {
         layer.updateCanvas();
     }

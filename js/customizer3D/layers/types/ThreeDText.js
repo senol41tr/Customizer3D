@@ -13,8 +13,9 @@ export class ThreeDText
         this.c3d = c3d;
         this.div = null;
 
+        this.image = document.createElement('canvas');
         this.canvas = document.createElement('canvas');
-        this.image = null;
+        this.effectsCanvas = document.createElement('canvas');
         this.imagePosition = data.imagePosition || {x:0, y:0};
         this.rotation = data.rotation || 0;
         this.opacity = data.opacity || 100;
@@ -28,7 +29,6 @@ export class ThreeDText
         this.effects = data.effects || {};
         this.visible = typeof data.visible == 'boolean' ? data.visible : true;
         this.options = data.options;
-        
 
         this._insertHTML();
     }
@@ -156,12 +156,30 @@ export class ThreeDText
 
         if(this.options)
         {
-            this.c3d.threeDTextLayer.show(this);
-            this.c3d.threeDTextLayer.showGUI();
-            this.c3d.threeDTextLayer._create();
-            this.c3d.threeDTextLayer.bakeImageToLayer();
+            const l = this.c3d.threeDTextLayer;
+            l.updatePreview();
+            l.show(this);
+            l.showGUI();
+            l._create();
+            l.bakeImageToLayer();
         }
 
+    }
+
+    updateCanvas()
+    {
+        
+        this.canvas.width = this.image.width;
+        this.canvas.height = this.image.height;
+
+        const ctx = this.canvas.getContext('2d', {willReadFrequently: true});
+        const fx = Object.keys(this.effects).length > 0;
+        const source = fx ? this.effectsCanvas : this.image;
+
+        ctx.save();
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(source, 0, 0);
+        ctx.restore();
     }
 
 }

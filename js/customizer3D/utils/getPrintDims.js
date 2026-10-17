@@ -14,6 +14,10 @@ export const getPrintDims = (c3d, layer, DPI, unit = 'px') =>
     {
         console.log("Print size is undefined! Layer: " + layer.name);
     }
+    else
+    {
+        console.log("Print size is undefined! Layer: " + layer);
+    }
 
     return {width, height, originalSize};
 }

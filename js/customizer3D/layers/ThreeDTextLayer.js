@@ -242,8 +242,8 @@ export class ThreeDTextLayer
 
             this.layer.imagePosition =
             {
-                x: -canvasPreview.width / 2 + ((clientX - bb.x) * 2), 
-                y: -canvasPreview.height / 2 + ((clientY - bb.y) * 2)
+                x: -canvasPreview.width / 2 + ((clientX - bb.x) * this.c3d.PIXEL_RATIO), 
+                y: -canvasPreview.height / 2 + ((clientY - bb.y) * this.c3d.PIXEL_RATIO)
             };
             
             this.updatePreview(true);
@@ -303,11 +303,6 @@ export class ThreeDTextLayer
         // set top of window
         this.htmlEl.style.zIndex = this.c3d.zIndex.index;
 
-        // 
-        const printDims = getPrintDims(this.c3d, this.layer, 72);
-        const printWidth = printDims.width;
-        const printHeight = printDims.height;
-
         // as default show window
         this.htmlEl.querySelector('div.content').style.display = 'flex'; // show content
         this.htmlEl.querySelector('div.title > div.buttons > img.rollup').style.rotate = '180deg';
@@ -324,11 +319,12 @@ export class ThreeDTextLayer
         this.htmlEl.style.display = 'block';
 
         // set preview canvas dims.
-        const previewDims = calculateAspectRatioFit(printWidth, printHeight, 150, 150);
+        const printDims = getPrintDims(this.c3d, this.layer, 72);
+        const previewDims = calculateAspectRatioFit(printDims.width, printDims.height, 150, 150);
         canvasPreview.style.width = Math.floor(previewDims.width) + 'px';
         canvasPreview.style.height = Math.floor(previewDims.height) + 'px';
-        canvasPreview.width = previewDims.width * 2;
-        canvasPreview.height = previewDims.height * 2;
+        canvasPreview.width = previewDims.width * this.c3d.PIXEL_RATIO;
+        canvasPreview.height = previewDims.height * this.c3d.PIXEL_RATIO;
 
         if(!this.layer.options)
         {
@@ -415,19 +411,16 @@ export class ThreeDTextLayer
     {
         if(!this.layer) return;
         
-        const printDims = getPrintDims(this.c3d, this.layer, this.c3d.settings.getRenderDPI());
         const c3d = this.c3d;
-        const canvas = this.layer.image || document.createElement('canvas');
+        const canvas = this.layer.image;
+
+        const printDims = getPrintDims(this.c3d, {name: this.layer.name}, this.c3d.settings.getRenderDPI());
+        canvas.width = printDims.width;
+        canvas.height = printDims.height;
+
         const ctx = canvas.getContext('2d');
-        const w = Math.round(printDims.width);
-        const h = Math.round(printDims.height);
-console.log(canvas);
-
-canvas.width = w;
-canvas.height = h;
-
-console.log(canvas);
-        if(!this.layer.image) this.layer.image = canvas;
+        const w = canvas.width;
+        const h = canvas.height;
 
         const renderTargetOptions = 
         {
@@ -455,9 +448,6 @@ console.log(canvas);
 
         target.dispose();
         
-        canvas.width = w;
-        canvas.height = h;
-
         const imageData = ctx.createImageData(w, h);
 
         for (let y = 0; y < h; y++)
@@ -469,10 +459,11 @@ console.log(canvas);
 
         ctx.putImageData(imageData, 0, 0);
 
+        this.layer.updateCanvas();
         this.hide();
         this.hideGUI();
-        // applyEffects(this.c3d, this.layer, 'threeDTextLayer');
-        // applyFilters(this.c3d, this.layer, 'threeDTextLayer');
+        applyEffects(this.c3d, this.layer, 'threeDTextLayer');
+        applyFilters(this.c3d, this.layer, 'threeDTextLayer');
         this._baked = true;
 
     }

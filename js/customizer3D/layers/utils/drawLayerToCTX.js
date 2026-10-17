@@ -46,8 +46,8 @@ export const drawLayerToCTX = (c3d, canvas, layer) =>
           const fx = Object.keys(layer.effects).length > 0;
           const source = fx ? layer.effectsCanvas : layer.image;
           const textureDims = calculateAspectRatioFit(
-              source[fx ? 'width' : 'naturalWidth'], 
-              source[fx ? 'height' : 'naturalHeight'], 
+              source[fx || layer.type != 'image' ? 'width' : 'naturalWidth'], 
+              source[fx || layer.type != 'image' ? 'height' : 'naturalHeight'], 
               canvas.width,
               canvas.height
           );
