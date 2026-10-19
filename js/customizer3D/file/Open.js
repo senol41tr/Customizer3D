@@ -1,7 +1,7 @@
 import * as fflate from 'base/fflate@0.8.2/fflate.esm.js';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.4';
-import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.5.4';
-import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=0.5.4';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.5';
+import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.5.5';
+import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=0.5.5';
 
 export class Open
 {
@@ -14,6 +14,7 @@ export class Open
     {
         // hide UI during processing
         this.c3d.showHideUI.hide();
+        this.c3d.showHideUI.hideSubWindows();
 
         let arrayBuffer, header = '';
 

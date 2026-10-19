@@ -1,9 +1,9 @@
 import * as THREE from 'three';
-import {Controls} from './Controls.js?c3d=0.5.4';
-import {Lights} from './Lights.js?c3d=0.5.4';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.4';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.4';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.4';
+import {Controls} from './Controls.js?c3d=0.5.5';
+import {Lights} from './Lights.js?c3d=0.5.5';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.5';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.5';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.5';
 import gsap from 'base/gsap@3.13.0/gsap@3.13.0.esm.js';
 
 export class Three

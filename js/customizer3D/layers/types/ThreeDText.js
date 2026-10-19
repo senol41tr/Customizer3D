@@ -1,7 +1,7 @@
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.4';
-import {BlendModes, createBlendModesList} from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=0.5.4';
-import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=0.5.4';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.4';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.5';
+import {BlendModes, createBlendModesList} from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=0.5.5';
+import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=0.5.5';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.5';
 
 export class ThreeDText
 {
@@ -13,6 +13,7 @@ export class ThreeDText
         this.c3d = c3d;
         this.div = null;
 
+        this.text = 'Q';
         this.image = document.createElement('canvas');
         this.canvas = document.createElement('canvas');
         this.effectsCanvas = document.createElement('canvas');
@@ -28,7 +29,7 @@ export class ThreeDText
         this.filters = data.filters || {};
         this.effects = data.effects || {};
         this.visible = typeof data.visible == 'boolean' ? data.visible : true;
-        this.options = data.options;
+        this.options = data.options || {};
 
         this._insertHTML();
     }
@@ -81,12 +82,12 @@ export class ThreeDText
         this.div = div;
 
         div.innerHTML = `
-            <img class="visibility" src="${C3D_SERVER}svg/visibility.svg?c3d=0.5.4" alt="Icon" style="opacity:1;width: 12px;">
+            <img class="visibility" src="${C3D_SERVER}svg/visibility.svg?c3d=0.5.5" alt="Icon" style="opacity:1;width: 12px;">
             <canvas class="thumbnail" oncontextmenu="return false;"></canvas>
             <div style="width:100%;"></div>
-            <img src="${C3D_SERVER}svg/opacity.svg?c3d=0.5.4" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
-            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=0.5.4" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
-            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=0.5.4" title="${this.c3d.lang['delete-layer']}" class="remove">
+            <img src="${C3D_SERVER}svg/opacity.svg?c3d=0.5.5" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
+            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=0.5.5" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=0.5.5" title="${this.c3d.lang['delete-layer']}" class="remove">
         `;
 
         // CANVAS
@@ -154,31 +155,37 @@ export class ThreeDText
 
         // DRAW IMAGE
 
-        if(this.options)
+        if(this.options.material)
         {
             const l = this.c3d.threeDTextLayer;
-            l.updatePreview();
             l.show(this);
             l.showGUI();
-            l._create();
-            l.bakeImageToLayer();
+
+            if(this.options?.materialOptions?.matcap) // !!!
+            {
+                l._create(true);
+            }
+            else
+            {
+                l._create();
+                l.bakeImageToLayer();
+            }
         }
 
     }
 
     updateCanvas()
     {
-        
-        this.canvas.width = this.image.width;
-        this.canvas.height = this.image.height;
-
+        const printDims = getPrintDims(this.c3d, {name: this.name}, this.c3d.settings.getRenderDPI());
         const ctx = this.canvas.getContext('2d', {willReadFrequently: true});
         const fx = Object.keys(this.effects).length > 0;
-        const source = fx ? this.effectsCanvas : this.image;
+        
+        this.canvas.width = printDims.width;
+        this.canvas.height = printDims.height;        
 
         ctx.save();
         ctx.imageSmoothingEnabled = false;
-        ctx.drawImage(source, 0, 0);
+        ctx.drawImage(fx ? this.effectsCanvas : this.image, 0, 0);
         ctx.restore();
     }
 

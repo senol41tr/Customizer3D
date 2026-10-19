@@ -52,6 +52,13 @@ html, body
     filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.15));
 }
 
+.lil-gui .lil-gui option
+{
+    font-size: var(--c3dFontSizeDefault) !important;
+    font-family: var(--c3dFontFamily) !important;
+}
+
+
 .lil-gui .controller.number .slider,
 .lil-gui input
 {
@@ -68,16 +75,66 @@ html, body
     top: 15px !important;
     right: auto !important;
     left: 15px !important;
+    max-height: 95% !important;
 }
+
+.lil-gui .lil-gui .lil-gui>.children
+{
+    border: none !important;
+}
+
+.lil-gui div.children div.matcap img {
+    margin: 0 0.1rem !important;
+    width: 40px !important;
+    height: 40px !important;
+    cursor: pointer !important;
+    border-radius: 50% !important;
+}
+
+.lil-gui .lil-gui .lil-gui>.children:has(div.matcap)
+{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.lil-gui div.children div.matcapActive {
+    position: relative;
+}
+
+.lil-gui div.children div.matcapActive img {
+    filter: blur(10px);
+    -webkit-filter: blur(10px);
+}
+
+.lil-gui div.children div.matcapActive::after {
+    content: "✓";
+    position: absolute;
+    font-family: var(--c3dFontFamily);
+    font-size: 1rem;
+    background-color: var(--c3dColorPrimary);
+    color: var(--c3dColorText);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 16px #b3ff00;
+}
+
+
 
 .lil-gui button {
     font-size: calc(var(--c3dFontSizeDefault) + 0.15rem) !important;
     background: linear-gradient(135deg, #ff007f, #7928ca) !important;
-    padding: 0.5rem !important;
     border: none !important;
     height: auto !important;
     color: white !important;
     border-radius: 4px !important;
+    padding: 0.75rem 0.5rem !important;
 }
 
 .lil-gui .btn-cancel button {
@@ -86,6 +143,24 @@ html, body
     color: var(--c3dColorText) !important;
     font-size: var(--c3dFontSizeDefault) !important;
     padding: 0.25rem !important;
+}
+
+.lil-gui .btn-back button {
+    background: var(--c3dColorText) !important;
+    color: var(--c3dColorPrimary) !important;
+    font-size: var(--c3dFontSizeDefault) !important;
+    padding: 0.5rem !important;
+}
+
+.lil-gui .btn-material-browser button  {
+    font-size: calc(var(--c3dFontSizeDefault) + 0.15rem) !important;
+    background: linear-gradient(135deg, #00ff15, #00d9ff) !important;
+    padding: 0.75rem 0.5rem !important;
+    border: none !important;
+    height: auto !important;
+    color: black !important;
+    border-radius: 4px !important;
+    margin-bottom: 1rem !important;
 }
 
 .lil-gui .controller.color .display,

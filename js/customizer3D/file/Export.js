@@ -1,5 +1,5 @@
 import jsPDF from 'base/jspdf@4.0.0/jspdf.es.min.js';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.4';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.5';
 import {drawLayerToCTX} from 'customizer3D_dir/layers//utils/drawLayerToCTX.js';
 
 export class Export

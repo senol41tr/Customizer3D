@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import {GUI} from 'three_dir/libs/lil-gui.module.min.js';
-import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.4';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.4';
-import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.4';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.4';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.4';
+import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.5';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.5';
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.5';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.5';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.5';
 
 export class PointCloud
 {
@@ -213,14 +213,14 @@ export class PointCloud
             },
             cancel: () =>
             {
-                this.c3d[this.layerName].show(this.layer);
-
                 if(this.options.meshState) {
                     this._cancel();
                     return;
                 }
                 delete this.layer.effects[this.name];
                 this._cancel();
+                this.c3d[this.layerName].show(this.layer);
+                this.c3d[this.layerName].updatePreview();
             }
         };
 

@@ -1,6 +1,6 @@
-import {PointCloud} from './PointCloud.js?c3d=0.5.4';
-import {ColorAnalyzer} from './ColorAnalyzer.js?c3d=0.5.4';
-import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.4';
+import {PointCloud} from './PointCloud.js?c3d=0.5.5';
+import {ColorAnalyzer} from './ColorAnalyzer.js?c3d=0.5.5';
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.5';
 
 const EffectsList =
 {
@@ -71,7 +71,7 @@ export const createEffectsList = (c3d, root, layerName) =>
                     <input type="checkbox" data-effect="${name}"${checked}>
                     ${effect[1].label}
                 </label>
-                <img src="${C3D_SERVER}svg/settings.svg?c3d=0.5.4" alt="Icon" class="settings" draggable="false" style="width:20px; cursor:pointer;" title="Edit Effect Settings">
+                <img src="${C3D_SERVER}svg/settings.svg?c3d=0.5.5" alt="Icon" class="settings" draggable="false" style="width:20px; cursor:pointer;" title="Edit Effect Settings">
             </div>
         `;
 

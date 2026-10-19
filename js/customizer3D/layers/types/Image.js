@@ -1,7 +1,7 @@
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.4';
-import {BlendModes, createBlendModesList} from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=0.5.4';
-import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=0.5.4';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.4';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.5';
+import {BlendModes, createBlendModesList} from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=0.5.5';
+import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=0.5.5';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.5';
 
 export class Image
 {
@@ -83,12 +83,12 @@ export class Image
         this.div = div;
 
         div.innerHTML = `
-            <img class="visibility" src="${C3D_SERVER}svg/visibility.svg?c3d=0.5.4" alt="Icon" style="opacity:1;width: 12px;">
+            <img class="visibility" src="${C3D_SERVER}svg/visibility.svg?c3d=0.5.5" alt="Icon" style="opacity:1;width: 12px;">
             <canvas class="thumbnail" oncontextmenu="return false;"></canvas>
             <div style="width:100%;"></div>
-            <img src="${C3D_SERVER}svg/opacity.svg?c3d=0.5.4" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
-            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=0.5.4" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
-            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=0.5.4" title="${this.c3d.lang['delete-layer']}" class="remove">
+            <img src="${C3D_SERVER}svg/opacity.svg?c3d=0.5.5" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
+            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=0.5.5" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=0.5.5" title="${this.c3d.lang['delete-layer']}" class="remove">
         `;
 
         // CANVAS
@@ -176,9 +176,10 @@ export class Image
     {
         const printDims = getPrintDims(this.c3d, {name: this.name}, this.c3d.settings.getRenderDPI());
         const textureDims = calculateAspectRatioFit(this.image.naturalWidth, this.image.naturalHeight, printDims.width, printDims.height);
-        this.canvas.width = this.effectsCanvas.width = printDims.width;
-        this.canvas.height = this.effectsCanvas.height = printDims.height;
         const ctx = this.canvas.getContext('2d', {willReadFrequently: true});
+
+        this.canvas.width = printDims.width;
+        this.canvas.height = printDims.height;
         
         ctx.save();
         ctx.imageSmoothingEnabled = false;

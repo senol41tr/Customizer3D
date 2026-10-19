@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import {GUI} from 'three_dir/libs/lil-gui.module.min.js';
-import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.4';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.4';
-import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.4';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.4';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.4';
+import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.5';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.5';
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.5';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.5';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.5';
 
 export class ColorAnalyzer
 {
@@ -164,15 +164,14 @@ export class ColorAnalyzer
             },
             cancel: () =>
             {
-                this.c3d[this.layerName].show(this.layer);
-
                 if(this.options.meshState) {
                     this._cancel();
                     return;
                 }
                 delete this.layer.effects[this.name];
                 this._cancel();
-                // applyFilters(this.c3d, this.layer, this.layerName);
+                this.c3d[this.layerName].show(this.layer);
+                this.c3d[this.layerName].updatePreview();
             }
         };
 
@@ -193,32 +192,68 @@ export class ColorAnalyzer
             }
         ).name(' Shape Type').onChange(__update);
 
-        shapeFolder.add(this.options, 'strokeWidth', 0.1, 6, 0.1).name(' Stroke Width').onChange(__update);
-        shapeFolder.add(this.options, 'crossSize', 0, 300, 1).name(' Cross Size').onChange(__update);
+        shapeFolder.add(this.options, 'strokeWidth', 0.1, 6, 0.1)
+            .name(' Stroke Width')
+            .onChange(__update);
+        
+        shapeFolder.add(this.options, 'crossSize', 0, 300, 1)
+            .name(' Cross Size')
+            .onChange(__update);
 
         const styleFolder = gui.addFolder('Style');
-        styleFolder.add(this.options, 'useOriginalColor').name(' Use Image Colors').onChange(__update).listen();
-        styleFolder.addColor(this.options, 'strokeColor').name(' Fixed Stroke Color').onChange(() => {
-            this.options.useOriginalColor = false;
-            __update();
-        });
-        styleFolder.add(this.options, 'showText').name(' Show Text').onChange(__update);
-        styleFolder.add(this.options, 'fontSize', 6, 24, 1).name(' Font Size').onChange(__update);
-        styleFolder.add(this.options, 'labelOpacity', 0, 1, 0.01).name(' Text Opacity').onChange(__update);
-        styleFolder.addColor(this.options, 'bgColor').name(' Background Color').onChange(() => {
-            __update();
-            this.options.transparentBG = false;
-        });
-        styleFolder.add(this.options, 'bgOpacity', 0.0, 1.0, 0.05).name(' BG Photo Opacity').onChange(__update);
-        styleFolder.add(this.options, 'transparentBG').name(' Transparent BG').onChange(() => {
-            __update();
-        }).listen();
 
+        styleFolder.add(this.options, 'useOriginalColor')
+            .name(' Use Image Colors')
+            .onChange(__update)
+            .listen();
+        
+        styleFolder.addColor(this.options, 'strokeColor')
+            .name(' Fixed Stroke Color')
+            .onChange(() => {
+                this.options.useOriginalColor = false;
+                __update();
+            });
+        
+        styleFolder.add(this.options, 'showText')
+            .name(' Show Text')
+            .onChange(__update);
+        
+        styleFolder.add(this.options, 'fontSize', 6, 24, 1)
+            .name(' Font Size')
+            .onChange(__update);
+        
+        styleFolder.add(this.options, 'labelOpacity', 0, 1, 0.01)
+            .name(' Text Opacity')
+            .onChange(__update);
+        
+        styleFolder.addColor(this.options, 'bgColor')
+            .name(' Background Color')
+            .onChange(() => {
+                __update();
+                this.options.transparentBG = false;
+            });
+        
+        styleFolder.add(this.options, 'bgOpacity', 0.0, 1.0, 0.05)
+            .name(' BG Photo Opacity')
+            .onChange(__update)
+            .listen();
+        
+        styleFolder.add(this.options, 'transparentBG').name(' Transparent BG')
+        .onChange((value) => {
+                if(value) this.options.bgOpacity = 1.0;
+                __update();
+            })
+            .listen();
 
-        gui.add(guiSettings, 'copyToCanvas').name('Render to Canvas');
-        gui.add(guiSettings, 'cancel').name('Cancel').domElement.classList.add('btn-cancel');
+        gui.add(guiSettings, 'copyToCanvas')
+            .name('Render to Canvas');
+        
+        gui.add(guiSettings, 'cancel')
+            .name('Cancel')
+            .domElement.classList.add('btn-cancel');
 
         __update();
+
         this.c3d.three.render();
     }
 

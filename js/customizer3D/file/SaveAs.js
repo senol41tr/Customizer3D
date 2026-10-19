@@ -190,6 +190,7 @@ export class SaveAs
     
                         json[meshName].push({
                             type: layer.type,
+                            text: layer.text,
                             imagePosition: layer.imagePosition,
                             rotation:layer.rotation,
                             opacity: layer.opacity, 

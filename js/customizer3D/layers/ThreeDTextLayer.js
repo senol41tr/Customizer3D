@@ -1,18 +1,18 @@
 import * as THREE from 'three';
-import {TTFLoader} from 'three_dir/loaders/TTFLoader.js?c3d=0.5.4';
-import {Font} from 'three_dir/loaders/FontLoader.js?c3d=0.5.4';
-import {TextGeometry} from 'three_dir/geometries/TextGeometry.js?c3d=0.5.4';
-import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.4';
+import {TTFLoader} from 'three_dir/loaders/TTFLoader.js?c3d=0.5.5';
+import {Font} from 'three_dir/loaders/FontLoader.js?c3d=0.5.5';
+import {TextGeometry} from 'three_dir/geometries/TextGeometry.js?c3d=0.5.5';
+import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.5';
 import {GUI} from 'three_dir/libs/lil-gui.module.min.js';
+import {MaterialBrowser} from 'customizer3D_dir/three/material/MaterialBrowser.js?c3d=0.5.5';
 
-
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.4';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.4';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.4';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.4';
-import {createFiltersList, applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.4';
-import {createEffectsList, applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.5.4';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.4';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.5';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.5';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.5';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.5';
+import {createFiltersList, applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.5';
+import {createEffectsList, applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.5.5';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.5';
 
 export class ThreeDTextLayer
 {
@@ -23,14 +23,17 @@ export class ThreeDTextLayer
         this.htmlEl = document.createElement('div');
         this.htmlEl.classList.add('threeDTextLayer');
         document.querySelector(this.c3d.props.container).append(this.htmlEl);
+        this.materialBrowser = new MaterialBrowser(this.c3d);
+        this.textureLoader = new THREE.TextureLoader();
 
         this.layer = null; // active layer (new Image(): Image.js)
         this.mesh = null;
         this.is2DViewing = null;
         this.controls = null;
         this.oldCamState = null;
-        this.__mouseUp = this._mouseUp.bind(this);
         this._baked = null;
+        this.__mouseUp = this._mouseUp.bind(this);
+        this.__create = this._create.bind(this);
 
         let el;
 
@@ -38,15 +41,15 @@ export class ThreeDTextLayer
         <div class="title">
             <p class="label" draggable="false">${this.c3d.lang['add-3d-text-layer']}</p>
             <div class="buttons">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.4" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
-                <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.4" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.5" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
+                <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.5" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
             </div>
         </div>
 
         <div class="content">
             <div class="menu">
                 <div class="rotate">
-                    <div class="button" title="${this.c3d.lang['rotate']}"><img src="${C3D_SERVER}svg/rotate.svg?c3d=0.5.4" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['rotate']}"><img src="${C3D_SERVER}svg/rotate.svg?c3d=0.5.5" alt="Icon"></div>
                     <div class="list">
                         <div class="inputPercent" data-icon="°" title="${this.c3d.lang['degree']}">
                             <input type="number" min="-180" max="180" value="0">
@@ -55,24 +58,24 @@ export class ThreeDTextLayer
                     </div>
                 </div>
                 <div class="zoom">
-                    <div class="button" title="${this.c3d.lang['zoom']}"><img src="${C3D_SERVER}svg/zoom.svg?c3d=0.5.4" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['zoom']}"><img src="${C3D_SERVER}svg/zoom.svg?c3d=0.5.5" alt="Icon"></div>
                     <div class="list">
                         <div class="inputPercent" data-icon="%"><input type="number" min="1" max="2000" value="100"></div>
                         <input type="range" min="1" max="2000" value="100" step="0.5">
                     </div>
                 </div>
                 <div class="filters">
-                    <div class="button" title="${this.c3d.lang['filter-gallery']}"><img src="${C3D_SERVER}svg/filters.svg?c3d=0.5.4" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['filter-gallery']}"><img src="${C3D_SERVER}svg/filters.svg?c3d=0.5.5" alt="Icon"></div>
                     <div class="list">
                     </div>
                 </div>
                 <div class="effects">
-                    <div class="button" title="${this.c3d.lang['effects-gallery']}"><img src="${C3D_SERVER}svg/effects.svg?c3d=0.5.4" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['effects-gallery']}"><img src="${C3D_SERVER}svg/effects.svg?c3d=0.5.5" alt="Icon"></div>
                     <div class="list">
                     </div>
                 </div>
                 <div class="settings">
-                    <div class="button" title="${this.c3d.lang['settings']}"><img src="${C3D_SERVER}svg/settings.svg?c3d=0.5.4" alt="Icon" style="height:24px;"></div>
+                    <div class="button" title="${this.c3d.lang['settings']}"><img src="${C3D_SERVER}svg/settings.svg?c3d=0.5.5" alt="Icon" style="height:24px;"></div>
                 </div>
             </div>
             <canvas class="preview" oncontextmenu="return false;"></canvas>
@@ -326,7 +329,7 @@ export class ThreeDTextLayer
         canvasPreview.width = previewDims.width * this.c3d.PIXEL_RATIO;
         canvasPreview.height = previewDims.height * this.c3d.PIXEL_RATIO;
 
-        if(!this.layer.options)
+        if(!this.layer.options.geometry)
         {
             this.showGUI();
             this._create();
@@ -465,11 +468,12 @@ export class ThreeDTextLayer
         applyEffects(this.c3d, this.layer, 'threeDTextLayer');
         applyFilters(this.c3d, this.layer, 'threeDTextLayer');
         this._baked = true;
-
     }
 
     showGUI()
     {
+        if(this.gui) this.gui.destroy();
+        
         this.is2DViewing = document.querySelector(this.c3d.props.layers + ' > div.switchTo2D > button').classList.contains('threeD');
         if(this.is2DViewing) this.c3d.switchTo3D();
         this.c3d.showHideUI.hide();
@@ -479,17 +483,12 @@ export class ThreeDTextLayer
 
         const options =
         {
-            text: 'Q',
-
+            materialName: 'MeshMatcapMaterial',
+            
             material:
             {
-                name: 'MeshStandardMaterial',
                 color: '#ffffff',
-                emissive: '#000000',
-                roughness: 0.5,
-                metalness: 1.0,
-                flatShading: false,
-                wireframe: false
+                matcap: 'js/customizer3D/three/material/assets/matcaps/gold/27.webp'
             },
 
             geometry:
@@ -501,44 +500,55 @@ export class ThreeDTextLayer
                 bevelEnabled: true,
                 bevelThickness: 10,
                 bevelSize: 5,
-                bevelSegments: 3,
+                bevelSegments: 10,
             }
         };
 
-        if(!this.layer.options) this.layer.options = options;
+        if(!this.layer.options.geometry) this.layer.options.geometry = options.geometry;
+        if(!this.layer.options.materialOptions) this.layer.options.materialOptions = options.material;
+        if(!this.layer.options.material) this.layer.options.material = options.materialName;
 
         const gui = this.gui = new GUI({title: '3D Text Options'});
 
         const guiSettings =
         {
-            copyToCanvas: () =>
+            renderToCanvas: () =>
             {
                 this._baked = false;
                 this.bakeImageToLayer();
                 this.show(this.layer);
+                this.c3d._setNavActive(this.layer.name, true);
             },
             cancel: () =>
             {
                 
                 this.show(this.layer);
+                this.c3d._setNavActive(this.layer.name, true);
 
                 if(this._baked) {
                     this.hideGUI();
                     return;
                 }
 
-                this.layer.options = null;
+                this.layer.options.geometry = null;
+                this.layer.options.materialOptions = null;
+                this.layer.options.material = null;
                 this.hideGUI();
                 this.hide();
                 this.layer.div.querySelector('img.remove').click();
+            },
+            openMaterialBrowser: async () =>
+            {
+                this.gui.domElement.style.display = 'none';
+                await this.materialBrowser.show(this.layer, this.gui, this.__create);
             }
         };
 
         const txtFolder = gui.addFolder('Please Insert your text below:');
 
-        txtFolder.add(this.layer.options, 'text')
+        txtFolder.add(this.layer, 'text')
             .name('Text')
-            .onChange((value) => {
+            .onChange((v) => {
                 this._create();
             }).domElement.querySelector('div.name').remove();        
 
@@ -549,6 +559,10 @@ export class ThreeDTextLayer
             .onChange((value) => {
                 this._create();
             });
+
+
+        const matFolder = gui.addFolder('Material');
+        matFolder.add(guiSettings, 'openMaterialBrowser').name('Material Browser').domElement.classList.add('btn-material-browser');
 
 
         const geoFolder = gui.addFolder('Geometry');
@@ -579,7 +593,7 @@ export class ThreeDTextLayer
 
         geoFolder.add(this.layer.options.geometry, 'bevelThickness')
             .name('Bevel Thickness')
-            .min(0.01)
+            .min(0.1)
             .max(500)
             .step(0.01)
             .onChange((value) => {
@@ -598,52 +612,13 @@ export class ThreeDTextLayer
         geoFolder.add(this.layer.options.geometry, 'bevelSegments')
             .name('Bevel Segments')
             .min(1)
-            .max(32)
+            .max(64)
             .step(1)
             .onChange((value) => {
                 this._create();
             });
 
-
-        const matFolder = gui.addFolder('Material');
-
-        matFolder.addColor(this.layer.options.material, 'color')
-            .name('Base Color')
-            .onChange((value) => {
-                this._create();
-            });
-
-        matFolder.addColor(this.layer.options.material, 'emissive')
-            .name('Emissive Color')
-            .onChange((value) => {
-                this._create();
-            });
-
-        matFolder.add(this.layer.options.material, 'roughness')
-            .name('Roughness')
-            .min(0.0)
-            .max(1.0)
-            .step(0.01)
-            .onChange((value) => {
-                this._create();
-            });
-
-        matFolder.add(this.layer.options.material, 'metalness')
-            .name('Metalness')
-            .min(0.0)
-            .max(1.0)
-            .step(0.01)
-            .onChange((value) => {
-                this._create();
-            });
-
-        matFolder.add(this.layer.options.material, 'wireframe')
-            .name('Wireframe')
-            .onChange((value) => {
-                this._create();
-            });
-        
-        gui.add(guiSettings, 'copyToCanvas').name('Render to Canvas');
+        gui.add(guiSettings, 'renderToCanvas').name('Render to Canvas');
         gui.add(guiSettings, 'cancel').name('Cancel').domElement.classList.add('btn-cancel');
     }
 
@@ -655,6 +630,7 @@ export class ThreeDTextLayer
             this.mesh.removeFromParent();
         }
 
+        this.materialBrowser.hide();
         this.gui.destroy();
         this.c3d.three.camera.position.copy(this.oldCamState.position);
         this.c3d.three.camera.rotation.copy(this.oldCamState.rotation);
@@ -668,16 +644,9 @@ export class ThreeDTextLayer
         this.controls.removeEventListeners();
     }
 
-    _create()
-    {
-        if(this.mesh)
-        {
-            this.mesh.clear();
-            this.mesh.removeFromParent();
-        }
-
+    _create(bake = false)
+    {        
         const geoOptions = this.layer.options.geometry;
-
         const base64 = this.c3d.textLayer.getFontData(geoOptions.font).base64.split(',')[1];
         const uint8Array = Uint8Array.fromBase64(base64);
         const arrayBuffer = uint8Array.buffer;
@@ -691,12 +660,12 @@ export class ThreeDTextLayer
 
             const meshGeoOptions = {...geoOptions};
             meshGeoOptions.font = new Font(json);
-            geo = new TextGeometry(this.layer.options.text, meshGeoOptions);
+            geo = new TextGeometry(this.layer.text, meshGeoOptions);
             geo.center();
         }
         catch(e)
         {
-            alert("An error occurred while converting the text to 3D!\nMessage: " + e.message);
+            alert("An error occurred while converting the text to 3D!\nPlease select another font family.\nMessage: " + e);
             this.hide();
             return;
         }
@@ -709,10 +678,34 @@ export class ThreeDTextLayer
         this.c3d.three.camera.rotation.set(0, 0, 0);
         this.c3d.three.camera.position.set(0, 0, isMobile() ? 1.5 : 1);
 
-        const matOptions = this.layer.options.material;
+        const matOptions = {...this.layer.options.materialOptions};
+        
+        let matcapURL;
+        if(this.layer.options.material == 'MeshMatcapMaterial')
+        {
+            matcapURL = matOptions.matcap;
+            matOptions.matcap = null;
+        }
 
-        const mat = new THREE[matOptions.name](matOptions);
+        if(this.mesh)
+        {
+            this.mesh.clear();
+            this.mesh.removeFromParent();
+        }
+
+        const mat = new THREE[this.layer.options.material](matOptions);
         this.mesh = new THREE.Mesh(geo, mat);
+        this.mesh.name = 'threeDText';
+
+        if(matcapURL)
+        {
+            this.textureLoader.load(matcapURL, (tex) => {
+                mat.matcap = tex;
+                mat.needsUpdate = true;
+                if(bake) this.bakeImageToLayer();
+                this.c3d.three.render();
+            });
+        }
 
         if(this.layer.options.meshState)
         {
@@ -732,7 +725,6 @@ export class ThreeDTextLayer
         this.controls = new Controls(this.mesh, this.c3d.three.getCanvas());
         this.controls.addEventListeners();
 
-        // this.controls.mesh = this.mesh;
         this.c3d.three.scene.add(this.mesh);
         this.c3d.three.render();
 

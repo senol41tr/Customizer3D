@@ -1,5 +1,5 @@
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.4';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.4';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.5';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.5';
 
 export class New
 {

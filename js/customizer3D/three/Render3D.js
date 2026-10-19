@@ -1,8 +1,8 @@
 import * as THREE from 'three';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.4';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.5';
 import {drawLayerToCTX} from 'customizer3D_dir/layers//utils/drawLayerToCTX.js';
-import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.4';
-import {applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.5.4';
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.5';
+import {applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.5.5';
 
 export class Render3D
 {
@@ -72,7 +72,7 @@ export class Render3D
 
             if(!layer.visible) continue;
 
-            material = layer.material;
+            material = layer.material; // !!!
             materialOptions = layer.materialOptions;
             
             if(layer.type == 'colorOnly')
@@ -91,6 +91,8 @@ export class Render3D
             
             // draw image to canvas
             drawLayerToCTX(this.c3d, canvas, layer);
+
+
             if(applyFXs)
             {
                 applyEffects(this.c3d, layer, layer.type + 'Layer');

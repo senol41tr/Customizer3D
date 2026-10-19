@@ -1,4 +1,4 @@
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.4';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.5';
 
 export const getPrintDims = (c3d, layer, DPI, unit = 'px') =>
 {
@@ -16,7 +16,7 @@ export const getPrintDims = (c3d, layer, DPI, unit = 'px') =>
     }
     else
     {
-        console.log("Print size is undefined! Layer: " + layer);
+        console.log("Print size is undefined! Layer: " + layer.name);
     }
 
     return {width, height, originalSize};
