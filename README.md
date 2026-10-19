@@ -44,3 +44,5 @@ https://ssarigul.tr/Customizer3D
 [![First Project](https://img.youtube.com/vi/i55T8xjZy_8/maxresdefault.jpg)](https://www.youtube.com/watch?v=i55T8xjZy_8)
 [![WebGL Effect Point Cloud](https://img.youtube.com/vi/fmq-Vo9FwMQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=fmq-Vo9FwMQ)
 [![Canvas Effect Color Analyzer](https://img.youtube.com/vi/-5yfZE4mjl4/maxresdefault.jpg)](https://www.youtube.com/watch?v=-5yfZE4mjl4)
+[![3D Text](https://img.youtube.com/vi/gjWaWq6bvyI/maxresdefault.jpg)](https://www.youtube.com/watch?v=gjWaWq6bvyI)
+[![Material Browser](https://img.youtube.com/vi/ejMyksy6w3A/maxresdefault.jpg)](https://www.youtube.com/watch?v=ejMyksy6w3A)
