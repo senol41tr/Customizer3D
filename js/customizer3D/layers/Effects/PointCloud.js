@@ -1,10 +1,11 @@
 import * as THREE from 'three';
 import {GUI} from 'three_dir/libs/lil-gui.module.min.js';
 import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.5';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.5';
 import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.5';
 import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.5';
 import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.5';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.5';
+import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=0.5.5';
 
 export class PointCloud
 {
@@ -29,17 +30,19 @@ export class PointCloud
     {
         const c3d = this.c3d;
         const canvas = document.createElement('canvas');
-        canvas.width = this.layer.canvas.width;
-        canvas.height = this.layer.canvas.height;
+        canvas.width = this.drawCanvas.width;
+        canvas.height = this.drawCanvas.height;
+        
         const ctx = canvas.getContext('2d');
         const w = Math.round(canvas.width);
         const h = Math.round(canvas.height);
         const renderTargetOptions = 
         {
-            format: THREE.RGBAFormat,
             samples: 4,
             stencilBuffer: false,
-            depthBuffer: false
+            depthBuffer: false,
+            colorSpace: THREE.SRGBColorSpace,
+            format: THREE.RGBAFormat
         };
         if(c3d.three.scene.background == null) renderTargetOptions.type = THREE.UnsignedByteType;
 
@@ -59,9 +62,6 @@ export class PointCloud
 
         target.dispose();
         
-        canvas.width = w;
-        canvas.height = h;
-
         const imageData = ctx.createImageData(w, h);
 
         for (let y = 0; y < h; y++)
@@ -107,8 +107,8 @@ export class PointCloud
     {
         this.options =
         {
-            uPosZ: 0.15,
-            uPointSize: 0.15,
+            uPosZ: 0.08,
+            uPointSize: 1.2,
             blending: true,
             transparentBG: true,
             bgColor: '#000000',
@@ -156,7 +156,7 @@ export class PointCloud
             }
         `;
 
-        const geometry = this._getGeometry();
+        const geometry = this._getGeometry(this.options.density, this.options.maxBrightness, this.options.direction);
         const material = new THREE.ShaderMaterial({
             vertexShader,
             fragmentShader,
@@ -184,7 +184,7 @@ export class PointCloud
         }
         else
         {
-            this.mesh.position.z = isMobile() ? 0 : 0.5;
+            fitMeshToScreen(this.c3d.three.camera, this.mesh, 1.25, true);
         }
 
         this.oldCamState = {
@@ -192,8 +192,6 @@ export class PointCloud
             rotation: this.c3d.three.camera.rotation.clone(),
             target: this.c3d.three.controls.orbit.target.clone()
         };
-        this.c3d.three.camera.rotation.set(0, 0, 0);
-        this.c3d.three.camera.position.set(0, 0, 2);
 
         this.controls = new Controls(this.mesh, this.c3d.three.getCanvas());
         this.controls.addEventListeners();
@@ -245,7 +243,7 @@ export class PointCloud
 
         gui.add(guiSettings, 'step')
             .min(1)
-            .max(8)
+            .max(5)
             .step(1)
             .name('Pixel Density')
             .onFinishChange((density) => {
@@ -267,8 +265,8 @@ export class PointCloud
 
         gui.add(material.uniforms.uPointSize, 'value')
             .min(0.15)
-            .max(5.0)
-            .step(0.01)
+            .max(6.0)
+            .step(0.1)
             .name('Point Size')
             .onChange((value) => {
                 this.options.uPointSize = value;
@@ -312,9 +310,10 @@ export class PointCloud
 
     _getGeometry(density = 2, maxBrightness = 1.0, direction = true)
     {
+        const printDims = getPrintDims(this.c3d, {name: this.layer.name}, this.c3d.settings.getRenderDPI());
         this.drawCanvas = document.createElement('canvas');
-        this.drawCanvas.width = this.layer.canvas.width;
-        this.drawCanvas.height = this.layer.canvas.height;
+        this.drawCanvas.width = printDims.width;
+        this.drawCanvas.height = printDims.height;
         
         const ctx = this.drawCanvas.getContext('2d', {willReadFrequently: true});
 
@@ -332,11 +331,12 @@ export class PointCloud
         const data = ctx.getImageData(0, 0, this.drawCanvas.width, this.drawCanvas.height).data;
         const width = this.drawCanvas.width;
         const height = this.drawCanvas.height;
-                
+
         const positions = [];
         const colors = [];
         const brightnesses = [];
         const step = density;
+        const scaleFactor = 1 / Math.max(width, height);
 
         for (let y = 0; y < height; y += step)
         {
@@ -352,16 +352,15 @@ export class PointCloud
                     
                 const brightness = (r * 0.299) + (g * 0.587) + (b * 0.114);
 
-                if(brightness > maxBrightness) continue;
+                if (brightness > maxBrightness) continue;
 
-                const posX = (x - width / 2) * 0.0005;
-                const posY = -(y - height / 2) * 0.0005;
+                const posX = (x - width / 2) * scaleFactor;
+                const posY = -(y - height / 2) * scaleFactor;
                 const posZ = 0;
 
                 positions.push(posX, posY, posZ);
                 colors.push(r, g, b);
                 brightnesses.push(direction ? brightness : -brightness);
-                
             }
         }
 

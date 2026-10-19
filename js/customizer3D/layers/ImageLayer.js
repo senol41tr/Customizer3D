@@ -383,30 +383,48 @@ export class ImageLayer
 
     async toUint8Array(blob) // !!!
     {
-        
-        const uint8Array = await new Promise((resolve, reject) =>
+        try
         {
-
-            const reader = new FileReader();
-
-            reader.onload = () =>
+            const uint8Array = await new Promise((resolve, reject) =>
             {
-                const arrayBuffer = reader.result;
-                const uint8Array = new Uint8Array(arrayBuffer);
-                resolve(uint8Array);
-            };
 
-            reader.readAsArrayBuffer(blob);
+                const reader = new FileReader();
 
-        });
+                reader.onload = () =>
+                {
+                    const arrayBuffer = reader.result;
+                    const uint8Array = new Uint8Array(arrayBuffer);
+                    resolve(uint8Array);
+                };
 
-        return uint8Array;
+                reader.readAsArrayBuffer(blob);
+
+            });
+
+            return uint8Array;
+        }
+        catch(e)
+        {
+            alert(e);
+        }
+        finally
+        {
+            this.c3d.showHideUI.show();
+        }
+
     }
 
     async canvasToBlob(canvas) // !!!
     {
-        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
-        return blob;
+        try
+        {
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
+            return blob;
+        }
+        catch(e)
+        {
+            alert(e);
+        }
     }
 
 

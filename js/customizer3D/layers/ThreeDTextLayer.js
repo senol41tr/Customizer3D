@@ -31,7 +31,6 @@ export class ThreeDTextLayer
         this.is2DViewing = null;
         this.controls = null;
         this.oldCamState = null;
-        this._baked = null;
         this.__mouseUp = this._mouseUp.bind(this);
         this.__create = this._create.bind(this);
 
@@ -463,11 +462,11 @@ export class ThreeDTextLayer
         ctx.putImageData(imageData, 0, 0);
 
         this.layer.updateCanvas();
-        this.hide();
         this.hideGUI();
+        this.hide();
         applyEffects(this.c3d, this.layer, 'threeDTextLayer');
         applyFilters(this.c3d, this.layer, 'threeDTextLayer');
-        this._baked = true;
+        this.layer.__baked = true;
     }
 
     showGUI()
@@ -514,18 +513,17 @@ export class ThreeDTextLayer
         {
             renderToCanvas: () =>
             {
-                this._baked = false;
+                this.layer.__baked = false;
                 this.bakeImageToLayer();
                 this.show(this.layer);
-                this.c3d._setNavActive(this.layer.name, true);
+                this.c3d._setNavActive(this.layer.name, true, false);                
             },
             cancel: () =>
-            {
-                
+            {                
                 this.show(this.layer);
-                this.c3d._setNavActive(this.layer.name, true);
+                this.c3d._setNavActive(this.layer.name, true, false);
 
-                if(this._baked) {
+                if(this.layer.__baked) {
                     this.hideGUI();
                     return;
                 }

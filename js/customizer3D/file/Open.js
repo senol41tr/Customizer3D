@@ -370,7 +370,8 @@ export class Open
             this.c3d.setView();
         }
 
-        //this.c3d.onResize(); // resize model to window
+        this.c3d.render3d._preDPI = null; // force update canvas
+
         this.c3d.three.start(); // start render again
         this.c3d.preloader.hide();
         this.c3d.showHideUI.show();

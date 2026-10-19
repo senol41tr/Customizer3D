@@ -234,10 +234,8 @@ export class Export
 
     async _getCanvasBlob(canvas, meshName)
     {
-      const ctx = canvas.getContext('2d');
       const layersDiv = document.querySelector(this.c3d.props.layers);
       const layers = layersDiv.querySelectorAll('[data-mesh=\'' + meshName + '\'] > div.content > div.layers > div');
-
 
       // write layers
       for (let j = layers.length - 1; j >= 0; j--)

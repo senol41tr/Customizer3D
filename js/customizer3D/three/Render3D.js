@@ -9,6 +9,8 @@ export class Render3D
     constructor(c3d)
     {
         this.c3d = c3d;
+
+        this._preDPI = null;
     }
 
     renderView(side, applyFXs = false)
@@ -144,6 +146,7 @@ export class Render3D
         }
 
         this.c3d.three.render();
+        this._preDPI = this.c3d.settings.getRenderDPI();
 
     }
 

@@ -161,15 +161,6 @@ export class Image
         {
             this.root.__C3D_Sortable.addElement(div.querySelector('canvas.thumbnail'));
         }
-
-        // DRAW IMAGE
-
-        if(this.image)
-        {
-            this.updateCanvas();
-            this.c3d.imageLayer.updatePreview();
-        }
-
     }
 
     updateCanvas()
@@ -177,6 +168,7 @@ export class Image
         const printDims = getPrintDims(this.c3d, {name: this.name}, this.c3d.settings.getRenderDPI());
         const textureDims = calculateAspectRatioFit(this.image.naturalWidth, this.image.naturalHeight, printDims.width, printDims.height);
         const ctx = this.canvas.getContext('2d', {willReadFrequently: true});
+        const fx = Object.keys(this.effects).length > 0;
 
         this.canvas.width = printDims.width;
         this.canvas.height = printDims.height;
@@ -184,7 +176,7 @@ export class Image
         ctx.save();
         ctx.imageSmoothingEnabled = false;
         ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
-        ctx.drawImage(this.image, -textureDims.width / 2, -textureDims.height / 2, textureDims.width, textureDims.height);
+        ctx.drawImage(fx ? this.effectsCanvas : this.image, -textureDims.width / 2, -textureDims.height / 2, textureDims.width, textureDims.height);
         ctx.restore();
     }
 }

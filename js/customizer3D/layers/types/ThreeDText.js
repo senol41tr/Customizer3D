@@ -31,6 +31,8 @@ export class ThreeDText
         this.visible = typeof data.visible == 'boolean' ? data.visible : true;
         this.options = data.options || {};
 
+        this.__baked = false;
+
         this._insertHTML();
     }
 

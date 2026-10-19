@@ -26,6 +26,10 @@ html, body
     --c3dColorBG2: #ebebeb;
 }
 
+input::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+
 
 .lil-gui {
     --slider-knob-width: 3px !important;

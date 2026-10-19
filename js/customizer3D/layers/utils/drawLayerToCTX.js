@@ -43,6 +43,12 @@ export const drawLayerToCTX = (c3d, canvas, layer) =>
 
           if(!layer.image) break;
 
+          // recreate canvas image
+          if(layer.updateCanvas && c3d.render3d._preDPI != c3d.settings.getRenderDPI())
+          {
+            layer.updateCanvas();
+          }
+
           const fx = Object.keys(layer.effects).length > 0;
           const source = fx ? layer.effectsCanvas : layer.image;
           const textureDims = calculateAspectRatioFit(
