@@ -32,6 +32,7 @@ export class Layers
     {
         const layer = new Text(root, this.c3d, data);
         await this.c3d.textLayer.show(layer);
+        layer.updateCanvas();
         this.c3d._setNavActive(layer.name, false, false);
 
         return layer;
