@@ -170,8 +170,8 @@ export class Image
         const ctx = this.canvas.getContext('2d', {willReadFrequently: true});
         const fx = Object.keys(this.effects).length > 0;
 
-        this.canvas.width = printDims.width;
-        this.canvas.height = printDims.height;
+        this.canvas.width = textureDims.width;
+        this.canvas.height = textureDims.height;
         
         ctx.save();
         ctx.imageSmoothingEnabled = false;

@@ -122,7 +122,7 @@ export class Open
                 continue;
             }
 
-            this.c3d.textLayer.addBase64Font
+            await this.c3d.textLayer.addBase64Font
             ({
                 name: data.customFonts[i].name,
                 postscript_name: data.customFonts[i].postscript_name,
@@ -168,10 +168,10 @@ export class Open
                 }
                 
                 // add layers
-                switch (layerData.type.toLowerCase())
+                switch (layerData.type)
                 {
 
-                    case 'coloronly':
+                    case 'colorOnly':
 
                         const solidLayer = layer.querySelector('div.colorOnly').self;
                         solidLayer.color = layerData.color;
@@ -268,12 +268,16 @@ export class Open
 
 
                     case 'shape': 
+
                         await this.c3d.layers.addShape(layer, layerData);
+
                     break;
 
 
-                    case 'threedtext': 
+                    case 'threeDText': 
+
                         await this.c3d.layers.addThreeDText(layer, layerData);
+                        
                     break;
                 }
 
@@ -370,16 +374,14 @@ export class Open
             this.c3d.setView();
         }
 
-        this.c3d.render3d._preDPI = null; // force update canvas
-
         this.c3d.three.start(); // start render again
-        this.c3d.preloader.hide();
-        this.c3d.showHideUI.show();
-        this.c3d._setNavActive();
 
         setTimeout(() => {
             this.c3d.render3d.renderAll();
             this.c3d.showHideUI.hideSubWindows();
+            this.c3d.preloader.hide();
+            this.c3d.showHideUI.show();
+            this.c3d._setNavActive();
             this.c3d.three.render();
         }, 500);  
         

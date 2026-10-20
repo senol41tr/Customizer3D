@@ -344,7 +344,7 @@ export class ThreeDTextLayer
         document.querySelector(this.c3d.props.layers).style.opacity = 1;
     }
 
-    updatePreview(drawLines = false)
+    updatePreview(drawLines = false, render = true)
     {
         if(this.layer == null) return;
 
@@ -403,8 +403,11 @@ export class ThreeDTextLayer
         }
 
         this.layer.updateThumbnail(canvas);
-        this.c3d.render3d.renderView(this.layer.name);
-        this.c3d.render2d.renderView(this.layer.name);
+        if(render)
+        {
+            this.c3d.render3d.renderView(this.layer.name);
+            this.c3d.render2d.renderView(this.layer.name);
+        }
 
     }
 
@@ -412,6 +415,8 @@ export class ThreeDTextLayer
     bakeImageToLayer()
     {
         if(!this.layer) return;
+
+        this.c3d.glbScene.visible = false;
         
         const c3d = this.c3d;
         const canvas = this.layer.image;
@@ -642,7 +647,7 @@ export class ThreeDTextLayer
         this.controls.removeEventListeners();
     }
 
-    _create(bake = false)
+    _create()
     {        
         const geoOptions = this.layer.options.geometry;
         const base64 = this.c3d.textLayer.getFontData(geoOptions.font).base64.split(',')[1];
@@ -682,7 +687,7 @@ export class ThreeDTextLayer
         if(this.layer.options.material == 'MeshMatcapMaterial')
         {
             matcapURL = matOptions.matcap;
-            matOptions.matcap = null;
+            matOptions.matcap = this.layer.__matcap;
         }
 
         if(this.mesh)
@@ -697,10 +702,10 @@ export class ThreeDTextLayer
 
         if(matcapURL)
         {
-            this.textureLoader.load(matcapURL, (tex) => {
-                mat.matcap = tex;
+            this.textureLoader.load(matcapURL, (matcap) => {
+                this.layer.__matcap = matcap;
+                mat.matcap = matcap;
                 mat.needsUpdate = true;
-                if(bake) this.bakeImageToLayer();
                 this.c3d.three.render();
             });
         }

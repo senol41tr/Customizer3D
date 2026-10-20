@@ -428,7 +428,7 @@ export class ImageLayer
     }
 
 
-    updatePreview(drawLines = false)
+    updatePreview(drawLines = false, render = true)
     {
         if(!this.layer || !this.layer.image) return;
 
@@ -490,8 +490,12 @@ export class ImageLayer
         }
 
         this.layer.updateThumbnail(canvas);
-        this.c3d.render3d.renderView(this.layer.name);
-        this.c3d.render2d.renderView(this.layer.name);
+        
+        if(render)
+        {
+            this.c3d.render3d.renderView(this.layer.name);
+            this.c3d.render2d.renderView(this.layer.name);
+        }
 
     }
 

@@ -13,7 +13,7 @@ export class ThreeDText
         this.c3d = c3d;
         this.div = null;
 
-        this.text = 'Q';
+        this.text = data.text || 'Q';
         this.image = document.createElement('canvas');
         this.canvas = document.createElement('canvas');
         this.effectsCanvas = document.createElement('canvas');
@@ -32,6 +32,7 @@ export class ThreeDText
         this.options = data.options || {};
 
         this.__baked = false;
+        this.__matcap = null;
 
         this._insertHTML();
     }
@@ -71,7 +72,7 @@ export class ThreeDText
     // PRIVATE METHODS
 
 
-    _insertHTML()
+    async _insertHTML()
     {
         const printDims = getPrintDims(this.c3d, {name: this.name}, this.c3d.settings.getRenderDPI());
         this.canvas.width = printDims.width;
@@ -155,25 +156,6 @@ export class ThreeDText
             this.root.__C3D_Sortable.addElement(div.querySelector('canvas.thumbnail'));
         }
 
-        // DRAW IMAGE
-
-        if(this.options.material)
-        {
-            const l = this.c3d.threeDTextLayer;
-            l.show(this);
-            l.showGUI();
-
-            if(this.options?.materialOptions?.matcap) // !!!
-            {
-                l._create(true);
-            }
-            else
-            {
-                l._create();
-                l.bakeImageToLayer();
-            }
-        }
-
     }
 
     updateCanvas()
@@ -183,7 +165,7 @@ export class ThreeDText
         const fx = Object.keys(this.effects).length > 0;
         
         this.canvas.width = printDims.width;
-        this.canvas.height = printDims.height;        
+        this.canvas.height = printDims.height;
 
         ctx.save();
         ctx.imageSmoothingEnabled = false;

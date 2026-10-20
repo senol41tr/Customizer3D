@@ -13,7 +13,11 @@ export class Layers
 
     async addImage(root, data = {})
     {
-        return new Image(root, this.c3d, data);
+        const layer = new Image(root, this.c3d, data);
+        this.c3d.imageLayer.show(layer);
+        layer.updateCanvas();
+        this.c3d.imageLayer.updatePreview(false, false);
+        return layer;
     }
 
     async addSolid(root, data = {})
@@ -48,7 +52,27 @@ export class Layers
     async addThreeDText(root, data = {})
     {
         const layer = new ThreeDText(root, this.c3d, data);
-        this.c3d.threeDTextLayer.show(layer);
+        const l = this.c3d.threeDTextLayer;
+
+        l.show(layer);
+
+        if(data.options?.material)
+        {
+            l.showGUI();
+            l._create();
+
+            if(data.options?.materialOptions?.matcap)
+            {
+                const tex = await l.textureLoader.loadAsync(data.options.materialOptions.matcap);
+                layer.__matcap = tex;
+                l.mesh.material.matcap = tex;
+                l.mesh.material.needsUpdate = true;
+            }
+
+            l.bakeImageToLayer();
+        }
+
+        this.c3d.threeDTextLayer.updatePreview(false, false);
         this.c3d._setNavActive(layer.name, false, false);
         
         return layer;

@@ -11,6 +11,8 @@ export const applyFilters = (c3d, layer, layerName) =>
     else if(effectsCount > 0) source = layer.effectsCanvas;
     else source = layer.image;
 
+    if(!source) return;
+
     const ctx = layer.canvas.getContext('2d', {willReadFrequently: true});
 
     if(layer.type == 'image')

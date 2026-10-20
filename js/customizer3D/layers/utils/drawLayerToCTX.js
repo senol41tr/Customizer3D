@@ -2,8 +2,7 @@ import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRat
 import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.5';
 
 export const drawLayerToCTX = (c3d, canvas, layer) =>
-{
-
+{  
   const ctx = canvas.getContext('2d', {willReadFrequently: true});
 
   switch (layer.type)
@@ -47,6 +46,14 @@ export const drawLayerToCTX = (c3d, canvas, layer) =>
           if(layer.updateCanvas && c3d.render3d._preDPI != c3d.settings.getRenderDPI())
           {
             layer.updateCanvas();
+
+            if(layer.type == 'threeDText')
+            {
+                const l = c3d.threeDTextLayer;
+                l.layer = layer;
+                l._create();
+                l.bakeImageToLayer();
+            }
           }
 
           const fx = Object.keys(layer.effects).length > 0;

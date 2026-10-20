@@ -74,7 +74,10 @@ export class Shape
 
     draw()
     {
-        
+        const printDims = getPrintDims(this.c3d, {name: this.name}, this.c3d.settings.getRenderDPI());
+        this.canvas.width = printDims.width;
+        this.canvas.height = printDims.height;
+
         const drawCanvas = this.canvas;
         const htmlEl = this.c3d.shapeLayer.htmlEl;
         const ctx = drawCanvas.getContext('2d', {willReadFrequently: true});
@@ -197,9 +200,6 @@ export class Shape
             this.root.__C3D_Sortable.addElement(thumbCanvas);
         }
 
-        const printDims = getPrintDims(this.c3d, {name: this.name}, this.c3d.settings.getRenderDPI());
-        this.canvas.width = printDims.width;
-        this.canvas.height = printDims.height;
     }
 
 }

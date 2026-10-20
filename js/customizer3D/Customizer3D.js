@@ -111,16 +111,16 @@ export class Customizer3D
         // init. layers
         this.layers = new Layers(this);
 
+        // set html, options, tint all loaded svg's etc.
+        this.settings = new Settings(this);
+        await this.settings._init();
+
         // 
         this.render2d = new Render2D(this);
         this.render3d = new Render3D(this);
 
         // load model
         await this._loadGLB(glbPath);
-
-        // set html, options, tint all loaded svg's etc.
-        this.settings = new Settings(this);
-        await this.settings._init();
 
         // 
         // HTML STUFF

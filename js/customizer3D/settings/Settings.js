@@ -215,9 +215,20 @@ export class Settings
             if(val < range.min) val = range.min;
             if(val > range.max) val = range.max;
             range.parentNode.parentNode.querySelector('p').innerText = val + ' DPI';
-            this.c3d.render3d.renderAll();
-            this.c3d.render2d.renderAll();
             this.c3d.localStorage.set('renderDPI', val);
+
+            this.c3d.showHideUI.hide();
+            this.c3d.showHideUI.hideSubWindows();
+            this.c3d.preloader.set('Creating Layers... ');
+            this.c3d.preloader.show();
+
+            setTimeout(() => {
+                // this.c3d.render2d.renderAll();
+                this.c3d.render3d.renderAll();
+                this.c3d.preloader.hide();
+                this.c3d.render3d._preDPI = val;
+            }, 300);
+
         });
 
 

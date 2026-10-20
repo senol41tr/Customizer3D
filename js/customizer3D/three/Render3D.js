@@ -1,8 +1,6 @@
 import * as THREE from 'three';
 import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.5';
 import {drawLayerToCTX} from 'customizer3D_dir/layers//utils/drawLayerToCTX.js';
-import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.5';
-import {applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.5.5';
 
 export class Render3D
 {
@@ -10,10 +8,10 @@ export class Render3D
     {
         this.c3d = c3d;
 
-        this._preDPI = null;
+        this._preDPI = c3d.settings.getRenderDPI();
     }
 
-    renderView(side, applyFXs = false)
+    renderView(side)
     {
         const layersDiv = document.querySelector(this.c3d.props.layers);
         const layers = layersDiv.querySelectorAll('[data-mesh=\'' + side + '\'] > div.content > div.layers > div');
@@ -65,6 +63,9 @@ export class Render3D
 
         for (let i = layers.length - 1; i >= 0; i--)
         {
+
+
+
             const layer = layers[i].self;
 
             // disable first layer blendmode
@@ -93,20 +94,6 @@ export class Render3D
             
             // draw image to canvas
             drawLayerToCTX(this.c3d, canvas, layer);
-
-
-            if(applyFXs)
-            {
-                applyEffects(this.c3d, layer, layer.type + 'Layer');
-                applyFilters(this.c3d, layer, layer.type + 'Layer');
-                const layerClass = this.c3d[layer.type + 'Layer'];
-                if(layerClass)
-                {
-                    layerClass.show(layer);
-                    layerClass.updatePreview();
-                    layerClass.hide();
-                }
-            }
 
         }
 
@@ -146,8 +133,6 @@ export class Render3D
         }
 
         this.c3d.three.render();
-        this._preDPI = this.c3d.settings.getRenderDPI();
-
     }
 
     renderAll()
@@ -157,7 +142,7 @@ export class Render3D
         for (let i = 0; i < data.length; i++)
         {
             const meshName = data[i][0];
-            this.renderView(meshName, true);
+            this.renderView(meshName);
         }
     }
 

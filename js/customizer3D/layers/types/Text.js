@@ -43,6 +43,10 @@ export class Text
 
     updateCanvas()
     {
+        const printDims = getPrintDims(this.c3d, {name: this.name}, this.c3d.settings.getRenderDPI());
+        this.canvas.width = printDims.width;
+        this.canvas.height = printDims.height;
+        
         const source = this.canvas;
         const canvas = this.c3d.textLayer.htmlEl.querySelector('canvas.preview');
         const ctx = source.getContext('2d', {willReadFrequently: true});
@@ -165,10 +169,6 @@ export class Text
         
         this.root.prepend(div);
 
-
-        const printDims = getPrintDims(this.c3d, {name: this.name}, this.c3d.settings.getRenderDPI());
-        this.canvas.width = printDims.width;
-        this.canvas.height = printDims.height;
     }
 
 }
