@@ -169,10 +169,13 @@ export class Export
         canvas.height = canvasHeight;
 
         const yieldToMainThread = () => new Promise(resolve => setTimeout(resolve, 0));
-        const blob = await this._getCanvasBlob(canvas, meshName);
+        await yieldToMainThread();
+        
+        let blob = await this._getCanvasBlob(canvas, meshName);
         uint8Array = await toUint8Array(blob);
         pdf.addImage(uint8Array, 'PNG', 0, 0, printWidth, printHeight, null, 'FAST', 0);
-
+        blob = null;
+        uint8Array = null;
 
         // ADD TITLE
 
@@ -200,8 +203,6 @@ export class Export
       setTimeout(() => this.c3d.preloader.hide(), 1000);
       this.c3d.showHideUI.enableContainer();
 
-      blob = null;
-      uint8Array = null
     }
 
     async exportAsPNG()
