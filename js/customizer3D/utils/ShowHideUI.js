@@ -60,9 +60,13 @@ export class ShowHideUI
 
     _setContainerState(state)
     {
-        const el = document.querySelector(this.c3d.props.container);
-        el.style.pointerEvents = state ? 'all' : 'none';
-        el.style.opacity = state ? 1 : 0.3;
+        const els = document.querySelectorAll(this.c3d.props.container + ' > *').forEach((e) => {
+
+            if(e.classList.contains('preloader')) return;
+            e.style.pointerEvents = state ? 'all' : 'none';
+            e.style.opacity = state ? 1 : 0.3;
+
+        });        
     }
 
 }

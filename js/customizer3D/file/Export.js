@@ -3,8 +3,6 @@ import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.6';
 import {drawLayerToCTX} from 'customizer3D_dir/layers/utils/drawLayerToCTX.js';
 import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.6';
 import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.6';
-import {toUint8Array} from 'customizer3D_dir/utils/toUint8Array.js?c3d=0.5.6';
-import {canvasToBlob} from 'customizer3D_dir/utils/canvasToBlob.js?c3d=0.5.6';
 
 export class Export
 {
@@ -25,7 +23,7 @@ export class Export
       const ce = this.c3d.colorEngine;
       const limits = getLimits();
 
-      let printWidth, printHeight, uint8Array;
+      let printWidth, printHeight;
 
       // CREATE NEW PDF
 
@@ -125,7 +123,7 @@ export class Export
 
         }
 
-        this.c3d.preloader.set(this.c3d.lang['being-exported'] + '<br>' + layersData[i][1].label + '...');
+        // this.c3d.preloader.set(this.c3d.lang['being-exported'] + '<br>' + layersData[i][1].label + '...');
 
         // get size
         const printSize = layersData[i][1].printSize;
@@ -168,14 +166,8 @@ export class Export
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
 
-        const yieldToMainThread = () => new Promise(resolve => setTimeout(resolve, 0));
-        await yieldToMainThread();
-        
-        let blob = await this._getCanvasBlob(canvas, meshName);
-        uint8Array = await toUint8Array(blob);
-        pdf.addImage(uint8Array, 'PNG', 0, 0, printWidth, printHeight, null, 'FAST', 0);
-        blob = null;
-        uint8Array = null;
+        const drawedCanvas = await this._getCanvas(canvas, meshName, this.c3d.lang['creating-pdf']);
+        pdf.addImage(drawedCanvas, 'PNG', 0, 0, printWidth, printHeight, null, 'FAST', 0);
 
         // ADD TITLE
 
@@ -228,7 +220,7 @@ export class Export
         // mesh with predefined color(s)
         if(layersData[i][1].hasOwnProperty('materials') && layersData[i][1]['materials'][0].hasOwnProperty('colors')) continue;
 
-        this.c3d.preloader.set(this.c3d.lang['being-exported'] + '<br>' + layersData[i][1].label + '...');
+        this.c3d.preloader.set(this.c3d.lang['creating-png'] + '<br>' + layersData[i][1].label + '...');
 
         // get size
         const printSize = layersData[i][1].printSize;
@@ -239,7 +231,8 @@ export class Export
 
         setTimeout(async() =>
         {
-          const blob = await this._getCanvasBlob(canvas, meshName);
+          const drawedCanvas = await this._getCanvas(canvas, meshName, this.c3d.lang['creating-png']);
+          const blob = await new Promise(resolve => drawedCanvas.toBlob(resolve, 'image/png', 1.0));
           const a = document.createElement('a');
           const blobUrl = URL.createObjectURL(blob);
           a.href = blobUrl;
@@ -259,8 +252,9 @@ export class Export
 
 
 
-    async _getCanvasBlob(canvas, meshName)
+    async _getCanvas(canvas, meshName, str)
     {
+      const yieldToMainThread = () => new Promise(resolve => setTimeout(resolve, 0));
       const layersDiv = document.querySelector(this.c3d.props.layers);
       const layers = layersDiv.querySelectorAll('[data-mesh=\'' + meshName + '\'] > div.content > div.layers > div');
 
@@ -269,8 +263,7 @@ export class Export
         const tempCanvas = document.createElement('canvas');
         tempCanvas.width = 1;
         tempCanvas.height = 1;
-        const blob = canvasToBlob(tempCanvas);
-        return blob;
+        return tempCanvas;
       }
 
       // write layers
@@ -279,15 +272,23 @@ export class Export
         const layer = layers[j].self;
 
         if(!layer.visible) continue;
+
+        await yieldToMainThread();
+        
+        this.c3d.preloader.set(
+          '<span style="font-size:1.5rem;">' + str + '</span><br>' + 
+          'Drawing Layers to Canvas....<br>' + 
+          meshName + 
+          '   ' + 
+          Math.floor((layers.length - j) / layers.length * 100) + '%'
+        );
           
         // draw image to canvas
         drawLayerToCTX(this.c3d, canvas, layer);
 
       }
 
-      const blob = await canvasToBlob(canvas);
-
-      return blob;
+      return canvas;
 
     }
 
