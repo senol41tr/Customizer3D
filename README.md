@@ -1,5 +1,6 @@
-# Customizer3D
-### 3D Product & Model Configurator {Release Candidate} ###
+# Customizer3D {Release Candidate}
+
+### 3D Product & Model Configurator and Image Editor ###
 
 **Client Side Creation**
 No Server needed, all operations are performed on the device. Client Side
@@ -13,8 +14,9 @@ Add Image, Text and all available Layer types, rearrange with drag'n drop
 **Filter & Effects Gallery**
 You can add filter or effect to your image, shape or text. 
 
-**Export**
-PDF and PNG Export (Up to **4K** image resolution)
+**Export (*up to 16K)**
+PDF and PNG Export
+*Depends on GPU and Device
 
 **Open and Save as Function**
 You can save your project in your device later you can continue editing.
@@ -39,10 +41,11 @@ https://ssarigul.tr/Customizer3D
 
 ### YouTube Videos ###
 
-[![Installation](https://img.youtube.com/vi/RSCb554seqg/maxresdefault.jpg)](https://www.youtube.com/watch?v=RSCb554seqg)
-[![Introduction](https://img.youtube.com/vi/a6ijoub5l6Q/maxresdefault.jpg)](https://www.youtube.com/watch?v=a6ijoub5l6Q)
-[![First Project](https://img.youtube.com/vi/i55T8xjZy_8/maxresdefault.jpg)](https://www.youtube.com/watch?v=i55T8xjZy_8)
-[![WebGL Effect Point Cloud](https://img.youtube.com/vi/fmq-Vo9FwMQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=fmq-Vo9FwMQ)
-[![Canvas Effect Color Analyzer](https://img.youtube.com/vi/-5yfZE4mjl4/maxresdefault.jpg)](https://www.youtube.com/watch?v=-5yfZE4mjl4)
+[![16K Export](https://img.youtube.com/vi/TiAvV7RmNbg/maxresdefault.jpg)](https://www.youtube.com/watch?v=TiAvV7RmNbg)
 [![3D Text](https://img.youtube.com/vi/gjWaWq6bvyI/maxresdefault.jpg)](https://www.youtube.com/watch?v=gjWaWq6bvyI)
 [![Material Browser](https://img.youtube.com/vi/ejMyksy6w3A/maxresdefault.jpg)](https://www.youtube.com/watch?v=ejMyksy6w3A)
+[![Canvas Effect Color Analyzer](https://img.youtube.com/vi/-5yfZE4mjl4/maxresdefault.jpg)](https://www.youtube.com/watch?v=-5yfZE4mjl4)
+[![WebGL Effect Point Cloud](https://img.youtube.com/vi/fmq-Vo9FwMQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=fmq-Vo9FwMQ)
+[![First Project](https://img.youtube.com/vi/i55T8xjZy_8/maxresdefault.jpg)](https://www.youtube.com/watch?v=i55T8xjZy_8)
+[![Introduction](https://img.youtube.com/vi/a6ijoub5l6Q/maxresdefault.jpg)](https://www.youtube.com/watch?v=a6ijoub5l6Q)
+[![Installation](https://img.youtube.com/vi/RSCb554seqg/maxresdefault.jpg)](https://www.youtube.com/watch?v=RSCb554seqg)
