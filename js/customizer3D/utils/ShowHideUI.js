@@ -1,4 +1,4 @@
-import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.5';
+import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.6';
 
 export class ShowHideUI
 {
@@ -45,6 +45,24 @@ export class ShowHideUI
         document.querySelector(this.c3d.props.controls).style.visibility = 
         document.querySelector(this.c3d.props.settings).style.visibility = state;
         document.querySelector(this.c3d.props.container + ' > div.webXR').style.visibility = isIOS() ? 'hidden' : state;
+    }
+
+
+    enableContainer()
+    {
+        this._setContainerState(true);
+    }
+
+    disableContainer()
+    {
+        this._setContainerState(false);
+    }
+
+    _setContainerState(state)
+    {
+        const el = document.querySelector(this.c3d.props.container);
+        el.style.pointerEvents = state ? 'all' : 'none';
+        el.style.opacity = state ? 1 : 0.3;
     }
 
 }

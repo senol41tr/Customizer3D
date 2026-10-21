@@ -1,4 +1,5 @@
 import * as fflate from 'base/fflate@0.8.2/fflate.esm.js';
+import {toUint8Array} from 'customizer3D_dir/utils/toUint8Array.js?c3d=0.5.6';
 
 export class SaveAs
 {
@@ -154,7 +155,7 @@ export class SaveAs
 
                         const response = await fetch(layer.image.src);
                         const blob = await response.blob();
-                        const uint8Array = await this.c3d.imageLayer.toUint8Array(blob);
+                        const uint8Array = await toUint8Array(blob);
 
                         filesToZip[imageName] = [uint8Array];
 

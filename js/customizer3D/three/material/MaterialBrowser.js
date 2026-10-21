@@ -177,6 +177,7 @@ export class MaterialBrowser
             const matcapFolderName = folders[i];
             const images = json[matcapFolderName];
             const guiFolder = folder.addFolder(matcapFolderName.substring(0,1).toUpperCase() + matcapFolderName.substring(1));
+            guiFolder.$title.style.pointerEvents = 'none';
             
             for (let j = 0; j < images.length; j++)
             {

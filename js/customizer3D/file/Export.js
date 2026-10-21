@@ -1,6 +1,10 @@
 import jsPDF from 'base/jspdf@4.0.0/jspdf.es.min.js';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.5';
-import {drawLayerToCTX} from 'customizer3D_dir/layers//utils/drawLayerToCTX.js';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.6';
+import {drawLayerToCTX} from 'customizer3D_dir/layers/utils/drawLayerToCTX.js';
+import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.6';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.6';
+import {toUint8Array} from 'customizer3D_dir/utils/toUint8Array.js?c3d=0.5.6';
+import {canvasToBlob} from 'customizer3D_dir/utils/canvasToBlob.js?c3d=0.5.6';
 
 export class Export
 {
@@ -12,13 +16,14 @@ export class Export
     async exportAsPDF()
     {
 
-      this.c3d.showHideUI.hide();
+      this.c3d.showHideUI.disableContainer();
       this.c3d.preloader.show();
       this.c3d.preloader.set(this.c3d.lang['creating-pdf']);
 
       const layersData = Object.entries(this.c3d.props.data);
       const layersDiv = document.querySelector(this.c3d.props.layers);
       const ce = this.c3d.colorEngine;
+      const limits = getLimits();
 
       let printWidth, printHeight, uint8Array;
 
@@ -50,14 +55,7 @@ export class Export
       const defaultFont = 'Signika-Regular';
       if(!pdf.existsFileInVFS(defaultFont))
       {
-        const response = await fetch(C3D_SERVER + 'fonts/' + defaultFont + '.ttf');
-        const blob = await response.blob();
-        const base64 = await new Promise((resolve) => {
-            const reader = new FileReader()
-            reader.onloadend = () => resolve(reader.result)
-            reader.readAsDataURL(blob)
-        });
-
+        const base64 = this.c3d.textLayer.getFontData(defaultFont).base64;
         const rawBase64 = base64.split(',')[1];
         pdf.addFileToVFS(defaultFont, rawBase64);
         pdf.addFont(defaultFont, defaultFont, 'normal');
@@ -135,12 +133,20 @@ export class Export
         {
           printWidth = new Size({size: printSize.width, DPI: 72}).mm;
           printHeight = new Size({size: printSize.height, DPI: 72}).mm;
+
+          if(printWidth > limits.print || printHeight > limits.print)
+          {
+            const newPrintSize = calculateAspectRatioFit(printWidth, printHeight, limits.print, limits.print);
+            printWidth = Math.floor(newPrintSize.width);
+            printHeight = Math.floor(newPrintSize.height);
+          }
+
         }
         else
         {
           printWidth = 100;
           printHeight = 54;
-        }
+        }        
 
 
         // ADD NEW PAGE
@@ -149,27 +155,39 @@ export class Export
 
         const canvas = document.createElement('canvas');
 
-        canvas.width = new Size({size: printWidth + 'mm', DPI: 300}).px;
-        canvas.height = new Size({size: printHeight + 'mm', DPI: 300}).px;
+        let canvasWidth = new Size({size: printWidth + 'mm'}).px;
+        let canvasHeight = new Size({size: printHeight + 'mm'}).px;
+        
+        if(canvasWidth > limits.display || canvasHeight > limits.display)
+        {
+          const newCanvasSize = calculateAspectRatioFit(canvasWidth, canvasHeight, limits.display, limits.display);
+          canvasWidth = newCanvasSize.width;
+          canvasHeight = newCanvasSize.height;
+        }
+
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
 
         const blob = await this._getCanvasBlob(canvas, meshName);
-        uint8Array = await this.c3d.imageLayer.toUint8Array(blob);
+        uint8Array = await toUint8Array(blob);
+        pdf.addImage(uint8Array, 'PNG', 0, 0, printWidth, printHeight, null, 'FAST', 0);
 
-        pdf.addImage(uint8Array, 'PNG', 0, 0,printWidth, printHeight, null, 'FAST', 0);
 
         // ADD TITLE
 
-        const titleDescription = layersData[i][1].label || (mesh.name + ( mesh.material.name ? '(' + mesh.material.name + ')' : ''));
-        pdf.saveGraphicsState();
-        pdf.setTextColor(1,1,1,1);
-        pdf.setFont(defaultFont, 'normal');
-        pdf.setFontSize(6);
-        const textDims = pdf.getTextDimensions(titleDescription);
-        pdf.setFillColor(1,0,1,0);
-        pdf.rect(0, 0, textDims.w + 2, textDims.h + 2, 'F');
-        pdf.text(titleDescription, 1, 1, {baseline:'top'});
-        pdf.restoreGraphicsState();
-
+        if(layersData.length > 1)
+        {
+          const titleDescription = layersData[i][1].label || (mesh.name + ( mesh.material.name ? '(' + mesh.material.name + ')' : ''));
+          pdf.saveGraphicsState();
+          pdf.setTextColor(1,1,1,1);
+          pdf.setFont(defaultFont, 'normal');
+          pdf.setFontSize(printWidth / limits.print * 300);
+          const textDims = pdf.getTextDimensions(titleDescription);
+          pdf.setFillColor(1,0,1,0);
+          pdf.rect(0, 0, textDims.w + 2, textDims.h + 2, 'F');
+          pdf.text(titleDescription, 1, 1, {baseline:'top'});
+          pdf.restoreGraphicsState();
+        }
       }
       
       const date = new Date();
@@ -179,13 +197,12 @@ export class Export
       pdf.save(fileName + '.pdf');
 
       setTimeout(() => this.c3d.preloader.hide(), 1000);
-      this.c3d.showHideUI.show();
-
+      this.c3d.showHideUI.enableContainer();
     }
 
     async exportAsPNG()
     {
-      this.c3d.showHideUI.hide();
+      this.c3d.showHideUI.disableContainer();
       this.c3d.preloader.show();
       this.c3d.preloader.set(this.c3d.lang['exporting-png']);
 
@@ -212,21 +229,26 @@ export class Export
         const printSize = layersData[i][1].printSize;
         const canvas = document.createElement('canvas');
 
-        canvas.width = new Size({size: printSize.width, DPI: 300}).px;
-        canvas.height = new Size({size: printSize.height, DPI: 300}).px;
+        canvas.width = new Size({size: printSize.width}).px;
+        canvas.height = new Size({size: printSize.height}).px;
 
-        const blob = await this._getCanvasBlob(canvas, meshName);
-        const a = document.createElement('a');
-        const blobUrl = URL.createObjectURL(blob);
-        a.href = blobUrl;
-        a.download = meshName + '.png';
-        a.click();
-        a.remove();
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 200);
+        setTimeout(async() =>
+        {
+          const blob = await this._getCanvasBlob(canvas, meshName);
+          const a = document.createElement('a');
+          const blobUrl = URL.createObjectURL(blob);
+          a.href = blobUrl;
+          a.download = meshName + '.png';
+          a.click();
+          a.remove();
+          setTimeout(() =>
+          {
+            setTimeout(() => this.c3d.preloader.hide(), 1000);
+            this.c3d.showHideUI.enableContainer();
+            URL.revokeObjectURL(blobUrl);
+          }, 250);
+        }, 250);
       }
-
-      setTimeout(() => this.c3d.preloader.hide(), 1000);
-      this.c3d.showHideUI.show();
 
     }
 
@@ -236,6 +258,15 @@ export class Export
     {
       const layersDiv = document.querySelector(this.c3d.props.layers);
       const layers = layersDiv.querySelectorAll('[data-mesh=\'' + meshName + '\'] > div.content > div.layers > div');
+
+      if(!layers.length)
+      {
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = 1;
+        tempCanvas.height = 1;
+        const blob = canvasToBlob(tempCanvas);
+        return blob;
+      }
 
       // write layers
       for (let j = layers.length - 1; j >= 0; j--)
@@ -249,7 +280,7 @@ export class Export
 
       }
 
-      const blob = await this.c3d.imageLayer.canvasToBlob(canvas);
+      const blob = await canvasToBlob(canvas);
 
       return blob;
 

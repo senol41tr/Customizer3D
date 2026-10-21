@@ -1,18 +1,17 @@
 import * as THREE from 'three';
-import {TTFLoader} from 'three_dir/loaders/TTFLoader.js?c3d=0.5.5';
-import {Font} from 'three_dir/loaders/FontLoader.js?c3d=0.5.5';
-import {TextGeometry} from 'three_dir/geometries/TextGeometry.js?c3d=0.5.5';
-import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.5';
+import {TTFLoader} from 'three_dir/loaders/TTFLoader.js?c3d=0.5.6';
+import {Font} from 'three_dir/loaders/FontLoader.js?c3d=0.5.6';
+import {TextGeometry} from 'three_dir/geometries/TextGeometry.js?c3d=0.5.6';
+import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.6';
 import {GUI} from 'three_dir/libs/lil-gui.module.min.js';
-import {MaterialBrowser} from 'customizer3D_dir/three/material/MaterialBrowser.js?c3d=0.5.5';
-
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.5';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.5';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.5';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.5';
-import {createFiltersList, applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.5';
-import {createEffectsList, applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.5.5';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.5';
+import {MaterialBrowser} from 'customizer3D_dir/three/material/MaterialBrowser.js?c3d=0.5.6';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.6';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.6';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.6';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.6';
+import {createFiltersList, applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.6';
+import {createEffectsList, applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.5.6';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.6';
 
 export class ThreeDTextLayer
 {
@@ -40,15 +39,15 @@ export class ThreeDTextLayer
         <div class="title">
             <p class="label" draggable="false">${this.c3d.lang['add-3d-text-layer']}</p>
             <div class="buttons">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.5" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
-                <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.5" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.6" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
+                <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.6" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
             </div>
         </div>
 
         <div class="content">
             <div class="menu">
                 <div class="rotate">
-                    <div class="button" title="${this.c3d.lang['rotate']}"><img src="${C3D_SERVER}svg/rotate.svg?c3d=0.5.5" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['rotate']}"><img src="${C3D_SERVER}svg/rotate.svg?c3d=0.5.6" alt="Icon"></div>
                     <div class="list">
                         <div class="inputPercent" data-icon="°" title="${this.c3d.lang['degree']}">
                             <input type="number" min="-180" max="180" value="0">
@@ -57,24 +56,24 @@ export class ThreeDTextLayer
                     </div>
                 </div>
                 <div class="zoom">
-                    <div class="button" title="${this.c3d.lang['zoom']}"><img src="${C3D_SERVER}svg/zoom.svg?c3d=0.5.5" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['zoom']}"><img src="${C3D_SERVER}svg/zoom.svg?c3d=0.5.6" alt="Icon"></div>
                     <div class="list">
                         <div class="inputPercent" data-icon="%"><input type="number" min="1" max="2000" value="100"></div>
                         <input type="range" min="1" max="2000" value="100" step="0.5">
                     </div>
                 </div>
                 <div class="filters">
-                    <div class="button" title="${this.c3d.lang['filter-gallery']}"><img src="${C3D_SERVER}svg/filters.svg?c3d=0.5.5" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['filter-gallery']}"><img src="${C3D_SERVER}svg/filters.svg?c3d=0.5.6" alt="Icon"></div>
                     <div class="list">
                     </div>
                 </div>
                 <div class="effects">
-                    <div class="button" title="${this.c3d.lang['effects-gallery']}"><img src="${C3D_SERVER}svg/effects.svg?c3d=0.5.5" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['effects-gallery']}"><img src="${C3D_SERVER}svg/effects.svg?c3d=0.5.6" alt="Icon"></div>
                     <div class="list">
                     </div>
                 </div>
                 <div class="settings">
-                    <div class="button" title="${this.c3d.lang['settings']}"><img src="${C3D_SERVER}svg/settings.svg?c3d=0.5.5" alt="Icon" style="height:24px;"></div>
+                    <div class="button" title="${this.c3d.lang['settings']}"><img src="${C3D_SERVER}svg/settings.svg?c3d=0.5.6" alt="Icon" style="height:24px;"></div>
                 </div>
             </div>
             <canvas class="preview" oncontextmenu="return false;"></canvas>
@@ -411,7 +410,6 @@ export class ThreeDTextLayer
 
     }
 
-
     bakeImageToLayer()
     {
         if(!this.layer) return;
@@ -420,23 +418,21 @@ export class ThreeDTextLayer
         
         const c3d = this.c3d;
         const canvas = this.layer.image;
-
         const printDims = getPrintDims(this.c3d, {name: this.layer.name}, this.c3d.settings.getRenderDPI());
-        canvas.width = printDims.width;
-        canvas.height = printDims.height;
-
         const ctx = canvas.getContext('2d');
-        const w = canvas.width;
-        const h = canvas.height;
+        const w = canvas.width = Math.round(printDims.width);
+        const h = canvas.height = Math.round(printDims.height);
 
         const renderTargetOptions = 
         {
+            // samples: 4,
             format: THREE.RGBAFormat,
-            samples: 4,
             stencilBuffer: false,
             depthBuffer: false,
             type: THREE.UnsignedByteType,
-            colorSpace: THREE.SRGBColorSpace
+            colorSpace: THREE.SRGBColorSpace,
+            minFilter: THREE.LinearFilter,
+            magFilter: THREE.LinearFilter
         };
 
         const oldCanvasSize = {...c3d.three._canvasDims};
@@ -456,7 +452,7 @@ export class ThreeDTextLayer
         target.dispose();
         
         const imageData = ctx.createImageData(w, h);
-
+        
         for (let y = 0; y < h; y++)
         {
             const sourceRow = y * w * 4;
@@ -466,12 +462,13 @@ export class ThreeDTextLayer
 
         ctx.putImageData(imageData, 0, 0);
 
-        this.layer.updateCanvas();
+        // this.layer.updateCanvas();
         this.hideGUI();
         this.hide();
         applyEffects(this.c3d, this.layer, 'threeDTextLayer');
         applyFilters(this.c3d, this.layer, 'threeDTextLayer');
         this.layer.__baked = true;
+
     }
 
     showGUI()
@@ -513,15 +510,25 @@ export class ThreeDTextLayer
         if(!this.layer.options.material) this.layer.options.material = options.materialName;
 
         const gui = this.gui = new GUI({title: '3D Text Options'});
-
         const guiSettings =
         {
             renderToCanvas: () =>
             {
-                this.layer.__baked = false;
-                this.bakeImageToLayer();
-                this.show(this.layer);
-                this.c3d._setNavActive(this.layer.name, true, false);                
+
+                this.c3d.preloader.set('Creating Image Data... ');
+                this.c3d.preloader.show();
+                this.c3d.showHideUI.disableContainer();
+                this.gui.domElement.style.opacity = 0.3;
+
+                setTimeout(() => {
+                    this.layer.__baked = false;
+                    this.bakeImageToLayer();
+                    this.show(this.layer);
+                    this.c3d._setNavActive(this.layer.name, true, false);
+                    this.c3d.preloader.hide();
+                    this.c3d.showHideUI.enableContainer();
+                    this.gui.domElement.style.opacity = 1.0;
+                }, 250);
             },
             cancel: () =>
             {                
@@ -679,7 +686,7 @@ export class ThreeDTextLayer
             target: this.c3d.three.controls.orbit.target.clone()
         };
         this.c3d.three.camera.rotation.set(0, 0, 0);
-        this.c3d.three.camera.position.set(0, 0, isMobile() ? 1.5 : 1);
+        this.c3d.three.camera.position.set(0, 0, 1);
 
         const matOptions = {...this.layer.options.materialOptions};
         

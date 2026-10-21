@@ -1,5 +1,5 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.5';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.5';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.6';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.6';
 
 export function lang()
 {
@@ -14,7 +14,7 @@ export function parameters(self)
     return {
         // unique name (module name) in models folder, the name is important for creating instance 
         // const {parameters, init, setView, onUnLoad} = await import('models/'+ data.modelName +'.js');  
-        modelName: 'TwoD',
+        modelName: 'C2D',
 
         container:      'section.customizer',
         preloader:      'section.customizer > div.preloader',
@@ -60,10 +60,10 @@ export function parameters(self)
 
         data:
         {
-            front:
+            area:
             {
                 label: self.lang['design-layer'],
-                printSize: {width: '2048px', height: '2048px'}
+                printSize: {width: null, height: null}
             }
         }
     };
@@ -71,7 +71,7 @@ export function parameters(self)
 
 export async function init()
 {
-    setTimeout(() => this._setNavActive('front', true, false), 100);
+    
 }
 
 // set model views
@@ -80,7 +80,7 @@ export function setView(view, fn = 'to')
 {
     switch (view)
     {
-        case 'front':
+        case 'area':
             this.three.rotateToAngle(0, 0, 0);
         break;
     }

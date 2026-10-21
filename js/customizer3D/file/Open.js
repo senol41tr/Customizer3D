@@ -1,7 +1,7 @@
 import * as fflate from 'base/fflate@0.8.2/fflate.esm.js';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.5';
-import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.5.5';
-import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=0.5.5';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.6';
+import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.5.6';
+import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=0.5.6';
 
 export class Open
 {
@@ -324,9 +324,12 @@ export class Open
 
         this.c3d.three.setupLights();
 
-        await this.c3d._loadGLB(glbPath);
-        await this.c3d._createLayerData();
-
+        if(glbPath)
+        {
+            await this.c3d._loadGLB(glbPath);
+            await this.c3d._createLayerData();
+        }
+        
         this._reRender();
     }
     
@@ -374,7 +377,7 @@ export class Open
             this.c3d.setView();
         }
 
-        this.c3d.three.start(); // start render again
+        this.c3d.three.start();
 
         setTimeout(() => {
             this.c3d.render3d.renderAll();
@@ -383,7 +386,7 @@ export class Open
             this.c3d.showHideUI.show();
             this.c3d._setNavActive();
             this.c3d.three.render();
-        }, 500);  
+        }, 250);  
         
     }
 

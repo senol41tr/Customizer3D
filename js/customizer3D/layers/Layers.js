@@ -1,8 +1,8 @@
-import {Image} from 'customizer3D_dir/layers/types/Image.js?c3d=0.5.5';
-import {Solid} from 'customizer3D_dir/layers/types/Solid.js?c3d=0.5.5';
-import {Text} from 'customizer3D_dir/layers/types/Text.js?c3d=0.5.5';
-import {Shape} from 'customizer3D_dir/layers/types/Shape.js?c3d=0.5.5';
-import {ThreeDText} from 'customizer3D_dir/layers/types/ThreeDText.js?c3d=0.5.5';
+import {Image} from 'customizer3D_dir/layers/types/Image.js?c3d=0.5.6';
+import {Solid} from 'customizer3D_dir/layers/types/Solid.js?c3d=0.5.6';
+import {Text} from 'customizer3D_dir/layers/types/Text.js?c3d=0.5.6';
+import {Shape} from 'customizer3D_dir/layers/types/Shape.js?c3d=0.5.6';
+import {ThreeDText} from 'customizer3D_dir/layers/types/ThreeDText.js?c3d=0.5.6';
 
 export class Layers
 {
@@ -70,7 +70,7 @@ export class Layers
                 l.mesh.material.needsUpdate = true;
             }
 
-            l.bakeImageToLayer();
+            await l.bakeImageToLayer();
         }
 
         this.c3d.threeDTextLayer.updatePreview(false, false);

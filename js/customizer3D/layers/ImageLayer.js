@@ -1,12 +1,12 @@
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.5';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.5';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.5';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.5';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.5';
-import {ExtractImages} from 'customizer3D_dir/layers/utils/ExtractImages.js?c3d=0.5.5';
-import {createFiltersList, applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.5';
-import {createEffectsList, applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.5.5';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.5';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.6';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.6';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.6';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.6';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.6';
+import {ExtractImages} from 'customizer3D_dir/layers/utils/ExtractImages.js?c3d=0.5.6';
+import {createFiltersList, applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.6';
+import {createEffectsList, applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.5.6';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.6';
 
 export class ImageLayer
 {
@@ -28,8 +28,8 @@ export class ImageLayer
         <div class="title">
             <p class="label" draggable="false">${this.c3d.lang['add-image-layer']}</p>
             <div class="buttons">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.5" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
-                <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.5" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.6" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
+                <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.6" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
             </div>
         </div>
 
@@ -40,7 +40,7 @@ export class ImageLayer
                     <div class="inputs"></div>
                 </div>
                 <div class="rotate">
-                    <div class="button" title="${this.c3d.lang['rotate']}"><img src="${C3D_SERVER}svg/rotate.svg?c3d=0.5.5" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['rotate']}"><img src="${C3D_SERVER}svg/rotate.svg?c3d=0.5.6" alt="Icon"></div>
                     <div class="list">
                         <div class="inputPercent" data-icon="°" title="${this.c3d.lang['degree']}">
                             <input type="number" min="-180" max="180" value="0">
@@ -49,19 +49,19 @@ export class ImageLayer
                     </div>
                 </div>
                 <div class="zoom">
-                    <div class="button" title="${this.c3d.lang['zoom']}"><img src="${C3D_SERVER}svg/zoom.svg?c3d=0.5.5" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['zoom']}"><img src="${C3D_SERVER}svg/zoom.svg?c3d=0.5.6" alt="Icon"></div>
                     <div class="list">
                         <div class="inputPercent" data-icon="%"><input type="number" min="1" max="2000" value="100"></div>
                         <input type="range" min="1" max="2000" value="100" step="0.5">
                     </div>
                 </div>
                 <div class="filters">
-                    <div class="button" title="${this.c3d.lang['filter-gallery']}"><img src="${C3D_SERVER}svg/filters.svg?c3d=0.5.5" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['filter-gallery']}"><img src="${C3D_SERVER}svg/filters.svg?c3d=0.5.6" alt="Icon"></div>
                     <div class="list">
                     </div>
                 </div>
                 <div class="effects">
-                    <div class="button" title="${this.c3d.lang['effects-gallery']}"><img src="${C3D_SERVER}svg/effects.svg?c3d=0.5.5" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['effects-gallery']}"><img src="${C3D_SERVER}svg/effects.svg?c3d=0.5.6" alt="Icon"></div>
                     <div class="list">
                     </div>
                 </div>
@@ -272,7 +272,7 @@ export class ImageLayer
         else canvasPreview.addEventListener('pointerdown', canvasMouseDown);
 
         // show preferred size notice
-        const smallerThanPreffered = this.c3d.lang['smaller-than-preffered'].replace('[warningIcon]', '<img src="' + C3D_SERVER + 'svg/warning.svg?c3d=0.5.5" alt="Icon">');
+        const smallerThanPreffered = this.c3d.lang['smaller-than-preffered'].replace('[warningIcon]', '<img src="' + C3D_SERVER + 'svg/warning.svg?c3d=0.5.6" alt="Icon">');
         this.htmlEl.querySelector('p.smaller-than-preffered').innerHTML = smallerThanPreffered;
         
     }
@@ -379,52 +379,6 @@ export class ImageLayer
     {
         this.htmlEl.style.display = 'none';
         document.querySelector(this.c3d.props.layers).style.opacity = 1;
-    }
-
-    async toUint8Array(blob) // !!!
-    {
-        try
-        {
-            const uint8Array = await new Promise((resolve, reject) =>
-            {
-
-                const reader = new FileReader();
-
-                reader.onload = () =>
-                {
-                    const arrayBuffer = reader.result;
-                    const uint8Array = new Uint8Array(arrayBuffer);
-                    resolve(uint8Array);
-                };
-
-                reader.readAsArrayBuffer(blob);
-
-            });
-
-            return uint8Array;
-        }
-        catch(e)
-        {
-            alert(e);
-        }
-        finally
-        {
-            this.c3d.showHideUI.show();
-        }
-
-    }
-
-    async canvasToBlob(canvas) // !!!
-    {
-        try
-        {
-            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
-            return blob;
-        }
-        catch(e)
-        {
-            alert(e);
-        }
     }
 
 
