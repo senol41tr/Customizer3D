@@ -14,9 +14,9 @@ Add Image, Text and all available Layer types, rearrange with drag'n drop
 **Filter & Effects Gallery**
 You can add filter or effect to your image, shape or text. 
 
-**Export (*up to 16K)**
+**Export (up to 16K)**
 PDF and PNG Export
-*Depends on GPU and Device
+Depends on GPU and Device
 
 **Open and Save as Function**
 You can save your project in your device later you can continue editing.
