@@ -1,6 +1,4 @@
 import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.6';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.6';
-import gsap from 'base/gsap@3.13.0/gsap@3.13.0.esm.js';
 
 export function lang()
 {
@@ -36,8 +34,8 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: isMobile() ? 2 : 1,
-                maxDistance: 5
+                minDistance: isMobile() ? 0.25 : 0.5,
+                maxDistance: 3
             },
 
             // set initial z position
@@ -45,7 +43,7 @@ export function parameters(self)
             {
                 position:
                 {
-                    z: isMobile() ? 4 : 2
+                    z: isMobile() ? 2 : 1
                 }
             },
 
