@@ -34,8 +34,8 @@ export function parameters(self)
             // set zoom-in, zoom-out limit
             orbitControlOptions: 
             {
-                minDistance: isMobile() ? 0.25 : 0.5,
-                maxDistance: 3
+                minDistance: isMobile() ? 2 : 1,
+                maxDistance: 10
             },
 
             // set initial z position
@@ -43,7 +43,7 @@ export function parameters(self)
             {
                 position:
                 {
-                    z: isMobile() ? 2 : 1
+                    z: isMobile() ? 4 : 2
                 }
             },
 
@@ -173,9 +173,6 @@ export function parameters(self)
 // modify all wanted things
 export async function init()
 {
-    // default view
-    this.three.rotateToAngle(10, 30, 0);
-
     // enable zoom with mouse or tap (2 fingers)
     this.enableAutoZoom();
 
@@ -187,6 +184,8 @@ export async function init()
         delete this.userData.onClick;
     };
     window.addEventListener('click', this.userData.onClick);
+
+    setTimeout(() => this.setView('feet'), 500);
 
 }
 
