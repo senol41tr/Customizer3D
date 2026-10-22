@@ -3,7 +3,6 @@ import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.6';
 import {drawLayerToCTX} from 'customizer3D_dir/layers/utils/drawLayerToCTX.js';
 import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.6';
 import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.6';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.6';
 
 export class Export
 {
@@ -152,8 +151,8 @@ export class Export
 
         const canvas = document.createElement('canvas');
 
-        let canvasWidth = new Size({size: printWidth + 'mm'}).px;
-        let canvasHeight = new Size({size: printHeight + 'mm'}).px;
+        let canvasWidth = new Size({size: printWidth + 'mm', DPI: 300}).px;
+        let canvasHeight = new Size({size: printHeight + 'mm', DPI: 300}).px;
         
         if(canvasWidth > limits.display || canvasHeight > limits.display)
         {
@@ -167,7 +166,7 @@ export class Export
 
         const drawedCanvas = await this._getCanvas(canvas, meshName, this.c3d.lang['creating-pdf'], (i + 1) + ' - ' + layersData.length);
         pdf.addImage(drawedCanvas, 'PNG', 0, 0, printWidth, printHeight, null, 'FAST', 0);
-
+        
         // ADD TITLE
 
         if(layersData.length > 1)
@@ -197,6 +196,7 @@ export class Export
 
     }
 
+
     async exportAsPNG()
     {
       this.c3d.showHideUI.disableContainer();
@@ -206,49 +206,73 @@ export class Export
       const layersData = Object.entries(this.c3d.props.data);
       const layersDiv = document.querySelector(this.c3d.props.layers);
 
-      for (let i = 0; i < layersData.length; i++)
+      async function* generatePngLayers()
       {
-        const meshName = layersData[i][0];
-
-        if(meshName == '*') continue;
-
-        const layers = layersDiv.querySelectorAll('[data-mesh=\'' + meshName + '\'] > div.content > div.layers > div');
-
-        // mesh colorOnly
-        if(layers.length == 1 && layers[0].classList.contains('colorOnly')) continue;
-
-        // mesh with predefined color(s)
-        if(layersData[i][1].hasOwnProperty('materials') && layersData[i][1]['materials'][0].hasOwnProperty('colors')) continue;
-
-        this.c3d.preloader.set(this.c3d.lang['creating-png'] + '<br>' + layersData[i][1].label + '...');
-
-        // get size
-        const printSize = layersData[i][1].printSize;
-        const canvas = document.createElement('canvas');
-
-        canvas.width = new Size({size: printSize.width}).px;
-        canvas.height = new Size({size: printSize.height}).px;
-
-        setTimeout(async() =>
+        for (let i = 0; i < layersData.length; i++)
         {
-          const drawedCanvas = await this._getCanvas(canvas, meshName, this.c3d.lang['creating-png'], (i + 1) + ' - ' + layersData.length);
+          const meshName = layersData[i][0];
+
+          if (meshName == '*') continue;
+
+          const layers = layersDiv.querySelectorAll('[data-mesh=\'' + meshName + '\'] > div.content > div.layers > div');
+
+          if (layers.length == 1 && layers[0].classList.contains('colorOnly')) continue;
+
+          if (layersData[i][1].hasOwnProperty('materials') && layersData[i][1]['materials'][0].hasOwnProperty('colors')) continue;
+
+          const layerInfo = layersData[i][1];
+          const printSize = layerInfo.printSize;
+          const canvas = document.createElement('canvas');
+
+          canvas.width = new Size({ size: printSize.width }).px;
+          canvas.height = new Size({ size: printSize.height }).px;
+
+          yield {
+            index: i + 1,
+            total: layersData.length,
+            meshName: meshName,
+            label: layerInfo.label,
+            canvas: canvas
+          };
+        }
+      }
+
+      try
+      {
+        for await (const layer of generatePngLayers())
+        {
+          this.c3d.preloader.set(this.c3d.lang['creating-png'] + '<br>' + layer.label + '...');
+
+          const drawedCanvas = await this._getCanvas(
+            layer.canvas, 
+            layer.meshName, 
+            this.c3d.lang['creating-png'], 
+            layer.index + ' - ' + layer.total
+          );
+
           const blob = await new Promise(resolve => drawedCanvas.toBlob(resolve, 'image/png', 1.0));
+
           const a = document.createElement('a');
           const blobUrl = URL.createObjectURL(blob);
           a.href = blobUrl;
-          a.download = meshName + '.png';
+          a.download = layer.meshName + '.png';
           a.click();
           a.remove();
-          setTimeout(() =>
-          {
-            setTimeout(() => this.c3d.preloader.hide(), 1000);
-            this.c3d.showHideUI.enableContainer();
-            URL.revokeObjectURL(blobUrl);
-            this.c3d.render3d.renderAll();
-          }, 250);
-        }, 250);
-      }
 
+          await new Promise(resolve => setTimeout(resolve, 250));
+          URL.revokeObjectURL(blobUrl);
+        }
+      }
+      catch (error)
+      {
+        console.error(error);
+      }
+      finally
+      {
+        this.c3d.render3d.renderAll();
+        setTimeout(() => this.c3d.preloader.hide(), 1000);
+        this.c3d.showHideUI.enableContainer();
+      }
     }
 
 

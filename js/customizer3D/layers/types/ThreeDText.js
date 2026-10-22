@@ -157,8 +157,8 @@ export class ThreeDText
             this.root.__C3D_Sortable.addElement(div.querySelector('canvas.thumbnail'));
         }
 
-        this.effectsCanvas.width = printDims.width;
-        this.effectsCanvas.height = printDims.height;
+        this.image.width = this.effectsCanvas.width = printDims.width;
+        this.image.height = this.effectsCanvas.height = printDims.height;
 
     }
 

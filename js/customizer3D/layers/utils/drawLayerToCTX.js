@@ -45,7 +45,6 @@ export const drawLayerToCTX = (c3d, canvas, layer, isExport) =>
           // recreate canvas image
           if(isExport || (layer.updateCanvas && c3d.render3d._preDPI != c3d.settings.getRenderDPI()))
           {
-            layer.updateCanvas(isExport);
 
             if(layer.type == 'threeDText')
             {
@@ -53,6 +52,10 @@ export const drawLayerToCTX = (c3d, canvas, layer, isExport) =>
                 l.layer = layer;
                 l._create();
                 l.bakeImageToLayer(isExport);
+            }
+            else
+            {
+                layer.updateCanvas(isExport);
             }
           }
 

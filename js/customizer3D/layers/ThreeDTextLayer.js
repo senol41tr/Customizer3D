@@ -8,6 +8,7 @@ import {MaterialBrowser} from 'customizer3D_dir/three/material/MaterialBrowser.j
 import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.6';
 import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.6';
 import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.6';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.6';
 import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.6';
 import {createFiltersList, applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.6';
 import {createEffectsList, applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.5.6';
@@ -32,6 +33,7 @@ export class ThreeDTextLayer
         this.oldCamState = null;
         this.__mouseUp = this._mouseUp.bind(this);
         this.__create = this._create.bind(this);
+        this.__preMaterial = null;
 
         let el;
 
@@ -426,12 +428,8 @@ export class ThreeDTextLayer
         {
             // samples: 4,
             format: THREE.RGBAFormat,
-            stencilBuffer: false,
-            depthBuffer: false,
             type: THREE.UnsignedByteType,
-            colorSpace: THREE.SRGBColorSpace,
-            minFilter: THREE.LinearFilter,
-            magFilter: THREE.LinearFilter
+            colorSpace: THREE.SRGBColorSpace
         };
 
         const oldCanvasSize = {...c3d.three._canvasDims};
@@ -461,6 +459,7 @@ export class ThreeDTextLayer
 
         ctx.putImageData(imageData, 0, 0);
 
+        this.layer.updateCanvas(isExport);
         this.hideGUI();
         this.hide();
         applyEffects(this.c3d, this.layer, 'threeDTextLayer', isExport);
@@ -503,9 +502,11 @@ export class ThreeDTextLayer
             }
         };
 
-        if(!this.layer.options.geometry) this.layer.options.geometry = options.geometry;
-        if(!this.layer.options.materialOptions) this.layer.options.materialOptions = options.material;
-        if(!this.layer.options.material) this.layer.options.material = options.materialName;
+        const op = this.layer.options;
+        if(!op.geometry) op.geometry = options.geometry;
+        if(!op.materialOptions) op.materialOptions = options.material;
+        else this.__preMaterialOptions = {...op.materialOptions};
+        if(!op.material) op.material = options.materialName;
 
         const gui = this.gui = new GUI({title: '3D Text Options'});
         const guiSettings =
@@ -534,13 +535,15 @@ export class ThreeDTextLayer
                 this.c3d._setNavActive(this.layer.name, true, false);
 
                 if(this.layer.__baked) {
+                    this.layer.options.materialOptions =  this.__preMaterialOptions;
                     this.hideGUI();
                     return;
                 }
 
-                this.layer.options.geometry = null;
+                this.__preMaterialOptions = null;
                 this.layer.options.materialOptions = null;
                 this.layer.options.material = null;
+                this.layer.options.geometry = null;
                 this.hideGUI();
                 this.hide();
                 this.layer.div.querySelector('img.remove').click();
@@ -557,7 +560,7 @@ export class ThreeDTextLayer
         txtFolder.add(this.layer, 'text')
             .name('Text')
             .onChange((v) => {
-                this._create();
+                this._create(true);
             }).domElement.querySelector('div.name').remove();        
 
         
@@ -565,7 +568,7 @@ export class ThreeDTextLayer
         fontFolder.add(this.layer.options.geometry, 'font', this.c3d.textLayer.getFontList())
             .name('Font Family')
             .onChange((value) => {
-                this._create();
+                this._create(true);
             });
 
 
@@ -575,28 +578,19 @@ export class ThreeDTextLayer
 
         const geoFolder = gui.addFolder('Geometry');
 
-        geoFolder.add(this.layer.options.geometry, 'size')
-            .name('Size')
-            .min(100)
-            .max(1000)
-            .step(30)
-            .onChange((value) => {
-                this._create();
-            });
-
         geoFolder.add(this.layer.options.geometry, 'curveSegments')
             .name('Curve Segments')
             .min(1)
             .max(64)
             .step(1)
             .onChange((value) => {
-                this._create();
+                this._create(true);
             });
 
         geoFolder.add(this.layer.options.geometry, 'bevelEnabled')
             .name('Enable Bevel')
             .onChange((value) => {
-                this._create();
+                this._create(true);
             });
 
         geoFolder.add(this.layer.options.geometry, 'bevelThickness')
@@ -605,7 +599,7 @@ export class ThreeDTextLayer
             .max(500)
             .step(0.01)
             .onChange((value) => {
-                this._create();
+                this._create(true);
             });
 
         geoFolder.add(this.layer.options.geometry, 'bevelSize')
@@ -614,7 +608,7 @@ export class ThreeDTextLayer
             .max(50)
             .step(0.01)
             .onChange((value) => {
-                this._create();
+                this._create(true);
             });
 
         geoFolder.add(this.layer.options.geometry, 'bevelSegments')
@@ -623,11 +617,14 @@ export class ThreeDTextLayer
             .max(64)
             .step(1)
             .onChange((value) => {
-                this._create();
+                this._create(true);
             });
 
         gui.add(guiSettings, 'renderToCanvas').name('Render to Canvas');
         gui.add(guiSettings, 'cancel').name('Cancel').domElement.classList.add('btn-cancel');
+
+        window.addEventListener(isMobile() ? 'touchend' : 'mouseup', this.__mouseUp);
+        if(!isMobile()) window.addEventListener('wheel', this.__mouseUp);
     }
 
     hideGUI()
@@ -636,6 +633,7 @@ export class ThreeDTextLayer
         {
             this.mesh.clear();
             this.mesh.removeFromParent();
+            this.mesh = null;
         }
 
         this.materialBrowser.hide();
@@ -648,12 +646,45 @@ export class ThreeDTextLayer
         this.c3d.glbScene.visible = true;
         this.c3d.three.controls.orbit.enabled = true;
         this.c3d.three.render();
+
         window.removeEventListener(isMobile() ? 'touchend' : 'mouseup', this.__mouseUp);
         this.controls.removeEventListeners();
     }
 
-    _create()
-    {        
+    _create(reCreate = false)
+    {
+        if(this.__preMaterial == this.layer.options.material && this.mesh && !reCreate)
+        {
+            const mo = this.layer.options.materialOptions;
+            const mat = this.mesh.material;
+
+            if(this.layer.options.material == 'MeshMatcapMaterial')
+            {
+                this.textureLoader.load(C3D_SERVER + mo.matcap, (matcap) => {
+                    if(mo.color) mat.color = new THREE.Color(mo.color); 
+                    mat.matcap.dispose();
+                    mat.matcap = matcap;
+                    mat.needsUpdate = true;
+                    this.c3d.three.render();
+                });
+            }
+            else
+            {
+                const props = Object.keys(mo);
+                for (let i = 0; i < props.length; i++)
+                {
+                    const prop = props[i];
+                    let val = mo[prop];
+                    if(typeof val == 'string' && val.startsWith('#')) val = new THREE.Color(val);          
+                    mat[prop] = val;
+                }
+                mat.needsUpdate = true;
+                this.c3d.three.render();
+            }
+            return;
+        }
+
+
         const geoOptions = this.layer.options.geometry;
         const base64 = this.c3d.textLayer.getFontData(geoOptions.font).base64.split(',')[1];
         const uint8Array = Uint8Array.fromBase64(base64);
@@ -699,6 +730,7 @@ export class ThreeDTextLayer
         {
             this.mesh.clear();
             this.mesh.removeFromParent();
+            this.mesh = null;
         }
 
         const mat = new THREE[this.layer.options.material](matOptions);
@@ -736,8 +768,7 @@ export class ThreeDTextLayer
         this.c3d.three.scene.add(this.mesh);
         this.c3d.three.render();
 
-        window.addEventListener(isMobile() ? 'touchend' : 'mouseup', this.__mouseUp);
-        if(!isMobile()) window.addEventListener('wheel', this.__mouseUp);
+        this.__preMaterial = this.layer.options.material;
     }
 
     _mouseUp()

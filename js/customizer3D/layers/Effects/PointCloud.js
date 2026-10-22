@@ -36,7 +36,7 @@ export class PointCloud
         const h = canvas.height;
         const renderTargetOptions = 
         {
-            samples: 4,
+            // samples: 4,
             stencilBuffer: false,
             depthBuffer: false,
             colorSpace: THREE.SRGBColorSpace,

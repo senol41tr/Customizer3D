@@ -12,11 +12,11 @@ export const getPrintDims = (c3d, layer, DPI, isExport = false) =>
     if(c3d.props.data[layer.name] && c3d.props.data[layer.name].hasOwnProperty('printSize'))
     {
         originalSize = c3d.props.data[layer.name].printSize;
-        width = new Size({size: originalSize.width, DPI}).px;
-        height = new Size({size: originalSize.height, DPI}).px;
+        width = new Size({size: originalSize.width, DPI:600}).px;
+        height = new Size({size: originalSize.height, DPI:600}).px;
 
         if(!isExport)
-        {            
+        {               
             const newDims = calculateAspectRatioFit(width, height, window.screen.width, window.screen.height);
             const minMaxDPI = c3d.settings.getMinMaxDPI();
             const ratio = minMaxDPI.max / c3d.settings.getRenderDPI();
@@ -48,6 +48,7 @@ export const getPrintDims = (c3d, layer, DPI, isExport = false) =>
     {
         console.log("Print size is undefined! Layer: " + layer.name);
     }
+// console.log(width, height);
 
     return {width, height, originalSize};
 }
