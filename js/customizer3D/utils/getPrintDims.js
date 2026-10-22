@@ -1,5 +1,5 @@
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.6';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.6';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.7';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.7';
 
 export const MIN_TEXTURE_SIZE = 512;
 export const MAX_TEXTURE_SIZE = 2048;
@@ -59,7 +59,7 @@ export const getLimits = () =>
     const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
     if (!gl) alert('WebGL is not supported by the browser!');
 
-    const maxTextureSize = 13000;//gl.getParameter(gl.MAX_TEXTURE_SIZE) || MAX_TEXTURE_SIZE;
+    const maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE) || MAX_TEXTURE_SIZE;
     const maxPrintSize = MAX_PRINT_SIZE;
 
     return {display: maxTextureSize, print: maxPrintSize };

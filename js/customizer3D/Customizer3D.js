@@ -1,39 +1,39 @@
 import * as THREE from 'three';
 import gsap from 'base/gsap@3.13.0/gsap@3.13.0.esm.js';
-import {File} from 'customizer3D_dir/file/File.js?c3d=0.5.6';
-import {Three} from 'customizer3D_dir/three/Three.js?c3d=0.5.6';
-import {Render3D} from 'customizer3D_dir/three/Render3D.js?c3d=0.5.6';
-import {Render2D} from 'customizer3D_dir/render2d/Render2D.js?c3d=0.5.6';
-import {GLB} from 'customizer3D_dir/three/loaders/GLB.js?c3d=0.5.6';
-import {EventsManager} from 'customizer3D_dir/events/EventsManager.js?c3d=0.5.6';
-import {LocalStorage} from 'customizer3D_dir/cookie/LocalStorage.js?c3d=0.5.6';
-import {Preloader} from 'customizer3D_dir/preloader/Preloader.js?c3d=0.5.6';
-import {Settings} from 'customizer3D_dir/settings/Settings.js?c3d=0.5.6';
-import {Layers} from 'customizer3D_dir/layers/Layers.js?c3d=0.5.6';
-import {TextLayer} from 'customizer3D_dir/layers/TextLayer.js?c3d=0.5.6';
-import {ImageLayer} from 'customizer3D_dir/layers/ImageLayer.js?c3d=0.5.6';
-import {ShapeLayer} from 'customizer3D_dir/layers/ShapeLayer.js?c3d=0.5.6';
-import {ThreeDTextLayer} from 'customizer3D_dir/layers/ThreeDTextLayer.js?c3d=0.5.6';
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.6';
-import {ContextMenu} from 'customizer3D_dir/contextMenu/ContextMenu.js?c3d=0.5.6';
-import {Help} from 'customizer3D_dir/help/Help.js?c3d=0.5.6';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.6';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.6';
-import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.6';
-import {ZIndex} from 'customizer3D_dir/utils/ZIndex.js?c3d=0.5.6';
-import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.5.6';
-import {WebXR} from 'customizer3D_dir/three/WebXR.js?c3d=0.5.6';
-import {ShowHideUI} from 'customizer3D_dir/utils/ShowHideUI.js?c3d=0.5.6';
-import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=0.5.6';
-import {ColorEngine} from 'customizer3D_dir/ColorEngine/ColorEngine.js?c3d=0.5.6';
-import {Sortable} from 'customizer3D_dir/sortable/Sortable.js?c3d=0.5.6';
+import {File} from 'customizer3D_dir/file/File.js?c3d=0.5.7';
+import {Three} from 'customizer3D_dir/three/Three.js?c3d=0.5.7';
+import {Render3D} from 'customizer3D_dir/three/Render3D.js?c3d=0.5.7';
+import {Render2D} from 'customizer3D_dir/render2d/Render2D.js?c3d=0.5.7';
+import {GLB} from 'customizer3D_dir/three/loaders/GLB.js?c3d=0.5.7';
+import {EventsManager} from 'customizer3D_dir/events/EventsManager.js?c3d=0.5.7';
+import {LocalStorage} from 'customizer3D_dir/cookie/LocalStorage.js?c3d=0.5.7';
+import {Preloader} from 'customizer3D_dir/preloader/Preloader.js?c3d=0.5.7';
+import {Settings} from 'customizer3D_dir/settings/Settings.js?c3d=0.5.7';
+import {Layers} from 'customizer3D_dir/layers/Layers.js?c3d=0.5.7';
+import {TextLayer} from 'customizer3D_dir/layers/TextLayer.js?c3d=0.5.7';
+import {ImageLayer} from 'customizer3D_dir/layers/ImageLayer.js?c3d=0.5.7';
+import {ShapeLayer} from 'customizer3D_dir/layers/ShapeLayer.js?c3d=0.5.7';
+import {ThreeDTextLayer} from 'customizer3D_dir/layers/ThreeDTextLayer.js?c3d=0.5.7';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.7';
+import {ContextMenu} from 'customizer3D_dir/contextMenu/ContextMenu.js?c3d=0.5.7';
+import {Help} from 'customizer3D_dir/help/Help.js?c3d=0.5.7';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.7';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.7';
+import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.7';
+import {ZIndex} from 'customizer3D_dir/utils/ZIndex.js?c3d=0.5.7';
+import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.5.7';
+import {WebXR} from 'customizer3D_dir/three/WebXR.js?c3d=0.5.7';
+import {ShowHideUI} from 'customizer3D_dir/utils/ShowHideUI.js?c3d=0.5.7';
+import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=0.5.7';
+import {ColorEngine} from 'customizer3D_dir/ColorEngine/ColorEngine.js?c3d=0.5.7';
+import {Sortable} from 'customizer3D_dir/sortable/Sortable.js?c3d=0.5.7';
 
 export class Customizer3D
 {
     constructor(glbPath, jsPath)
     {
         this.PIXEL_RATIO = 2;
-        this.CURRENT_VERSION = '0.5.6';
+        this.CURRENT_VERSION = '0.5.7';
 
         if(glbPath && jsPath) this.initialize(glbPath, jsPath);
     }
@@ -87,7 +87,7 @@ export class Customizer3D
                 secureDiv.remove();
             });
             secureDiv.innerHTML = this.lang['secure-text'];
-            secureDiv.innerHTML += '<img src="' + C3D_SERVER + 'svg/plus.svg?c3d=0.5.6" alt="Icon" class="close">';
+            secureDiv.innerHTML += '<img src="' + C3D_SERVER + 'svg/plus.svg?c3d=0.5.7" alt="Icon" class="close">';
             document.querySelector(this.props.container).appendChild(secureDiv);
         }
 
@@ -129,9 +129,9 @@ export class Customizer3D
 
         layersDiv.innerHTML = `
         <div class="title">
-            <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.6" alt="Icon" class="icon" draggable="false">
+            <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.7" alt="Icon" class="icon" draggable="false">
             <div class="title">
-                <img src="${C3D_SERVER}svg/layers.svg?c3d=0.5.6" alt="Icon" class="icon" draggable="false">
+                <img src="${C3D_SERVER}svg/layers.svg?c3d=0.5.7" alt="Icon" class="icon" draggable="false">
                 <p class="title">${this.lang['layers']}</p>
             </div>
         </div>
@@ -172,12 +172,12 @@ export class Customizer3D
         const controlsDiv = document.querySelector(this.props.controls);
         const deviceIcon = isMobile() ? 'tap' : 'mouse';
         controlsDiv.innerHTML = `
-            <img src="${C3D_SERVER}svg/zoom-out.svg?c3d=0.5.6" class="zoomOut" draggable="false">
+            <img src="${C3D_SERVER}svg/zoom-out.svg?c3d=0.5.7" class="zoomOut" draggable="false">
             <div class="inputDiv">
                 <input type="checkbox" class="checkbox" checked>
-                <img src="${C3D_SERVER}svg/${deviceIcon}.svg?c3d=0.5.6" class="deviceIcon" draggable="false">
+                <img src="${C3D_SERVER}svg/${deviceIcon}.svg?c3d=0.5.7" class="deviceIcon" draggable="false">
             </div>
-            <img src="${C3D_SERVER}svg/zoom-in.svg?c3d=0.5.6" class="zoomIn" data-factor="0.01" draggable="false">
+            <img src="${C3D_SERVER}svg/zoom-in.svg?c3d=0.5.7" class="zoomIn" data-factor="0.01" draggable="false">
         `;
 
         const dragableControls = new Dragable({
@@ -217,7 +217,7 @@ export class Customizer3D
         const webXRDiv = document.createElement('div');
         webXRDiv.className = 'webXR';
         webXRDiv.innerHTML = `
-            <img src="${C3D_SERVER}svg/xr.svg?c3d=0.5.6" class="button" alt="XR Button" draggable="false">
+            <img src="${C3D_SERVER}svg/xr.svg?c3d=0.5.7" class="button" alt="XR Button" draggable="false">
         `;
         document.querySelector(this.props.container).appendChild(webXRDiv);
 
@@ -380,7 +380,7 @@ export class Customizer3D
             layer.dataset.mesh = meshName;
             layer.innerHTML = `
                 <div class="title">
-                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.6" alt="Icon" class="icon" draggable="false">
+                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.7" alt="Icon" class="icon" draggable="false">
                     <p class="name">${label}</p>
                 </div>
                 <div class="content">
@@ -569,7 +569,7 @@ export class Customizer3D
                     layer.dataset.mesh = mesh.name;
                     layer.innerHTML = `
                         <div class="title">
-                            <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.6" alt="Icon" class="icon" draggable="false">
+                            <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.7" alt="Icon" class="icon" draggable="false">
                             <p class="name" title="${label}">${label}</p>
                         </div>
                         <div class="content">
@@ -791,7 +791,7 @@ export class Customizer3D
                 div.setAttribute('class', 'button');
                 div.setAttribute('title', this.lang['add-solid-layer']);
 
-                img.src = C3D_SERVER + 'svg/solid.svg?c3d=0.5.6';
+                img.src = C3D_SERVER + 'svg/solid.svg?c3d=0.5.7';
                 img.alt = 'Icon';
                 img.dataset.type = 'Solid';
                 img.draggable = false;
@@ -816,7 +816,7 @@ export class Customizer3D
                 div.setAttribute('class', 'button');
                 div.setAttribute('title', this.lang['add-text-layer']);
 
-                img.src = C3D_SERVER + 'svg/text.svg?c3d=0.5.6';
+                img.src = C3D_SERVER + 'svg/text.svg?c3d=0.5.7';
                 img.alt = 'Icon';
                 img.dataset.type = 'Text';
                 img.draggable = false;
@@ -841,7 +841,7 @@ export class Customizer3D
                 div.setAttribute('class', 'button');
                 div.setAttribute('title', this.lang['add-image-layer']);
 
-                img.src = C3D_SERVER + 'svg/image.svg?c3d=0.5.6';
+                img.src = C3D_SERVER + 'svg/image.svg?c3d=0.5.7';
                 img.alt = 'Icon';
                 img.dataset.type = 'Image';
                 img.draggable = false;
@@ -867,7 +867,7 @@ export class Customizer3D
                 div.setAttribute('class', 'button');
                 div.setAttribute('title', this.lang['add-shape-layer']);
 
-                img.src = C3D_SERVER + 'svg/shapes.svg?c3d=0.5.6';
+                img.src = C3D_SERVER + 'svg/shapes.svg?c3d=0.5.7';
                 img.alt = 'Icon';
                 img.dataset.type = 'Image';
                 img.draggable = false;
@@ -892,7 +892,7 @@ export class Customizer3D
                 div.setAttribute('class', 'button');
                 div.setAttribute('title', this.lang['add-3d-text-layer']);
 
-                img.src = C3D_SERVER + 'svg/3d-text.svg?c3d=0.5.6';
+                img.src = C3D_SERVER + 'svg/3d-text.svg?c3d=0.5.7';
                 img.alt = 'Icon';
                 img.dataset.type = 'Image';
                 img.draggable = false;
@@ -910,11 +910,11 @@ export class Customizer3D
             else
             {
                 materialButtons.innerHTML += `
-                <div class="button solid" title="${this.lang['add-solid-layer']}"><img src="${C3D_SERVER}svg/solid.svg?c3d=0.5.6" alt="Icon" data-type="Solid" draggable="false"></div>
-                <div class="button text" title="${this.lang['add-text-layer']}"><img src="${C3D_SERVER}svg/text.svg?c3d=0.5.6" alt="Icon" data-type="Text" draggable="false"></div>
-                <div class="button image" title="${this.lang['add-image-layer']}"><img src="${C3D_SERVER}svg/image.svg?c3d=0.5.6" alt="Icon" data-type="Image" draggable="false"></div>
-                <div class="button shape" title="${this.lang['add-shape-layer']}"><img src="${C3D_SERVER}svg/shapes.svg?c3d=0.5.6" alt="Icon" data-type="Shape" draggable="false"></div>
-                <div class="button threeDText" title="${this.lang['add-3d-text-layer']}"><img src="${C3D_SERVER}svg/3d-text.svg?c3d=0.5.6" alt="Icon" data-type="threeDText" draggable="false"></div>`;
+                <div class="button solid" title="${this.lang['add-solid-layer']}"><img src="${C3D_SERVER}svg/solid.svg?c3d=0.5.7" alt="Icon" data-type="Solid" draggable="false"></div>
+                <div class="button text" title="${this.lang['add-text-layer']}"><img src="${C3D_SERVER}svg/text.svg?c3d=0.5.7" alt="Icon" data-type="Text" draggable="false"></div>
+                <div class="button image" title="${this.lang['add-image-layer']}"><img src="${C3D_SERVER}svg/image.svg?c3d=0.5.7" alt="Icon" data-type="Image" draggable="false"></div>
+                <div class="button shape" title="${this.lang['add-shape-layer']}"><img src="${C3D_SERVER}svg/shapes.svg?c3d=0.5.7" alt="Icon" data-type="Shape" draggable="false"></div>
+                <div class="button threeDText" title="${this.lang['add-3d-text-layer']}"><img src="${C3D_SERVER}svg/3d-text.svg?c3d=0.5.7" alt="Icon" data-type="threeDText" draggable="false"></div>`;
 
                 materialButtons.querySelector('div.solid').addEventListener('click', async () =>
                 {

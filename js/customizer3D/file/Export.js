@@ -1,8 +1,8 @@
 import jsPDF from 'base/jspdf@4.0.0/jspdf.es.min.js';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.6';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.7';
 import {drawLayerToCTX} from 'customizer3D_dir/layers/utils/drawLayerToCTX.js';
-import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.6';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.6';
+import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.7';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.7';
 
 export class Export
 {

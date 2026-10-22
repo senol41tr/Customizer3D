@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import {OrbitControls} from "three_dir/controls/OrbitControls.js?c3d=0.5.6";
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.6';
-import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.6';
+import {OrbitControls} from "three_dir/controls/OrbitControls.js?c3d=0.5.7";
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.7';
+import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.7';
 import gsap from 'base/gsap@3.13.0/gsap@3.13.0.esm.js';
 
 export class Controls

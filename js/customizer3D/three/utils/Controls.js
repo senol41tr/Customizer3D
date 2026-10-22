@@ -1,4 +1,4 @@
-import { isMobile } from 'customizer3D_dir/utils/isMobile.js??c3d=0.5.6';
+import { isMobile } from 'customizer3D_dir/utils/isMobile.js??c3d=0.5.7';
 
 export class Controls {
     constructor(mesh, domElement) {

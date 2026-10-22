@@ -1,7 +1,7 @@
-import {New} from 'customizer3D_dir/file/New.js?c3d=0.5.6';
-import {Open} from 'customizer3D_dir/file/Open.js?c3d=0.5.6';
-import {SaveAs} from 'customizer3D_dir/file/SaveAs.js?c3d=0.5.6';
-import {Export} from 'customizer3D_dir/file/Export.js?c3d=0.5.6';
+import {New} from 'customizer3D_dir/file/New.js?c3d=0.5.7';
+import {Open} from 'customizer3D_dir/file/Open.js?c3d=0.5.7';
+import {SaveAs} from 'customizer3D_dir/file/SaveAs.js?c3d=0.5.7';
+import {Export} from 'customizer3D_dir/file/Export.js?c3d=0.5.7';
 
 export class File
 {

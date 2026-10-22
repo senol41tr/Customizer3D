@@ -1,5 +1,5 @@
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.6';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.6';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.7';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.7';
 
 export const drawLayerToCTX = (c3d, canvas, layer, isExport) =>
 {  

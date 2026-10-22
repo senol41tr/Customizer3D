@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { ARButton } from './webxr/ARButton.js?c3d=107';
 import {Three} from 'customizer3D_dir/three/Three.js?c3d=107';
-import {Lights} from 'customizer3D_dir/three/Lights.js?c3d=0.5.6';
+import {Lights} from 'customizer3D_dir/three/Lights.js?c3d=0.5.7';
 
 export class WebXR
 {

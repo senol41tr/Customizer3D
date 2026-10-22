@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 import {GUI} from 'three_dir/libs/lil-gui.module.min.js';
-import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.6';
-import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.6';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.6';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.6';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.6';
-import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=0.5.6';
+import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.7';
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.7';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.7';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.7';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.7';
+import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=0.5.7';
 
 export class PointCloud
 {

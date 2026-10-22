@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.6';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.7';
 
 export function lang()
 {
@@ -61,9 +61,9 @@ export function parameters(self)
                 // printSize: {width: '10cm', height: '10cm'},
                 materials:
                 [
-                    {url:root + 'matcap-1764731458681.jpg?c3d=0.5.6', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764731647559.jpg?c3d=0.5.6', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764787557882.jpg?c3d=0.5.6', material:'MeshMatcapMaterial'}
+                    {url:root + 'matcap-1764731458681.jpg?c3d=0.5.7', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764731647559.jpg?c3d=0.5.7', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764787557882.jpg?c3d=0.5.7', material:'MeshMatcapMaterial'}
                 ]
             },
             heart:
@@ -72,10 +72,10 @@ export function parameters(self)
                 // printSize: {width: '10cm', height: '10cm'},
                 materials:
                 [
-                    {url:root + 'matcap-1764731458681.jpg?c3d=0.5.6', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764731647559.jpg?c3d=0.5.6', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764787557882.jpg?c3d=0.5.6', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764731550075.jpg?c3d=0.5.6', material:'MeshMatcapMaterial'}
+                    {url:root + 'matcap-1764731458681.jpg?c3d=0.5.7', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764731647559.jpg?c3d=0.5.7', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764787557882.jpg?c3d=0.5.7', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764731550075.jpg?c3d=0.5.7', material:'MeshMatcapMaterial'}
                 ]
             }
         }

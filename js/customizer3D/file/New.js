@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.6';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.6';
-import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.6';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.7';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.7';
+import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.7';
 
 export class New
 {
