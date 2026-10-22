@@ -3,6 +3,7 @@ import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.6';
 import {drawLayerToCTX} from 'customizer3D_dir/layers/utils/drawLayerToCTX.js';
 import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.6';
 import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.6';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.6';
 
 export class Export
 {
@@ -123,8 +124,6 @@ export class Export
 
         }
 
-        // this.c3d.preloader.set(this.c3d.lang['being-exported'] + '<br>' + layersData[i][1].label + '...');
-
         // get size
         const printSize = layersData[i][1].printSize;
         if(printSize)
@@ -166,7 +165,7 @@ export class Export
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
 
-        const drawedCanvas = await this._getCanvas(canvas, meshName, this.c3d.lang['creating-pdf']);
+        const drawedCanvas = await this._getCanvas(canvas, meshName, this.c3d.lang['creating-pdf'], (i + 1) + ' - ' + layersData.length);
         pdf.addImage(drawedCanvas, 'PNG', 0, 0, printWidth, printHeight, null, 'FAST', 0);
 
         // ADD TITLE
@@ -194,6 +193,7 @@ export class Export
 
       setTimeout(() => this.c3d.preloader.hide(), 1000);
       this.c3d.showHideUI.enableContainer();
+      this.c3d.render3d.renderAll();
 
     }
 
@@ -231,7 +231,7 @@ export class Export
 
         setTimeout(async() =>
         {
-          const drawedCanvas = await this._getCanvas(canvas, meshName, this.c3d.lang['creating-png']);
+          const drawedCanvas = await this._getCanvas(canvas, meshName, this.c3d.lang['creating-png'], (i + 1) + ' - ' + layersData.length);
           const blob = await new Promise(resolve => drawedCanvas.toBlob(resolve, 'image/png', 1.0));
           const a = document.createElement('a');
           const blobUrl = URL.createObjectURL(blob);
@@ -244,6 +244,7 @@ export class Export
             setTimeout(() => this.c3d.preloader.hide(), 1000);
             this.c3d.showHideUI.enableContainer();
             URL.revokeObjectURL(blobUrl);
+            this.c3d.render3d.renderAll();
           }, 250);
         }, 250);
       }
@@ -252,7 +253,7 @@ export class Export
 
 
 
-    async _getCanvas(canvas, meshName, str)
+    async _getCanvas(canvas, meshName, str, count)
     {
       const yieldToMainThread = () => new Promise(resolve => setTimeout(resolve, 0));
       const layersDiv = document.querySelector(this.c3d.props.layers);
@@ -277,14 +278,13 @@ export class Export
         
         this.c3d.preloader.set(
           '<span style="font-size:1.5rem;">' + str + '</span><br>' + 
-          'Drawing Layers to Canvas....<br>' + 
-          meshName + 
-          '   ' + 
-          Math.floor((layers.length - j) / layers.length * 100) + '%'
+          'Drawing Layers to Canvas...<br>' + 
+          'Page: ' + count + ' ( ' + meshName + ' ) ' + 
+          Math.floor((layers.length - j) / layers.length * 100) + '% ...'
         );
           
         // draw image to canvas
-        drawLayerToCTX(this.c3d, canvas, layer);
+        drawLayerToCTX(this.c3d, canvas, layer, true);
 
       }
 

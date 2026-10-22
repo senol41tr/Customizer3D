@@ -18,6 +18,12 @@ export class Settings
         return parseInt(range.value);
     }
 
+    getMinMaxDPI()
+    {
+        const range = this.htmlEl.querySelector('div.content > div.renderDPI input[type="range"]');
+        return {min: range.min, max: range.max};
+    }
+
     async _init()
     {
         const availableLangs = Object.entries(JSON.parse(await (await fetch(C3D_SERVER + 'lang/langs.json?c3d=0.5.6')).text()));

@@ -35,6 +35,7 @@ export class ThreeDText
         this.__matcap = null;
 
         this._insertHTML();
+
     }
 
     // GETTERS
@@ -156,11 +157,14 @@ export class ThreeDText
             this.root.__C3D_Sortable.addElement(div.querySelector('canvas.thumbnail'));
         }
 
+        this.effectsCanvas.width = printDims.width;
+        this.effectsCanvas.height = printDims.height;
+
     }
 
-    updateCanvas()
+    updateCanvas(isExport)
     {
-        const printDims = getPrintDims(this.c3d, {name: this.name}, this.c3d.settings.getRenderDPI());
+        const printDims = getPrintDims(this.c3d, {name: this.name}, this.c3d.settings.getRenderDPI(), isExport);
         const ctx = this.canvas.getContext('2d', {willReadFrequently: true});
         const fx = Object.keys(this.effects).length > 0;
         
@@ -168,7 +172,6 @@ export class ThreeDText
         this.canvas.height = printDims.height;
 
         ctx.save();
-        ctx.imageSmoothingEnabled = false;
         ctx.drawImage(fx ? this.effectsCanvas : this.image, 0, 0);
         ctx.restore();
     }

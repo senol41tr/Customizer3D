@@ -369,7 +369,6 @@ export class ThreeDTextLayer
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.save();
         ctx.globalAlpha = layer.opacity / 100;
-        ctx.imageSmoothingEnabled = false;
         ctx.translate(canvas.width / 2 + x, canvas.height / 2 + y);
         ctx.rotate(degToRad(layer.rotation));
         ctx.scale(layer.zoom / 100, layer.zoom / 100);
@@ -410,19 +409,19 @@ export class ThreeDTextLayer
 
     }
 
-    bakeImageToLayer()
+    bakeImageToLayer(isExport)
     {
         if(!this.layer) return;
 
         this.c3d.glbScene.visible = false;
-        
+
         const c3d = this.c3d;
         const canvas = this.layer.image;
-        const printDims = getPrintDims(this.c3d, {name: this.layer.name}, this.c3d.settings.getRenderDPI());
+        const printDims = getPrintDims(this.c3d, {name: this.layer.name}, this.c3d.settings.getRenderDPI(), isExport);
         const ctx = canvas.getContext('2d');
         const w = canvas.width = Math.round(printDims.width);
         const h = canvas.height = Math.round(printDims.height);
-
+        
         const renderTargetOptions = 
         {
             // samples: 4,
@@ -462,11 +461,10 @@ export class ThreeDTextLayer
 
         ctx.putImageData(imageData, 0, 0);
 
-        // this.layer.updateCanvas();
         this.hideGUI();
         this.hide();
-        applyEffects(this.c3d, this.layer, 'threeDTextLayer');
-        applyFilters(this.c3d, this.layer, 'threeDTextLayer');
+        applyEffects(this.c3d, this.layer, 'threeDTextLayer', isExport);
+        applyFilters(this.c3d, this.layer, 'threeDTextLayer', isExport);
         this.layer.__baked = true;
 
     }

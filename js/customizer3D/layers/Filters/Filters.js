@@ -1,30 +1,15 @@
-export const applyFilters = (c3d, layer, layerName) =>
+export const applyFilters = (c3d, layer, layerName, isExport) =>
 {
-    let source;
-
     if(!layer.canvas) return;
     const filtersCount = Object.keys(layer.filters).length;
-    const effectsCount = layer.effects ? Object.keys(layer.effects).length : 0;
+    if(filtersCount == 0) return;
 
-    if(filtersCount > 0 && !layer.effects) source = layer.canvas;
-    else if(filtersCount > 0 && effectsCount == 0) source = layer.image;
-    else if(effectsCount > 0) source = layer.effectsCanvas;
-    else source = layer.image;
-
-    if(!source) return;
+    layer.canvas.width = layer.image.width;
+    layer.canvas.height = layer.image.height;
 
     const ctx = layer.canvas.getContext('2d', {willReadFrequently: true});
+    layer.updateCanvas(isExport);
 
-    if(layer.type == 'image')
-    {
-        ctx.clearRect(0, 0, layer.canvas.width, layer.canvas.height);
-        ctx.drawImage(source, 0, 0, layer.canvas.width, layer.canvas.height);
-    }
-    else if(layer.type == 'text' || layer.type == 'shape' || layer.type == 'threeDText')
-    {
-        layer.updateCanvas();
-    }
-    
     const filters = Object.entries(layer.filters);
 
     if(filters.length > 0)

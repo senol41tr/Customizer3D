@@ -8,15 +8,19 @@ const EffectsList =
     colorAnalyzer: new ColorAnalyzer()
 };
 
-export const applyEffects = (c3d, layer, layerName) =>
+export const applyEffects = (c3d, layer, layerName, isExport) =>
 {
     if(!layer.effectsCanvas) return;
     const effectsCount = Object.keys(layer.effects).length;
     if(effectsCount == 0) return;
 
+    layer.effectsCanvas.width = layer.canvas.width;
+    layer.effectsCanvas.height = layer.canvas.height;
+
     const ctx = layer.effectsCanvas.getContext('2d', {willReadFrequently: true});
     ctx.clearRect(0, 0, layer.effectsCanvas.width, layer.effectsCanvas.height);
     ctx.drawImage(layer.image, 0, 0, layer.effectsCanvas.width, layer.effectsCanvas.height);
+
 
     const effects = Object.entries(layer.effects);
 

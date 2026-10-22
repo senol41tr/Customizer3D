@@ -29,13 +29,11 @@ export class PointCloud
     bakeImageToLayer()
     {
         const c3d = this.c3d;
-        const canvas = document.createElement('canvas');
-        canvas.width = this.drawCanvas.width;
-        canvas.height = this.drawCanvas.height;
+        const canvas = this.layer.effectsCanvas;
         
         const ctx = canvas.getContext('2d');
-        const w = Math.round(canvas.width);
-        const h = Math.round(canvas.height);
+        const w = canvas.width;
+        const h = canvas.height;
         const renderTargetOptions = 
         {
             samples: 4,
@@ -51,6 +49,7 @@ export class PointCloud
         c3d.three.renderer.setRenderTarget(target);
         c3d.three.renderer.setPixelRatio(1);
         c3d.three._onResize(null, w, h);
+        
         c3d.three.render();
 
         const pixels = new Uint8Array(w * h * 4);
@@ -73,7 +72,6 @@ export class PointCloud
 
         ctx.putImageData(imageData, 0, 0);
         
-        this.layer.effectsCanvas = canvas;
         applyFilters(this.c3d, this.layer, this.layerName);
         this.hide();        
     }

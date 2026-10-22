@@ -411,7 +411,6 @@ export class ImageLayer
         ctx.save();
         ctx.globalCompositeOperation = layer.blendMode;
         ctx.globalAlpha = layer.opacity / 100;
-        ctx.imageSmoothingEnabled = false;
         ctx.translate(canvas.width / 2 + x, canvas.height / 2 + y);
         ctx.rotate(degToRad(layer.rotation));
         ctx.scale(layer.zoom / 100, layer.zoom / 100);

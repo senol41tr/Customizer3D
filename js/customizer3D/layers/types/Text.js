@@ -41,9 +41,10 @@ export class Text
     // PUBLIC METHODS
 
 
-    updateCanvas()
+    updateCanvas(isExport)
     {
-        const printDims = getPrintDims(this.c3d, {name: this.name}, this.c3d.settings.getRenderDPI());
+        const printDims = getPrintDims(this.c3d, {name: this.name}, this.c3d.settings.getRenderDPI(), isExport);
+        
         this.canvas.width = printDims.width;
         this.canvas.height = printDims.height;
         

@@ -31,7 +31,6 @@ export class ColorAnalyzer
 
     bakeImageToLayer()
     {
-        this.layer.effectsCanvas = this.drawCanvas;
         applyFilters(this.c3d, this.layer, this.layerName);
         this.hide();
     }
@@ -93,9 +92,7 @@ export class ColorAnalyzer
         
         this.layer.effects[this.name] = this.options;
 
-        this.drawCanvas = document.createElement('canvas');
-        this.drawCanvas.width = this.layer.canvas.width;
-        this.drawCanvas.height = this.layer.canvas.height;
+        this.drawCanvas = this.layer.effectsCanvas;
         this.drawCtx = this.drawCanvas.getContext('2d', {willReadFrequently: true});
 
         this.imgCanvas = document.createElement('canvas');
