@@ -4,7 +4,7 @@ import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.7';
 export function lang()
 {
     return {
-        'design-layer':  {en: 'Design Layer',    de: 'Design Ebene',     tr: 'Tasarım Katmanı'}
+        'artboard':  {en: 'Artboard',    de: 'Zeichenfläche',     tr: 'Tasarım Alanı'}
     };
 }
 
@@ -62,7 +62,7 @@ export function parameters(self)
         {
             area:
             {
-                label: self.lang['design-layer'],
+                label: self.lang['artboard'],
                 printSize: {width: null, height: null}
             }
         }
