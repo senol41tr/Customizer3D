@@ -1,7 +1,7 @@
 import * as fflate from 'base/fflate@0.8.2/fflate.esm.js';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.7';
-import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.5.7';
-import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=0.5.7';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.8';
+import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.5.8';
+import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=0.5.8';
 
 export class Open
 {
@@ -84,50 +84,62 @@ export class Open
             this.c3d.preloader.hide();
             return;
         }
-        
-        // destroy ui
-        this._destroyUI();
-        
-        // import model methods and options
-        const {lang, parameters, init, setView, onUnLoad} = await import(C3D_MODELS_DIR + data.modelName + '/' + data.modelName +'.js');
 
-        // renew translation table
-        this.c3d.lang = await new Lang(this).loadTranslationTable();
+        // LOAD C2D
 
-        // extend language
-        Lang.extend(this.c3d, lang(), true);
-        
-        // replace class vars and functions        
-        this.c3d.props = parameters(this.c3d);
-        this.c3d.modelInit = init;
-        this.c3d.setView = setView;
-        this.c3d.onUnLoad = onUnLoad;
-
-        this.c3d.three.setupLights();
-
-        // load GLB        
-        await this.c3d._loadGLB(C3D_MODELS_DIR + data.modelName + '/' + data.modelName +'.glb');
-
-        // create layers data
-        await this.c3d._createLayerData();
-
-        // add custom Font(s)
-        for (let i = 0; i < data.customFonts.length; i++)
+        if(data.modelName == 'C2D')
         {
-            const base64 = fflate.strFromU8(unzipped[data.customFonts[i].ttf]);
+            const w = parseFloat(data.printSize.width);
+            const h = parseFloat(data.printSize.height);
+            const u = data.printSize.unit;
+            await this.c3d.file._New._createNewFile(w, h, u);
+        }
+        else
+        {
+            // destroy ui
+            this._destroyUI();
             
-            if(!base64)
-            {
-                console.warn("Font data not found!\nFont name:" + data.customFonts[i].name);
-                continue;
-            }
+            // import model methods and options
+            const {lang, parameters, init, setView, onUnLoad} = await import(C3D_MODELS_DIR + data.modelName + '/' + data.modelName +'.js');
 
-            await this.c3d.textLayer.addBase64Font
-            ({
-                name: data.customFonts[i].name,
-                postscript_name: data.customFonts[i].postscript_name,
-                base64
-            });
+            // renew translation table
+            this.c3d.lang = await new Lang(this).loadTranslationTable();
+
+            // extend language
+            Lang.extend(this.c3d, lang(), true);
+            
+            // replace class vars and functions        
+            this.c3d.props = parameters(this.c3d);
+            this.c3d.modelInit = init;
+            this.c3d.setView = setView;
+            this.c3d.onUnLoad = onUnLoad;
+
+            this.c3d.three.setupLights();
+
+            // load GLB        
+            await this.c3d._loadGLB(C3D_MODELS_DIR + data.modelName + '/' + data.modelName +'.glb');
+
+            // create layers data
+            await this.c3d._createLayerData();
+
+            // add custom Font(s)
+            for (let i = 0; i < data.customFonts.length; i++)
+            {
+                const base64 = fflate.strFromU8(unzipped[data.customFonts[i].ttf]);
+                
+                if(!base64)
+                {
+                    console.warn("Font data not found!\nFont name:" + data.customFonts[i].name);
+                    continue;
+                }
+
+                await this.c3d.textLayer.addBase64Font
+                ({
+                    name: data.customFonts[i].name,
+                    postscript_name: data.customFonts[i].postscript_name,
+                    base64
+                });
+            }
         }
 
         // add layer(s)
@@ -285,7 +297,7 @@ export class Open
 
         }
 
-        this._reRender();
+        if(data.modelName != 'C2D') this._reRender();
 
     }
 

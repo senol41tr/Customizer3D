@@ -1,8 +1,8 @@
-import {BlendModes, createBlendModesList} from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=0.5.7';
-import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=0.5.7';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.7';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.7';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.7';
+import {BlendModes, createBlendModesList} from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=0.5.8';
+import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=0.5.8';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.8';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.8';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.8';
 
 export class Shape
 {
@@ -72,9 +72,9 @@ export class Shape
         div.querySelector('img.remove').click();
     }
 
-    draw()
+    draw(isExport)
     {
-        const printDims = getPrintDims(this.c3d, {name: this.name}, this.c3d.settings.getRenderDPI());
+        const printDims = getPrintDims(this.c3d, {name: this.name}, this.c3d.settings.getRenderDPI(), isExport);
         this.canvas.width = printDims.width;
         this.canvas.height = printDims.height;
 
@@ -114,9 +114,9 @@ export class Shape
 
     }
 
-    updateCanvas()
+    updateCanvas(isExport)
     {
-        this.draw();
+        this.draw(isExport);
     }
     
     // PRIVATE METHODS
@@ -130,12 +130,12 @@ export class Shape
         this.div = div;
 
         div.innerHTML = `
-            <img class="visibility" src="${C3D_SERVER}svg/visibility.svg?c3d=0.5.7" alt="Icon" style="opacity:1;width: 12px;">
+            <img class="visibility" src="${C3D_SERVER}svg/visibility.svg?c3d=0.5.8" alt="Icon" style="opacity:1;width: 12px;">
             <canvas class="thumbnail" oncontextmenu="return false;"></canvas>
             <div style="width:100%;"></div>
-            <img src="${C3D_SERVER}svg/opacity.svg?c3d=0.5.7" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
-            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=0.5.7" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
-            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=0.5.7" title="${this.c3d.lang['delete-layer']}" class="remove">
+            <img src="${C3D_SERVER}svg/opacity.svg?c3d=0.5.8" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
+            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=0.5.8" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=0.5.8" title="${this.c3d.lang['delete-layer']}" class="remove">
         `;
 
         // VISIBILITY

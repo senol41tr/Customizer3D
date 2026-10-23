@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import {GUI} from 'three_dir/libs/lil-gui.module.min.js';
-import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.7';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.7';
-import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.7';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.7';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.7';
+import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.8';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.8';
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.8';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.8';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.8';
 
 export class ColorAnalyzer
 {
@@ -85,7 +85,7 @@ export class ColorAnalyzer
             bgOpacity: 0.15,
             bgColor: '#000000',
             transparentBG: false,
-            labelOpacity: 0.6
+            labelOpacity: 1.0
         };
 
         mergeRecursive(this.options, this.layer.effects[this.name]);

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.7';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.8';
 import {drawLayerToCTX} from 'customizer3D_dir/layers//utils/drawLayerToCTX.js';
 
 export class Render3D

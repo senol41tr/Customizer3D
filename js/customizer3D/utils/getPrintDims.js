@@ -1,5 +1,5 @@
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.7';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.7';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.8';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.8';
 
 export const MIN_TEXTURE_SIZE = 512;
 export const MAX_TEXTURE_SIZE = 2048;

@@ -4,8 +4,11 @@ export const applyFilters = (c3d, layer, layerName, isExport) =>
     // const filtersCount = Object.keys(layer.filters).length;
     // if(filtersCount == 0) return;
 
-    layer.canvas.width = layer.image.width;
-    layer.canvas.height = layer.image.height;
+    if(layer.image)
+    {
+        layer.canvas.width = layer.image.width;
+        layer.canvas.height = layer.image.height;
+    }
 
     const ctx = layer.canvas.getContext('2d', {willReadFrequently: true});
     layer.updateCanvas(isExport);

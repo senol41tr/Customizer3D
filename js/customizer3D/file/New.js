@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.7';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.7';
-import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.7';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.8';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.8';
+import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.8';
 
 export class New
 {
@@ -12,12 +12,13 @@ export class New
 
     async new2D()
     {
-      this._showDialog();      
+      this._showDialog();
     }
 
 
     _showDialog()
     {
+
       this.c3d.showHideUI.hide();
       const canvas2D = document.querySelector(this.c3d.props.canvas2d);
       const canvas3D = this.c3d.three.getCanvas().parentNode; // div
@@ -28,6 +29,10 @@ export class New
         
         <h1 style="padding-bottom:1rem;">${this.c3d.lang['create-new-2d-title']}</h1>
 
+        <select class="presets" style="width:120px;border: 1px solid var(--c3dColorText);border-radius: 3px;padding: 0.15rem;">
+          <option value="" selected>Presets</option>
+        </select>
+
         <div class="inputPercent width" data-icon="${this.c3d.lang['width']}">
           <input type="number" value="2048" style="width:120px;padding: 0.3rem;">
         </div>
@@ -36,7 +41,7 @@ export class New
           <input type="number" value="2048" style="width:120px;padding: 0.3rem;">
         </div>
 
-        <select style="width:120px;margin-bottom:1rem;border: 1px solid var(--c3dColorText);border-radius: 3px;padding: 0.15rem;">
+        <select class="unit" style="width:120px;margin-bottom:1rem;border: 1px solid var(--c3dColorText);border-radius: 3px;padding: 0.15rem;">
           <option value="px" selected>Pixel</option>
           <option value="cm">Centimeter</option>
           <option value="mm">Millimeter</option>
@@ -50,14 +55,15 @@ export class New
       div.style.cssText = 'display:flex; flex-direction:column;gap:0.5rem;padding:1rem;';
       div.innerHTML = html;
 
-      const select = div.querySelector('select');
+      const selectPreset = div.querySelector('select.presets');
+      const selectUnit = div.querySelector('select.unit');
       const width = div.querySelector('div.width > input');
       const height = div.querySelector('div.height > input');
       const createButton = div.querySelector('button.create');
       const cancelButton = div.querySelector('button.cancel');
-
       const limits = getLimits();
-      let oldUnit = select.value;
+
+      let oldUnit = selectUnit.value;
       let oldValueWidth = width.value;
       let oldValueHeight = height.value;
       let maxSize = new Size({size: limits.display + 'px'})[oldUnit];
@@ -66,7 +72,7 @@ export class New
       {
         oldValueWidth = width.value;
         oldValueHeight = height.value;
-        oldUnit = select.value;
+        oldUnit = selectUnit.value;
 
         const maxSizeNumber = oldUnit == 'px' ? Math.round(maxSize) : maxSize;
         const maxSizeStr = maxSizeNumber.toFixed(2).replace('.00', '');
@@ -90,12 +96,15 @@ export class New
       height.addEventListener('input', _onInput);
       height.addEventListener('focus', () => height.select());
 
-      select.addEventListener('change', (e) =>
+
+      selectUnit.addEventListener('change', (e) =>
       {
-        const unit = select.value;
+        const unit = selectUnit.value;
         const sizeWidth = new Size({size: oldValueWidth + oldUnit});
         const sizeHeight = new Size({size: oldValueHeight + oldUnit});
-                
+
+        if(unit != 'px') selectPreset.value = '';
+
         width.step = unit == 'px' ? '1' : '0.01';
         height.step = unit == 'px' ? '1' : '0.01';
 
@@ -126,6 +135,43 @@ export class New
 
       });
 
+      
+      if(limits.display >= 1024)
+      {
+        let presetSize = limits.display;
+        const preselLabels = {
+          16384: '16K - Ultra (very slow)',
+          8192: '8K - High (slow)',
+          4096: '4K - Standard (normal)',
+          2048: '2K - Normal',
+        }
+        while(presetSize > 1024)
+        {
+          const option = document.createElement('option');
+          const label = presetSize + 'x' + presetSize + 'px';
+          option.value = presetSize;
+          option.innerText = preselLabels[presetSize] ? preselLabels[presetSize] : label;
+          selectPreset.append(option);
+          presetSize /= 2;
+        }
+        selectPreset.addEventListener('change', (e) =>
+        {
+          if(selectPreset.value == '') return;
+          width.value = selectPreset.value;
+          height.value = selectPreset.value;
+          oldUnit = 'px';
+          selectUnit.value = 'px';
+          oldValueWidth = width.value;
+          oldValueHeight = height.value;
+          selectUnit.dispatchEvent(new Event('change'));
+        });
+      }
+      else
+      {
+        selectPreset.style.display = 'none';
+      }
+
+
       cancelButton.addEventListener('click', () => {
         this.c3d.showHideUI.show();
         this.c3d.contextMenu.hide();
@@ -137,7 +183,7 @@ export class New
 
 
       createButton.addEventListener('click', async () => {
-        await this._createNewFile(width.value, height.value, select.value);
+        await this._createNewFile(width.value, height.value, selectUnit.value);
         cancelButton.click();
       });
 
@@ -170,6 +216,7 @@ export class New
       const ps = this.c3d.props.data.area.printSize;
       ps.width = width + unit;
       ps.height = height + unit;
+      ps.unit = unit;
       
       await this.c3d._createLayerData();
 

@@ -20,6 +20,13 @@ export class SaveAs
 
         // model
         json['modelName'] = this.c3d.props.modelName;
+
+        //
+        if(this.c3d.props.modelName == 'C2D')
+        {
+            json['printSize'] = this.c3d.props.data.area.printSize;
+            json['unit'] = this.c3d.props.data.area.unit;
+        }
         
         // add custom fonts
         let fontIndex = 0;
