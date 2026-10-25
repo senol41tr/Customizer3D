@@ -67,7 +67,7 @@ export const createEffectsList = (c3d, root, layerName) =>
                     <input type="checkbox" data-effect="${name}"${checked}>
                     ${effect[1].label}
                 </label>
-                <img src="${C3D_SERVER}svg/settings.svg?c3d=0.5.9" alt="Icon" class="settings" draggable="false" style="width:20px; cursor:pointer;" title="Edit Effect Settings">
+                <img src="${C3D_SERVER}svg/settings.svg?c3d=0.5.9" alt="Icon" class="settings" draggable="false" style="height: auto; width:20px; cursor:pointer;" title="Edit Effect Settings">
             </div>
         `;
 
