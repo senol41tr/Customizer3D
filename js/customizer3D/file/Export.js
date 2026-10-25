@@ -192,7 +192,7 @@ export class Export
 
       setTimeout(() => this.c3d.preloader.hide(), 1000);
       this.c3d.showHideUI.enableContainer();
-      this.c3d.render3d.renderAll();
+      this.c3d.render3d.renderAll(true);
 
     }
 
@@ -270,7 +270,7 @@ export class Export
       }
       finally
       {
-        this.c3d.render3d.renderAll();
+        this.c3d.render3d.renderAll(true);
         setTimeout(() => this.c3d.preloader.hide(), 1000);
         this.c3d.showHideUI.enableContainer();
       }

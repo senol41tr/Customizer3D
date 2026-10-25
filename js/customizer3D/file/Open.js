@@ -295,27 +295,36 @@ export class Open
 
                     case 'threeDLogo': 
 
-                        const img3D = new Image();
+                        let img3D;
                         const blob3D = new Blob([unzipped[layerData.image]], {type: layerData.detectedFileType});
-                        try
+
+                        if(layerData.detectedFileType == 'image/svg+xml')
                         {
-                            await new Promise((resolve, reject) =>
+                            img3D = await new Promise((resolve, reject) =>
                             {
-                                img3D.decoding = 'async';
-                                img3D.src = URL.createObjectURL(blob3D);
-                                img3D.onload = () => {
-                                img3D.decode()
+                                const img = new Image();
+                                img.onload = () => {
+                                    resolve(img);
+                                };
+                                img.src = URL.createObjectURL(blob3D);
+                            });
+                        }
+                        else
+                        {
+                            img3D = await new Promise((resolve, reject) =>
+                            {
+                                const img = new Image();
+                                img.decoding = 'async';
+                                img.onload = () => {
+                                    img.decode()
                                     .then(() => {
-                                        resolve(img3D);
+                                        resolve(img);
                                     })
                                     .catch((err) => reject(err));
                                 };
-                                img3D.onerror = (err) => reject(err);
+                                img.onerror = (err) => reject(err);
+                                img.src = URL.createObjectURL(blob3D);
                             });
-                        }
-                        catch (e)
-                        {
-                            console.error(e);
                         }
                         
                         layerData.image = img3D;

@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.9';
 import {drawLayerToCTX} from 'customizer3D_dir/layers//utils/drawLayerToCTX.js?c3d=0.5.9';
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.9';
+import {applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.5.9';
 
 export class Render3D
 {
@@ -11,7 +13,7 @@ export class Render3D
         this._preDPI = c3d.settings.getRenderDPI();
     }
 
-    renderView(side)
+    renderView(side, applyFX = false)
     {
         const layersDiv = document.querySelector(this.c3d.props.layers);
         const layers = layersDiv.querySelectorAll('[data-mesh=\'' + side + '\'] > div.content > div.layers > div');
@@ -63,9 +65,6 @@ export class Render3D
 
         for (let i = layers.length - 1; i >= 0; i--)
         {
-
-
-
             const layer = layers[i].self;
 
             // disable first layer blendmode
@@ -94,6 +93,13 @@ export class Render3D
             
             // draw image to canvas
             drawLayerToCTX(this.c3d, canvas, layer);
+
+            //
+            if(applyFX)
+            {
+                applyEffects(this.c3d, layer, 'threeDLogoLayer');
+                applyFilters(this.c3d, layer, 'threeDLogoLayer');
+            }
 
         }
 
@@ -135,14 +141,14 @@ export class Render3D
         this.c3d.three.render();
     }
 
-    renderAll()
+    renderAll(applyFX)
     {
         const data = Object.entries(this.c3d.props.data);
 
         for (let i = 0; i < data.length; i++)
         {
             const meshName = data[i][0];
-            this.renderView(meshName);
+            this.renderView(meshName, applyFX);
         }
     }
 
