@@ -316,10 +316,10 @@ export class PointCloud
         const ctx = this.drawCanvas.getContext('2d', {willReadFrequently: true});
 
         const fx = Object.keys(this.layer.effects).length > 1;
-        const source = fx ? this.layer.effectsCanvas : (this.layer.imageCanvas || this.layer.image);
+        const source = fx ? this.layer.effectsCanvas : this.layer.image;
         const imgDims = calculateAspectRatioFit(
-            source[fx || this.layer.type != 'image' ? 'width' : 'naturalWidth'], 
-            source[fx || this.layer.type != 'image' ? 'height' : 'naturalHeight'], 
+            source[fx || !this.layer?.image?.src ? 'width' : 'naturalWidth'], 
+            source[fx || !this.layer?.image?.src ? 'height' : 'naturalHeight'], 
             this.drawCanvas.width, 
             this.drawCanvas.height
         );

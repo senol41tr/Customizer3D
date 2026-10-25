@@ -12,8 +12,8 @@ export const applyEffects = (c3d, layer, layerName, isExport) =>
 {
     if(!layer.effectsCanvas) return;
 
-    layer.effectsCanvas.width = layer.canvas.width;
-    layer.effectsCanvas.height = layer.canvas.height;
+    layer.effectsCanvas.width = layer.image.width;
+    layer.effectsCanvas.height = layer.image.height;
     const ctx = layer.effectsCanvas.getContext('2d', {willReadFrequently: true});
     ctx.clearRect(0, 0, layer.effectsCanvas.width, layer.effectsCanvas.height);
     ctx.drawImage(layer.image, 0, 0, layer.effectsCanvas.width, layer.effectsCanvas.height);

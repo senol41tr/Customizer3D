@@ -150,7 +150,7 @@ export class ThreeDLogoLayer
         el.addEventListener('change', this._selectImageInputHandler.bind(this));
         el.addEventListener('cancel', () =>
         {
-            if(!this.layer.image)
+            if(!this.layer.sourceImage)
             {
                 this.layer.root.querySelector('img.remove').click();
                 this.c3d.showHideUI.hideSubWindows();
@@ -460,12 +460,11 @@ export class ThreeDLogoLayer
         this.c3d.glbScene.visible = false;
 
         const c3d = this.c3d;
-        const canvas = this.layer.imageCanvas;
+        const canvas = this.layer.image;
         const printDims = getPrintDims(this.c3d, {name: this.layer.name}, this.c3d.settings.getRenderDPI(), isExport);
         const ctx = canvas.getContext('2d');
         const w = canvas.width = Math.round(printDims.width);
         const h = canvas.height = Math.round(printDims.height);
-        
         const renderTargetOptions = 
         {
             // samples: 4,
@@ -680,7 +679,7 @@ export class ThreeDLogoLayer
 
     async loadSVGString()
     {
-        const response = await fetch(this.layer.image.src);
+        const response = await fetch(this.layer.sourceImage.src);
         this.layer.__svgString = await response.text();
     }
 
@@ -869,8 +868,7 @@ export class ThreeDLogoLayer
         box.getCenter(center);
         svgGroup.position.sub(center);
 
-        if(!this.layer.options.meshState)
-        {
+        if(!this.layer.options.meshState) {
             fitMeshToScreen(this.c3d.three.camera, this.mesh, 1.5, false);
         }
 
@@ -928,7 +926,7 @@ export class ThreeDLogoLayer
         const layers = layersDivContent.querySelector('div.'+ layerName +' > div.content > div.layers');
         const extractImages = new ExtractImages({c3d: this.c3d});
 
-        if(!this.layer.image) this.layer.root.querySelector('img.remove').click(); // delete empty layer
+        if(!this.layer.sourceImage) this.layer.root.querySelector('img.remove').click(); // delete empty layer
 
         for(let i = 0; i < e.target.files.length; i++)
         {
@@ -953,10 +951,10 @@ export class ThreeDLogoLayer
                 await img.decode();
                 
                 // add layer
-                if(this.layer.image && e.target.files.length == 1 && blobArray.length == 1)
+                if(this.layer.sourceImage && e.target.files.length == 1 && blobArray.length == 1)
                 {
-                    URL.revokeObjectURL(this.layer.image.src);
-                    this.layer.image = img;
+                    URL.revokeObjectURL(this.layer.sourceImage.src);
+                    this.layer.sourceImage = img;
                     this.layer.detectedFileType = data.detectedFileType;
                     this.layer.fileName = file.name;
                 }
@@ -975,7 +973,7 @@ export class ThreeDLogoLayer
                 if(!errorsInSVG.isValid)
                 {
                     alert("SVG IS NOT VALID!\nCan not Convert to 3D\n" + errorsInSVG.errors.join("\n"));
-                    URL.revokeObjectURL(this.layer.image.src);
+                    URL.revokeObjectURL(this.layer.sourceImage.src);
                     this.layer.div.remove();
                     continue;
                 }
@@ -989,7 +987,7 @@ export class ThreeDLogoLayer
                 applyFilters(this.c3d, this.layer, 'imageLayer');
                 this.updatePreview(false, true);
 
-                if(this.layer.image && e.target.files.length == 1 && blobArray.length == 1)
+                if(this.layer.sourceImage && e.target.files.length == 1 && blobArray.length == 1)
                 {
                     this.showGUI();
                     this._create(true);

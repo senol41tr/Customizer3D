@@ -13,8 +13,8 @@ export class ThreeDLogo
         this.c3d = c3d;
         this.div = null;
 
-        this.image = data.image;
-        this.imageCanvas = document.createElement('canvas');
+        this.sourceImage = data.image;
+        this.image = document.createElement('canvas');
         this.canvas = document.createElement('canvas');
         this.effectsCanvas = document.createElement('canvas');
         this.imagePosition = data.imagePosition || {x:0, y:0};
@@ -128,7 +128,7 @@ export class ThreeDLogo
 
         div.querySelector('img.remove').addEventListener('click', () =>
         {
-            if(this.image?.src) URL.revokeObjectURL(this.image.src);
+            if(this.sourceImage?.src) URL.revokeObjectURL(this.sourceImage.src);
             div.remove();
             this.c3d.threeDLogoLayer.hide();
             this.c3d.render3d.renderView(this.name);
@@ -161,22 +161,29 @@ export class ThreeDLogo
             this.root.__C3D_Sortable.addElement(div.querySelector('canvas.thumbnail'));
         }
 
-        if(!this.image)
+        if(!this.sourceImage)
         {
             this.c3d.threeDLogoLayer.htmlEl.querySelector('div.selectImage > label.selectImage > input[type="file"]').click();
         }
+        
     }
 
     updateCanvas(isExport)
     {
+        if(!this.sourceImage) return;
+        
         const printDims = getPrintDims(this.c3d, {name: this.name}, this.c3d.settings.getRenderDPI(), isExport);
+        const textureDims = calculateAspectRatioFit(this.sourceImage.naturalWidth, this.sourceImage.naturalHeight, printDims.width, printDims.height);
         const ctx = this.canvas.getContext('2d', {willReadFrequently: true});
         const fx = Object.keys(this.effects).length > 0;
-        
-        this.canvas.width = printDims.width;
-        this.canvas.height = printDims.height;
 
-        ctx.drawImage(fx ? this.effectsCanvas : this.imageCanvas, 0, 0);
+        this.canvas.width = textureDims.width;
+        this.canvas.height = textureDims.height;
+        
+        ctx.save();
+        ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
+        ctx.drawImage(fx ? this.effectsCanvas : this.image, -textureDims.width / 2, -textureDims.height / 2, textureDims.width, textureDims.height);
+        ctx.restore();
     }
 
 }

@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import {GUI} from 'three_dir/libs/lil-gui.module.min.js';
-import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.9';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.9';
-import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.9';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.9';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.9';
+import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.8';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.8';
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.8';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.8';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.8';
 
 export class ColorAnalyzer
 {
@@ -101,10 +101,10 @@ export class ColorAnalyzer
         this.imgCtx = this.imgCanvas.getContext('2d', {willReadFrequently: true});
 
         const fx = Object.keys(this.layer.effects).length > 1;
-        const source = fx ? this.layer.effectsCanvas : (this.layer.imageCanvas || this.layer.image);
+        const source = fx ? this.layer.effectsCanvas : this.layer.image;
         const imgDims = calculateAspectRatioFit(
-            source[fx || this.layer.type != 'image' ? 'width' : 'naturalWidth'], 
-            source[fx || this.layer.type != 'image' ? 'height' : 'naturalHeight'], 
+            source[fx || !this.layer?.image?.src ? 'width' : 'naturalWidth'], 
+            source[fx || !this.layer?.image?.src ? 'height' : 'naturalHeight'], 
             this.drawCanvas.width, 
             this.drawCanvas.height
         );

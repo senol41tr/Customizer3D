@@ -222,10 +222,11 @@ export class Export
 
           const layerInfo = layersData[i][1];
           const printSize = layerInfo.printSize;
+          const dpi = printSize.dpi || 300;
           const canvas = document.createElement('canvas');
 
-          canvas.width = new Size({ size: printSize.width }).px;
-          canvas.height = new Size({ size: printSize.height }).px;
+          canvas.width = new Size({ size: printSize.width, DPI: dpi }).px;
+          canvas.height = new Size({ size: printSize.height, DPI: dpi }).px;
 
           yield {
             index: i + 1,
