@@ -1,6 +1,6 @@
 import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.9';
 import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.9';
-import {drawLayerToCTX} from 'customizer3D_dir/layers//utils/drawLayerToCTX.js';
+import {drawLayerToCTX} from 'customizer3D_dir/layers//utils/drawLayerToCTX.js?c3d=0.5.9';
 
 export class Render2D
 {
