@@ -150,7 +150,7 @@ export class Export
         pdf.addPage([printHeight, printWidth], printHeight > printWidth ? 'portrait' : 'landscape');
 
         const canvas = document.createElement('canvas');
-        const dpi = layersData[i][1].printSize.dpi || 72;
+        const dpi = layersData[i][1].printSize.dpi || 300;
         let canvasWidth = new Size({size: printWidth + 'mm', DPI: dpi}).px;
         let canvasHeight = new Size({size: printHeight + 'mm', DPI: dpi}).px;
         
