@@ -1,4 +1,4 @@
-import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.8';
+import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.9';
 
 export class ShowHideUI
 {
@@ -10,7 +10,8 @@ export class ShowHideUI
             'textLayer',
             'imageLayer',
             'shapeLayer',
-            'threeDTextLayer'
+            'threeDTextLayer',
+            'threeDLogoLayer'
         ];
     }
 

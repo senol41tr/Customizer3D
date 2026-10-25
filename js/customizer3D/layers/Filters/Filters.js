@@ -1,8 +1,6 @@
 export const applyFilters = (c3d, layer, layerName, isExport) =>
 {
     if(!layer.canvas) return;
-    // const filtersCount = Object.keys(layer.filters).length;
-    // if(filtersCount == 0) return;
 
     if(layer.image)
     {

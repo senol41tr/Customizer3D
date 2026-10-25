@@ -29,7 +29,8 @@ export class SaveAs
         }
         
         // add custom fonts
-        let fontIndex = 0;
+        let fontIndex = 0, arrayBuffer, response;
+        
         json['customFonts'] = [];
 
         // 
@@ -38,7 +39,6 @@ export class SaveAs
         for (let i = 0; i < layersDiv.length; i++)
         {
             const meshName = layersDiv[i].dataset.mesh;
-            
             const layers = layersDiv[i].querySelectorAll('div.content > div.layers > div');
 
             json[meshName] = [];
@@ -159,10 +159,12 @@ export class SaveAs
                             effects: layer.effects
                         });
 
-                        const response = await fetch(layer.image.src);
-                        const arrayBuffer = await response.arrayBuffer();
+                        response = await fetch(layer.image.src);
+                        arrayBuffer = await response.arrayBuffer();
 
                         filesToZip[imageName] = new Uint8Array(arrayBuffer);
+                        response = null;
+                        arrayBuffer = null;
 
                         imageIndex++;
 
@@ -211,6 +213,41 @@ export class SaveAs
                             visible: layer.visible,
                             options: layer.options
                         });
+                        
+                    break;
+
+                    case 'threeDLogo':
+    
+                        const logoImageName = 'img' + imageIndex;
+
+                        json[meshName].push({
+                            type: layer.type,
+                            image: logoImageName,
+                            imagePosition: layer.imagePosition,
+                            rotation:layer.rotation,
+                            opacity: layer.opacity, 
+                            zoom: layer.zoom, 
+                            material: layer.material,
+                            materialOptions: layer.materialOptions,
+                            detectedFileType: layer.detectedFileType,
+                            fileName: layer.fileName,
+                            repeatX: layer.repeatX,
+                            repeatY: layer.repeatY,
+                            blendMode: layer.blendMode,
+                            filters: layer.filters,
+                            effects: layer.effects,
+                            visible: layer.visible,
+                            options: layer.options
+                        });
+
+                        response = await fetch(layer.image.src);
+                        arrayBuffer = await response.arrayBuffer();
+
+                        filesToZip[logoImageName] = new Uint8Array(arrayBuffer);
+                        response = null;
+                        arrayBuffer = null;
+
+                        imageIndex++;
                         
                     break;
                 }

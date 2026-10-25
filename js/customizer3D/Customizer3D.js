@@ -1,39 +1,40 @@
 import * as THREE from 'three';
 import gsap from 'base/gsap@3.13.0/gsap@3.13.0.esm.js';
-import {File} from 'customizer3D_dir/file/File.js?c3d=0.5.8';
-import {Three} from 'customizer3D_dir/three/Three.js?c3d=0.5.8';
-import {Render3D} from 'customizer3D_dir/three/Render3D.js?c3d=0.5.8';
-import {Render2D} from 'customizer3D_dir/render2d/Render2D.js?c3d=0.5.8';
-import {GLB} from 'customizer3D_dir/three/loaders/GLB.js?c3d=0.5.8';
-import {EventsManager} from 'customizer3D_dir/events/EventsManager.js?c3d=0.5.8';
-import {LocalStorage} from 'customizer3D_dir/cookie/LocalStorage.js?c3d=0.5.8';
-import {Preloader} from 'customizer3D_dir/preloader/Preloader.js?c3d=0.5.8';
-import {Settings} from 'customizer3D_dir/settings/Settings.js?c3d=0.5.8';
-import {Layers} from 'customizer3D_dir/layers/Layers.js?c3d=0.5.8';
-import {TextLayer} from 'customizer3D_dir/layers/TextLayer.js?c3d=0.5.8';
-import {ImageLayer} from 'customizer3D_dir/layers/ImageLayer.js?c3d=0.5.8';
-import {ShapeLayer} from 'customizer3D_dir/layers/ShapeLayer.js?c3d=0.5.8';
-import {ThreeDTextLayer} from 'customizer3D_dir/layers/ThreeDTextLayer.js?c3d=0.5.8';
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.8';
-import {ContextMenu} from 'customizer3D_dir/contextMenu/ContextMenu.js?c3d=0.5.8';
-import {Help} from 'customizer3D_dir/help/Help.js?c3d=0.5.8';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.8';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.8';
-import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.8';
-import {ZIndex} from 'customizer3D_dir/utils/ZIndex.js?c3d=0.5.8';
-import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.5.8';
-import {WebXR} from 'customizer3D_dir/three/WebXR.js?c3d=0.5.8';
-import {ShowHideUI} from 'customizer3D_dir/utils/ShowHideUI.js?c3d=0.5.8';
-import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=0.5.8';
-import {ColorEngine} from 'customizer3D_dir/ColorEngine/ColorEngine.js?c3d=0.5.8';
-import {Sortable} from 'customizer3D_dir/sortable/Sortable.js?c3d=0.5.8';
+import {File} from 'customizer3D_dir/file/File.js?c3d=0.5.9';
+import {Three} from 'customizer3D_dir/three/Three.js?c3d=0.5.9';
+import {Render3D} from 'customizer3D_dir/three/Render3D.js?c3d=0.5.9';
+import {Render2D} from 'customizer3D_dir/render2d/Render2D.js?c3d=0.5.9';
+import {GLB} from 'customizer3D_dir/three/loaders/GLB.js?c3d=0.5.9';
+import {EventsManager} from 'customizer3D_dir/events/EventsManager.js?c3d=0.5.9';
+import {LocalStorage} from 'customizer3D_dir/cookie/LocalStorage.js?c3d=0.5.9';
+import {Preloader} from 'customizer3D_dir/preloader/Preloader.js?c3d=0.5.9';
+import {Settings} from 'customizer3D_dir/settings/Settings.js?c3d=0.5.9';
+import {Layers} from 'customizer3D_dir/layers/Layers.js?c3d=0.5.9';
+import {TextLayer} from 'customizer3D_dir/layers/TextLayer.js?c3d=0.5.9';
+import {ImageLayer} from 'customizer3D_dir/layers/ImageLayer.js?c3d=0.5.9';
+import {ShapeLayer} from 'customizer3D_dir/layers/ShapeLayer.js?c3d=0.5.9';
+import {ThreeDTextLayer} from 'customizer3D_dir/layers/ThreeDTextLayer.js?c3d=0.5.9';
+import {ThreeDLogoLayer} from 'customizer3D_dir/layers/ThreeDLogoLayer.js?c3d=0.5.9';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.9';
+import {ContextMenu} from 'customizer3D_dir/contextMenu/ContextMenu.js?c3d=0.5.9';
+import {Help} from 'customizer3D_dir/help/Help.js?c3d=0.5.9';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.9';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.9';
+import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.9';
+import {ZIndex} from 'customizer3D_dir/utils/ZIndex.js?c3d=0.5.9';
+import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.5.9';
+import {WebXR} from 'customizer3D_dir/three/WebXR.js?c3d=0.5.9';
+import {ShowHideUI} from 'customizer3D_dir/utils/ShowHideUI.js?c3d=0.5.9';
+import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=0.5.9';
+import {ColorEngine} from 'customizer3D_dir/ColorEngine/ColorEngine.js?c3d=0.5.9';
+import {Sortable} from 'customizer3D_dir/sortable/Sortable.js?c3d=0.5.9';
 
 export class Customizer3D
 {
     constructor(glbPath, jsPath)
     {
         this.PIXEL_RATIO = 2;
-        this.CURRENT_VERSION = '0.5.8';
+        this.CURRENT_VERSION = '0.5.9';
 
         if(glbPath && jsPath) this.initialize(glbPath, jsPath);
     }
@@ -76,6 +77,7 @@ export class Customizer3D
         this.imageLayer = new ImageLayer(this);
         this.shapeLayer = new ShapeLayer(this);
         this.threeDTextLayer = new ThreeDTextLayer(this);
+        this.threeDLogoLayer = new ThreeDLogoLayer(this);
 
         // show secure decription
         if(this.localStorage.get('secureText') == null)
@@ -87,7 +89,7 @@ export class Customizer3D
                 secureDiv.remove();
             });
             secureDiv.innerHTML = this.lang['secure-text'];
-            secureDiv.innerHTML += '<img src="' + C3D_SERVER + 'svg/plus.svg?c3d=0.5.8" alt="Icon" class="close">';
+            secureDiv.innerHTML += '<img src="' + C3D_SERVER + 'svg/plus.svg?c3d=0.5.9" alt="Icon" class="close">';
             document.querySelector(this.props.container).appendChild(secureDiv);
         }
 
@@ -129,9 +131,9 @@ export class Customizer3D
 
         layersDiv.innerHTML = `
         <div class="title">
-            <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.8" alt="Icon" class="icon" draggable="false">
+            <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.9" alt="Icon" class="icon" draggable="false">
             <div class="title">
-                <img src="${C3D_SERVER}svg/layers.svg?c3d=0.5.8" alt="Icon" class="icon" draggable="false">
+                <img src="${C3D_SERVER}svg/layers.svg?c3d=0.5.9" alt="Icon" class="icon" draggable="false">
                 <p class="title">${this.lang['layers']}</p>
             </div>
         </div>
@@ -172,12 +174,12 @@ export class Customizer3D
         const controlsDiv = document.querySelector(this.props.controls);
         const deviceIcon = isMobile() ? 'tap' : 'mouse';
         controlsDiv.innerHTML = `
-            <img src="${C3D_SERVER}svg/zoom-out.svg?c3d=0.5.8" class="zoomOut" draggable="false">
+            <img src="${C3D_SERVER}svg/zoom-out.svg?c3d=0.5.9" class="zoomOut" draggable="false">
             <div class="inputDiv">
                 <input type="checkbox" class="checkbox" checked>
-                <img src="${C3D_SERVER}svg/${deviceIcon}.svg?c3d=0.5.8" class="deviceIcon" draggable="false">
+                <img src="${C3D_SERVER}svg/${deviceIcon}.svg?c3d=0.5.9" class="deviceIcon" draggable="false">
             </div>
-            <img src="${C3D_SERVER}svg/zoom-in.svg?c3d=0.5.8" class="zoomIn" data-factor="0.01" draggable="false">
+            <img src="${C3D_SERVER}svg/zoom-in.svg?c3d=0.5.9" class="zoomIn" data-factor="0.01" draggable="false">
         `;
 
         const dragableControls = new Dragable({
@@ -217,7 +219,7 @@ export class Customizer3D
         const webXRDiv = document.createElement('div');
         webXRDiv.className = 'webXR';
         webXRDiv.innerHTML = `
-            <img src="${C3D_SERVER}svg/xr.svg?c3d=0.5.8" class="button" alt="XR Button" draggable="false">
+            <img src="${C3D_SERVER}svg/xr.svg?c3d=0.5.9" class="button" alt="XR Button" draggable="false">
         `;
         document.querySelector(this.props.container).appendChild(webXRDiv);
 
@@ -379,7 +381,7 @@ export class Customizer3D
             layer.dataset.mesh = meshName;
             layer.innerHTML = `
                 <div class="title">
-                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.8" alt="Icon" class="icon" draggable="false">
+                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.9" alt="Icon" class="icon" draggable="false">
                     <p class="name">${label}</p>
                 </div>
                 <div class="content">
@@ -568,7 +570,7 @@ export class Customizer3D
                     layer.dataset.mesh = mesh.name;
                     layer.innerHTML = `
                         <div class="title">
-                            <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.8" alt="Icon" class="icon" draggable="false">
+                            <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.9" alt="Icon" class="icon" draggable="false">
                             <p class="name" title="${label}">${label}</p>
                         </div>
                         <div class="content">
@@ -790,7 +792,7 @@ export class Customizer3D
                 div.setAttribute('class', 'button');
                 div.setAttribute('title', this.lang['add-solid-layer']);
 
-                img.src = C3D_SERVER + 'svg/solid.svg?c3d=0.5.8';
+                img.src = C3D_SERVER + 'svg/solid.svg?c3d=0.5.9';
                 img.alt = 'Icon';
                 img.dataset.type = 'Solid';
                 img.draggable = false;
@@ -815,7 +817,7 @@ export class Customizer3D
                 div.setAttribute('class', 'button');
                 div.setAttribute('title', this.lang['add-text-layer']);
 
-                img.src = C3D_SERVER + 'svg/text.svg?c3d=0.5.8';
+                img.src = C3D_SERVER + 'svg/text.svg?c3d=0.5.9';
                 img.alt = 'Icon';
                 img.dataset.type = 'Text';
                 img.draggable = false;
@@ -840,7 +842,7 @@ export class Customizer3D
                 div.setAttribute('class', 'button');
                 div.setAttribute('title', this.lang['add-image-layer']);
 
-                img.src = C3D_SERVER + 'svg/image.svg?c3d=0.5.8';
+                img.src = C3D_SERVER + 'svg/image.svg?c3d=0.5.9';
                 img.alt = 'Icon';
                 img.dataset.type = 'Image';
                 img.draggable = false;
@@ -866,7 +868,7 @@ export class Customizer3D
                 div.setAttribute('class', 'button');
                 div.setAttribute('title', this.lang['add-shape-layer']);
 
-                img.src = C3D_SERVER + 'svg/shapes.svg?c3d=0.5.8';
+                img.src = C3D_SERVER + 'svg/shapes.svg?c3d=0.5.9';
                 img.alt = 'Icon';
                 img.dataset.type = 'Image';
                 img.draggable = false;
@@ -891,7 +893,7 @@ export class Customizer3D
                 div.setAttribute('class', 'button');
                 div.setAttribute('title', this.lang['add-3d-text-layer']);
 
-                img.src = C3D_SERVER + 'svg/3d-text.svg?c3d=0.5.8';
+                img.src = C3D_SERVER + 'svg/3d-text.svg?c3d=0.5.9';
                 img.alt = 'Icon';
                 img.dataset.type = 'Image';
                 img.draggable = false;
@@ -916,7 +918,7 @@ export class Customizer3D
                 div.setAttribute('class', 'button');
                 div.setAttribute('title', this.lang['add-3d-logo-layer']);
 
-                img.src = C3D_SERVER + 'svg/3d-logo.svg?c3d=0.5.8';
+                img.src = C3D_SERVER + 'svg/3d-logo.svg?c3d=0.5.9';
                 img.alt = 'Icon';
                 img.dataset.type = 'Image';
                 img.draggable = false;
@@ -934,12 +936,12 @@ export class Customizer3D
             else
             {
                 materialButtons.innerHTML += `
-                <div class="button solid" title="${this.lang['add-solid-layer']}"><img src="${C3D_SERVER}svg/solid.svg?c3d=0.5.8" alt="Icon" data-type="Solid" draggable="false"></div>
-                <div class="button text" title="${this.lang['add-text-layer']}"><img src="${C3D_SERVER}svg/text.svg?c3d=0.5.8" alt="Icon" data-type="Text" draggable="false"></div>
-                <div class="button image" title="${this.lang['add-image-layer']}"><img src="${C3D_SERVER}svg/image.svg?c3d=0.5.8" alt="Icon" data-type="Image" draggable="false"></div>
-                <div class="button shape" title="${this.lang['add-shape-layer']}"><img src="${C3D_SERVER}svg/shapes.svg?c3d=0.5.8" alt="Icon" data-type="Shape" draggable="false"></div>
-                <div class="button threeDText" title="${this.lang['add-3d-text-layer']}"><img src="${C3D_SERVER}svg/3d-text.svg?c3d=0.5.8" alt="Icon" data-type="threeDText" draggable="false"></div>
-                <div style="pointer-events:none;opacity:0.5;" class="button threeDLogo" title="${this.lang['add-3d-logo-layer']}"><img src="${C3D_SERVER}svg/3d-logo.svg?c3d=0.5.8" alt="Icon" data-type="threeDLogo" draggable="false"></div>
+                <div class="button solid" title="${this.lang['add-solid-layer']}"><img src="${C3D_SERVER}svg/solid.svg?c3d=0.5.9" alt="Icon" data-type="Solid" draggable="false"></div>
+                <div class="button text" title="${this.lang['add-text-layer']}"><img src="${C3D_SERVER}svg/text.svg?c3d=0.5.9" alt="Icon" data-type="Text" draggable="false"></div>
+                <div class="button image" title="${this.lang['add-image-layer']}"><img src="${C3D_SERVER}svg/image.svg?c3d=0.5.9" alt="Icon" data-type="Image" draggable="false"></div>
+                <div class="button shape" title="${this.lang['add-shape-layer']}"><img src="${C3D_SERVER}svg/shapes.svg?c3d=0.5.9" alt="Icon" data-type="Shape" draggable="false"></div>
+                <div class="button threeDText" title="${this.lang['add-3d-text-layer']}"><img src="${C3D_SERVER}svg/3d-text.svg?c3d=0.5.9" alt="Icon" data-type="threeDText" draggable="false"></div>
+                <div class="button threeDLogo" title="${this.lang['add-3d-logo-layer']}"><img src="${C3D_SERVER}svg/3d-logo.svg?c3d=0.5.9" alt="Icon" data-type="threeDLogo" draggable="false"></div>
                 `;
 
                 materialButtons.querySelector('div.solid').addEventListener('click', async () =>
@@ -958,15 +960,21 @@ export class Customizer3D
                     layer.input.click();
                 });
 
+                materialButtons.querySelector('div.shape').addEventListener('click', async () =>
+                {
+                    await this.layers.addShape(layers, {fillColor: '#eeff00', strokeColor: '#1100ff'});
+                });
+
                 materialButtons.querySelector('div.threeDText').addEventListener('click', async () =>
                 {
                     const layer = await this.layers.addThreeDText(layers);
                 });
 
-                materialButtons.querySelector('div.threeDText').addEventListener('click', async () =>
+                materialButtons.querySelector('div.threeDLogo').addEventListener('click', async () =>
                 {
                     const layer = await this.layers.addThreeDLogo(layers);
                 });
+
 
                 // materialButtons.querySelector('div.threeD').addEventListener('click', async () =>
                 // {
@@ -979,11 +987,6 @@ export class Customizer3D
                 //     const layer = await this.layers.addImage(layers, {type:'gradient', changeable: false});
                 //     this._setNavActive(mesh.name, false);
                 // });
-
-                materialButtons.querySelector('div.shape').addEventListener('click', async () =>
-                {
-                    await this.layers.addShape(layers, {fillColor: '#eeff00', strokeColor: '#1100ff'});
-                });
 
                 // set default material (EDIT AREA)
                 mesh.material = new THREE.MeshBasicMaterial({color: 0x0, opacity: 0.1, transparent: true, depthWrite: false});

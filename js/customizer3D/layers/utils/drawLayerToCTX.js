@@ -1,5 +1,5 @@
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.8';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.8';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.9';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.9';
 
 export const drawLayerToCTX = (c3d, canvas, layer, isExport) =>
 {  
@@ -39,6 +39,7 @@ export const drawLayerToCTX = (c3d, canvas, layer, isExport) =>
 
       case 'image':
       case 'threeDText':
+      case 'threeDLogo':
 
           if(!layer.image) break;
 
@@ -53,6 +54,13 @@ export const drawLayerToCTX = (c3d, canvas, layer, isExport) =>
                 l._create();
                 l.bakeImageToLayer(isExport);
             }
+            else if(layer.type == 'threeDLogo')
+            {
+                const l = c3d.threeDLogoLayer;
+                l.layer = layer;
+                l._create();
+                l.bakeImageToLayer(isExport);
+            }
             else
             {
                 layer.updateCanvas(isExport);
@@ -60,10 +68,10 @@ export const drawLayerToCTX = (c3d, canvas, layer, isExport) =>
           }
 
           const fx = Object.keys(layer.effects).length > 0;
-          const source = fx ? layer.effectsCanvas : layer.image;
+          const source = fx ? layer.effectsCanvas : layer.canvas;
           const textureDims = calculateAspectRatioFit(
-              source[fx || layer.type != 'image' ? 'width' : 'naturalWidth'], 
-              source[fx || layer.type != 'image' ? 'height' : 'naturalHeight'], 
+              source.width, 
+              source.height, 
               canvas.width,
               canvas.height
           );

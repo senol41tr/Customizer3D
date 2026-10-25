@@ -425,6 +425,7 @@ section.customizer > div.textLayer > div.content > div.menu > div > div.list > d
 
 
 
+
 section.customizer > div.textLayer > div.content > div.menu > div.builtInFonts > div.list > p
 {
     color: var(--c3dColorText);
@@ -578,6 +579,11 @@ section.customizer > div[class$='Layer'] > div.content > div.input > div.list > 
     display: none;
 }
 
+section.customizer > div[class$='Layer'] > div.content > div.menu > div > div.list img
+{
+    height: 14px;
+    cursor: pointer;
+}
 
 section.customizer > div[class$='Layer'] > div.content > div.menu > div.color_picker
 {

@@ -1,8 +1,9 @@
-import {Image} from 'customizer3D_dir/layers/types/Image.js?c3d=0.5.8';
-import {Solid} from 'customizer3D_dir/layers/types/Solid.js?c3d=0.5.8';
-import {Text} from 'customizer3D_dir/layers/types/Text.js?c3d=0.5.8';
-import {Shape} from 'customizer3D_dir/layers/types/Shape.js?c3d=0.5.8';
-import {ThreeDText} from 'customizer3D_dir/layers/types/ThreeDText.js?c3d=0.5.8';
+import {Image} from 'customizer3D_dir/layers/types/Image.js?c3d=0.5.9';
+import {Solid} from 'customizer3D_dir/layers/types/Solid.js?c3d=0.5.9';
+import {Text} from 'customizer3D_dir/layers/types/Text.js?c3d=0.5.9';
+import {Shape} from 'customizer3D_dir/layers/types/Shape.js?c3d=0.5.9';
+import {ThreeDText} from 'customizer3D_dir/layers/types/ThreeDText.js?c3d=0.5.9';
+import {ThreeDLogo} from 'customizer3D_dir/layers/types/ThreeDLogo.js?c3d=0.5.9';
 
 export class Layers
 {
@@ -74,6 +75,37 @@ export class Layers
         }
 
         this.c3d.threeDTextLayer.updatePreview(false, false);
+        this.c3d._setNavActive(layer.name, false, false);
+        
+        return layer;
+    }
+
+    async addThreeDLogo(root, data = {})
+    {
+        const layer = new ThreeDLogo(root, this.c3d, data);
+        const l = this.c3d.threeDLogoLayer;
+
+        l.show(layer);
+
+        if(data.image) await l.loadSVGString();
+
+        if(data.options?.material)
+        {
+            l.showGUI();
+            l._create();
+
+            if(data.options?.materialOptions?.matcap)
+            {
+                const tex = await l.textureLoader.loadAsync(data.options.materialOptions.matcap);
+                layer.__matcap = tex;
+                l.mesh.material.matcap = tex;
+                l.mesh.material.needsUpdate = true;
+            }
+
+            await l.bakeImageToLayer();
+        }
+
+        this.c3d.threeDLogoLayer.updatePreview(false, false);
         this.c3d._setNavActive(layer.name, false, false);
         
         return layer;

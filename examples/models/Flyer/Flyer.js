@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.8';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.9';
 
 export function lang()
 {
@@ -56,13 +56,13 @@ export function parameters(self)
             front:
             {
                 label: self.lang['flyer-front'],
-                printSize: {width: '12.13cm', height: '15.17cm'}
+                printSize: {width: '12.13cm', height: '15.17cm', dpi: 300}
             },
             
             back:
             {
                 label: self.lang['flyer-back'], 
-                printSize: {width: '12.13cm', height: '15.17cm'}
+                printSize: {width: '12.13cm', height: '15.17cm', dpi: 300}
             }
         }
     };

@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 import {GUI} from 'three_dir/libs/lil-gui.module.min.js';
-import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.8';
-import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.8';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.8';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.8';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.8';
-import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=0.5.8';
+import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.9';
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.9';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.9';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.9';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.9';
+import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=0.5.9';
 
 export class PointCloud
 {
@@ -316,7 +316,7 @@ export class PointCloud
         const ctx = this.drawCanvas.getContext('2d', {willReadFrequently: true});
 
         const fx = Object.keys(this.layer.effects).length > 1;
-        const source = fx ? this.layer.effectsCanvas : this.layer.image;
+        const source = fx ? this.layer.effectsCanvas : (this.layer.imageCanvas || this.layer.image);
         const imgDims = calculateAspectRatioFit(
             source[fx || this.layer.type != 'image' ? 'width' : 'naturalWidth'], 
             source[fx || this.layer.type != 'image' ? 'height' : 'naturalHeight'], 

@@ -98,16 +98,18 @@ export class MaterialBrowser
 
     this.gui.add({backToSettings: () => this.hide()}, 'backToSettings').name('Back to Settings').domElement.classList.add('btn-back');
 
+    if(this.layer.options.materialOptions.color) 
+    {
       const colorFolder = this.gui.addFolder('Color')
         .addColor(this.layer.options.materialOptions, 'color')
         .onChange((v) => {
           this.layer.options.materialOptions.color = v;
           this.callback();
         });
-        colorFolder.domElement.querySelector('input[type=text]').remove()
-        colorFolder.domElement.querySelector('div.name').remove();
-        colorFolder.domElement.querySelector('div.display').style.height = '30px';
-
+      colorFolder.domElement.querySelector('input[type=text]').remove()
+      colorFolder.domElement.querySelector('div.name').remove();
+      colorFolder.domElement.querySelector('div.display').style.height = '30px';
+    }
 
     const materials = Object.keys(this.materialList);
 
@@ -204,6 +206,7 @@ export class MaterialBrowser
         {
           const optionName = optionsList[x];
           const value = material.options[optionName];
+          const label = optionsList[x].substring(0,1).toUpperCase() + optionsList[x].substring(1);
 
           switch (typeof value)
           {
@@ -212,6 +215,7 @@ export class MaterialBrowser
               if(value.startsWith('#'))
               {
                 folder.addColor(this.layer.options.materialOptions, optionName)
+                  .name(label)
                   .onChange((value) => {
                     this.callback();
                   })
@@ -220,6 +224,7 @@ export class MaterialBrowser
               else
               {
                 folder.add(this.layer.options.materialOptions, optionName)
+                  .name(label)
                   .onChange((value) => {
                     this.callback();
                   });
@@ -230,6 +235,7 @@ export class MaterialBrowser
             case 'object':
 
               folder.add(this.layer.options.materialOptions, optionName)
+              .name(label)
               .min(value.min)
               .max(value.max)
               .step(value.step)
@@ -241,6 +247,7 @@ export class MaterialBrowser
           
             default:
               folder.add(this.layer.options.materialOptions, optionName)
+                .name(label)
                 .onChange((value) => {
                   this.callback();
                 })

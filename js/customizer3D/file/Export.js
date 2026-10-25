@@ -1,8 +1,8 @@
 import jsPDF from 'base/jspdf@4.0.0/jspdf.es.min.js';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.8';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.9';
 import {drawLayerToCTX} from 'customizer3D_dir/layers/utils/drawLayerToCTX.js';
-import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.8';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.8';
+import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.9';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.9';
 
 export class Export
 {
@@ -16,12 +16,12 @@ export class Export
 
       this.c3d.showHideUI.disableContainer();
       this.c3d.preloader.show();
-      this.c3d.preloader.set(this.c3d.lang['creating-pdf']);
+      this.c3d.preloader.set('<span style="font-size:1.5rem;">' + this.c3d.lang['creating-pdf'] + '</span><br>');
 
       const layersData = Object.entries(this.c3d.props.data);
       const layersDiv = document.querySelector(this.c3d.props.layers);
       const ce = this.c3d.colorEngine;
-      const limits = getLimits();
+      const limits = getLimits(this.c3d);
 
       let printWidth, printHeight;
 
@@ -150,9 +150,9 @@ export class Export
         pdf.addPage([printHeight, printWidth], printHeight > printWidth ? 'portrait' : 'landscape');
 
         const canvas = document.createElement('canvas');
-
-        let canvasWidth = new Size({size: printWidth + 'mm', DPI: 300}).px;
-        let canvasHeight = new Size({size: printHeight + 'mm', DPI: 300}).px;
+        const dpi = layersData[i][1].printSize.dpi || 72;
+        let canvasWidth = new Size({size: printWidth + 'mm', DPI: dpi}).px;
+        let canvasHeight = new Size({size: printHeight + 'mm', DPI: dpi}).px;
         
         if(canvasWidth > limits.display || canvasHeight > limits.display)
         {
@@ -303,8 +303,8 @@ export class Export
         this.c3d.preloader.set(
           '<span style="font-size:1.5rem;">' + str + '</span><br>' + 
           'Drawing Layers to Canvas...<br>' + 
-          'Page: ' + count + ' ( ' + meshName + ' ) ' + 
-          Math.floor((layers.length - j) / layers.length * 100) + '% ...'
+          'Page: ' + count + ' ( ' + meshName + ' )<br>' + 
+          '<span style="font-size:2rem;">' + Math.floor((layers.length - j) / layers.length * 100) + '%</span>'
         );
           
         // draw image to canvas

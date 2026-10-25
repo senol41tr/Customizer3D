@@ -1,13 +1,9 @@
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.8';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.8';
-
-export const MIN_TEXTURE_SIZE = 512;
-export const MAX_TEXTURE_SIZE = 2048;
-export const MAX_PRINT_SIZE = 5079; // mm
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.9';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.9';
 
 export const getPrintDims = (c3d, layer, DPI, isExport = false) =>
 {
-    let width = MIN_TEXTURE_SIZE, height = MIN_TEXTURE_SIZE, originalSize = 'unknown';
+    let width = c3d.settings.MIN_TEXTURE_SIZE, height = c3d.settings.MIN_TEXTURE_SIZE, originalSize = 'unknown';
     
     if(c3d.props.data[layer.name] && c3d.props.data[layer.name].hasOwnProperty('printSize'))
     {
@@ -29,7 +25,7 @@ export const getPrintDims = (c3d, layer, DPI, isExport = false) =>
         }
         else
         {
-            const limits = getLimits();
+            const limits = getLimits(c3d);
             
             if(width > limits.display || height > limits.display)
             {
@@ -48,19 +44,14 @@ export const getPrintDims = (c3d, layer, DPI, isExport = false) =>
     {
         console.log("Print size is undefined! Layer: " + layer.name);
     }
-// console.log(width, height);
 
     return {width, height, originalSize};
 }
 
-export const getLimits = () =>
+export const getLimits = (c3d) =>
 {
-    const canvas = document.createElement('canvas');
-    const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if (!gl) alert('WebGL is not supported by the browser!');
-
-    const maxTextureSize = gl.getParameter(gl.MAX_TEXTURE_SIZE) || MAX_TEXTURE_SIZE;
-    const maxPrintSize = MAX_PRINT_SIZE;
+    const maxTextureSize = c3d.settings.MAX_GPU_TEXTURE_SIZE;
+    const maxPrintSize = c3d.settings.MAX_PRINT_SIZE;
 
     return {display: maxTextureSize, print: maxPrintSize };
 }

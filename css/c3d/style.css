@@ -32,7 +32,7 @@ input::-webkit-calendar-picker-indicator {
 
 
 .lil-gui {
-    --slider-knob-width: 3px !important;
+    --slider-knob-width: 4px !important;
     --widget-border-radius: 3px !important;
     --widget-height: 20px !important;
     --font-size: var(--c3dFontSizeDefault) !important;
@@ -62,6 +62,16 @@ input::-webkit-calendar-picker-indicator {
     font-family: var(--c3dFontFamily) !important;
 }
 
+.lil-gui .controller.number .slider
+{
+    background-image: repeating-linear-gradient(
+    90deg,
+    rgba(0,0,0,0.1) 0px,
+    rgba(0,0,0,0.1) 1px,
+    transparent 1px,
+    transparent 3px
+    ) !important;
+}
 
 .lil-gui .controller.number .slider,
 .lil-gui input
@@ -80,6 +90,11 @@ input::-webkit-calendar-picker-indicator {
     right: auto !important;
     left: 15px !important;
     max-height: 95% !important;
+}
+
+.lil-gui .children
+{
+    padding-bottom: 0.2rem !important;
 }
 
 .lil-gui .lil-gui .lil-gui>.children

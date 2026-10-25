@@ -1,7 +1,7 @@
 import * as fflate from 'base/fflate@0.8.2/fflate.esm.js';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.8';
-import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.5.8';
-import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=0.5.8';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.9';
+import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.5.9';
+import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=0.5.9';
 
 export class Open
 {
@@ -92,7 +92,8 @@ export class Open
             const w = parseFloat(data.printSize.width);
             const h = parseFloat(data.printSize.height);
             const u = data.printSize.unit;
-            await this.c3d.file._New._createNewFile(w, h, u);
+            const d = data.printSize.dpi;
+            await this.c3d.file._New._createNewFile(w, h, u, d);
         }
         else
         {
@@ -226,7 +227,6 @@ export class Open
                         }
                         catch (e)
                         {
-                            alert(e.message);
                             console.error(e);
                         }
 
@@ -289,6 +289,37 @@ export class Open
                     case 'threeDText': 
 
                         await this.c3d.layers.addThreeDText(layer, layerData);
+                        
+                    break;
+
+
+                    case 'threeDLogo': 
+
+                        const img3D = new Image();
+                        const blob3D = new Blob([unzipped[layerData.image]], {type: layerData.detectedFileType});
+                        try
+                        {
+                            await new Promise((resolve, reject) =>
+                            {
+                                img3D.decoding = 'async';
+                                img3D.src = URL.createObjectURL(blob3D);
+                                img3D.onload = () => {
+                                img3D.decode()
+                                    .then(() => {
+                                        resolve(img3D);
+                                    })
+                                    .catch((err) => reject(err));
+                                };
+                                img3D.onerror = (err) => reject(err);
+                            });
+                        }
+                        catch (e)
+                        {
+                            console.error(e);
+                        }
+                        
+                        layerData.image = img3D;
+                        await this.c3d.layers.addThreeDLogo(layer, layerData);
                         
                     break;
                 }

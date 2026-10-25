@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.8';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.9';
 
 export class Sortable
 {
@@ -16,7 +16,8 @@ export class Sortable
             div.text:not(.active), 
             div.solid:not(.active), 
             div.shape:not(.active),
-            div.threeDText:not(.active)
+            div.threeDText:not(.active),
+            div.threeDLogo:not(.active)
         `;
 
         this.onMove = this.onMove.bind(this);
