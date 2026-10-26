@@ -1,8 +1,8 @@
 import * as THREE from 'three';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.0';
-import {drawLayerToCTX} from 'customizer3D_dir/layers//utils/drawLayerToCTX.js?c3d=0.6.0';
-import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.6.0';
-import {applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.6.0';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.1';
+import {drawLayerToCTX} from 'customizer3D_dir/layers//utils/drawLayerToCTX.js?c3d=0.6.1';
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.6.1';
+import {applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.6.1';
 
 export class Render3D
 {
@@ -63,8 +63,12 @@ export class Render3D
 
         let material, color, materialOptions;
 
+        this.c3d.preloader.show();
+
         for (let i = layers.length - 1; i >= 0; i--)
         {
+            this.c3d.preloader.set('Creating Layers...');
+            
             const layer = layers[i].self;
 
             // disable first layer blendmode
@@ -101,10 +105,19 @@ export class Render3D
                
                 if(this.c3d[lt])
                 {
+                    if(layer.type == 'threeDText') // !!!
+                    {
+                        const l = this.c3d.threeDTextLayer;
+                        l.layer = layer;
+                        l._create();
+                        l.bakeImageToLayer();
+                    }
                     applyEffects(this.c3d, layer, lt);
                     applyFilters(this.c3d, layer, lt);
-                    this.c3d[lt].updatePreview(false, false);
+                    this.c3d[lt].show(layer); // update preview and thumbnail
+                    this.c3d[lt].hide();
                 }
+
             }
 
         }
@@ -156,6 +169,8 @@ export class Render3D
             const meshName = data[i][0];
             this.renderView(meshName, applyFX);
         }
+
+        this.c3d.preloader.hide();
     }
 
 }

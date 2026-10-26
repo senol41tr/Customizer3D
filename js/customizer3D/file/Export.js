@@ -1,8 +1,8 @@
 import jsPDF from 'base/jspdf@4.0.0/jspdf.es.min.js';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.0';
-import {drawLayerToCTX} from 'customizer3D_dir/layers/utils/drawLayerToCTX.js?c3d=0.6.0';
-import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.0';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.0';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.1';
+import {drawLayerToCTX} from 'customizer3D_dir/layers/utils/drawLayerToCTX.js?c3d=0.6.1';
+import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.1';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.1';
 
 export class Export
 {
@@ -190,9 +190,12 @@ export class Export
       this.c3d.preloader.set(this.c3d.lang['downloading-pdf']);
       pdf.save(fileName + '.pdf');
 
-      setTimeout(() => this.c3d.preloader.hide(), 1000);
-      this.c3d.showHideUI.enableContainer();
-      this.c3d.render3d.renderAll(true);
+      setTimeout(() =>
+      {
+        this.c3d.preloader.hide();
+        this.c3d.showHideUI.enableContainer();
+        this.c3d.render3d.renderAll(true);
+      }, 1000);
 
     }
 
@@ -270,9 +273,12 @@ export class Export
       }
       finally
       {
-        this.c3d.render3d.renderAll(true);
         this.c3d.showHideUI.enableContainer();
-        setTimeout(() => this.c3d.preloader.hide(), 1000);
+        setTimeout(() =>
+        {
+          this.c3d.preloader.hide();
+          this.c3d.render3d.renderAll(true);
+        }, 1000);
       }
     }
 

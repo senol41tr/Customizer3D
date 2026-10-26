@@ -12,6 +12,7 @@ export class ColorAnalyzer
     {
         this.name = 'colorAnalyzer';
         this.label = 'Color Analyzer';
+        this.ratio = null;
 
         this.c3d = null;
         this.layer = null;
@@ -347,8 +348,7 @@ export class ColorAnalyzer
                 currentShape = this._getHashType(item.key);
             }
 
-            const ratio = this.c3d.settings.MAX_DPI / (this.c3d.props.data[this.layer.name].printSize.dpi || this.c3d.settings.MAX_DPI);
-            this.drawCtx.lineWidth = this.options.strokeWidth * ratio;
+            this.drawCtx.lineWidth = this.options.strokeWidth * this.ratio;
             if (this.options.useOriginalColor) {
                 this.drawCtx.strokeStyle = `rgb(${item.r}, ${item.g}, ${item.b})`;
             } else {
@@ -359,7 +359,7 @@ export class ColorAnalyzer
 
             if (this.options.showText) {
                 this.drawCtx.fillStyle = this.options.useOriginalColor ? `rgba(${item.r}, ${item.g}, ${item.b}, ${this.options.labelOpacity})` : this.options.strokeColor;
-                this.drawCtx.font = `Bold ${this.options.fontSize}px monospace`;
+                this.drawCtx.font = `Bold ${this.options.fontSize * this.ratio}px monospace`;
                 this.drawCtx.textAlign = 'left';
                 this.drawCtx.textBaseline = 'middle';
 

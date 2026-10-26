@@ -1,9 +1,9 @@
-import {Image} from 'customizer3D_dir/layers/types/Image.js?c3d=0.6.0';
-import {Solid} from 'customizer3D_dir/layers/types/Solid.js?c3d=0.6.0';
-import {Text} from 'customizer3D_dir/layers/types/Text.js?c3d=0.6.0';
-import {Shape} from 'customizer3D_dir/layers/types/Shape.js?c3d=0.6.0';
-import {ThreeDText} from 'customizer3D_dir/layers/types/ThreeDText.js?c3d=0.6.0';
-import {ThreeDLogo} from 'customizer3D_dir/layers/types/ThreeDLogo.js?c3d=0.6.0';
+import {Image} from 'customizer3D_dir/layers/types/Image.js?c3d=0.6.1';
+import {Solid} from 'customizer3D_dir/layers/types/Solid.js?c3d=0.6.1';
+import {Text} from 'customizer3D_dir/layers/types/Text.js?c3d=0.6.1';
+import {Shape} from 'customizer3D_dir/layers/types/Shape.js?c3d=0.6.1';
+import {ThreeDText} from 'customizer3D_dir/layers/types/ThreeDText.js?c3d=0.6.1';
+import {ThreeDLogo} from 'customizer3D_dir/layers/types/ThreeDLogo.js?c3d=0.6.1';
 
 export class Layers
 {
@@ -17,7 +17,7 @@ export class Layers
         const layer = new Image(root, this.c3d, data);
         this.c3d.imageLayer.show(layer);
         layer.updateCanvas();
-        this.c3d.imageLayer.updatePreview(false, false);
+        // this.c3d.imageLayer.updatePreview(false, false);
         return layer;
     }
 
@@ -44,8 +44,6 @@ export class Layers
         const layer = new Shape(root, this.c3d, data);
         layer._init();
         this.c3d.shapeLayer.show(layer);
-        // layer.updateCanvas();
-        // this.c3d.shapeLayer.updatePreview();
         this.c3d._setNavActive(layer.name, false, false);
 
         return layer;
@@ -71,10 +69,10 @@ export class Layers
                 l.mesh.material.needsUpdate = true;
             }
 
-            await l.bakeImageToLayer();
+            l.bakeImageToLayer();
         }
 
-        this.c3d.threeDTextLayer.updatePreview(false, false);
+        // this.c3d.threeDTextLayer.updatePreview(false, false);
         this.c3d._setNavActive(layer.name, false, false);
         
         return layer;
@@ -85,7 +83,7 @@ export class Layers
         const layer = new ThreeDLogo(root, this.c3d, data);
         const l = this.c3d.threeDLogoLayer;
 
-        l.show(layer);
+        l.layer = layer;
 
         if(data.image) await l.loadSVGString();
 
@@ -96,16 +94,21 @@ export class Layers
 
             if(data.options?.materialOptions?.matcap)
             {
-                const tex = await l.textureLoader.loadAsync(data.options.materialOptions.matcap);
-                layer.__matcap = tex;
-                l.mesh.material.matcap = tex;
-                l.mesh.material.needsUpdate = true;
+                const matcap = await l.textureLoader.loadAsync(C3D_SERVER + data.options.materialOptions.matcap);
+                layer.__matcap = matcap;
+                l.mesh.getObjectByName('SVGGroup').children.forEach((child) =>
+                {
+                    const mat = child.material;
+                    if(mat.matcap?.isTexture) mat.matcap.dispose();
+                    mat.matcap = matcap;
+                    mat.needsUpdate = true;
+                });
             }
 
-            await l.bakeImageToLayer();
+            l.bakeImageToLayer();
         }
 
-        this.c3d.threeDLogoLayer.updatePreview(false, false);
+        // l.show(layer);
         this.c3d._setNavActive(layer.name, false, false);
         
         return layer;

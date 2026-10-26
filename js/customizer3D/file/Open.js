@@ -1,7 +1,7 @@
 import * as fflate from 'base/fflate@0.8.2/fflate.esm.js';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.6.0';
-import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.6.0';
-import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=0.6.0';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.6.1';
+import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.6.1';
+import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=0.6.1';
 
 export class Open
 {
@@ -94,6 +94,10 @@ export class Open
             const u = data.printSize.unit;
             const d = data.printSize.dpi;
             await this.c3d.file._New._createNewFile(w, h, u, d);
+            setTimeout(() => {
+                // this.c3d.showHideUI.hideSubWindows();
+                // this.c3d.render3d.renderAll(true);
+            }, 500);
         }
         else
         {
@@ -143,201 +147,9 @@ export class Open
             }
         }
 
-        // add layer(s)
-        const layersDiv = document.querySelectorAll(this.c3d.props.layers + ' > div.content > div');
-
-        // 
-        for (let i = 0; i < layersDiv.length; i++)
-        {
-            const meshName = layersDiv[i].dataset.mesh;
-            const layer = layersDiv[i].querySelector('div.content > div.layers');
-
-            for (let j = data[meshName].length - 1; j >= 0; j--)
-            {
-                const layerData = data[meshName][j];
-                
-                // side with color
-                if((layerData.hasOwnProperty('colors') || layerData.hasOwnProperty('color')) && layerData.hasOwnProperty('type') === false) 
-                {
-                    const color = layerData.color;
-                    const spans = layersDiv[i].querySelectorAll('div.content > div.buttons > span');
-
-                    for (let z = 0; z < spans.length; z++)
-                    {
-                        const span = spans[z];
-
-                        if(span.style.backgroundColor === color)
-                        {
-                            span.classList.add('active');
-                            span.click();
-                        }
-                        else
-                        {
-                            span.classList.remove('active');
-                        }
-                    }
-                    
-                    continue;
-                }
-                
-                // add layers
-                switch (layerData.type)
-                {
-
-                    case 'colorOnly':
-
-                        const solidLayer = layer.querySelector('div.colorOnly').self;
-                        solidLayer.color = layerData.color;
-                        solidLayer.update();
-
-                    break;
-
-                    case 'solid':
-
-                        await this.c3d.layers.addSolid(layer, layerData);
-
-
-                    break;
-                    
-                    case 'text': 
-
-                        await this.c3d.layers.addText(layer, layerData);
-
-                    break;
-        
-                    case 'image':
-
-                        const img = new Image();
-                        const blob = new Blob([unzipped[layerData.image]], {type: layerData.detectedFileType});
-                        try
-                        {
-                            await new Promise((resolve, reject) =>
-                            {
-                                img.decoding = 'async';
-                                img.src = URL.createObjectURL(blob);
-                                img.onload = () => {
-                                img.decode()
-                                    .then(() => {
-                                        resolve(img);
-                                    })
-                                    .catch((err) => reject(err));
-                                };
-                                img.onerror = (err) => reject(err);
-                            });
-                        }
-                        catch (e)
-                        {
-                            console.error(e);
-                        }
-
-                        if(layerData.changeable)
-                        {
-                            layerData.image = img;
-                            await this.c3d.layers.addImage(layer, layerData);
-                        }
-                        else
-                        {
-                            const imgLayer = layer.querySelector('div.image').self;
-                            let fileName = layerData.fileName.substring(layerData.fileName.lastIndexOf('/') + 1);
-                            if(fileName.indexOf('?') > -1) fileName = fileName.substring(0, fileName.indexOf('?'));
-
-                            imgLayer.image = img;
-                            imgLayer.fileName = fileName;
-                            imgLayer.imagePosition = layerData.imagePosition;
-                            imgLayer.rotation = layerData.rotation,
-                            imgLayer.zoom = layerData.zoom,
-                            imgLayer.detectedFileType = layerData.detectedFileType,
-                            imgLayer.changeable = layerData.changeable,
-                            imgLayer.material = layerData.material,
-                            imgLayer.materialOptions = layerData.materialOptions,
-                            imgLayer.repeatX = layerData.repeatX,
-                            imgLayer.repeatY = layerData.repeatY;
-
-                            // set as active
-                            const textures = layersDiv[i].querySelectorAll('div.content > div.buttons > img.texture');
-                            
-                            for (let z = 0; z < textures.length; z++)
-                            {
-                                const texture = textures[z];
-                                let fileName = texture.src.substring(texture.src.lastIndexOf('/') + 1);
-                                if(fileName.indexOf('?') > -1) fileName = fileName.substring(0, fileName.indexOf('?'));
-                                
-                                if(fileName === imgLayer.fileName)
-                                {
-                                    texture.classList.add('active');
-                                    texture.click();
-                                    break;
-                                }
-                                else
-                                {
-                                    texture.classList.remove('active');
-                                }
-                            }
-                            
-                        }
-
-                    break;
-
-
-                    case 'shape': 
-
-                        await this.c3d.layers.addShape(layer, layerData);
-
-                    break;
-
-
-                    case 'threeDText': 
-
-                        await this.c3d.layers.addThreeDText(layer, layerData);
-                        
-                    break;
-
-
-                    case 'threeDLogo': 
-
-                        let img3D;
-                        const blob3D = new Blob([unzipped[layerData.image]], {type: layerData.detectedFileType});
-
-                        if(layerData.detectedFileType == 'image/svg+xml')
-                        {
-                            img3D = await new Promise((resolve, reject) =>
-                            {
-                                const img = new Image();
-                                img.onload = () => {
-                                    resolve(img);
-                                };
-                                img.src = URL.createObjectURL(blob3D);
-                            });
-                        }
-                        else
-                        {
-                            img3D = await new Promise((resolve, reject) =>
-                            {
-                                const img = new Image();
-                                img.decoding = 'async';
-                                img.onload = () => {
-                                    img.decode()
-                                    .then(() => {
-                                        resolve(img);
-                                    })
-                                    .catch((err) => reject(err));
-                                };
-                                img.onerror = (err) => reject(err);
-                                img.src = URL.createObjectURL(blob3D);
-                            });
-                        }
-                        
-                        layerData.image = img3D;
-                        await this.c3d.layers.addThreeDLogo(layer, layerData);
-                        
-                    break;
-                }
-
-            }
-
-        }
-
-        if(data.modelName != 'C2D') this._reRender();
+        await this._processLayers(data, unzipped);
+        this._reRender();
+        // if(data.modelName != 'C2D') this._reRender();
 
     }
 
@@ -385,7 +197,163 @@ export class Open
         this._reRender();
     }
     
-    // gemini.google.com
+
+    async _loadImageFromBlob(blob, fileType) {
+        
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            const objectUrl = URL.createObjectURL(blob);
+            img.onload = async () => {
+                if (fileType !== 'image/svg+xml' && 'decode' in img) {
+                    try {
+                        img.decoding = 'async';
+                        await img.decode();
+                    } catch (err) {
+                        console.warn("Image decode warning:", err);
+                    }
+                }
+                resolve(img);
+            };
+
+            img.onerror = (err) => {                
+                URL.revokeObjectURL(objectUrl);
+                reject(err);
+            };
+
+            img.src = objectUrl;
+        });
+    }
+
+
+    async _processLayers(data, unzipped)
+    {
+        const layersDivs = Array.from(
+            document.querySelectorAll(this.c3d.props.layers + ' > div.content > div')
+        );
+
+        for await (const layerDiv of layersDivs) {
+            const meshName = layerDiv.dataset.mesh;
+            const layer = layerDiv.querySelector('div.content > div.layers');
+
+            if (!data[meshName]) continue;
+
+            const meshLayers = data[meshName].slice().reverse();
+
+            for await (const layerData of meshLayers) {
+
+                const hasColors = layerData.hasOwnProperty('colors') || layerData.hasOwnProperty('color');
+                const hasNoType = layerData.hasOwnProperty('type') === false;
+
+                if (hasColors && hasNoType) {
+                    const color = layerData.color;
+                    const buttons = layerDiv.querySelectorAll('div.content > div.buttons > span');
+
+                    for (const span of buttons) {
+                        if (span.style.backgroundColor === color) {
+                            span.classList.add('active');
+                            span.click();
+                        } else {
+                            span.classList.remove('active');
+                        }
+                    }
+                    continue;
+                }
+
+                switch (layerData.type) {
+
+                    case 'colorOnly': {
+                        const solidLayer = layer.querySelector('div.colorOnly').self;
+                        solidLayer.color = layerData.color;
+                        solidLayer.update();
+                        break;
+                    }
+
+                    case 'solid': {
+                        await this.c3d.layers.addSolid(layer, layerData);
+                        break;
+                    }
+
+                    case 'text': {
+                        await this.c3d.layers.addText(layer, layerData);
+                        break;
+                    }
+
+                    case 'image': {
+                        try {
+                            const blob = new Blob([unzipped[layerData.image]], { type: layerData.detectedFileType });
+                            const img = await this._loadImageFromBlob(blob, layerData.detectedFileType);
+
+                            if (layerData.changeable) {
+                                layerData.image = img;
+                                await this.c3d.layers.addImage(layer, layerData);
+                            } else {
+                                const imgLayer = layer.querySelector('div.image').self;
+                                
+                                let fileName = layerData.fileName.substring(layerData.fileName.lastIndexOf('/') + 1);
+                                if (fileName.includes('?')) {
+                                    fileName = fileName.split('?')[0];
+                                }
+
+                                imgLayer.image = img;
+                                imgLayer.fileName = fileName;
+                                imgLayer.imagePosition = layerData.imagePosition;
+                                imgLayer.rotation = layerData.rotation;
+                                imgLayer.zoom = layerData.zoom;
+                                imgLayer.detectedFileType = layerData.detectedFileType;
+                                imgLayer.changeable = layerData.changeable;
+                                imgLayer.material = layerData.material;
+                                imgLayer.materialOptions = layerData.materialOptions;
+                                imgLayer.repeatX = layerData.repeatX;
+                                imgLayer.repeatY = layerData.repeatY;
+
+                                const textures = layerDiv.querySelectorAll('div.content > div.buttons > img.texture');
+                                for (const texture of textures) {
+                                    let texFileName = texture.src.substring(texture.src.lastIndexOf('/') + 1);
+                                    if (texFileName.includes('?')) {
+                                        texFileName = texFileName.split('?')[0];
+                                    }
+
+                                    if (texFileName === imgLayer.fileName) {
+                                        texture.classList.add('active');
+                                        texture.click();
+                                        break;
+                                    } else {
+                                        texture.classList.remove('active');
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                            console.error("Image loading error!", e);
+                        }
+                        break;
+                    }
+
+                    case 'shape': {
+                        await this.c3d.layers.addShape(layer, layerData);
+                        break;
+                    }
+
+                    case 'threeDText': {
+                        await this.c3d.layers.addThreeDText(layer, layerData);
+                        break;
+                    }
+
+                    case 'threeDLogo': {
+                        try {
+                            const blob3D = new Blob([unzipped[layerData.image]], { type: layerData.detectedFileType });
+                            const img3D = await this._loadImageFromBlob(blob3D, layerData.detectedFileType);
+                            layerData.image = img3D;
+                            await this.c3d.layers.addThreeDLogo(layer, layerData);
+                        } catch (e) {
+                            console.error("threeDLogo Error!", e);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     _getUint8ArrayFromFile(file)
     {
         return new Promise(resolve => {

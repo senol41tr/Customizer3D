@@ -1,12 +1,12 @@
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.0';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.0';
-import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.6.0';
-import {applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.6.0';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.1';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.1';
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.6.1';
+import {applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.6.1';
 
 export const drawLayerToCTX = (c3d, canvas, layer, isExport) =>
 {  
   const ctx = canvas.getContext('2d', {willReadFrequently: true});
-  const lt = c3d[layer.type + 'Layer'];
+  const lt = layer.type + 'Layer';
 
   switch (layer.type)
   {
@@ -31,9 +31,9 @@ export const drawLayerToCTX = (c3d, canvas, layer, isExport) =>
 
         if(isExport)
         {
-            layer.updateCanvas(isExport);
-            applyEffects(c3d, layer, lt, isExport);
-            applyFilters(c3d, layer, lt, isExport);
+          layer.updateCanvas(isExport);
+          applyEffects(c3d, layer, lt, isExport);
+          applyFilters(c3d, layer, lt, isExport);
         }
         
         ctx.save();
@@ -56,26 +56,27 @@ export const drawLayerToCTX = (c3d, canvas, layer, isExport) =>
         {
             if(layer.type == 'threeDText')
             {
-                const l = c3d.threeDTextLayer;
-                l.layer = layer;
-                l._create();
-                l.bakeImageToLayer(isExport);
+              const l = c3d.threeDTextLayer;
+              l.layer = layer;
+              l._create();
+              l.bakeImageToLayer(isExport);
             }
             else if(layer.type == 'threeDLogo')
             {
-                const l = c3d.threeDLogoLayer;
-                l.layer = layer;
-                l._create();
-                l.bakeImageToLayer(isExport);
+              const l = c3d.threeDLogoLayer;
+              l.layer = layer;
+              l._create();
+              l.bakeImageToLayer(isExport);
             }
             else
             {
-                layer.updateCanvas(isExport);
-                if(c3d[lt])
-                {
-                    applyEffects(c3d, layer, lt, isExport);
-                    applyFilters(c3d, layer, lt, isExport);
-                }
+              layer.updateCanvas(isExport);
+            }
+
+            if(c3d[lt])
+            {
+              applyEffects(c3d, layer, lt, isExport);
+              applyFilters(c3d, layer, lt, isExport);
             }
         }
 
@@ -110,7 +111,12 @@ export const drawLayerToCTX = (c3d, canvas, layer, isExport) =>
 
       case 'shape':
 
-        if(isExport) layer.updateCanvas(isExport);
+        if(isExport)
+        {
+          layer.updateCanvas(isExport);
+          applyFilters(c3d, layer, lt, isExport);
+        }
+
         ctx.save();
         ctx.globalCompositeOperation = layer.blendMode;
         ctx.globalAlpha = layer.opacity / 100;
@@ -126,5 +132,5 @@ export const drawLayerToCTX = (c3d, canvas, layer, isExport) =>
       break;
 
   }
-
+  
 }

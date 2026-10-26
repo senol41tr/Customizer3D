@@ -1,7 +1,9 @@
-import {PointCloud} from './PointCloud.js?c3d=0.6.0';
-import {ColorAnalyzer} from './ColorAnalyzer.js?c3d=0.6.0';
-import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.6.0';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.0';
+import {PointCloud} from './PointCloud.js?c3d=0.6.1';
+import {ColorAnalyzer} from './ColorAnalyzer.js?c3d=0.6.1';
+
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.6.1';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.1';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.1';
 
 const EffectsList =
 {
@@ -23,6 +25,15 @@ export const applyEffects = (c3d, layer, layerName, isExport) =>
     const effects = Object.entries(layer.effects);
     if(!effects.length) return;
 
+    let ratio = 1;
+    if(isExport)
+    {
+        const ps = c3d.props.data[layer.name].printSize;
+        const widthInPX = new Size({size: ps.width, DPI: ps.dpi}).px;
+        const canvasWidthInPX = c3d.three._screeDims.width;
+        ratio = Math.max(1, widthInPX / canvasWidthInPX);
+    }
+
     for (let j = 0; j < effects.length; j++)
     {
         const effect = effects[j][0];
@@ -31,6 +42,7 @@ export const applyEffects = (c3d, layer, layerName, isExport) =>
         fxClass.c3d = c3d;
         fxClass.layer = layer;
         fxClass.layerName = layerName;
+        fxClass.ratio = ratio;
         fxClass.show();
         fxClass.apply();
         fxClass.hide();
@@ -69,7 +81,7 @@ export const createEffectsList = (c3d, root, layerName) =>
                     <input type="checkbox" data-effect="${name}"${checked}>
                     ${effect[1].label}
                 </label>
-                <img src="${C3D_SERVER}svg/settings.svg?c3d=0.6.0" alt="Icon" class="settings" draggable="false" style="height: auto; width:20px; cursor:pointer;" title="Edit Effect Settings">
+                <img src="${C3D_SERVER}svg/settings.svg?c3d=0.6.1" alt="Icon" class="settings" draggable="false" style="height: auto; width:20px; cursor:pointer;" title="Edit Effect Settings">
             </div>
         `;
 

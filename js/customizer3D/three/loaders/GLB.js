@@ -1,4 +1,4 @@
-import { DefaultLoader } from './DefaultLoader.js?c3d=0.6.0';
+import { DefaultLoader } from './DefaultLoader.js?c3d=0.6.1';
 
 export class GLB extends DefaultLoader
 {

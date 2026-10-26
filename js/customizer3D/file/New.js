@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.0';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.0';
-import {calculateDynamicDPI, getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.0';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.1';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.1';
+import {calculateDynamicDPI, getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.1';
 
 export class New
 {
@@ -239,8 +239,8 @@ export class New
     ps.dpi = dpi;
     
     await this.c3d._createLayerData();
-        
-    setTimeout(() => {this.c3d._setNavActive('area', true, false);this.c3d.showHideUI.hideSubWindows();}, 500);
+       
+    setTimeout(() => {this.c3d._setNavActive('area', true, false);}, 500);
 
   }
 }

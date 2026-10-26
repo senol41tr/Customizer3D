@@ -1,5 +1,5 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.0';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.0';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.1';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.1';
 
 export function lang()
 {
@@ -81,6 +81,7 @@ export function setView(view, fn = 'to')
     switch (view)
     {
         case 'area':
+        default:
             this.three.rotateToAngle(0, 0, 0);
         break;
     }

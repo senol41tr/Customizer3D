@@ -349,7 +349,7 @@ function NoiseFilter(){
 		density : {min:0, max:1.0},
 		monochrome : {min:false, max:true}
 	};
-	this.filter = function(input,values){
+	this.filter = function(input,values){		
 		var width = input.width, height = input.height;
 		var inputData = input.data;
 		if(values === undefined){ values = this.defaultValues; }
@@ -646,46 +646,59 @@ function EdgeFilter(){
 /** 
  * Sharp
  */
-function SharpenFilter(){
-	this.name = "Sharpen";
-	this.isDirAnimatable = true;
-	this.defaultValues = {
-		value : 0.2
-	};
-	this.valueRanges = {
-		value : {min:0.0, max:4.0}
-	};
+function SharpenFilter() {
+    this.name = "Sharpen";
+    this.isDirAnimatable = true;
+    this.defaultValues = {
+        value: 0.2
+    };
+    this.valueRanges = {
+        value: { min: 0.0, max: 4.0 }
+    };
 
-	this.filter = function(input,values){
-		var width = input.width, height = input.height;
-		var value = (values.value === undefined) ? this.defaultValues.value : values.value;
-		var outputData = [];
-		const src = input.data;
-		const mix = value; 
-		const w0 = -mix;
-		const w1 = 5 * mix + (1 - mix);
-			for (let y = 1; y < height - 1; y++) {
-					for (let x = 1; x < width - 1; x++) {
-							const idx = (y * width + x) * 4;
+    this.filter = function(input, values) {
+        var width = input.width, height = input.height;
+        var value = (values.value === undefined) ? this.defaultValues.value : values.value;
+        
+        const src = input.data;
 
-							for (let c = 0; c < 3; c++) {
-									
-									const top    = ((y - 1) * width + x) * 4 + c;
-									const bottom = ((y + 1) * width + x) * 4 + c;
-									const left   = (y * width + (x - 1)) * 4 + c;
-									const right  = (y * width + (x + 1)) * 4 + c;
-									const center = idx + c;
-									const val = src[center] * w1 + (src[top] + src[bottom] + src[left] + src[right]) * w0;
+        if (!src || src.length === 0) return;
 
-									outputData[center] = Math.min(255, Math.max(0, val));
-							}
-							outputData[idx + 3] = src[idx + 3];
-					}
-			}
-			for(var k = 0; k < outputData.length; k++){
-				src[k] = outputData[k];
-			}
-	};
+        const outputData = new Uint8ClampedArray(src.length);
+        outputData.set(src);
+
+        const mix = value; 
+        const w0 = -mix;
+        const w1 = 5 * mix + (1 - mix);
+
+        for (let y = 1; y < height - 1; y++) {
+            for (let x = 1; x < width - 1; x++) {
+                const idx = (y * width + x) * 4;
+
+                for (let c = 0; c < 3; c++) {
+                    const top    = ((y - 1) * width + x) * 4 + c;
+                    const bottom = ((y + 1) * width + x) * 4 + c;
+                    const left   = (y * width + (x - 1)) * 4 + c;
+                    const right  = (y * width + (x + 1)) * 4 + c;
+                    const center = idx + c;
+
+                    const val = src[center] * w1 + (src[top] + src[bottom] + src[left] + src[right]) * w0;
+
+                    outputData[center] = Math.min(255, Math.max(0, val));
+                }
+                
+                outputData[idx + 3] = src[idx + 3];
+            }
+        }
+
+        if (src.set) {
+            src.set(outputData);
+        } else {
+            for (let k = 0; k < outputData.length; k++) {
+                src[k] = outputData[k];
+            }
+        }
+    };
 }
 
 /**

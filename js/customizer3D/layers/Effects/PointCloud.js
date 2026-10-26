@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 import {GUI} from 'three_dir/libs/lil-gui.module.min.js';
-import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.6.0';
-import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.6.0';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.6.0';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.0';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.0';
-import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=0.6.0';
+import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.6.1';
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.6.1';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.6.1';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.1';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.1';
+import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=0.6.1';
 
 export class PointCloud
 {
@@ -13,6 +13,7 @@ export class PointCloud
     {
         this.name = 'pointCloud';
         this.label = 'Point Cloud';
+        this.ratio = null;
 
         this.c3d = null;
         this.layer = null;
@@ -106,7 +107,7 @@ export class PointCloud
         this.options =
         {
             uPosZ: 0.08,
-            uPointSize: 1.2,
+            uPointSize: 1.2 * this.ratio,
             blending: true,
             transparentBG: true,
             bgColor: '#000000',

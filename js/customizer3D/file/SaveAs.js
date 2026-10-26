@@ -34,7 +34,7 @@ export class SaveAs
         json['customFonts'] = [];
 
         // 
-        let imageIndex = 0;
+        let imageIndex = 0, uint8Array, imageName;
 
         for (let i = 0; i < layersDiv.length; i++)
         {
@@ -138,7 +138,7 @@ export class SaveAs
 
                         if(!layer.image) continue;
 
-                        const imageName = 'img' + imageIndex;
+                        imageName = 'img' + imageIndex;
 
                         json[meshName].push({
                             type: layer.type,
@@ -159,12 +159,9 @@ export class SaveAs
                             effects: layer.effects
                         });
 
-                        response = await fetch(layer.image.src);
-                        arrayBuffer = await response.arrayBuffer();
-
-                        filesToZip[imageName] = new Uint8Array(arrayBuffer);
-                        response = null;
-                        arrayBuffer = null;
+                        uint8Array = await this._prepareImageForZip(layer.image.src, layer.detectedFileType);
+                        filesToZip[imageName] = uint8Array;
+                        uint8Array = null;
 
                         imageIndex++;
 
@@ -218,11 +215,11 @@ export class SaveAs
 
                     case 'threeDLogo':
     
-                        const logoImageName = 'img' + imageIndex;
+                        imageName = 'img' + imageIndex;
 
                         json[meshName].push({
                             type: layer.type,
-                            image: logoImageName,
+                            image: imageName,
                             imagePosition: layer.imagePosition,
                             rotation:layer.rotation,
                             opacity: layer.opacity, 
@@ -240,12 +237,9 @@ export class SaveAs
                             options: layer.options
                         });
 
-                        response = await fetch(layer.image.src);
-                        arrayBuffer = await response.arrayBuffer();
-
-                        filesToZip[logoImageName] = new Uint8Array(arrayBuffer);
-                        response = null;
-                        arrayBuffer = null;
+                        uint8Array = await this._prepareImageForZip(layer.sourceImage.src, layer.detectedFileType);
+                        filesToZip[imageName] = uint8Array;
+                        uint8Array = null;
 
                         imageIndex++;
                         
@@ -276,6 +270,37 @@ export class SaveAs
         setTimeout(() => this.c3d.preloader.hide(), 1000);
 
         this.c3d.showHideUI.show();
+    }
+
+
+    async _prepareImageForZip(imageSrc, detectedFileType = 'image/png')
+    {
+        try {
+            const response = await fetch(imageSrc);
+            if (!response.ok) {
+                throw new Error(`Görsel çekilemedi! HTTP Kodu: ${response.status}`);
+            }
+            
+            const arrayBuffer = await response.arrayBuffer();
+
+            if (detectedFileType === 'image/svg+xml' || imageSrc.includes('.svg') || imageSrc.startsWith('data:image/svg+xml')) {
+                const decoder = new TextDecoder('utf-8');
+                let svgText = decoder.decode(arrayBuffer);
+
+                if (!svgText.includes('xmlns=')) {
+                    svgText = svgText.replace(/<svg/i, '<svg xmlns="http://www.w3.org/2000/svg"');
+                }
+
+                const encoder = new TextEncoder();
+                return encoder.encode(svgText);
+            }
+
+            return new Uint8Array(arrayBuffer);
+
+        } catch (error) {
+            console.error("prepareImageForZip Erorr!", error);
+            throw error;
+        }
     }
 
 }

@@ -1,6 +1,6 @@
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.6.0';
-import {SVGFill, SVGFillColor} from 'customizer3D_dir/utils/SVGFill.js?c3d=0.6.0';
-import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=0.6.0';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.6.1';
+import {SVGFill, SVGFillColor} from 'customizer3D_dir/utils/SVGFill.js?c3d=0.6.1';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=0.6.1';
 
 export class Settings
 {
@@ -38,7 +38,7 @@ export class Settings
         this.MAX_GPU_TEXTURE_SIZE = gl.getParameter(gl.MAX_TEXTURE_SIZE);
 
 
-        const availableLangs = Object.entries(JSON.parse(await (await fetch(C3D_SERVER + 'lang/langs.json?c3d=0.6.0')).text()));
+        const availableLangs = Object.entries(JSON.parse(await (await fetch(C3D_SERVER + 'lang/langs.json?c3d=0.6.1')).text()));
         let availableLangsDiv = document.createElement('div');
         const activeLang = this.c3d.localStorage.get('language');
 
@@ -106,7 +106,7 @@ export class Settings
         this.htmlEl.innerHTML = `
         <div class="title">
             <div class="title">
-                <img src="${C3D_SERVER}svg/settings.svg?c3d=0.6.0" alt="Icon" class="icon" draggable="false">
+                <img src="${C3D_SERVER}svg/settings.svg?c3d=0.6.1" alt="Icon" class="icon" draggable="false">
             </div>
         </div>
 
@@ -121,7 +121,7 @@ export class Settings
 
             <div class="colors">
                 <div class="title">
-                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.6.0" alt="Icon" class="icon">
+                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.6.1" alt="Icon" class="icon">
                     <p>${this.c3d.lang['change-ui-colors']}</p>
                 </div>
                 <div class="colors">
@@ -149,7 +149,7 @@ export class Settings
 
             <div class="renderDPI">
                 <div class="title">
-                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.6.0" alt="Icon" class="icon">
+                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.6.1" alt="Icon" class="icon">
                     <p>${this.c3d.lang['image-quality']}</p>
                 </div>
 
@@ -292,7 +292,7 @@ export class Settings
         const aboutContainer = document.createElement('div');
         aboutContainer.setAttribute('class', 'about');
         aboutContainer.innerHTML = `
-            <img src="${C3D_SERVER}svg/customizer_3D_logo.svg?c3d=0.6.0" alt="Customizer3D Logo" class="logo">
+            <img src="${C3D_SERVER}svg/customizer_3D_logo.svg?c3d=0.6.1" alt="Customizer3D Logo" class="logo">
             <p class="title">Used Libraries:</p>
             <div>
                 <p>Three.js</p>
@@ -304,7 +304,7 @@ export class Settings
             </div>
             <div>
                 <p>PDF.js</p>
-                <a href="https://mozilla.github.io/pdf.js?c3d=0.6.0" target="_blank">#</a>
+                <a href="https://mozilla.github.io/pdf.js?c3d=0.6.1" target="_blank">#</a>
             </div>
             <div>
                 <p>fflate</p>
@@ -312,11 +312,11 @@ export class Settings
             </div>
             <div>
                 <p>JS Color Picker</p>
-                <a href="https://www.jscolorpicker.com?c3d=0.6.0" target="_blank">#</a>
+                <a href="https://www.jscolorpicker.com?c3d=0.6.1" target="_blank">#</a>
             </div>
             <div>
                 <p>opentype.js</p>
-                <a href="https://opentype.js.org?c3d=0.6.0" target="_blank">#</a>
+                <a href="https://opentype.js.org?c3d=0.6.1" target="_blank">#</a>
             </div>
             <div>
                 <p>jsColorEngine</p>

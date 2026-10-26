@@ -1,5 +1,5 @@
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.0';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.0';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.1';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.1';
 
 export const getPrintDims = (c3d, layer, DPI, isExport = false) =>
 {

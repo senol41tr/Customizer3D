@@ -1,4 +1,5 @@
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.0';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.1';
+// import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.1';
 
 export const applyFilters = (c3d, layer, layerName, isExport) =>
 {
@@ -18,6 +19,15 @@ export const applyFilters = (c3d, layer, layerName, isExport) =>
 
     if(filters.length > 0)
     {
+        // let ratio = 1;
+        // if(isExport)
+        // {
+        //     const ps = c3d.props.data[layer.name].printSize;
+        //     const widthInPX = new Size({size: ps.width, DPI: ps.dpi}).px;
+        //     const canvasWidthInPX = c3d.three._screeDims.width;
+        //     ratio = Math.max(1, widthInPX / canvasWidthInPX);
+        // }
+
         const data = ctx.getImageData(0,0,layer.canvas.width, layer.canvas.height);
 
         for (let j = 0; j < filters.length; j++)
@@ -25,6 +35,7 @@ export const applyFilters = (c3d, layer, layerName, isExport) =>
             const filter = filters[j][0];
             const props = filters[j][1];
             
+            // JSManipulate[filter].filter(data, props, ratio);
             JSManipulate[filter].filter(data, props);
         }
         ctx.putImageData(data,0,0);
