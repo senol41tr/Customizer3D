@@ -188,13 +188,25 @@ export class Export
       const fileName = this.c3d.props.modelName + '_'+ (date.getMonth() + 1) + '.' + date.getDate();
 
       this.c3d.preloader.set(this.c3d.lang['downloading-pdf']);
-      pdf.save(fileName + '.pdf');
+      // pdf.save(fileName + '.pdf');
+
+      const pdfBlob = pdf.output('blob');
+      const blobUrl = URL.createObjectURL(pdfBlob);
+
+      const downloadLink = document.createElement('a');
+      downloadLink.href = blobUrl;
+      downloadLink.download = `${fileName}.pdf`;
+
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      downloadLink.remove();
 
       setTimeout(() =>
       {
         this.c3d.preloader.hide();
         this.c3d.showHideUI.enableContainer();
         this.c3d.render3d.renderAll(true);
+        URL.revokeObjectURL(blobUrl);
       }, 1000);
 
     }
