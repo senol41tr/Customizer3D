@@ -517,7 +517,7 @@ export class ThreeDTextLayer
             material:
             {
                 color: '#ffffff',
-                matcap: 'js/customizer3D/three/material/assets/matcaps/gold/27.webp'
+                matcap: this.materialBrowser.root + 'matcaps/gold/27.webp'
             },
 
             geometry:
