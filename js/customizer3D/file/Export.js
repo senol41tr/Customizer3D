@@ -200,8 +200,8 @@ export class Export
     }
 
 
-    async exportAsPNG()
-    {
+
+    async exportAsPNG() {
       this.c3d.showHideUI.disableContainer();
       this.c3d.preloader.show();
       this.c3d.preloader.set(this.c3d.lang['exporting-png']);
@@ -209,23 +209,20 @@ export class Export
       const layersData = Object.entries(this.c3d.props.data);
       const layersDiv = document.querySelector(this.c3d.props.layers);
 
-      async function* generatePngLayers()
-      {
-        for (let i = 0; i < layersData.length; i++)
-        {
+      async function* generatePngLayers() {
+        for (let i = 0; i < layersData.length; i++) {
           const meshName = layersData[i][0];
+          if (meshName === '*') continue;
 
-          if (meshName == '*') continue;
+          const layers = layersDiv.querySelectorAll(`[data-mesh='${meshName}'] > div.content > div.layers > div`);
 
-          const layers = layersDiv.querySelectorAll('[data-mesh=\'' + meshName + '\'] > div.content > div.layers > div');
-
-          if (layers.length == 1 && layers[0].classList.contains('colorOnly')) continue;
-
+          if (layers.length === 1 && layers[0].classList.contains('colorOnly')) continue;
           if (layersData[i][1].hasOwnProperty('materials') && layersData[i][1]['materials'][0].hasOwnProperty('colors')) continue;
 
           const layerInfo = layersData[i][1];
-          const printSize = layerInfo.printSize;
+          const printSize = layerInfo.printSize || { width: 100, height: 100, dpi: 300 };
           const dpi = printSize.dpi || 300;
+          
           const canvas = document.createElement('canvas');
 
           canvas.width = new Size({ size: printSize.width, DPI: dpi }).px;
@@ -235,17 +232,16 @@ export class Export
             index: i + 1,
             total: layersData.length,
             meshName: meshName,
-            label: layerInfo.label,
+            label: layerInfo.label || meshName,
             canvas: canvas
           };
         }
       }
 
-      try
-      {
-        for await (const layer of generatePngLayers())
-        {
-          this.c3d.preloader.set(this.c3d.lang['creating-png'] + '<br>' + layer.label + '...');
+      try {
+        for await (const layer of generatePngLayers()) {
+          this.c3d.preloader.set(this.c3d.lang['creating-png'] + '\n' + layer.label + '...');
+          await new Promise(resolve => setTimeout(resolve, 50)); 
 
           const drawedCanvas = await this._getCanvas(
             layer.canvas, 
@@ -254,34 +250,40 @@ export class Export
             layer.index + ' - ' + layer.total
           );
 
-          const blob = await new Promise(resolve => drawedCanvas.toBlob(resolve, 'image/png', 1.0));
+          await new Promise(resolve => setTimeout(resolve, 50));
+
+          const blob = await new Promise((resolve, reject) => {
+            drawedCanvas.toBlob((b) => {
+              if (b) {
+                resolve(b);
+              } else {
+                reject(new Error(`For ${layer.meshName} Can't create PNG Blob. (Memory may be insufficient)`));
+              }
+            }, 'image/png', 1.0);
+          });
 
           const a = document.createElement('a');
           const blobUrl = URL.createObjectURL(blob);
           a.href = blobUrl;
           a.download = layer.meshName + '.png';
+          
+          document.body.appendChild(a);
           a.click();
           a.remove();
 
-          await new Promise(resolve => setTimeout(resolve, 250));
+          await new Promise(resolve => setTimeout(resolve, 500));
           URL.revokeObjectURL(blobUrl);
         }
-      }
-      catch (error)
-      {
-        console.error(error);
-      }
-      finally
-      {
+      } catch (error) {
+        console.error("Export PNG Error:", error);
+      } finally {
         this.c3d.showHideUI.enableContainer();
-        setTimeout(() =>
-        {
+        setTimeout(() => {
           this.c3d.preloader.hide();
           this.c3d.render3d.renderAll(true);
         }, 1000);
       }
     }
-
 
 
     async _getCanvas(canvas, meshName, str, count)
