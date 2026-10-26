@@ -1,6 +1,6 @@
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.9';
-import {SVGFill, SVGFillColor} from 'customizer3D_dir/utils/SVGFill.js?c3d=0.5.9';
-import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=0.5.9';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.6.0';
+import {SVGFill, SVGFillColor} from 'customizer3D_dir/utils/SVGFill.js?c3d=0.6.0';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=0.6.0';
 
 export class Settings
 {
@@ -9,6 +9,7 @@ export class Settings
         this.c3d = c3d;        
         this.htmlEl = document.querySelector(this.c3d.props.settings);
 
+        this.MAX_DPI = 300;
         this.MIN_TEXTURE_SIZE = 512;
         this.MAX_TEXTURE_SIZE = 2048;
         this.MAX_GPU_TEXTURE_SIZE = 2048;
@@ -37,7 +38,7 @@ export class Settings
         this.MAX_GPU_TEXTURE_SIZE = gl.getParameter(gl.MAX_TEXTURE_SIZE);
 
 
-        const availableLangs = Object.entries(JSON.parse(await (await fetch(C3D_SERVER + 'lang/langs.json?c3d=0.5.9')).text()));
+        const availableLangs = Object.entries(JSON.parse(await (await fetch(C3D_SERVER + 'lang/langs.json?c3d=0.6.0')).text()));
         let availableLangsDiv = document.createElement('div');
         const activeLang = this.c3d.localStorage.get('language');
 
@@ -105,7 +106,7 @@ export class Settings
         this.htmlEl.innerHTML = `
         <div class="title">
             <div class="title">
-                <img src="${C3D_SERVER}svg/settings.svg?c3d=0.5.9" alt="Icon" class="icon" draggable="false">
+                <img src="${C3D_SERVER}svg/settings.svg?c3d=0.6.0" alt="Icon" class="icon" draggable="false">
             </div>
         </div>
 
@@ -120,7 +121,7 @@ export class Settings
 
             <div class="colors">
                 <div class="title">
-                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.9" alt="Icon" class="icon">
+                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.6.0" alt="Icon" class="icon">
                     <p>${this.c3d.lang['change-ui-colors']}</p>
                 </div>
                 <div class="colors">
@@ -148,7 +149,7 @@ export class Settings
 
             <div class="renderDPI">
                 <div class="title">
-                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.9" alt="Icon" class="icon">
+                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.6.0" alt="Icon" class="icon">
                     <p>${this.c3d.lang['image-quality']}</p>
                 </div>
 
@@ -240,10 +241,10 @@ export class Settings
 
             setTimeout(() => {
                 // this.c3d.render2d.renderAll();
-                this.c3d.render3d.renderAll();
+                this.c3d.render3d.renderAll(true);
                 this.c3d.preloader.hide();
                 this.c3d.render3d._preDPI = val;
-                // this.c3d.showHideUI.show();
+                this.c3d.showHideUI.show();
             }, 300);
 
         });
@@ -291,7 +292,7 @@ export class Settings
         const aboutContainer = document.createElement('div');
         aboutContainer.setAttribute('class', 'about');
         aboutContainer.innerHTML = `
-            <img src="${C3D_SERVER}svg/customizer_3D_logo.svg?c3d=0.5.9" alt="Customizer3D Logo" class="logo">
+            <img src="${C3D_SERVER}svg/customizer_3D_logo.svg?c3d=0.6.0" alt="Customizer3D Logo" class="logo">
             <p class="title">Used Libraries:</p>
             <div>
                 <p>Three.js</p>
@@ -303,7 +304,7 @@ export class Settings
             </div>
             <div>
                 <p>PDF.js</p>
-                <a href="https://mozilla.github.io/pdf.js?c3d=0.5.9" target="_blank">#</a>
+                <a href="https://mozilla.github.io/pdf.js?c3d=0.6.0" target="_blank">#</a>
             </div>
             <div>
                 <p>fflate</p>
@@ -311,11 +312,11 @@ export class Settings
             </div>
             <div>
                 <p>JS Color Picker</p>
-                <a href="https://www.jscolorpicker.com?c3d=0.5.9" target="_blank">#</a>
+                <a href="https://www.jscolorpicker.com?c3d=0.6.0" target="_blank">#</a>
             </div>
             <div>
                 <p>opentype.js</p>
-                <a href="https://opentype.js.org?c3d=0.5.9" target="_blank">#</a>
+                <a href="https://opentype.js.org?c3d=0.6.0" target="_blank">#</a>
             </div>
             <div>
                 <p>jsColorEngine</p>

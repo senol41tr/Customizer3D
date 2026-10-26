@@ -1,7 +1,7 @@
 import * as fflate from 'base/fflate@0.8.2/fflate.esm.js';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.9';
-import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.5.9';
-import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=0.5.9';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.6.0';
+import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.6.0';
+import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=0.6.0';
 
 export class Open
 {
@@ -430,15 +430,12 @@ export class Open
         }
 
         this.c3d.three.start();
-
-        setTimeout(() => {
-            this.c3d.render3d.renderAll();
-            this.c3d.showHideUI.hideSubWindows();
-            this.c3d.preloader.hide();
-            this.c3d.showHideUI.show();
-            this.c3d._setNavActive();
-            this.c3d.three.render();
-        }, 250);  
+        this.c3d.render3d.renderAll(true);
+        this.c3d.preloader.hide();
+        this.c3d.showHideUI.show();
+        this.c3d._setNavActive();
+        this.c3d.showHideUI.hideSubWindows();
+        this.c3d.three.render();
         
     }
 

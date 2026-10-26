@@ -1,11 +1,14 @@
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.0';
+
 export const applyFilters = (c3d, layer, layerName, isExport) =>
 {
     if(!layer.canvas) return;
 
     if(layer.image)
     {
-        layer.canvas.width = layer.image.width;
-        layer.canvas.height = layer.image.height;
+        const printDims = getPrintDims(c3d, {name: layer.name}, c3d.settings.getRenderDPI(), isExport);
+        layer.canvas.width = printDims.width;
+        layer.canvas.height = printDims.height;
     }
 
     const ctx = layer.canvas.getContext('2d', {willReadFrequently: true});

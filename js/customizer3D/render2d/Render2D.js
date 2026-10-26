@@ -1,6 +1,6 @@
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.9';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.9';
-import {drawLayerToCTX} from 'customizer3D_dir/layers//utils/drawLayerToCTX.js?c3d=0.5.9';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.0';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.0';
+import {drawLayerToCTX} from 'customizer3D_dir/layers//utils/drawLayerToCTX.js?c3d=0.6.0';
 
 export class Render2D
 {
@@ -71,7 +71,7 @@ export class Render2D
 
             const label = document.createElement('p');
             label.setAttribute('class', 'label');
-            label.innerHTML = '<img src="' + C3D_SERVER + 'svg/arrow-drop-down.svg?c3d=0.5.9" class="arrow"><span class="label">'+ layerDesc +'</span>';
+            label.innerHTML = '<img src="' + C3D_SERVER + 'svg/arrow-drop-down.svg?c3d=0.6.0" class="arrow"><span class="label">'+ layerDesc +'</span>';
             div.appendChild(label);
 
             // Canvas

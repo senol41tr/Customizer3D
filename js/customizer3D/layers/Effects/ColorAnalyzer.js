@@ -108,7 +108,7 @@ export class ColorAnalyzer
             this.drawCanvas.width, 
             this.drawCanvas.height
         );
-        
+
         this.imgCtx.drawImage(source, (this.drawCanvas.width - imgDims.width) / 2, (this.drawCanvas.height - imgDims.height) / 2, imgDims.width, imgDims.height);
 
         this.mainTexture = new THREE.CanvasTexture(this.drawCanvas);
@@ -279,7 +279,6 @@ export class ColorAnalyzer
             this.drawCtx.fillRect(0, 0, width, height);
         }
         this.drawCtx.globalAlpha = this.options.bgOpacity;
-        this.drawCtx.imageSmoothingEnabled = false;
         this.drawCtx.drawImage(this.imgCanvas, 0, 0, width, height);
         this.drawCtx.restore();
 
@@ -348,7 +347,8 @@ export class ColorAnalyzer
                 currentShape = this._getHashType(item.key);
             }
 
-            this.drawCtx.lineWidth = this.options.strokeWidth;
+            const ratio = this.c3d.settings.MAX_DPI / (this.c3d.props.data[this.layer.name].printSize.dpi || this.c3d.settings.MAX_DPI);
+            this.drawCtx.lineWidth = this.options.strokeWidth * ratio;
             if (this.options.useOriginalColor) {
                 this.drawCtx.strokeStyle = `rgb(${item.r}, ${item.g}, ${item.b})`;
             } else {

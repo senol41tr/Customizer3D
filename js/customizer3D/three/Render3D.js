@@ -1,8 +1,8 @@
 import * as THREE from 'three';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.9';
-import {drawLayerToCTX} from 'customizer3D_dir/layers//utils/drawLayerToCTX.js?c3d=0.5.9';
-import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.9';
-import {applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.5.9';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.0';
+import {drawLayerToCTX} from 'customizer3D_dir/layers//utils/drawLayerToCTX.js?c3d=0.6.0';
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.6.0';
+import {applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.6.0';
 
 export class Render3D
 {
@@ -97,8 +97,14 @@ export class Render3D
             //
             if(applyFX)
             {
-                applyEffects(this.c3d, layer, 'threeDLogoLayer');
-                applyFilters(this.c3d, layer, 'threeDLogoLayer');
+                const lt = layer.type+'Layer';
+               
+                if(this.c3d[lt])
+                {
+                    applyEffects(this.c3d, layer, lt);
+                    applyFilters(this.c3d, layer, lt);
+                    this.c3d[lt].updatePreview(false, false);
+                }
             }
 
         }

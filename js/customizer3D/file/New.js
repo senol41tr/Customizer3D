@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.5.9';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.9';
-import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.9';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.0';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.0';
+import {calculateDynamicDPI, getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.0';
 
 export class New
 {
@@ -13,43 +13,6 @@ export class New
   async new2D()
   {
     this._showDialog();
-  }
-
-  calculateDynamicDPI(size, unit = 'px', maxDPI = 300)
-  {
-      const limits = getLimits(this.c3d);
-      const BASE_PIXELS = limits.display;
-      const BASE_DPI = 72;
-      const K = BASE_PIXELS * BASE_DPI;
-
-      if (!size || size <= 0) {
-          return BASE_DPI;
-      }
-
-      const u = String(unit).toLowerCase().trim();
-      let pxSize = size;
-
-      switch (u) {
-          case 'in':
-              pxSize = size * BASE_DPI;
-              break;
-          case 'cm':
-              pxSize = (size / 2.54) * BASE_DPI;
-              break;
-          case 'mm':
-              pxSize = (size / 25.4) * BASE_DPI;
-              break;
-          case 'px':
-          default:
-              pxSize = size;
-              break;
-      }
-      let calculatedDPI = K / pxSize;
-      if (maxDPI && maxDPI > 0) {
-          calculatedDPI = Math.min(calculatedDPI, maxDPI);
-      }
-
-      return Math.round(calculatedDPI);
   }
 
 
@@ -119,7 +82,7 @@ export class New
 
     const _onInput = (e) =>
     {
-      dpi.value = this.calculateDynamicDPI(width.value, selectUnit.value);
+      dpi.value = calculateDynamicDPI(this.c3d, Math.max(width.value, height.value), selectUnit.value);
 
       const maxSizeNumber = selectUnit.value == 'px' ? Math.round(maxSize) : maxSize;
       const maxSizeStr = maxSizeNumber.toFixed(2).replace('.00', '');
@@ -276,8 +239,8 @@ export class New
     ps.dpi = dpi;
     
     await this.c3d._createLayerData();
-
-    setTimeout(() => this.c3d._setNavActive('area', true, false), 500);
+        
+    setTimeout(() => {this.c3d._setNavActive('area', true, false);this.c3d.showHideUI.hideSubWindows();}, 500);
 
   }
 }

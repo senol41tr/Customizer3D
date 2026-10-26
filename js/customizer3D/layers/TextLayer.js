@@ -1,10 +1,11 @@
 import * as opentype from "base/opentype/opentype.esm.js";
-import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=0.5.9';
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.9';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.9';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.9';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.9';
-import {createFiltersList} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.9';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=0.6.0';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.6.0';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.0';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.0';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.0';
+import {createFiltersList} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.6.0';
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.6.0';
 
 export class TextLayer
 {
@@ -27,8 +28,8 @@ export class TextLayer
         <div class="title">
             <p class="label" draggable="false">${this.c3d.lang['add-text-layer']}</p>
             <div class="buttons">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.9" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
-                <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.9" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.6.0" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
+                <img src="${C3D_SERVER}svg/plus.svg?c3d=0.6.0" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
             </div>
         </div>
 
@@ -36,11 +37,11 @@ export class TextLayer
             <input type="text" class="text" placeholder="${this.c3d.lang['enter-your-text']}" style="padding: 0.5rem;">
             <div class="menu">
                 <div class="builtInFonts">
-                    <div class="button" title="${this.c3d.lang['font']}"><img src="${C3D_SERVER}svg/font_family.svg?c3d=0.5.9" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['font']}"><img src="${C3D_SERVER}svg/font_family.svg?c3d=0.6.0" alt="Icon"></div>
                     <div class="list"></div>
                 </div>
                 <div class="fontSizes">
-                    <div class="button" title="${this.c3d.lang['size']}"><img src="${C3D_SERVER}svg/font_size.svg?c3d=0.5.9" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['size']}"><img src="${C3D_SERVER}svg/font_size.svg?c3d=0.6.0" alt="Icon"></div>
                     <!-- change Text.js if default font size change -->
                     <div class="list">
                         <div class="inputPercent" data-icon="pt"><input type="number" min="1" max="500" value="30"></div>
@@ -49,19 +50,19 @@ export class TextLayer
                 </div>
                 <div class="color_picker" title="${this.c3d.lang['color']}"></div>
                 <div class="rotate">
-                    <div class="button" title="${this.c3d.lang['rotate']}"><img src="${C3D_SERVER}svg/rotate.svg?c3d=0.5.9" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['rotate']}"><img src="${C3D_SERVER}svg/rotate.svg?c3d=0.6.0" alt="Icon"></div>
                     <div class="list">
                         <div class="inputPercent" data-icon="°" title="${this.c3d.lang['degree']}"><input type="number" min="-180" max="180" value="0"></div>
                         <input type="range" min="-180" max="180" value="0" step="0.1">
                         <div style="padding-top: 0.5rem;">
-                            <img src="${C3D_SERVER}svg/rotation_left.svg?c3d=0.5.9" alt="Icon" class="left" style="">
-                            <img src="${C3D_SERVER}svg/rotation_reset.svg?c3d=0.5.9" alt="Icon" class="reset" style="">
-                            <img src="${C3D_SERVER}svg/rotation_right.svg?c3d=0.5.9" alt="Icon" class="right">
+                            <img src="${C3D_SERVER}svg/rotation_left.svg?c3d=0.6.0" alt="Icon" class="left" style="">
+                            <img src="${C3D_SERVER}svg/rotation_reset.svg?c3d=0.6.0" alt="Icon" class="reset" style="">
+                            <img src="${C3D_SERVER}svg/rotation_right.svg?c3d=0.6.0" alt="Icon" class="right">
                         </div>
                     </div>
                 </div>
                 <div class="filters">
-                    <div class="button" title="${this.c3d.lang['filter-gallery']}"><img src="${C3D_SERVER}svg/filters.svg?c3d=0.5.9" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['filter-gallery']}"><img src="${C3D_SERVER}svg/filters.svg?c3d=0.6.0" alt="Icon"></div>
                     <div class="list">
                     </div>
                 </div>
@@ -91,6 +92,7 @@ export class TextLayer
         {
             this.layer.color = color.string('hex');
             this.layer.updateCanvas();
+            applyFilters(this.c3d, this.layer, 'textLayer');
             this.updatePreview();
         });
 
@@ -174,6 +176,7 @@ export class TextLayer
             this.layer.text = e.currentTarget.value;
             this.layer.textPosition = {x: 0, y: 0};
             this.layer.updateCanvas();
+            applyFilters(this.c3d, this.layer, 'textLayer');
             this.updatePreview();
         });
         this.htmlEl.querySelector('div.content > input.text').addEventListener('focus', (e) => e.currentTarget.select());
@@ -197,6 +200,7 @@ export class TextLayer
             this.htmlEl.querySelector('div.fontSizes input[type="range"]').value = val;
             this.layer.fontSize = val;
             this.layer.updateCanvas();
+            applyFilters(this.c3d, this.layer, 'textLayer');
             this.updatePreview();
         });
         el.addEventListener('focus', (e) => e.currentTarget.select());
@@ -211,6 +215,7 @@ export class TextLayer
                     this.htmlEl.querySelector('div.fontSizes input[type="range"]').value = input.value;
                     this.layer.fontSize = input.value;
                     this.layer.updateCanvas();
+                    applyFilters(this.c3d, this.layer, 'textLayer');
                     this.updatePreview();
                     input.parentNode.parentNode.style.display = 'none'; // hide list
                 }
@@ -221,6 +226,7 @@ export class TextLayer
             this.layer.fontSize = e.currentTarget.value;
             this.htmlEl.querySelector('div.fontSizes input[type="number"]').value = e.currentTarget.value;
             this.layer.updateCanvas();
+            applyFilters(this.c3d, this.layer, 'textLayer');
             this.updatePreview();
         });
 
@@ -235,6 +241,7 @@ export class TextLayer
             this.htmlEl.querySelector('div.rotate input[type="range"]').value = val;
             this.layer.rotation = parseFloat(val);
             this.layer.updateCanvas();
+            applyFilters(this.c3d, this.layer, 'textLayer');
             this.updatePreview();
         });
         el.addEventListener('focus', (e) => e.currentTarget.select());
@@ -249,6 +256,7 @@ export class TextLayer
                     this.htmlEl.querySelector('div.rotate input[type="range"]').value = input.value;
                     this.layer.rotation = parseFloat(input.value);
                     this.layer.updateCanvas();
+                    applyFilters(this.c3d, this.layer, 'textLayer');
                     this.updatePreview();
                     input.parentNode.parentNode.style.display = 'none'; // hide list
                 }
@@ -259,6 +267,7 @@ export class TextLayer
             this.layer.rotation = parseFloat(e.currentTarget.value);
             this.htmlEl.querySelector('div.rotate input[type="number"]').value = e.currentTarget.value;
             this.layer.updateCanvas();
+            applyFilters(this.c3d, this.layer, 'textLayer');
             this.updatePreview();
         });
 
@@ -269,6 +278,7 @@ export class TextLayer
             this.htmlEl.querySelector('div.rotate input[type="number"]').value = deg;
             this.htmlEl.querySelector('div.rotate input[type="range"]').value = deg;
             this.layer.updateCanvas();
+            applyFilters(this.c3d, this.layer, 'textLayer');
             this.updatePreview();
         };
 
@@ -545,7 +555,7 @@ export class TextLayer
     // https://stackoverflow.com/a/42272155
     async _loadBuiltInFonts()
     {
-        const url = 'fonts/fonts.json?c3d=0.5.9'; // load all built-in fonts
+        const url = 'fonts/fonts.json?c3d=0.6.0'; // load all built-in fonts
         
         this.c3d.preloader.show();
         this.c3d.preloader.set(url);
@@ -595,6 +605,7 @@ export class TextLayer
             this.layer.font = data.postscript_name;
             e.currentTarget.parentNode.style.display = 'none'; // hide list
             this.layer.updateCanvas();
+            applyFilters(this.c3d, this.layer, 'textLayer');
             this.updatePreview();
         });
         listDiv[prepend ? 'prepend' : 'append'](p);

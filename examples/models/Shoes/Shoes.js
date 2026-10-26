@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.9';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.9';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.0';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.0';
 
 export function lang(self)
 {

@@ -1,8 +1,8 @@
-import {BlendModes, createBlendModesList} from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=0.5.9';
-import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=0.5.9';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.9';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.9';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.9';
+import {BlendModes, createBlendModesList} from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=0.6.0';
+import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=0.6.0';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.0';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.0';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.0';
 
 export class Shape
 {
@@ -78,18 +78,16 @@ export class Shape
         this.canvas.width = printDims.width;
         this.canvas.height = printDims.height;
 
-        const drawCanvas = this.canvas;
         const htmlEl = this.c3d.shapeLayer.htmlEl;
-        const ctx = drawCanvas.getContext('2d', {willReadFrequently: true});
+        const ctx = this.canvas.getContext('2d', {willReadFrequently: true});
         const canvas = htmlEl.querySelector('canvas.preview');
-        const ratio = drawCanvas.width / canvas.width;
+        const ratio = this.canvas.width / canvas.width;
         const radiusValue = htmlEl.querySelector('div.radius input[type="number"]').max;
         const multiplyer = Math.max(1, this.radius / radiusValue);
-        const x = (drawCanvas.width / canvas.width) * (this.shapePosition.x * multiplyer);
-        const y = (drawCanvas.height / canvas.height) * (this.shapePosition.y * multiplyer);
+        const x = (this.canvas.width / canvas.width) * (this.shapePosition.x * multiplyer);
+        const y = (this.canvas.height / canvas.height) * (this.shapePosition.y * multiplyer);
 
-        ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         ctx.save();
         if(this.fillColor != null) ctx.fillStyle = this.fillColor;
@@ -98,13 +96,14 @@ export class Shape
         ctx.lineJoin = this.lineJoin;
 
         ctx.translate(
-            drawCanvas.width / 2 + x, 
-            drawCanvas.height / 2 + y
+            this.canvas.width / 2 + x, 
+            this.canvas.height / 2 + y
         );
 
         ctx.rotate(degToRad(this.rotation));
 
         ctx.beginPath();
+        this.c3d.shapeLayer.layer = this;
         this.c3d.shapeLayer.drawShape(ctx, this.radius * ratio);
         ctx.closePath();
 
@@ -130,12 +129,12 @@ export class Shape
         this.div = div;
 
         div.innerHTML = `
-            <img class="visibility" src="${C3D_SERVER}svg/visibility.svg?c3d=0.5.9" alt="Icon" style="opacity:1;width: 12px;">
+            <img class="visibility" src="${C3D_SERVER}svg/visibility.svg?c3d=0.6.0" alt="Icon" style="opacity:1;width: 12px;">
             <canvas class="thumbnail" oncontextmenu="return false;"></canvas>
             <div style="width:100%;"></div>
-            <img src="${C3D_SERVER}svg/opacity.svg?c3d=0.5.9" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
-            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=0.5.9" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
-            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=0.5.9" title="${this.c3d.lang['delete-layer']}" class="remove">
+            <img src="${C3D_SERVER}svg/opacity.svg?c3d=0.6.0" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
+            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=0.6.0" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=0.6.0" title="${this.c3d.lang['delete-layer']}" class="remove">
         `;
 
         // VISIBILITY

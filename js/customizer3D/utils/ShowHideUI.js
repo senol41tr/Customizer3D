@@ -1,4 +1,4 @@
-import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.9';
+import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.0';
 
 export class ShowHideUI
 {

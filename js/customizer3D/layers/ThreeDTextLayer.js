@@ -1,17 +1,17 @@
 import * as THREE from 'three';
-import {TTFLoader} from 'three_dir/loaders/TTFLoader.js?c3d=0.5.9';
-import {Font} from 'three_dir/loaders/FontLoader.js?c3d=0.5.9';
-import {TextGeometry} from 'three_dir/geometries/TextGeometry.js?c3d=0.5.9';
-import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.5.9';
+import {TTFLoader} from 'three_dir/loaders/TTFLoader.js?c3d=0.6.0';
+import {Font} from 'three_dir/loaders/FontLoader.js?c3d=0.6.0';
+import {TextGeometry} from 'three_dir/geometries/TextGeometry.js?c3d=0.6.0';
+import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.6.0';
 import {GUI} from 'three_dir/libs/lil-gui.module.min.js';
-import {MaterialBrowser} from 'customizer3D_dir/three/material/MaterialBrowser.js?c3d=0.5.9';
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.5.9';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.9';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.9';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.9';
-import {createFiltersList, applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.9';
-import {createEffectsList, applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.5.9';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.5.9';
+import {MaterialBrowser} from 'customizer3D_dir/three/material/MaterialBrowser.js?c3d=0.6.0';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.6.0';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.0';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.0';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.0';
+import {createFiltersList, applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.6.0';
+import {createEffectsList, applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.6.0';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.0';
 
 export class ThreeDTextLayer
 {
@@ -40,46 +40,46 @@ export class ThreeDTextLayer
         <div class="title">
             <p class="label" draggable="false">${this.c3d.lang['add-3d-text-layer']}</p>
             <div class="buttons">
-                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.5.9" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
-                <img src="${C3D_SERVER}svg/plus.svg?c3d=0.5.9" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
+                <img src="${C3D_SERVER}svg/arrow-drop-down.svg?c3d=0.6.0" alt="Icon" class="rollup" draggable="false" style="rotate:-180deg;">
+                <img src="${C3D_SERVER}svg/plus.svg?c3d=0.6.0" alt="Icon" class="icon" draggable="false" style="rotate:45deg;">
             </div>
         </div>
 
         <div class="content">
             <div class="menu">
                 <div class="rotate">
-                    <div class="button" title="${this.c3d.lang['rotate']}"><img src="${C3D_SERVER}svg/rotate.svg?c3d=0.5.9" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['rotate']}"><img src="${C3D_SERVER}svg/rotate.svg?c3d=0.6.0" alt="Icon"></div>
                     <div class="list">
                         <div class="inputPercent" data-icon="°" title="${this.c3d.lang['degree']}">
                             <input type="number" min="-180" max="180" value="0">
                         </div>
                         <input type="range" min="-180" max="180" value="0" step="1">
                         <div style="padding-top: 0.5rem;">
-                            <img src="${C3D_SERVER}svg/rotation_left.svg?c3d=0.5.9" alt="Icon" class="left" style="">
-                            <img src="${C3D_SERVER}svg/rotation_reset.svg?c3d=0.5.9" alt="Icon" class="reset" style="">
-                            <img src="${C3D_SERVER}svg/rotation_right.svg?c3d=0.5.9" alt="Icon" class="right">
+                            <img src="${C3D_SERVER}svg/rotation_left.svg?c3d=0.6.0" alt="Icon" class="left" style="">
+                            <img src="${C3D_SERVER}svg/rotation_reset.svg?c3d=0.6.0" alt="Icon" class="reset" style="">
+                            <img src="${C3D_SERVER}svg/rotation_right.svg?c3d=0.6.0" alt="Icon" class="right">
                         </div>
                     </div>
                 </div>
                 <div class="zoom">
-                    <div class="button" title="${this.c3d.lang['zoom']}"><img src="${C3D_SERVER}svg/zoom.svg?c3d=0.5.9" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['zoom']}"><img src="${C3D_SERVER}svg/zoom.svg?c3d=0.6.0" alt="Icon"></div>
                     <div class="list">
                         <div class="inputPercent" data-icon="%"><input type="number" min="1" max="2000" value="100"></div>
                         <input type="range" min="1" max="2000" value="100" step="0.5">
                     </div>
                 </div>
                 <div class="filters">
-                    <div class="button" title="${this.c3d.lang['filter-gallery']}"><img src="${C3D_SERVER}svg/filters.svg?c3d=0.5.9" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['filter-gallery']}"><img src="${C3D_SERVER}svg/filters.svg?c3d=0.6.0" alt="Icon"></div>
                     <div class="list">
                     </div>
                 </div>
                 <div class="effects">
-                    <div class="button" title="${this.c3d.lang['effects-gallery']}"><img src="${C3D_SERVER}svg/effects.svg?c3d=0.5.9" alt="Icon"></div>
+                    <div class="button" title="${this.c3d.lang['effects-gallery']}"><img src="${C3D_SERVER}svg/effects.svg?c3d=0.6.0" alt="Icon"></div>
                     <div class="list">
                     </div>
                 </div>
                 <div class="settings">
-                    <div class="button" title="${this.c3d.lang['settings']}"><img src="${C3D_SERVER}svg/settings.svg?c3d=0.5.9" alt="Icon" style="height:24px;"></div>
+                    <div class="button" title="${this.c3d.lang['settings']}"><img src="${C3D_SERVER}svg/settings.svg?c3d=0.6.0" alt="Icon" style="height:24px;"></div>
                 </div>
             </div>
             <canvas class="preview" oncontextmenu="return false;"></canvas>
@@ -489,7 +489,6 @@ export class ThreeDTextLayer
         applyEffects(this.c3d, this.layer, 'threeDTextLayer', isExport);
         applyFilters(this.c3d, this.layer, 'threeDTextLayer', isExport);
         this.layer.__baked = true;
-
     }
 
     showGUI()
@@ -664,7 +663,7 @@ export class ThreeDTextLayer
         }
 
         this.materialBrowser.hide();
-        this.gui.destroy();
+        if(this.gui) this.gui.destroy();
         this.c3d.three.camera.position.copy(this.oldCamState.position);
         this.c3d.three.camera.rotation.copy(this.oldCamState.rotation);
         this.c3d.three.controls.orbit.target.copy(this.oldCamState.target);

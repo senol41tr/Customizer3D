@@ -65,7 +65,7 @@ import {
 	SRGBColorSpace,
 	InstancedBufferAttribute
 } from 'three';
-import { toTrianglesDrawMode } from '../utils/BufferGeometryUtils.js?c3d=0.5.9';
+import { toTrianglesDrawMode } from '../utils/BufferGeometryUtils.js?c3d=0.6.0';
 
 /**
  * A loader for the glTF 2.0 format.
@@ -117,7 +117,7 @@ import { toTrianglesDrawMode } from '../utils/BufferGeometryUtils.js?c3d=0.5.9';
  * ```
  *
  * @augments Loader
- * @three_import import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js?c3d=0.5.9';
+ * @three_import import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js?c3d=0.6.0';
  */
 class GLTFLoader extends Loader {
 
@@ -265,7 +265,7 @@ class GLTFLoader extends Loader {
 			// Example  path = 'https://my-cnd-server.com/', url = 'assets/models/model.gltf'
 			// resourcePath = 'https://my-cnd-server.com/assets/models/'
 			// referenced resource 'model.bin' will be loaded from 'https://my-cnd-server.com/assets/models/model.bin'
-			// referenced resource '../textures/texture.png?c3d=0.5.9' will be loaded from 'https://my-cnd-server.com/assets/textures/texture.png?c3d=0.5.9'
+			// referenced resource '../textures/texture.png?c3d=0.6.0' will be loaded from 'https://my-cnd-server.com/assets/textures/texture.png?c3d=0.6.0'
 			const relativeUrl = LoaderUtils.extractUrlBase( url );
 			resourcePath = LoaderUtils.resolveURL( relativeUrl, this.path );
 

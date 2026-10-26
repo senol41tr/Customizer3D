@@ -1,7 +1,7 @@
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.9';
-import {BlendModes, createBlendModesList} from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=0.5.9';
-import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=0.5.9';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.5.9';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.0';
+import {BlendModes, createBlendModesList} from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=0.6.0';
+import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=0.6.0';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.0';
 
 export class ThreeDLogo
 {
@@ -89,12 +89,12 @@ export class ThreeDLogo
         this.div = div;
 
         div.innerHTML = `
-            <img class="visibility" src="${C3D_SERVER}svg/visibility.svg?c3d=0.5.9" alt="Icon" style="opacity:1;width: 12px;">
+            <img class="visibility" src="${C3D_SERVER}svg/visibility.svg?c3d=0.6.0" alt="Icon" style="opacity:1;width: 12px;">
             <canvas class="thumbnail" oncontextmenu="return false;"></canvas>
             <div style="width:100%;"></div>
-            <img src="${C3D_SERVER}svg/opacity.svg?c3d=0.5.9" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
-            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=0.5.9" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
-            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=0.5.9" title="${this.c3d.lang['delete-layer']}" class="remove">
+            <img src="${C3D_SERVER}svg/opacity.svg?c3d=0.6.0" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
+            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=0.6.0" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=0.6.0" title="${this.c3d.lang['delete-layer']}" class="remove">
         `;
 
         // CANVAS
@@ -165,7 +165,7 @@ export class ThreeDLogo
         {
             this.c3d.threeDLogoLayer.htmlEl.querySelector('div.selectImage > label.selectImage > input[type="file"]').click();
         }
-        
+        document.body.append(this.canvas)
     }
 
     updateCanvas(isExport)
