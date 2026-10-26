@@ -63,12 +63,8 @@ export class Render3D
 
         let material, color, materialOptions;
 
-        this.c3d.preloader.show();
-
         for (let i = layers.length - 1; i >= 0; i--)
         {
-            this.c3d.preloader.set('Creating Layers...');
-            
             const layer = layers[i].self;
 
             // disable first layer blendmode
@@ -169,8 +165,6 @@ export class Render3D
             const meshName = data[i][0];
             this.renderView(meshName, applyFX);
         }
-
-        this.c3d.preloader.hide();
     }
 
 }
