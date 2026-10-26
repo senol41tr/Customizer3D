@@ -34,15 +34,15 @@ export class New
       </select>
 
       <div class="inputPercent width" data-icon="${this.c3d.lang['width']}">
-        <input type="number" value="2048" style="padding: 0.3rem;">
+        <input type="number" value="2048" style="padding: 0.3rem;width: 100%;">
       </div>
       
       <div class="inputPercent height" data-icon="${this.c3d.lang['height']}">
-        <input type="number" value="2048" style="padding: 0.3rem;">
+        <input type="number" value="2048" style="padding: 0.3rem;width: 100%;">
       </div>
       
       <div class="inputPercent dpi" data-icon="DPI">
-        <input list="dpis" type="number" value="72" style="padding: 0.3rem;">
+        <input list="dpis" type="number" value="72" style="padding: 0.3rem;width: 100%;">
         <datalist id="dpis">
           <option value="72">
           <option value="96">
