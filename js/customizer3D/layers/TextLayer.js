@@ -492,6 +492,18 @@ export class TextLayer
 
     }
 
+    toUint8Array(postscript_name)
+    {
+        const base64 = this.getFontData(postscript_name).base64;
+        const rawBase64 = base64.includes(',') ? base64.split(',')[1] : base64;
+        const binaryString = atob(rawBase64);
+        const bytes = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+        return bytes;
+    }
+
     getFontData(postscript_name)
     {
         const fonts = this.builtInFonts.concat(this.customFonts);

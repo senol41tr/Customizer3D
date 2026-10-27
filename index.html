@@ -125,6 +125,7 @@
 
             import {Customizer3D} from 'customizer3D_dir/Customizer3D.js?c3d=0.6.1';
             import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.6.1';
+            import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.1';
 
 
             // 
@@ -292,6 +293,13 @@
 
             const thumb = container.querySelector('div.active');
             if(thumb) await thumb.click();
+
+
+
+            if(isIOS())
+            {
+                alert("iOS support is currently under development!");
+            }
 
 
 

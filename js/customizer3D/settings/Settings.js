@@ -13,7 +13,7 @@ export class Settings
         this.MIN_TEXTURE_SIZE = 512;
         this.MAX_TEXTURE_SIZE = 2048;
         this.MAX_GPU_TEXTURE_SIZE = 2048;
-        this.MAX_PRINT_SIZE = 5079; // mm
+        this.MAX_PRINT_SIZE = 5079 * 2.834645669; // mm to pt
 
         this._init();
     }
@@ -41,6 +41,8 @@ export class Settings
         const availableLangs = Object.entries(JSON.parse(await (await fetch(C3D_SERVER + 'lang/langs.json?c3d=0.6.1')).text()));
         let availableLangsDiv = document.createElement('div');
         const activeLang = this.c3d.localStorage.get('language');
+
+        document.documentElement.lang = activeLang;
 
         for (let i = 0; i < availableLangs.length; i++)
         {
@@ -243,7 +245,6 @@ export class Settings
                 // this.c3d.render2d.renderAll();
                 this.c3d.render3d.renderAll(true);
                 this.c3d.preloader.hide();
-                this.c3d.render3d._preDPI = val;
                 this.c3d.showHideUI.show();
             }, 300);
 
@@ -299,8 +300,8 @@ export class Settings
                 <a href="https://threejs.org" target="_blank">#</a>
             </div>
             <div>
-                <p>jsPDF</p>
-                <a href="https://parall.ax/products/jspdf" target="_blank">#</a>
+                <p>pdf-lib</p>
+                <a href="https://github.com/Hopding/pdf-lib" target="_blank">#</a>
             </div>
             <div>
                 <p>PDF.js</p>

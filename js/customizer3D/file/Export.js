@@ -1,4 +1,4 @@
-import jsPDF from 'base/jspdf@4.0.0/jspdf.es.min.js';
+import {PDFDocument, StandardFonts, cmyk} from 'base/pdf-lib/pdf-lib.min.esm.js?c3d=0.6.1';
 import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.1';
 import {drawLayerToCTX} from 'customizer3D_dir/layers/utils/drawLayerToCTX.js?c3d=0.6.1';
 import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.1';
@@ -22,65 +22,71 @@ export class Export
       const layersDiv = document.querySelector(this.c3d.props.layers);
       const ce = this.c3d.colorEngine;
       const limits = getLimits(this.c3d);
+      const mmToPt = (mm) => mm * 2.834645669; // !!!
 
-      let printWidth, printHeight;
+      let printWidth, printHeight, page;
 
       // CREATE NEW PDF
 
-      const pdf = new jsPDF({
-        unit: 'mm',
-        putOnlyUsedFonts: true,
-        compress: true,
-        lineHeight: 0
-      });
-
-      pdf.deletePage(1);
-      pdf.__private__.setPdfVersion('1.4');
+      const pdf = await PDFDocument.create();
 
 
       // SET PDF PROPERTIES
 
-      pdf.setProperties
-      ({
-        title: this.c3d.props.modelName,
-        author: 'Customizer3D (https://ssarigul.tr/Customizer3D)',
-        creator: 'jsPDF (https://github.com/parallax/jsPDF)'
-      });
+      pdf.setTitle(this.c3d.props.modelName || 'Customizer3D Model');
+      pdf.setAuthor('Customizer3D (https://ssarigul.tr/Customizer3D)');
+      pdf.setCreator('pdf-lib (https://github.com/Hopding/pdf-lib)');
 
 
-      // ADD DEFAULT FONT (which can support multi-language)
+      // ADD DEFAULT FONT
 
-      const defaultFont = 'Signika-Regular';
-      if(!pdf.existsFileInVFS(defaultFont))
-      {
-        const base64 = this.c3d.textLayer.getFontData(defaultFont).base64;
-        const rawBase64 = base64.split(',')[1];
-        pdf.addFileToVFS(defaultFont, rawBase64);
-        pdf.addFont(defaultFont, defaultFont, 'normal');
-      }
+      const defaultFont = await pdf.embedFont(StandardFonts.HelveticaBold);
 
+      // 
 
       const addColorInfos = (str, color) =>
       {
-        str = str.substring(0,1).toUpperCase() + str.substring(1);
         const colorCMYK = ce.cmyk(color);
-        pdf.addPage([130, 54], 'landscape');
-        pdf.saveGraphicsState();
-        pdf.setFillColor(0,0,0,0);
-        pdf.setFontSize(16);
-        pdf.setFont(defaultFont, 'normal');
-        pdf.text(`${str} Color:`, 52, 12);
-        pdf.setFontSize(10);
-        pdf.text(`
-          HEX: ${ce.hex(color, false).toUpperCase()}\n
-          ${ce.rgb(color, false).toUpperCase()}\n
-          ${ce.cmyk(color, false).toUpperCase()}
-          `, 52, 18, {lineHeightFactor: 1});
-        pdf.setDrawColor(0);
-        pdf.setFillColor(colorCMYK.C, colorCMYK.M, colorCMYK.Y, colorCMYK.K);
-        pdf.setLineWidth(3);
-        pdf.rect(7, 7, 40, 40, 'FD');
-        pdf.restoreGraphicsState();
+        const pageWidthPt = mmToPt(130);
+        const pageHeightPt = mmToPt(54);
+        const page = pdf.addPage([pageWidthPt, pageHeightPt]);
+        const titleFontSize = 16;
+        const titleX = mmToPt(52);
+        const titleY = pageHeightPt - mmToPt(12);
+        
+        str = str.substring(0, 1).toUpperCase() + str.substring(1);
+        page.drawText(`${str} Color:`, {
+          x: titleX,
+          y: titleY,
+          size: titleFontSize,
+          font: defaultFont,
+          color: cmyk(1, 1, 1, 1)
+        });
+
+        const detailsFontSize = 10;
+        const detailsX = mmToPt(52);
+        const detailsY = pageHeightPt - mmToPt(18);
+
+        const textContent = `HEX: ${ce.hex(color, false).toUpperCase()}\n${ce.rgb(color, false).toUpperCase()}\n${ce.cmyk(color, false).toUpperCase()}`;
+
+        page.drawText(textContent, {
+          x: detailsX,
+          y: detailsY,
+          size: detailsFontSize,
+          font: defaultFont,
+          color: cmyk(1, 1, 1, 1),
+          lineHeight: detailsFontSize * 1.2
+        });
+
+        page.drawRectangle({
+          x: mmToPt(7),
+          y: pageHeightPt - mmToPt(7 + 40),
+          width: mmToPt(40),
+          height: mmToPt(40),
+          color: cmyk(colorCMYK.C, colorCMYK.M, colorCMYK.Y, colorCMYK.K),
+          borderColor: cmyk(1, 1, 1, 1),
+          borderWidth: mmToPt(3)
+        });
       };
 
 
@@ -110,7 +116,9 @@ export class Export
         // mesh colorOnly
         if(layers.length == 1 && layers[0].classList.contains('colorOnly'))
         {
-          addColorInfos(meshName, layers[0].self.color);
+          console.log(1);
+          
+          addColorInfos(this.c3d.props.data[meshName].label || meshName, layers[0].self.color);
           continue;
         }
 
@@ -127,8 +135,8 @@ export class Export
         const printSize = layersData[i][1].printSize;
         if(printSize)
         {
-          printWidth = new Size({size: printSize.width, DPI: 72}).mm;
-          printHeight = new Size({size: printSize.height, DPI: 72}).mm;
+          printWidth = new Size({size: printSize.width, DPI: 72}).pt;
+          printHeight = new Size({size: printSize.height, DPI: 72}).pt;
 
           if(printWidth > limits.print || printHeight > limits.print)
           {
@@ -140,19 +148,19 @@ export class Export
         }
         else
         {
-          printWidth = 100;
-          printHeight = 54;
+          printWidth = mmToPt(100);
+          printHeight = mmToPt(54);
         }        
 
 
         // ADD NEW PAGE
 
-        pdf.addPage([printHeight, printWidth], printHeight > printWidth ? 'portrait' : 'landscape');
+        page = pdf.addPage([printWidth, printHeight]);
 
         const canvas = document.createElement('canvas');
         const dpi = layersData[i][1].printSize.dpi || 300;
-        let canvasWidth = new Size({size: printWidth + 'mm', DPI: dpi}).px;
-        let canvasHeight = new Size({size: printHeight + 'mm', DPI: dpi}).px;
+        let canvasWidth = new Size({size: printWidth + 'pt', DPI: dpi}).px;
+        let canvasHeight = new Size({size: printHeight + 'pt', DPI: dpi}).px;
         
         if(canvasWidth > limits.display || canvasHeight > limits.display)
         {
@@ -165,48 +173,36 @@ export class Export
         canvas.height = canvasHeight;
 
         const drawedCanvas = await this._getCanvas(canvas, meshName, this.c3d.lang['creating-pdf'], (i + 1) + ' - ' + layersData.length);
-        pdf.addImage(drawedCanvas, 'PNG', 0, 0, printWidth, printHeight, null, 'FAST', 0);
-        
-        // ADD TITLE
+        const blob = await new Promise(resolve => drawedCanvas.toBlob(resolve, 'image/png', 0.92));
+        const arrayBuffer = await blob.arrayBuffer();
+        const embeddedImage = await pdf.embedPng(arrayBuffer);
+        page.drawImage(embeddedImage, {x: 0, y: 0, width: printWidth, height: printHeight});
+        drawedCanvas.width = 0;
+        drawedCanvas.height = 0;
 
-        if(layersData.length > 1)
-        {
-          const titleDescription = layersData[i][1].label || (mesh.name + ( mesh.material.name ? '(' + mesh.material.name + ')' : ''));
-          pdf.saveGraphicsState();
-          pdf.setTextColor(1,1,1,1);
-          pdf.setFont(defaultFont, 'normal');
-          pdf.setFontSize(printWidth / limits.print * 300);
-          const textDims = pdf.getTextDimensions(titleDescription);
-          pdf.setFillColor(1,0,1,0);
-          pdf.rect(0, 0, textDims.w + 2, textDims.h + 2, 'F');
-          pdf.text(titleDescription, 1, 1, {baseline:'top'});
-          pdf.restoreGraphicsState();
-        }
       }
       
       const date = new Date();
       const fileName = this.c3d.props.modelName + '_'+ (date.getMonth() + 1) + '.' + date.getDate();
 
       this.c3d.preloader.set(this.c3d.lang['downloading-pdf']);
-      // pdf.save(fileName + '.pdf');
 
-      const pdfBlob = pdf.output('blob');
-      const blobUrl = URL.createObjectURL(pdfBlob);
-
-      const downloadLink = document.createElement('a');
-      downloadLink.href = blobUrl;
-      downloadLink.download = `${fileName}.pdf`;
-
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      downloadLink.remove();
+      const pdfBytes = await pdf.save();
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName + '.pdf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
 
       setTimeout(() =>
       {
         this.c3d.preloader.hide();
         this.c3d.showHideUI.enableContainer();
         this.c3d.render3d.renderAll(true);
-        URL.revokeObjectURL(blobUrl);
+        URL.revokeObjectURL(url);
       }, 1000);
 
     }
@@ -269,7 +265,7 @@ export class Export
               if (b) {
                 resolve(b);
               } else {
-                reject(new Error(`For ${layer.meshName} Can't create PNG Blob. (Memory may be insufficient)`));
+                reject(new Error(`For '${layer.meshName}' can't create PNG Blob! (Memory may be insufficient)`));
               }
             }, 'image/png', 1.0);
           });
@@ -287,6 +283,7 @@ export class Export
           URL.revokeObjectURL(blobUrl);
         }
       } catch (error) {
+        alert("Export PNG Error:", error);
         console.error("Export PNG Error:", error);
       } finally {
         this.c3d.showHideUI.enableContainer();

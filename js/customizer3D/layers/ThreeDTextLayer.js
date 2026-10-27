@@ -769,7 +769,7 @@ export class ThreeDTextLayer
         this.mesh = new THREE.Mesh(geo, mat);
         this.mesh.name = 'threeDText';
 
-        if(!this.layer.__matcap)
+        if(!this.layer.__matcap && this.layer.options.materialOptions.matcap)
         {
             this.textureLoader.load(C3D_SERVER + this.layer.options.materialOptions.matcap, (matcap) => {
                 this.layer.__matcap = matcap;
