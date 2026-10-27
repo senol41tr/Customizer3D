@@ -61,7 +61,7 @@ export class Export
         const titleY = pageHeightPt - mmToPt(12);
         
         str = str.substring(0, 1).toUpperCase() + str.substring(1);
-        page.drawText(`${str} Color:`, {
+        page.drawText(`${str}:`, {
           x: titleX,
           y: titleY,
           size: titleFontSize,
