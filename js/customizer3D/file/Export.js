@@ -1,4 +1,5 @@
 import {PDFDocument, StandardFonts, cmyk} from 'base/pdf-lib/pdf-lib.min.esm.js?c3d=0.6.1';
+import fontkit from 'base/pdf-lib/fontkit@1.1.1.esm.js?c3d=0.6.1';
 import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.1';
 import {drawLayerToCTX} from 'customizer3D_dir/layers/utils/drawLayerToCTX.js?c3d=0.6.1';
 import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.1';
@@ -40,7 +41,12 @@ export class Export
 
       // ADD DEFAULT FONT
 
-      const defaultFont = await pdf.embedFont(StandardFonts.HelveticaBold);
+      // ADD DEFAULT FONT (which can support multi-language)
+
+      const fontBytes = this.c3d.textLayer.toUint8Array('Signika-Regular');
+      pdf.registerFontkit(fontkit)
+      const defaultFont = await pdf.embedFont(fontBytes);
+
 
       // 
 
@@ -116,8 +122,6 @@ export class Export
         // mesh colorOnly
         if(layers.length == 1 && layers[0].classList.contains('colorOnly'))
         {
-          console.log(1);
-          
           addColorInfos(this.c3d.props.data[meshName].label || meshName, layers[0].self.color);
           continue;
         }

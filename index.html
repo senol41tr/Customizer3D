@@ -152,7 +152,7 @@
             }
 
             // set active module
-            let activeModule = hash != '' && found ? hash.substring(1) : 'Flyer';
+            let activeModule = hash != '' && found ? hash.substring(1) : (isIOS() ? 'TShirt': 'Flyer');
 
 
             // Initialize Customizer3D
