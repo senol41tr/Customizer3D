@@ -696,8 +696,9 @@ export class ThreeDTextLayer
             {
                 this.textureLoader.load(C3D_SERVER + mo.matcap, (matcap) => {
                     if(mo.color) mat.color = new THREE.Color(mo.color); 
-                    mat.matcap.dispose();
+                    if(mat.matcap?.isTexture) mat.matcap.dispose();
                     mat.matcap = matcap;
+                    this.layer.__matcap = matcap;
                     mat.needsUpdate = true;
                     this.c3d.three.render();
                 });
@@ -752,10 +753,8 @@ export class ThreeDTextLayer
 
         const matOptions = {...this.layer.options.materialOptions};
         
-        let matcapURL;
         if(this.layer.options.material == 'MeshMatcapMaterial')
         {
-            matcapURL = matOptions.matcap;
             matOptions.matcap = this.layer.__matcap;
         }
 
@@ -770,9 +769,9 @@ export class ThreeDTextLayer
         this.mesh = new THREE.Mesh(geo, mat);
         this.mesh.name = 'threeDText';
 
-        if(matcapURL)
+        if(!this.layer.__matcap)
         {
-            this.textureLoader.load(matcapURL, (matcap) => {
+            this.textureLoader.load(C3D_SERVER + this.layer.options.materialOptions.matcap, (matcap) => {
                 this.layer.__matcap = matcap;
                 mat.matcap = matcap;
                 mat.needsUpdate = true;

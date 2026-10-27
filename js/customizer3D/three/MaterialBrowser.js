@@ -10,7 +10,6 @@ export class MaterialBrowser
     this._opendFolder = null;
     
     this.root = 'webp/';
-    this._defaultMatcap = this.root + 'matcaps/gold/27.webp';
     this.layer = null;
     this.backToGUI = null;
     this.callback = null;
@@ -113,8 +112,6 @@ export class MaterialBrowser
           delete mo.metalness;
           delete mo.roughness;
           delete mo.emissive;
-
-          // if(!mo.matcap && !this.layer.__matcap) mo.matcap = this._defaultMatcap;
         }
 
         this.callback();
