@@ -85,13 +85,6 @@ input::-webkit-calendar-picker-indicator {
     border-top-right-radius: 7px !important;
 }
 
-.lil-gui.autoPlace {
-    top: 15px !important;
-    right: auto !important;
-    left: 15px !important;
-    max-height: 95% !important;
-}
-
 .lil-gui .children
 {
     padding-bottom: 0.2rem !important;
@@ -265,7 +258,7 @@ section.customizer button
     background-color: var(--c3dColorText);
     color: var(--c3dColorPrimary);
     font-size: var(--c3dFontSizeDefault);
-    padding: 0.325rem 0.75rem;
+    padding: 0.5rem 1.25rem;
     border-radius: 4px;
     cursor: pointer;
 }
@@ -317,8 +310,9 @@ section.customizer
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
+    width: 100%;
     height: 100vh;
-    height: 100svh;
+    height: 100dvh;
 }
 
 section.customizer *
@@ -364,6 +358,6 @@ section.customizer * {
 {
     :root
     {
-        --c3dFontSizeDefault: 0.75rem;
+        --c3dFontSizeDefault: 0.7rem;
     }
 }

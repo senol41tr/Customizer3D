@@ -1,6 +1,6 @@
-import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=0.6.1';
-import {BlendModes, createBlendModesList} from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=0.6.1';
-import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=0.6.1';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=0.6.2';
+import {BlendModes, createBlendModesList} from 'customizer3D_dir/layers/BlendModes/BlendModes.js?c3d=0.6.2';
+import {addOpacityControls} from 'customizer3D_dir/layers/utils/addOpacityControls.js?c3d=0.6.2';
 
 export class Solid
 {
@@ -11,7 +11,7 @@ export class Solid
         this.root = root;
         this.c3d = c3d;
 
-        this.color = data.color || '#eeff00';
+        this.color = data.color || '#ffffff';
         this.opacity = data.opacity || 100;
         this.blendMode = data.blendMode || BlendModes.normal.canvas;
         this.material = data.material;
@@ -44,12 +44,12 @@ export class Solid
         this.div = div;
         
         div.innerHTML = `
-            <img class="visibility" src="${C3D_SERVER}svg/visibility.svg?c3d=0.6.1" alt="Icon" style="opacity:1;width: 12px;">
+            <img class="visibility" src="${C3D_SERVER}svg/visibility.svg?c3d=0.6.2" alt="Icon" style="opacity:1;width: 12px;">
             <div class="color_picker"></div>
             <div style="width:100%;"></div>
-            <img src="${C3D_SERVER}svg/opacity.svg?c3d=0.6.1" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
-            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=0.6.1" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
-            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=0.6.1" alt="Icon" title="${this.c3d.lang['delete-layer']}" class="delete-layer">
+            <img src="${C3D_SERVER}svg/opacity.svg?c3d=0.6.2" alt="Icon" title="${this.c3d.lang['opacity']}" class="opacity">
+            <img src="${C3D_SERVER}svg/blend_modes.svg?c3d=0.6.2" alt="Icon" title="${this.c3d.lang['blend-modes']}" class="blend-modes">
+            <img src="${C3D_SERVER}svg/delete-bin.svg?c3d=0.6.2" alt="Icon" title="${this.c3d.lang['delete-layer']}" class="delete-layer">
         `;
 
         if(this.type == 'colorOnly')

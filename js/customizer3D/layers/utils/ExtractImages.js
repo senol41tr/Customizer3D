@@ -17,32 +17,74 @@ export class ExtractImages
         let header = '', type;
         const arrayBuffer = await file.arrayBuffer();
         const fileSignature = new Uint8Array(arrayBuffer).subarray(0, 4).forEach((v) => header+=v.toString(16)); // https://stackoverflow.com/a/29672957
-        switch (header)
+        switch (header.toLowerCase())
         {
-            case '52494646': type = 'image/webp'; break;
+            case '52494646': case '57454250': type = 'image/webp'; break;
             case '89504e47': type = 'image/png'; break;
             case '25504446': type = 'application/pdf'; break;
-            case '3c3f786d': type = 'image/svg+xml'; break;
+            
+            case '3c3f786d':
+            case '3c737667':
+              type = 'image/svg+xml';
+            break;
+
             case '676c5446': type = 'model/gltf-binary'; break;
+            case '4b617964': type = 'model/fbx'; break;
+            case '76202d33': type = 'model/obj'; break;
+            case '46696c65': type = 'model/stl'; break;
 
             case 'ffd8ffe0':
             case 'ffd8ffe1':
             case 'ffd8ffe2':
             case 'ffd8ffe3':
             case 'ffd8ffe8':
+            case '49460001':
+            case 'ffd8ffee':
+            case '69660000':
                 type = 'image/jpeg';
-                break;
-            default:
-                type = file.type;
-                // alert('File Type mismatch!!\nSupported file types are [.pdf, .png, .jpg, .svg, .jpeg, .jfif, .pjpeg, .pjp]');
-                // this.c3d.preloader.hide();
-                // return blobs;
+            break;
+
+            case '69660000':
+            case '4d4d002a':
+            case '49492b00':
+            case '4d4d002b':
+                type = 'image/tif';
+            break;
+
+            case '00000018':
+            case '65696300':
+                type = 'image/heif';
+            break;
+
+            case '00000100':
+                type = 'image/ico';
+            break;
+
+            case '47494638':
+                type = 'image/gif';
+            break;
+
+            case '424d4ea0':
+            case '424df6a':
+                type = 'image/bmp';
+            break;
+
+            case '66747970':
+                type = 'image/avif';
+            break;
+
+            case '0000000c':
+                type = 'image/jxl';
+            break;
+
+            case '504b34':
+                type = 'application/x-customizer3d';
             break;
         }
-        
-        if(type != 'application/pdf' || type === 'model/gltf-binary')
+
+        if(type != 'application/pdf')
         {
-            blobs.push({blob: file, detectedFileType: type});
+            if(type) blobs.push({blob: file, detectedFileType: type});
             this.c3d.preloader.hide();
             return blobs;
         }

@@ -1,6 +1,7 @@
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.6.1';
-import {SVGFill, SVGFillColor} from 'customizer3D_dir/utils/SVGFill.js?c3d=0.6.1';
-import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=0.6.1';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.6.2';
+import {SVGFill, SVGFillColor} from 'customizer3D_dir/utils/SVGFill.js?c3d=0.6.2';
+import ColorPicker from 'base/jscolorpicker/colorpicker.js?c3d=0.6.2';
+import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.2';
 
 export class Settings
 {
@@ -11,8 +12,7 @@ export class Settings
 
         this.MAX_DPI = 300;
         this.MIN_TEXTURE_SIZE = 512;
-        this.MAX_TEXTURE_SIZE = 2048;
-        this.MAX_GPU_TEXTURE_SIZE = 2048;
+        this.MAX_TEXTURE_SIZE = this.MAX_GPU_TEXTURE_SIZE = 2560;
         this.MAX_PRINT_SIZE = 5079 * 2.834645669; // mm to pt
 
         this._init();
@@ -30,15 +30,52 @@ export class Settings
         return {min: range.min, max: range.max};
     }
 
+    _isIPhoneXROrNewer()
+    {
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        const isIPhone = /iPhone/i.test(userAgent) || 
+                        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+        if (!isIPhone) {
+            return false;
+        }
+
+        const screenWidth = Math.min(window.screen.width, window.screen.height);
+        const screenHeight = Math.max(window.screen.width, window.screen.height);
+        const aspectRatio = screenHeight / screenWidth;
+        const hasModernAspectRatio = aspectRatio >= 2.1;
+        const hasModernHeight = screenHeight >= 812;
+
+        return hasModernAspectRatio && hasModernHeight;
+    }
+
+    _getIPhoneTextureSize()
+    {
+        const isModern = this._isIPhoneXROrNewer();
+        const screenWidth = Math.min(window.screen.width, window.screen.height);
+        const screenHeight = Math.max(window.screen.width, window.screen.height);
+
+        if (!isModern) {
+            return 1024;
+        } else if (screenWidth === 414 && screenHeight === 896) {
+            return 2048;
+        } else if (screenWidth === 390 && screenHeight === 844) {
+            return 2048;
+        } else if (screenWidth === 393 && screenHeight === 852) {
+            return 4096;
+        } else if (screenWidth === 430 && screenHeight === 932) {
+            return 8192;
+        }
+    }
+
     async _init()
     {
         const canvas = document.createElement('canvas');
         const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
         if (!gl) alert('WebGL is not supported by the browser!');
-        this.MAX_GPU_TEXTURE_SIZE = gl.getParameter(gl.MAX_TEXTURE_SIZE);
+        this.MAX_GPU_TEXTURE_SIZE = isIOS() ? this._getIPhoneTextureSize() : gl.getParameter(gl.MAX_TEXTURE_SIZE);
 
-
-        const availableLangs = Object.entries(JSON.parse(await (await fetch(C3D_SERVER + 'lang/langs.json?c3d=0.6.1')).text()));
+        const availableLangs = Object.entries(JSON.parse(await (await fetch(C3D_SERVER + 'lang/langs.json?c3d=0.6.2')).text()));
         let availableLangsDiv = document.createElement('div');
         const activeLang = this.c3d.localStorage.get('language');
 
@@ -108,13 +145,13 @@ export class Settings
         this.htmlEl.innerHTML = `
         <div class="title">
             <div class="title">
-                <img src="${C3D_SERVER}svg/settings.svg?c3d=0.6.1" alt="Icon" class="icon" draggable="false">
+                <img src="${C3D_SERVER}svg/settings.svg?c3d=0.6.2" alt="Icon" class="icon" draggable="false">
             </div>
         </div>
 
         <div class="content">
 
-            <div class="language" style="padding-bottom: 0.5rem;gap:0.2rem;">
+            <div class="language" style="padding-bottom: 1rem;gap:0.3rem;">
                 <p class="title">${this.c3d.lang['change-language']}</p>
                 <div class="langs">
                     <a href="lang/language.php" target="_blank" title="Language Administration" style="background-color:blue;color:white;padding:0.25rem;text-decoration:none;font-size:0.65rem;">ADMIN</a>
@@ -123,10 +160,10 @@ export class Settings
 
             <div class="colors">
                 <div class="title">
-                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.6.1" alt="Icon" class="icon">
+                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.6.2" alt="Icon" class="icon">
                     <p>${this.c3d.lang['change-ui-colors']}</p>
                 </div>
-                <div class="colors">
+                <div class="colors" style="padding-left: 1rem;">
                     <div>
                         <p class="title">${this.c3d.lang['change-background-color']}</p>
                         <div>
@@ -142,7 +179,7 @@ export class Settings
                         <p class="title">${this.c3d.lang['change-text-color']}</p>
                         <div class="color_picker text_color" data-css_id="${c3dColorText}"></div>
                     </div>
-                    <div class="reset_colors" style="padding: 0.5rem 0;">
+                    <div class="reset_colors" style="padding: 0.5rem 0;padding-bottom:1rem;">
                         <a href="javascript:void(0);" title="Reset Colors">${this.c3d.lang['reset-colors']}</a>
                     </div>
                 </div>
@@ -151,13 +188,13 @@ export class Settings
 
             <div class="renderDPI">
                 <div class="title">
-                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.6.1" alt="Icon" class="icon">
+                    <img src="${C3D_SERVER}svg/plus.svg?c3d=0.6.2" alt="Icon" class="icon">
                     <p>${this.c3d.lang['image-quality']}</p>
                 </div>
 
                 <div>
                     <div>
-                        <div style="display:flex;align-items: center;gap: 0.35rem;">
+                        <div style="display:flex;align-items: center;gap: 0.35rem;padding-bottom:1rem;">
                             <span>Min.</span>
                             <input type="range" value="${renderDPI}" min="36" max="300" title="${this.c3d.lang['image-quality']}">
                             <span>Max.</span>
@@ -170,13 +207,12 @@ export class Settings
                 <a href="javascript:void(0);" title="">${this.c3d.lang['take-a-screenshot']}</a>
             </div>
 
-            <div class="about">
+            <div class="about" style="display:flex; gap:0.5rem; flex-direction:row;">
                 <button class="about">About</button>
                 <button class="update">Check For Updates</button>
             </div>
 
-            <div class="updateStatus" style="padding:0.5rem;">
-            </div>
+            <div class="updateStatus" style="padding:0.5rem; display:none;"></div>
 
         </div>`;
 
@@ -293,7 +329,7 @@ export class Settings
         const aboutContainer = document.createElement('div');
         aboutContainer.setAttribute('class', 'about');
         aboutContainer.innerHTML = `
-            <img src="${C3D_SERVER}svg/customizer_3D_logo.svg?c3d=0.6.1" alt="Customizer3D Logo" class="logo">
+            <img src="${C3D_SERVER}svg/customizer_3D_logo.svg?c3d=0.6.2" alt="Customizer3D Logo" class="logo">
             <p class="title">Used Libraries:</p>
             <div>
                 <p>Three.js</p>
@@ -305,7 +341,7 @@ export class Settings
             </div>
             <div>
                 <p>PDF.js</p>
-                <a href="https://mozilla.github.io/pdf.js?c3d=0.6.1" target="_blank">#</a>
+                <a href="https://mozilla.github.io/pdf.js?c3d=0.6.2" target="_blank">#</a>
             </div>
             <div>
                 <p>fflate</p>
@@ -313,11 +349,11 @@ export class Settings
             </div>
             <div>
                 <p>JS Color Picker</p>
-                <a href="https://www.jscolorpicker.com?c3d=0.6.1" target="_blank">#</a>
+                <a href="https://www.jscolorpicker.com?c3d=0.6.2" target="_blank">#</a>
             </div>
             <div>
                 <p>opentype.js</p>
-                <a href="https://opentype.js.org?c3d=0.6.1" target="_blank">#</a>
+                <a href="https://opentype.js.org?c3d=0.6.2" target="_blank">#</a>
             </div>
             <div>
                 <p>jsColorEngine</p>
@@ -378,9 +414,40 @@ export class Settings
             await this.checkForUpdates();
         });
 
-
         // tint SVG's
         this._tintSVG(text_color);
+
+
+        // DOCUMENT INFOS
+
+        const docInfosDiv = document.createElement('div');
+        docInfosDiv.classList.add('docInfos');
+        container.appendChild(docInfosDiv);
+
+    }
+
+    updateDocumentInfos(side)
+    {
+        const docInfosDiv = document.querySelector(this.c3d.props.container + ' > div.docInfos');
+        const ps = this.c3d.props.data[side]?.printSize;
+        
+        let str = '';
+        if(ps)
+        {
+            if(ps.width && ps.height)
+            {
+                str += this.c3d.lang['width'] + ': ' + ps.width 
+                str += '<br>';
+                str += this.c3d.lang['height'] + ': ' + ps.height;
+            }
+
+            if(ps.dpi)
+            {
+                str += '<br>';
+                str += 'DPI: ' + ps.dpi;
+            }
+        }
+        docInfosDiv.innerHTML = str;
     }
 
     _resetColors = () =>
@@ -450,6 +517,7 @@ export class Settings
         };
 
         try {
+            updateStatus.style.display = 'flex';
             updateBtn.disabled = true;
             updateStatus.innerText = "Checking for updates...";
 

@@ -1,7 +1,7 @@
 import * as fflate from 'base/fflate@0.8.2/fflate.esm.js';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.6.1';
-import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.6.1';
-import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=0.6.1';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.6.2';
+import {Lang} from 'customizer3D_dir/lang/Lang.js?c3d=0.6.2';
+import {fetchWithProgress} from 'customizer3D_dir/utils/fetchWithProgress.js?c3d=0.6.2';
 
 export class Open
 {
@@ -35,7 +35,6 @@ export class Open
         }
         else
         {
-            file = file.currentTarget.files[0];
             if(!file)
             {
                 this.c3d.preloader.hide();
@@ -52,6 +51,7 @@ export class Open
         {
             alert('File Type mismatch!!\nSupported file type is .c3d');
             this.c3d.showHideUI.show();
+            this.c3d.preloader.hide();
             return;
         }
 
@@ -94,10 +94,6 @@ export class Open
             const u = data.printSize.unit;
             const d = data.printSize.dpi;
             await this.c3d.file._New._createNewFile(w, h, u, d);
-            setTimeout(() => {
-                // this.c3d.showHideUI.hideSubWindows();
-                // this.c3d.render3d.renderAll(true);
-            }, 500);
         }
         else
         {
@@ -198,7 +194,7 @@ export class Open
     }
     
 
-    async _loadImageFromBlob(blob, fileType) {
+    async loadImageFromBlob(blob, fileType) {
         
         return new Promise((resolve, reject) => {
             const img = new Image();
@@ -239,7 +235,8 @@ export class Open
 
             const meshLayers = data[meshName].slice().reverse();
 
-            for await (const layerData of meshLayers) {
+            for await (const layerData of meshLayers)
+            {
 
                 const hasColors = layerData.hasOwnProperty('colors') || layerData.hasOwnProperty('color');
                 const hasNoType = layerData.hasOwnProperty('type') === false;
@@ -259,29 +256,27 @@ export class Open
                     continue;
                 }
 
-                switch (layerData.type) {
+                switch (layerData.type)
+                {
 
-                    case 'colorOnly': {
+                    case 'colorOnly':
                         const solidLayer = layer.querySelector('div.colorOnly').self;
                         solidLayer.color = layerData.color;
                         solidLayer.update();
-                        break;
-                    }
+                    break;
 
-                    case 'solid': {
+                    case 'solid':
                         await this.c3d.layers.addSolid(layer, layerData);
-                        break;
-                    }
+                    break;
 
-                    case 'text': {
+                    case 'text':
                         await this.c3d.layers.addText(layer, layerData);
-                        break;
-                    }
+                    break;
 
-                    case 'image': {
+                    case 'image':
                         try {
                             const blob = new Blob([unzipped[layerData.image]], { type: layerData.detectedFileType });
-                            const img = await this._loadImageFromBlob(blob, layerData.detectedFileType);
+                            const img = await this.loadImageFromBlob(blob, layerData.detectedFileType);
 
                             if (layerData.changeable) {
                                 layerData.image = img;
@@ -325,32 +320,41 @@ export class Open
                         } catch (e) {
                             console.error("Image loading error!", e);
                         }
-                        break;
-                    }
+                    break;
 
-                    case 'shape': {
+                    case 'shape':
                         await this.c3d.layers.addShape(layer, layerData);
-                        break;
-                    }
+                    break;
 
-                    case 'threeDText': {
+                    case 'gradient':
+                        await this.c3d.layers.addGradient(layer, layerData);
+                    break;
+
+                    case 'threeDText':
                         await this.c3d.layers.addThreeDText(layer, layerData);
-                        break;
-                    }
+                    break;
 
-                    case 'threeDLogo': {
-                        try {
+                    case 'threeDLogo':
+                        try
+                        {
                             const blob3D = new Blob([unzipped[layerData.image]], { type: layerData.detectedFileType });
-                            const img3D = await this._loadImageFromBlob(blob3D, layerData.detectedFileType);
+                            const img3D = await this.loadImageFromBlob(blob3D, layerData.detectedFileType);
                             layerData.image = img3D;
                             await this.c3d.layers.addThreeDLogo(layer, layerData);
                         } catch (e) {
                             console.error("threeDLogo Error!", e);
                         }
-                        break;
-                    }
+                    break;
+
+                    case 'threeDModel':
+                        const blob3D = new Blob([unzipped[layerData.model]], { type: layerData.detectedFileType });
+                        layerData.model = URL.createObjectURL(blob3D);
+                        await this.c3d.layers.addThreeDModel(layer, layerData);
+                    break;
                 }
+
             }
+
         }
     }
 
@@ -403,8 +407,7 @@ export class Open
         this.c3d.showHideUI.show();
         this.c3d._setNavActive();
         this.c3d.showHideUI.hideSubWindows();
-        this.c3d.three.render();
-        
+        this.c3d.three.render();        
     }
 
 }

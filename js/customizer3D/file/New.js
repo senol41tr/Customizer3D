@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.1';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.1';
-import {calculateDynamicDPI, getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.1';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.2';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.2';
+import {calculateDynamicDPI, getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.2';
 
 export class New
 {
@@ -20,6 +20,7 @@ export class New
   {
 
     this.c3d.showHideUI.hide();
+    this.c3d.showHideUI.hideSubWindows();
     const canvas2D = document.querySelector(this.c3d.props.canvas2d);
     const canvas3D = this.c3d.three.getCanvas().parentNode; // div
     canvas2D.classList.add('blur');
@@ -58,7 +59,7 @@ export class New
         <option value="in">Inch</option>
       </select>
 
-      <button class="create">${this.c3d.lang['create']}</button>
+      <button class="create" style="font-size:1.05rem;">${this.c3d.lang['create']}</button>
       <button class="cancel" style="background-color:red;color:white;">${this.c3d.lang['cancel']}</button>
     `;
     const div = document.createElement('div');
@@ -240,7 +241,9 @@ export class New
     
     await this.c3d._createLayerData();
        
-    setTimeout(() => {this.c3d._setNavActive('area', true, false);}, 500);
+    setTimeout(() => {this.c3d._setNavActive('area', true, false);}, 250);
+
+    this.c3d.settings.updateDocumentInfos('area');
 
   }
 }

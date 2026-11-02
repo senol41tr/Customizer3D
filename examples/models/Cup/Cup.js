@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.1';
-import {Texture} from 'customizer3D_dir/three/loaders/Texture.js?c3d=0.6.1';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.2';
+import {Loader} from 'customizer3D_dir/three/loaders/Loader.js?c3d=0.6.2';
 
 export function lang()
 {
@@ -25,7 +25,7 @@ export function parameters(self)
         contextMenu:    'section.customizer > div.contextMenu',
         help:           'section.customizer > div.help',
         layers:         'section.customizer > div.layers',
-        controls:       'section.customizer > div.controls',
+        
         canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
@@ -98,13 +98,11 @@ export async function init()
     // set default rotation
     this.three.rotateToAngle(10, 70, 0);
 
-    // enable zoom with mouse or tap (2 fingers)
-    this.enableAutoZoom();
-
     // set model material
     const model = this.glbScene.getObjectByName('model');
     model.material.dispose();
-    const matcap = await new Texture({url: C3D_MODELS_DIR + 'Cup/matcap_base.png?c3d=0.6.1', preloader: this.preloader}).load();
+    const matcap = await new Loader({type: 'png', url: C3D_MODELS_DIR + 'Cup/matcap_base.png?c3d=0.6.2', preloader: this.preloader}).load();
+    matcap.colorSpace = THREE.SRGBColorSpace;
     model.material = new THREE.MeshMatcapMaterial({matcap});
 
     const modelInner = this.glbScene.getObjectByName('inner');

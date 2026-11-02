@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.1';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.1';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.2';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.2';
 
 export function lang(self)
 {
@@ -34,7 +34,7 @@ export function parameters(self)
         contextMenu:    'section.customizer > div.contextMenu',
         help:           'section.customizer > div.help',
         layers:         'section.customizer > div.layers',
-        controls:       'section.customizer > div.controls',
+        
         canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
@@ -170,9 +170,6 @@ export async function init(self)
     
     // remove after 10 seconds
     setTimeout(() => { p.remove(); delete this.userData.p;}, 10000);
-
-    // enable zoom with mouse or tap (2 fingers)
-    this.enableAutoZoom();
 
     // remove p tag
     this.userData.p = p;

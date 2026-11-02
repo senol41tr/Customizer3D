@@ -1,5 +1,5 @@
-import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.6.1';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.1';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.6.2';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.2';
 
 export class Help
 {
@@ -13,7 +13,7 @@ export class Help
         this.htmlEl.innerHTML = `
         <div class="title">
             <div class="title">
-                <img src="${C3D_SERVER}svg/help.svg?c3d=0.6.1" alt="Icon" class="icon" draggable="false">
+                <img src="${C3D_SERVER}svg/help.svg?c3d=0.6.2" alt="Icon" class="icon" draggable="false">
             </div>
         </div>
 

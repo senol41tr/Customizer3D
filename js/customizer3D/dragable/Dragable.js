@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.1';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.2';
 
 export class Dragable
 {

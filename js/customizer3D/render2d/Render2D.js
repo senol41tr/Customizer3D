@@ -1,6 +1,6 @@
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.1';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.1';
-import {drawLayerToCTX} from 'customizer3D_dir/layers//utils/drawLayerToCTX.js?c3d=0.6.1';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.2';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.2';
+import {drawLayerToCTX} from 'customizer3D_dir/layers//utils/drawLayerToCTX.js?c3d=0.6.2';
 
 export class Render2D
 {
@@ -18,7 +18,6 @@ export class Render2D
         if(!this._initialized) this._init();
 
         // hide UI
-        document.querySelector(this.c3d.props.controls).style.visibility = 'hidden';
         this.c3d.showHideUI.hideSubWindows();
 
         const canvas2D = document.querySelector(this.c3d.props.canvas2d);
@@ -44,8 +43,8 @@ export class Render2D
         
         canvas2D.style.display = 'none';
         canvas3D.style.display = 'flex';
+        this.c3d.three._onResize();
 
-        document.querySelector(this.c3d.props.controls).style.visibility = 'visible';
         window.removeEventListener('resize', this.__onResize);
 
     }
@@ -71,7 +70,7 @@ export class Render2D
 
             const label = document.createElement('p');
             label.setAttribute('class', 'label');
-            label.innerHTML = '<img src="' + C3D_SERVER + 'svg/arrow-drop-down.svg?c3d=0.6.1" class="arrow"><span class="label">'+ layerDesc +'</span>';
+            label.innerHTML = '<img src="' + C3D_SERVER + 'svg/arrow-drop-down.svg?c3d=0.6.2" class="arrow"><span class="label">'+ layerDesc +'</span>';
             div.appendChild(label);
 
             // Canvas

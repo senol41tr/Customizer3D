@@ -1,11 +1,12 @@
 import * as THREE from 'three';
 import {GUI} from 'three_dir/libs/lil-gui.module.min.js';
-import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.6.1';
-import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.6.1';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.6.1';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.1';
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.1';
-import {fitMeshToScreen} from 'customizer3D_dir/utils/fitMeshToScreen.js?c3d=0.6.1';
+import {Controls} from 'customizer3D_dir/three/utils/Controls.js?c3d=0.6.2';
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.6.2';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.6.2';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.2';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.2';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.8';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.6.2';
 
 export class PointCloud
 {
@@ -40,7 +41,7 @@ export class PointCloud
             // samples: 4,
             stencilBuffer: false,
             depthBuffer: false,
-            colorSpace: THREE.SRGBColorSpace,
+            // colorSpace: THREE.SRGBColorSpace,
             format: THREE.RGBAFormat
         };
         if(c3d.three.scene.background == null) renderTargetOptions.type = THREE.UnsignedByteType;
@@ -169,7 +170,8 @@ export class PointCloud
             vertexColors: true
         });
 
-        this.mesh = new THREE.Points(geometry, material);
+        this.mesh = new THREE.Group();
+        this.mesh.add(new THREE.Points(geometry, material));
         this.c3d.three.scene.add(this.mesh);
 
         if(this.options.meshState)
@@ -183,7 +185,17 @@ export class PointCloud
         }
         else
         {
-            fitMeshToScreen(this.c3d.three.camera, this.mesh, 1.25, true);
+            const model = this.mesh.children[0];
+            const box = new THREE.Box3().setFromObject(this.mesh);
+            const size = box.getSize(new THREE.Vector3()).length();
+            const center = box.getCenter(new THREE.Vector3());
+
+            model.position.x += (model.position.x - center.x);
+            model.position.y += (model.position.y - center.y);
+            model.position.z += (model.position.z - center.z);
+
+            const modelScale = (isMobile() ? 0.5 : 0.65) / size;
+            this.mesh.scale.setScalar(modelScale);
         }
 
         this.oldCamState = {
@@ -196,6 +208,14 @@ export class PointCloud
         this.controls.addEventListeners();
 
         const gui = this.gui = new GUI({ title: 'Effect Controls' });
+
+        const dragable = new Dragable({
+            dragEl: gui.$title,
+            container: gui.domElement,
+            root: document.querySelector(this.c3d.props.container),
+            c3d: this.c3d
+        });
+
         const guiSettings = {
             blending: this.options.blending,
             transparentBG: this.options.transparentBG,

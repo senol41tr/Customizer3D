@@ -25,7 +25,7 @@ You can save your project in your device later you can continue editing.
 You can load your Custom Fonts too.
 
 **Supported Import Image and document formats**
-.xbm, .tif, .jfif, .pjp, .apng, .jpe, .jpeg, .heif, .ico, .tiff, .webp, .svgz, .jpg, .heic, .gif, .svg, .png, .bmp, .pjpeg, .avif, .pdf
+.glb, .gltf, .obj, .fbx, .stl, .pdf, .tif, .tiff, .jfif, .jpeg, .heif, .ico, .webp, .jpg, .gif, .svg, .svgz, .png, .bmp, .avif, .apng, .jxl
 
 **WebXR Feature (currently only on Android with Chrome)**
 Place your designed Model in your environment

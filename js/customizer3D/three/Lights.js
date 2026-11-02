@@ -14,17 +14,17 @@ export class Lights
     studio()
     {
         // ambient
-        let light = this.addLight({
-            name: 'AmbientLight',
-            color: 0xffffff,
-            intensity: 1.1
-        });
+        // let light = this.addLight({
+        //     name: 'AmbientLight',
+        //     color: 0xffffff,
+        //     intensity: 1.0
+        // });
         
         // front
-        light = this.addLight({
+        let light = this.addLight({
             name: 'DirectionalLight',
             color: 0xffffff,
-            intensity: 1.0,
+            intensity: 0.5,
             position: {x:0, y: 0, z:30}
         });
 
@@ -35,7 +35,7 @@ export class Lights
         light = this.addLight({
             name: 'DirectionalLight',
             color: 0xffffff,
-            intensity: 1.0,
+            intensity: 0.5,
             position: {x:0, y: 0, z:-30}
         });
 
@@ -46,7 +46,7 @@ export class Lights
         light = this.addLight({
             name: 'DirectionalLight',
             color: 0xffffff,
-            intensity: 1.0,
+            intensity: 0.5,
             position: {x:30, y: 0, z:0}
         });
 
@@ -57,7 +57,7 @@ export class Lights
         light = this.addLight({
             name: 'DirectionalLight',
             color: 0xffffff,
-            intensity: 1.0,
+            intensity: 0.5,
             position: {x:-30, y: 0, z:0}
         });
 
@@ -68,7 +68,7 @@ export class Lights
         light = this.addLight({
             name: 'DirectionalLight',
             color: 0xffffff,
-            intensity: 1.0,
+            intensity: 0.5,
             position: {x:0, y: 30, z:0}
         });
 
@@ -79,7 +79,7 @@ export class Lights
         light = this.addLight({
             name: 'DirectionalLight',
             color: 0xffffff,
-            intensity: 1.0,
+            intensity: 0.5,
             position: {x:0, y: -30, z:0}
         });
 

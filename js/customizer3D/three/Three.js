@@ -1,9 +1,10 @@
 import * as THREE from 'three';
-import {Controls} from './Controls.js?c3d=0.6.1';
-import {Lights} from './Lights.js?c3d=0.6.1';
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.6.1';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.1';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.1';
+import {Loader} from 'customizer3D_dir/three/loaders/Loader.js?c3d=0.6.2';
+import {Controls} from './Controls.js?c3d=0.6.2';
+import {Lights} from './Lights.js?c3d=0.6.2';
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.6.2';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.2';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.2';
 import gsap from 'base/gsap@3.13.0/gsap@3.13.0.esm.js';
 
 export class Three
@@ -173,6 +174,7 @@ export class Three
         if(typeof(o.canvas) === 'string') o.canvas = document.querySelector(o.canvas);
         if(typeof(o.antialias) === 'undefined') o.antialias = true;
         if(typeof(o.alpha) === 'undefined') o.alpha = true;
+        if(typeof(o.toneMapping) === 'undefined') o.toneMapping = THREE.ACESFilmicToneMapping;
 
         this.renderer = new THREE.WebGLRenderer(o);
         this.renderer.setSize(this._screeDims.width, this._screeDims.height, false);
@@ -180,6 +182,16 @@ export class Three
         this.renderer.onDeviceLost = () => {
             alert("WebGLRenderer: Context Lost!\nPlease save changes and reload the page.");
         };
+
+        const pmremGenerator = new THREE.PMREMGenerator( this.renderer );
+        pmremGenerator.compileEquirectangularShader();
+
+        const exrLoader = new Loader({url: C3D_SERVER + 'exr/environment.exr', preloader: this.c3d.preloader, onLoad: (exr) => {
+            const envmap = pmremGenerator.fromEquirectangular(exr).texture;
+            this.scene.environment = envmap;
+            pmremGenerator.dispose();
+        }});
+        exrLoader.loadNormal();
     }
 
     _onResize(e, width, height)

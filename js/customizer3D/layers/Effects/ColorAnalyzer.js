@@ -5,6 +5,7 @@ import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.5.8';
 import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.5.8';
 import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.5.8';
 import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.5.8';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.6.2';
 
 export class ColorAnalyzer
 {
@@ -154,6 +155,14 @@ export class ColorAnalyzer
 
 
         const gui = this.gui = new GUI({ title: ' Color Analyzer' });
+
+        const dragable = new Dragable({
+            dragEl: gui.$title,
+            container: gui.domElement,
+            root: document.querySelector(this.c3d.props.container),
+            c3d: this.c3d
+        });
+
         const guiSettings = {
             copyToCanvas: () => {
                 this.apply();
@@ -190,7 +199,7 @@ export class ColorAnalyzer
             }
         ).name(' Shape Type').onChange(__update);
 
-        shapeFolder.add(this.options, 'strokeWidth', 0.1, 6, 0.1)
+        shapeFolder.add(this.options, 'strokeWidth', 0.1, 12, 0.1)
             .name(' Stroke Width')
             .onChange(__update);
         
@@ -216,7 +225,7 @@ export class ColorAnalyzer
             .name(' Show Text')
             .onChange(__update);
         
-        styleFolder.add(this.options, 'fontSize', 6, 24, 1)
+        styleFolder.add(this.options, 'fontSize', 2, 24, 1)
             .name(' Font Size')
             .onChange(__update);
         
@@ -348,7 +357,7 @@ export class ColorAnalyzer
                 currentShape = this._getHashType(item.key);
             }
 
-            this.drawCtx.lineWidth = this.options.strokeWidth * this.ratio;
+            this.drawCtx.lineWidth = this.options.strokeWidth * Math.max(1, this.ratio);
             if (this.options.useOriginalColor) {
                 this.drawCtx.strokeStyle = `rgb(${item.r}, ${item.g}, ${item.b})`;
             } else {
@@ -359,7 +368,7 @@ export class ColorAnalyzer
 
             if (this.options.showText) {
                 this.drawCtx.fillStyle = this.options.useOriginalColor ? `rgba(${item.r}, ${item.g}, ${item.b}, ${this.options.labelOpacity})` : this.options.strokeColor;
-                this.drawCtx.font = `Bold ${this.options.fontSize * this.ratio}px monospace`;
+                this.drawCtx.font = `Bold ${this.options.fontSize * Math.max(1, this.ratio)}px monospace`;
                 this.drawCtx.textAlign = 'left';
                 this.drawCtx.textBaseline = 'middle';
 

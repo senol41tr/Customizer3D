@@ -1,7 +1,6 @@
 import * as THREE from 'three';
-import {OrbitControls} from "three_dir/controls/OrbitControls.js?c3d=0.6.1";
-import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.6.1';
-import {isIOS} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.1';
+import {OrbitControls} from "three_dir/controls/OrbitControls.js?c3d=0.6.2";
+import {mergeRecursive} from 'customizer3D_dir/utils/mergeRecursive.js?c3d=0.6.2';
 import gsap from 'base/gsap@3.13.0/gsap@3.13.0.esm.js';
 
 export class Controls
@@ -26,7 +25,7 @@ export class Controls
     {
         const o = this.c3d.props.three?.orbitControlOptions ? {...this.c3d.props.three.orbitControlOptions} : {};
         if(typeof(o.enableDamping) === 'undefined') o.enableDamping = true;
-        if(typeof(o.dampingFactor) === 'undefined') o.dampingFactor = isIOS() ? 0.075 : 0.15;
+        // if(typeof(o.dampingFactor) === 'undefined') o.dampingFactor = isIOS() ? 0.075 : 0.15;
         if(typeof(o.target) === 'undefined') o.target = new THREE.Vector3(0,0,0);
         if(typeof(o.minDistance) === 'undefined') o.minDistance = 0;
         if(typeof(o.maxDistance) === 'undefined') o.maxDistance = Infinity;

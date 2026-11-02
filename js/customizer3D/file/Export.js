@@ -1,9 +1,9 @@
-import {PDFDocument, StandardFonts, cmyk} from 'base/pdf-lib/pdf-lib.min.esm.js?c3d=0.6.1';
-import fontkit from 'base/pdf-lib/fontkit@1.1.1.esm.js?c3d=0.6.1';
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.1';
-import {drawLayerToCTX} from 'customizer3D_dir/layers/utils/drawLayerToCTX.js?c3d=0.6.1';
-import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.1';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.1';
+import {PDFDocument, cmyk} from 'base/pdf-lib/pdf-lib.min.esm.js?c3d=0.6.2';
+import fontkit from 'base/pdf-lib/fontkit@1.1.1.esm.js?c3d=0.6.2';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.2';
+import {drawLayerToCTX} from 'customizer3D_dir/layers/utils/drawLayerToCTX.js?c3d=0.6.2';
+import {getLimits} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.2';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.2';
 
 export class Export
 {
@@ -161,7 +161,7 @@ export class Export
 
         page = pdf.addPage([printWidth, printHeight]);
 
-        const canvas = document.createElement('canvas');
+        let canvas = document.createElement('canvas');
         const dpi = layersData[i][1].printSize.dpi || 300;
         let canvasWidth = new Size({size: printWidth + 'pt', DPI: dpi}).px;
         let canvasHeight = new Size({size: printHeight + 'pt', DPI: dpi}).px;
@@ -176,14 +176,18 @@ export class Export
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
 
-        const drawedCanvas = await this._getCanvas(canvas, meshName, this.c3d.lang['creating-pdf'], (i + 1) + ' - ' + layersData.length);
-        const blob = await new Promise(resolve => drawedCanvas.toBlob(resolve, 'image/png', 0.92));
-        const arrayBuffer = await blob.arrayBuffer();
-        const embeddedImage = await pdf.embedPng(arrayBuffer);
+        let drawedCanvas = await this._getCanvas(canvas, meshName, this.c3d.lang['creating-pdf'], (i + 1) + ' - ' + layersData.length);
+        let blob = await new Promise(resolve => drawedCanvas.toBlob(resolve, 'image/png', 0.92));
+        let arrayBuffer = await blob.arrayBuffer();
+        let embeddedImage = await pdf.embedPng(arrayBuffer);
         page.drawImage(embeddedImage, {x: 0, y: 0, width: printWidth, height: printHeight});
         drawedCanvas.width = 0;
         drawedCanvas.height = 0;
-
+        canvas.width = 0;
+        canvas.height = 0;
+        blob = null;
+        arrayBuffer = null;
+        embeddedImage = null;
       }
       
       const date = new Date();

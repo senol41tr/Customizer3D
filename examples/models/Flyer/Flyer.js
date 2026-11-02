@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.1';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.2';
 
 export function lang()
 {
@@ -22,7 +22,7 @@ export function parameters(self)
         contextMenu:    'section.customizer > div.contextMenu',
         help:           'section.customizer > div.help',
         layers:         'section.customizer > div.layers',
-        controls:       'section.customizer > div.controls',
+        
         canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
@@ -70,9 +70,6 @@ export function parameters(self)
 
 export async function init()
 {
-    // enable zoom with mouse or tap (2 fingers)
-    this.enableAutoZoom();
-
 }
 
 // set model views

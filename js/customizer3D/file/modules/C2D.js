@@ -1,5 +1,5 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.1';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.1';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.2';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.2';
 
 export function lang()
 {
@@ -25,7 +25,7 @@ export function parameters(self)
         textLayer:      'section.customizer > div.textLayer',
         imageLayer:     'section.customizer > div.imageLayer',
         shapeLayer:     'section.customizer > div.shapeLayer',
-        controls:       'section.customizer > div.controls',
+        
         canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options

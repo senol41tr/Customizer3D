@@ -1,7 +1,7 @@
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.1';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.1';
-import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.6.1';
-import {applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.6.1';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.2';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.2';
+import {applyFilters} from 'customizer3D_dir/layers/Filters/Filters.js?c3d=0.6.2';
+import {applyEffects} from 'customizer3D_dir/layers/Effects/Effects.js?c3d=0.6.2';
 
 export const drawLayerToCTX = (c3d, canvas, layer, isExport) =>
 {  
@@ -43,11 +43,18 @@ export const drawLayerToCTX = (c3d, canvas, layer, isExport) =>
         ctx.drawImage(layer.canvas, 0, 0, canvas.width, canvas.height);
         ctx.restore();
 
+        if(isExport) {
+          layer.updateCanvas();
+        }
+
       break;
 
       case 'image':
+      case 'gradient':
       case 'threeDText':
       case 'threeDLogo':
+      case 'threeDModel':
+      case 'threeDShape':
 
         if(!layer.image) break;
 
@@ -107,6 +114,12 @@ export const drawLayerToCTX = (c3d, canvas, layer, isExport) =>
         );
         ctx.restore();
 
+        if(isExport)
+        {
+          layer.updateCanvas();
+          layer.effectsCanvas = document.createElement('canvas');
+        }
+
       break;
 
       case 'shape':
@@ -123,11 +136,16 @@ export const drawLayerToCTX = (c3d, canvas, layer, isExport) =>
         ctx.drawImage(layer.canvas, 0, 0, canvas.width, canvas.height);
         ctx.restore();
 
+        if(isExport)
+        {
+          layer.updateCanvas();
+        }
+
       break;
 
       default: 
 
-        console.warn('Undefined layer type! ' + layer);
+        console.warn('Undefined layer type! ' + layer.name);
 
       break;
 

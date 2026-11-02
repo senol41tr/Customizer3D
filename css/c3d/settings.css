@@ -51,12 +51,14 @@ section.customizer > div.settings > div.content > div
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: 1rem;
 }
 
 section.customizer > div.settings > div.content > div.colors > div > div > p.title
 {
-    padding-bottom: 0.25rem;
+    padding-bottom: 0.5rem;
+    font-size: 0.65rem;
+    opacity: 0.75;
 }
 
 section.customizer > div.settings > div.content > div.colors > div > div > div,
@@ -110,7 +112,18 @@ section.customizer > div.settings > div.content > div.about > button
 }
 
 
-@media screen and (max-width: 500px)
-{
 
+
+section.customizer > div.docInfos
+{
+    position: absolute;
+    z-index: 1;
+    right: 1.5rem;
+    bottom: 1rem;
+    font-size: var(--c3dFontSizeDefault);
+    color: var(--c3dColorText);
+    opacity: 0.5;
+    text-align: right;
+    line-height: 1.3;
 }
+

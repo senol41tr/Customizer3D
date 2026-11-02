@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.1';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.2';
 
 export function lang()
 {
@@ -24,7 +24,7 @@ export function parameters(self)
         contextMenu:    'section.customizer > div.contextMenu',
         help:           'section.customizer > div.help',
         layers:         'section.customizer > div.layers',
-        controls:       'section.customizer > div.controls',
+        
         canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
@@ -61,9 +61,9 @@ export function parameters(self)
                 // printSize: {width: '10cm', height: '10cm'},
                 materials:
                 [
-                    {url:root + 'matcap-1764731458681.jpg?c3d=0.6.1', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764731647559.jpg?c3d=0.6.1', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764787557882.jpg?c3d=0.6.1', material:'MeshMatcapMaterial'}
+                    {url:root + 'matcap-1764731458681.jpg?c3d=0.6.2', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764731647559.jpg?c3d=0.6.2', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764787557882.jpg?c3d=0.6.2', material:'MeshMatcapMaterial'}
                 ]
             },
             heart:
@@ -72,10 +72,10 @@ export function parameters(self)
                 // printSize: {width: '10cm', height: '10cm'},
                 materials:
                 [
-                    {url:root + 'matcap-1764731458681.jpg?c3d=0.6.1', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764731647559.jpg?c3d=0.6.1', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764787557882.jpg?c3d=0.6.1', material:'MeshMatcapMaterial'},
-                    {url:root + 'matcap-1764731550075.jpg?c3d=0.6.1', material:'MeshMatcapMaterial'}
+                    {url:root + 'matcap-1764731458681.jpg?c3d=0.6.2', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764731647559.jpg?c3d=0.6.2', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764787557882.jpg?c3d=0.6.2', material:'MeshMatcapMaterial'},
+                    {url:root + 'matcap-1764731550075.jpg?c3d=0.6.2', material:'MeshMatcapMaterial'}
                 ]
             }
         }
@@ -84,8 +84,6 @@ export function parameters(self)
 
 export async function init()
 {
-    // enable zoom with mouse or tap (2 fingers)
-    this.enableAutoZoom();
 
 }
 

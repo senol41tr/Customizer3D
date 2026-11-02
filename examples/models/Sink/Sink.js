@@ -1,5 +1,5 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.1';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.1';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.2';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.2';
 
 export function lang()
 {
@@ -26,7 +26,7 @@ export function parameters(self)
         contextMenu:    'section.customizer > div.contextMenu',
         help:           'section.customizer > div.help',
         layers:         'section.customizer > div.layers',
-        controls:       'section.customizer > div.controls',
+        
         canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
@@ -64,7 +64,7 @@ export function parameters(self)
                 materials:
                 [
                     {
-                        url: root + 'cabinet/dark.jpg?c3d=0.6.1', 
+                        url: root + 'cabinet/dark.jpg?c3d=0.6.2', 
                         repatX: 4, 
                         repeatY: 4, 
                         material: 'MeshStandardMaterial', 
@@ -75,7 +75,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'cabinet/middle.jpg?c3d=0.6.1', 
+                        url: root + 'cabinet/middle.jpg?c3d=0.6.2', 
                         repatX: 4, 
                         repeatY: 4, 
                         material: 'MeshStandardMaterial', 
@@ -86,7 +86,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'cabinet/light.jpg?c3d=0.6.1', 
+                        url: root + 'cabinet/light.jpg?c3d=0.6.2', 
                         repatX: 4, 
                         repeatY: 4, 
                         material: 'MeshStandardMaterial', 
@@ -105,7 +105,7 @@ export function parameters(self)
                 materials:
                 [
                     {
-                        url: root + 'marmour/black_gold.jpg?c3d=0.6.1', 
+                        url: root + 'marmour/black_gold.jpg?c3d=0.6.2', 
                         material: 'MeshStandardMaterial', 
                         materialOptions: 
                         {
@@ -114,7 +114,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'marmour/white_gold.jpg?c3d=0.6.1', 
+                        url: root + 'marmour/white_gold.jpg?c3d=0.6.2', 
                         material: 'MeshStandardMaterial', 
                         materialOptions: 
                         {
@@ -123,7 +123,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'marmour/middle.jpg?c3d=0.6.1', 
+                        url: root + 'marmour/middle.jpg?c3d=0.6.2', 
                         material: 'MeshStandardMaterial', 
                         materialOptions: 
                         {
@@ -132,7 +132,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'marmour/black.jpg?c3d=0.6.1', 
+                        url: root + 'marmour/black.jpg?c3d=0.6.2', 
                         material: 'MeshStandardMaterial', 
                         materialOptions: 
                         {
@@ -141,7 +141,7 @@ export function parameters(self)
                         }
                     },
                     {
-                        url: root + 'marmour/white.jpg?c3d=0.6.1', 
+                        url: root + 'marmour/white.jpg?c3d=0.6.2', 
                         material: 'MeshStandardMaterial', 
                         materialOptions: 
                         {
@@ -158,31 +158,31 @@ export function parameters(self)
                 materials:
                 [
                     {
-                        url: root + 'metal_pieces/gold.jpg?c3d=0.6.1', 
+                        url: root + 'metal_pieces/gold.jpg?c3d=0.6.2', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/anthracite.jpg?c3d=0.6.1', 
+                        url: root + 'metal_pieces/anthracite.jpg?c3d=0.6.2', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/metal.jpg?c3d=0.6.1', 
+                        url: root + 'metal_pieces/metal.jpg?c3d=0.6.2', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/green_metal.jpg?c3d=0.6.1', 
+                        url: root + 'metal_pieces/green_metal.jpg?c3d=0.6.2', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/orange_metal.jpg?c3d=0.6.1', 
+                        url: root + 'metal_pieces/orange_metal.jpg?c3d=0.6.2', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/red_metal.jpg?c3d=0.6.1', 
+                        url: root + 'metal_pieces/red_metal.jpg?c3d=0.6.2', 
                         material: 'MeshMatcapMaterial'
                     },
                     {
-                        url: root + 'metal_pieces/white_metal.jpg?c3d=0.6.1', 
+                        url: root + 'metal_pieces/white_metal.jpg?c3d=0.6.2', 
                         material: 'MeshMatcapMaterial'
                     }
                 ]
@@ -196,10 +196,6 @@ export async function init()
 {
     // initial position
     this.three.rotateToAngle(30, 30, 0);
-
-    // enable zoom with mouse or tap (2 fingers)
-    this.enableAutoZoom();
-
 }
 
 // set model views

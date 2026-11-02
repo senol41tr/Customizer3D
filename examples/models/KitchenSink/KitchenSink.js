@@ -1,5 +1,5 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.1';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.1';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.2';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.2';
 
 export function lang()
 {
@@ -32,7 +32,7 @@ export function parameters(self)
         contextMenu:    'section.customizer > div.contextMenu',
         help:           'section.customizer > div.help',
         layers:         'section.customizer > div.layers',
-        controls:       'section.customizer > div.controls',
+        
         canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
@@ -70,13 +70,13 @@ export function parameters(self)
                 materials:
                 [
                     {
-                        url: root + 'cabinet/dark.jpg?c3d=0.6.1'
+                        url: root + 'cabinet/dark.jpg?c3d=0.6.2'
                     },
                     {
-                        url: root + 'cabinet/middle.jpg?c3d=0.6.1' 
+                        url: root + 'cabinet/middle.jpg?c3d=0.6.2' 
                     },
                     {
-                        url: root + 'cabinet/light.jpg?c3d=0.6.1' 
+                        url: root + 'cabinet/light.jpg?c3d=0.6.2' 
                     }
                 ]
             },
@@ -145,19 +145,19 @@ export function parameters(self)
                 materials:
                 [
                     {
-                        url: root + 'marmour/black_gold.jpg?c3d=0.6.1'
+                        url: root + 'marmour/black_gold.jpg?c3d=0.6.2'
                     },
                     {
-                        url: root + 'marmour/white_gold.jpg?c3d=0.6.1' 
+                        url: root + 'marmour/white_gold.jpg?c3d=0.6.2' 
                     },
                     {
-                        url: root + 'marmour/middle.jpg?c3d=0.6.1'
+                        url: root + 'marmour/middle.jpg?c3d=0.6.2'
                     },
                     {
-                        url: root + 'marmour/black.jpg?c3d=0.6.1'
+                        url: root + 'marmour/black.jpg?c3d=0.6.2'
                     },
                     {
-                        url: root + 'marmour/white.jpg?c3d=0.6.1'
+                        url: root + 'marmour/white.jpg?c3d=0.6.2'
                     }
                 ]
             },
@@ -215,8 +215,6 @@ export function parameters(self)
 // modify all wanted things
 export async function init()
 {
-    // enable zoom with mouse or tap (2 fingers)
-    this.enableAutoZoom();
 }
 
 // set model views

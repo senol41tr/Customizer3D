@@ -1,5 +1,6 @@
-import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.1';
-import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.1';
+import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.2';
+import {calculateAspectRatioFit} from 'customizer3D_dir/utils/calculateAspectRatioFit.js?c3d=0.6.2';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.2';
 
 export const getPrintDims = (c3d, layer, DPI, isExport = false) =>
 {
@@ -17,11 +18,20 @@ export const getPrintDims = (c3d, layer, DPI, isExport = false) =>
             const minMaxDPI = c3d.settings.getMinMaxDPI();
             const ratio = minMaxDPI.max / c3d.settings.getRenderDPI();
             
-            newDims.width /= ratio;
-            newDims.height /= ratio;
+            newDims.width /= ratio / (isMobile() ? 2 : 1);
+            newDims.height /= ratio / (isMobile() ? 2 : 1);
             
             width = newDims.width;
             height = newDims.height;
+
+            if(width > c3d.settings.MAX_TEXTURE_SIZE || height > c3d.settings.MAX_TEXTURE_SIZE)
+            {
+                
+                const newDims = calculateAspectRatioFit(width, height, c3d.settings.MAX_TEXTURE_SIZE, c3d.settings.MAX_TEXTURE_SIZE);
+                width = newDims.width;
+                height = newDims.height;
+            }
+
         }
         else
         {

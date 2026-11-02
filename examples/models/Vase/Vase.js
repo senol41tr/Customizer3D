@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.1';
-import {Texture} from 'customizer3D_dir/three/loaders/Texture.js?c3d=0.6.1';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.2';
+import {Loader} from 'customizer3D_dir/three/loaders/Loader.js?c3d=0.6.2';
 
 export function lang()
 {
@@ -25,7 +25,7 @@ export function parameters(self)
         contextMenu:    'section.customizer > div.contextMenu',
         help:           'section.customizer > div.help',
         layers:         'section.customizer > div.layers',
-        controls:       'section.customizer > div.controls',
+        
         canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
@@ -62,13 +62,13 @@ export function parameters(self)
                 printSize: {width: '10cm', height: '10cm'},
                 materials: 
                 [
-                    {url: root + 'textures/5.jpg?c3d=0.6.1', repeatX: 2, repeatY: 2},
-                    {url: root + 'textures/1.jpg?c3d=0.6.1', repeatX: 4, repeatY: 4},
-                    {url: root + 'textures/2.jpg?c3d=0.6.1', repeatX: 4, repeatY: 4},
-                    {url: root + 'textures/3.jpg?c3d=0.6.1', repeatX: 4, repeatY: 4},
-                    {url: root + 'textures/4.jpg?c3d=0.6.1', repeatX: 4, repeatY: 4},
-                    {url: root + 'textures/6.jpg?c3d=0.6.1', repeatX: 2, repeatY: 2},
-                    {url: root + 'textures/7.jpg?c3d=0.6.1', repeatX: 2, repeatY: 2}
+                    {url: root + 'textures/5.jpg?c3d=0.6.2', repeatX: 2, repeatY: 2},
+                    {url: root + 'textures/1.jpg?c3d=0.6.2', repeatX: 4, repeatY: 4},
+                    {url: root + 'textures/2.jpg?c3d=0.6.2', repeatX: 4, repeatY: 4},
+                    {url: root + 'textures/3.jpg?c3d=0.6.2', repeatX: 4, repeatY: 4},
+                    {url: root + 'textures/4.jpg?c3d=0.6.2', repeatX: 4, repeatY: 4},
+                    {url: root + 'textures/6.jpg?c3d=0.6.2', repeatX: 2, repeatY: 2},
+                    {url: root + 'textures/7.jpg?c3d=0.6.2', repeatX: 2, repeatY: 2}
                 ]
             }
         }
@@ -80,19 +80,26 @@ export async function init()
 {
     const root = C3D_MODELS_DIR + 'Vase/';
 
-    // enable zoom with mouse or tap (2 fingers)
-    this.enableAutoZoom();
-
     // set mesh materials
-    const soilMap = await new Texture({url: root + 'maps/Plant-Set-002-grass.jpg?c3d=0.6.1', preloader: this.preloader}).load();
+    const soilMap = await new Loader({type:'jpg', url: root + 'maps/Plant-Set-002-grass.jpg?c3d=0.6.2', preloader: this.preloader}).load();
+    soilMap.colorSpace = THREE.SRGBColorSpace;
 
     this.glbScene.getObjectByName('vase').material = new THREE.MeshPhysicalMaterial({map:soilMap, metalness: 0.3, roughness: 0.5});
     
     this.glbScene.getObjectByName('soil').material = new THREE.MeshBasicMaterial({map: soilMap, side: THREE.DoubleSide});
     
-    const leavesMap = await new Texture({url: root + 'maps/03.jpg?c3d=0.6.1', preloader: this.preloader}).load();
-    const leavesAlphaMap = await new Texture({url: root + 'maps/03_Opacity.jpg?c3d=0.6.1', preloader: this.preloader}).load();
-    const leavesNormalMap = await new Texture({url: root + 'maps/03_Normal.jpg?c3d=0.6.1', preloader: this.preloader}).load();
+    const leavesMap = await new Loader({type:'jpg', url: root + 'maps/03.jpg?c3d=0.6.2', preloader: this.preloader}).load();
+    leavesMap.flipY = false;
+    leavesMap.colorSpace = THREE.SRGBColorSpace;
+
+    const leavesAlphaMap = await new Loader({type:'jpg', url: root + 'maps/03_Opacity.jpg?c3d=0.6.2', preloader: this.preloader}).load();
+    leavesAlphaMap.flipY = false;
+    leavesAlphaMap.colorSpace = THREE.SRGBColorSpace;
+    
+    const leavesNormalMap = await new Loader({type:'jpg', url: root + 'maps/03_Normal.jpg?c3d=0.6.2', preloader: this.preloader}).load();
+    leavesNormalMap.flipY = false;
+    leavesNormalMap.colorSpace = THREE.SRGBColorSpace;
+    
     this.glbScene.getObjectByName('leaves').material = new THREE.MeshStandardMaterial({
         map: leavesMap, 
         alphaMap: leavesAlphaMap, 

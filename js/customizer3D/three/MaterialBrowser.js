@@ -1,5 +1,6 @@
-import {GUI} from 'three_dir/libs/lil-gui.module.min.js';
 import * as THREE from 'three';
+import {GUI} from 'three_dir/libs/lil-gui.module.min.js';
+import {Dragable} from 'customizer3D_dir/dragable/Dragable.js?c3d=0.6.2';
 
 export class MaterialBrowser
 {
@@ -26,7 +27,13 @@ export class MaterialBrowser
     this.callback = callback;
 
     this.gui = new GUI({title: 'Material Browser', width: 190});
-    this.gui.domElement.style.zIndex = this.c3d.zIndex.index;
+
+    const dragable = new Dragable({
+        dragEl: this.gui.$title,
+        container: this.gui.domElement,
+        root: document.querySelector(this.c3d.props.container),
+        c3d: this.c3d
+    });
 
     await this._createMaterialList();
 
@@ -51,7 +58,8 @@ export class MaterialBrowser
           {
             emissive: mo.emissive || '#000000',
             roughness: {min:0.0, max: 1.0, value: mo.roughness || 0.5, step: 0.01},
-            metalness: {min:0.0, max: 1.0, value: mo.metalness || 1.0, step: 0.01}
+            metalness: {min:0.0, max: 1.0, value: mo.metalness || 1.0, step: 0.01},
+            wireframe: mo.wireframe || false
           }
         },
 
@@ -60,6 +68,7 @@ export class MaterialBrowser
           label: 'Matcap Material',
           options:
           {
+            wireframe: mo.wireframe || false
           }
         }
     };

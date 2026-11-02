@@ -1,5 +1,5 @@
-import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.1';
-// import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.1';
+import {getPrintDims} from 'customizer3D_dir/utils/getPrintDims.js?c3d=0.6.2';
+// import {Size} from 'customizer3D_dir/utils/Size.js?c3d=0.6.2';
 
 export const applyFilters = (c3d, layer, layerName, isExport) =>
 {

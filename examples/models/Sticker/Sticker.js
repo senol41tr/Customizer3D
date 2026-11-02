@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.1';
-import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.1';
-import {Texture} from 'customizer3D_dir/three/loaders/Texture.js?c3d=0.6.1';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.2';
+import {degToRad} from 'customizer3D_dir/utils/degToRad.js?c3d=0.6.2';
+import {Loader} from 'customizer3D_dir/three/loaders/Loader.js?c3d=0.6.2';
 
 
 export function lang()
@@ -28,7 +28,7 @@ export function parameters(self)
         contextMenu:    'section.customizer > div.contextMenu',
         help:           'section.customizer > div.help',
         layers:         'section.customizer > div.layers',
-        controls:       'section.customizer > div.controls',
+        
         canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
@@ -95,12 +95,10 @@ export async function init()
     // set initial rotation
     this.three.rotateToAngle(30, 30, 0);
 
-    // enable zoom with mouse or tap (2 fingers)
-    this.enableAutoZoom();
-
     // set model material
     const box = this.glbScene.getObjectByName('box');
-    const boxTexture = await new Texture({url: C3D_MODELS_DIR + 'Sticker/baseColor.jpg?c3d=0.6.1', preloader: this.preloader}).load();
+    const boxTexture = await new Loader({type:'jpg', url: C3D_MODELS_DIR + 'Sticker/baseColor.jpg?c3d=0.6.2', preloader: this.preloader}).load();
+    boxTexture.colorSpace = THREE.SRGBColorSpace;
     box.material = new THREE.MeshStandardMaterial({map:boxTexture, roughness:0.5, metalness:0.75});
     
     const top = this.glbScene.getObjectByName('top');

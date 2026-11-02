@@ -1,4 +1,4 @@
-import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.1';
+import {isMobile} from 'customizer3D_dir/utils/isMobile.js?c3d=0.6.2';
 
 export function lang()
 {
@@ -25,7 +25,7 @@ export function parameters(self)
         contextMenu:    'section.customizer > div.contextMenu',
         help:           'section.customizer > div.help',
         layers:         'section.customizer > div.layers',
-        controls:       'section.customizer > div.controls',
+        
         canvas2d:       'section.customizer > div.webgl_2d_canvas',
 
         // Three.js options
@@ -62,11 +62,11 @@ export function parameters(self)
                 printSize:  {width: '20cm', height: '20cm'},
                 materials:
                 [
-                    {url: root + 'Fabric067_2K-JPG_Color.jpg?c3d=0.6.1', repeatX: 2, repeatY: 2},
-                    {url: root + 'Fabric018_2K-JPG_Color.jpg?c3d=0.6.1', repeatX: 2, repeatY: 2},
-                    {url: root + 'Fabric061_2K-JPG_Color.jpg?c3d=0.6.1', repeatX: 2, repeatY: 2},
-                    {url: root + 'Fabric026_2K-JPG_Color.jpg?c3d=0.6.1', repeatX: 2, repeatY: 2},
-                    {url: root + 'Fabric024_2K-JPG_Color.jpg?c3d=0.6.1', repeatX: 2, repeatY: 2},
+                    {url: root + 'Fabric067_2K-JPG_Color.jpg?c3d=0.6.2', repeatX: 2, repeatY: 2},
+                    {url: root + 'Fabric018_2K-JPG_Color.jpg?c3d=0.6.2', repeatX: 2, repeatY: 2},
+                    {url: root + 'Fabric061_2K-JPG_Color.jpg?c3d=0.6.2', repeatX: 2, repeatY: 2},
+                    {url: root + 'Fabric026_2K-JPG_Color.jpg?c3d=0.6.2', repeatX: 2, repeatY: 2},
+                    {url: root + 'Fabric024_2K-JPG_Color.jpg?c3d=0.6.2', repeatX: 2, repeatY: 2},
                 ]
             },
             front:
@@ -85,8 +85,6 @@ export function parameters(self)
 
 export async function init()
 {
-    // enable zoom with mouse or tap (2 fingers)
-    this.enableAutoZoom();
 
 }
 

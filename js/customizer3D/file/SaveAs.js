@@ -191,6 +191,28 @@ export class SaveAs
                         
                     break;
 
+
+                    case 'gradient':
+    
+                        json[meshName].push({
+                            type: layer.type,
+                            imagePosition: layer.imagePosition,
+                            rotation:layer.rotation,
+                            opacity: layer.opacity, 
+                            zoom: layer.zoom, 
+                            material: layer.material,
+                            materialOptions: layer.materialOptions,
+                            repeatX: layer.repeatX,
+                            repeatY: layer.repeatY,
+                            blendMode: layer.blendMode,
+                            filters: layer.filters,
+                            effects: layer.effects,
+                            visible: layer.visible,
+                            options: layer.options
+                        });
+                        
+                    break;
+
                     case 'threeDText':
     
                         json[meshName].push({
@@ -244,6 +266,39 @@ export class SaveAs
                         imageIndex++;
                         
                     break;
+
+                    case 'threeDModel':
+    
+                        imageName = 'glb' + imageIndex;
+
+                        json[meshName].push({
+                            type: layer.type,
+                            model: imageName,
+                            imagePosition: layer.imagePosition,
+                            rotation:layer.rotation,
+                            opacity: layer.opacity, 
+                            zoom: layer.zoom, 
+                            material: layer.material,
+                            materialOptions: layer.materialOptions,
+                            detectedFileType: layer.detectedFileType,
+                            fileName: layer.fileName,
+                            repeatX: layer.repeatX,
+                            repeatY: layer.repeatY,
+                            blendMode: layer.blendMode,
+                            filters: layer.filters,
+                            effects: layer.effects,
+                            visible: layer.visible,
+                            options: layer.options
+                        });
+
+                        uint8Array = await this._prepareImageForZip(layer.model, layer.detectedFileType);
+                        filesToZip[imageName] = uint8Array;
+                        uint8Array = null;
+
+                        imageIndex++;
+                        
+                    break;
+
                 }
             }
         }
